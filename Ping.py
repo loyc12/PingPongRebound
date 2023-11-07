@@ -2,6 +2,8 @@ import pygame as pg
 import GameObject as go
 import sys	# to exit properly
 
+# TODO : make an array of balls and rackets instead, so that the number can vary during runtime
+
 # ------------------------------------------- INITIALIZATION ------------------------------------------- #
 
 # screen setup & vars
@@ -10,11 +12,9 @@ win_h = 1024 #	window height
 
 pg.init()
 clock = pg.time.Clock()
-
 window = pg.display.set_mode((win_w, win_h))
 
 pg.display.set_caption('Pongtest') #	window title
-
 bgr_colour = pg.Color('black') #		background colour
 fnt_colour = pg.Color('gray25') #		font & line colour
 obj_colour = pg.Color('white') #		ball & racket colour
@@ -27,11 +27,13 @@ font = pg.font.Font(None, fnt_size) #	font
 size_b = 20 #	ball size & racket width
 size_r = 160 #	racket lenght
 
-speed_b = 6 #	ball default speed
+speed_b = 10 #	ball default speed
 speed_r = 6 #	racket speed increment
 
-f_abs = 0.50 #	by how much the ball bounces when it hits a wall
-f_rck = 1.05 #	by how much the ball bounces when it hits a racket
+f_abs = 0.75 #	by how much the ball bounces when it hits a wall
+f_rck = 0.95 #	by how much the ball bounces when it hits a racket
+f_rck2 = 1.0 #	by how much the ball bounces when it hits an immobile racket #			TODO : unfuck this this shit ugly
+gravity = 0.4 #	by how much the ball accelerates down every frame
 
 hard_break = True # whether the racket stops immediately when changing direction
 
@@ -44,18 +46,15 @@ score_2 = 0
 
 # setting up game objects: win, _x                               , _y                  , _w    , _h
 rack_1 = go.GameObject( 1, window, win_w * (1 / 4) - (size_r / 2), win_h - (2 * size_b), size_r, size_b )
-rack_2 = go.GameObject( 2, window, win_w * (3 / 4) - (size_r / 2), win_h - (4 * size_b), size_r, size_b )
-rack_3 = go.GameObject( 3, window, win_w * (1 / 4) - (size_r / 2), (4 * size_b)		   , size_r, size_b )
-rack_4 = go.GameObject( 4, window, win_w * (3 / 4) - (size_r / 2), (2 * size_b)		   , size_r, size_b )
-
-ball_1 = go.GameObject( 1, window, (win_w - size_b) / 2          , win_h * (3 / 4)     , size_b, size_b )
-#ball_2 = go.GameObject( 2, window, (win_w - size_b) / 2          , win_h * (4 / 4)     , size_b, size_b )
+rack_2 = go.GameObject( 2, window, win_w * (3 / 4) - (size_r / 2), win_h - (2 * size_b), size_r, size_b )
+ball_1 = go.GameObject( 1, window, (win_w - size_b) / 2          , win_h * (2 / 3)      , size_b, size_b )
+#ball_2 = go.GameObject( 2, window, (win_w - size_b) / 2          , win_h * (2 / 3)      , size_b, size_b )
 
 # setting up object speeds
 rack_1.setSpeeds( speed_r, 0 )
 rack_2.setSpeeds( speed_r, 0 )
-ball_1.setSpeeds( speed_b , speed_b)
-#ball_2.setSpeeds( speed_b , speed_b)
+ball_1.setSpeeds( speed_b * (2 / 3), speed_b * 2 )
+#ball_2.setSpeeds( speed_b * (2 / 3), speed_b * 2 )
 
 # setting up ball directions
 ball_1.setDirs	( 1, -1 )
@@ -95,14 +94,14 @@ def handleInputs(key):
 		else:
 			rack_2.fx += 1
 
-	rack_3.fx = rack_1.fx
-	rack_3.dx = rack_1.dx
-	rack_4.fx = rack_2.fx
-	rack_4.dx = rack_2.dx
-
 #  function : updating the ball position
 def moveBall(ball):	#						TODO: add sound effects
-	global score_1, score_2, rack_1, rack_2, rack_3, rack_4
+	global score_1, score_2, rack_1, rack_2
+
+	if ball.fy > 0:
+		ball.dy += gravity
+	else:
+		ball.dy -= gravity
 
 	ball.updatePos ()
 
@@ -111,42 +110,41 @@ def moveBall(ball):	#						TODO: add sound effects
 		ball.collide( "hor" )
 		ball.dx *= f_abs
 
-	# bounce off the rackets
-	if ball.box.colliderect( rack_1.box ):
+	# bouncing off the top
+	if ball.box.top <= 0:
 		ball.collide( "ver" )
-		ball.collideWith( rack_1, "ver" )
-		ball.setPos( ball.box.x, rack_1.box.y - size_b )
-		ball.dy *= f_rck
-	elif ball.box.colliderect( rack_2.box ):
+		ball.dx *= f_abs
+		ball.dy = 1
+
+	# bounce off a racket
+	if ball.box.colliderect( rack_1.box ) or ball.box.colliderect( rack_2.box ):
 		ball.collide( "ver" )
-		ball.collideWith( rack_2, "ver" )
-		ball.setPos( ball.box.x, rack_2.box.y - size_b )
 		ball.dy *= f_rck
-	elif ball.box.colliderect( rack_3.box ):
-		ball.collide( "ver" )
-		ball.collideWith( rack_3, "ver" )
-		ball.setPos( ball.box.x, rack_3.box.y + size_b )
-		ball.dy *= f_rck
-	elif ball.box.colliderect( rack_4.box ):
-		ball.collide( "ver" )
-		ball.collideWith( rack_4, "ver" )
-		ball.setPos( ball.box.x, rack_4.box.y + size_b )
-		ball.dy *= f_rck
+
+		if ball.box.colliderect( rack_1.box ):
+			ball.collideWith( rack_1, "ver" )
+			ball.setPos( ball.box.x, rack_1.box.y - size_b )
+			if rack_1.fx == 0:
+				ball.dy *= f_rck2
+		elif ball.box.colliderect( rack_2.box ):
+			ball.collideWith( rack_2, "ver" )
+			ball.setPos( ball.box.x, rack_2.box.y - size_b )
+			if rack_2.fx == 0:
+				ball.dy *= f_rck2
 
 	# scoring a goal
-	if ball.box.bottom >= win_h or ball.box.top <= 0:
+	if ball.box.bottom >= win_h:
 		# checking who scored
-		if ball.box.bottom >= win_h:
-			score_1 += 1
-			ball.setDirs( -ball.fx, 1 )
-			ball.setPos ( (win_w - size_b) / 2, win_h * (1 / 4) )
-		if ball.box.top <= 0:
+		if ball.box.left <= win_w / 2:
 			score_2 += 1
-			ball.setDirs( -ball.fx, -1 )
-			ball.setPos ( (win_w - size_b) / 2, win_h * (3 / 4) )
+			ball.setDirs( -1, -1 )
+		if ball.box.right >= win_w / 2:
+			score_1 += 1
+			ball.setDirs( 1, -1 )
 
 		# reseting the ball's position
-		ball.setSpeeds( ball.dx * (2 / 3) , speed_b )
+		ball.setPos   ( (win_w - size_b) / 2, win_h * (2 / 3) )
+		ball.setSpeeds( (ball.dx + speed_b) / 3, speed_b * 2 )
 
 	ball.clampPos ()
 
@@ -158,6 +156,14 @@ def moveRacket(rack):
 	if (rack.box.left <= 0 and rack.fx < 0) or (rack.box.right >= win_w and rack.fx > 0):
 		rack.collide( "block" )
 
+	# prevent racket from crossing the middle line
+	if rack.id == 1 and rack.box.right > win_w / 2:
+		rack.collide( "block" )
+		rack.setPos( (win_w / 2) - size_r, rack.box.y )
+	elif rack.id == 2 and rack.box.left < win_w / 2:
+		rack.collide( "block" )
+		rack.setPos( win_w / 2, rack.box.y )
+
 	rack.clampPos ()
 
 # function : redrawing on the screen
@@ -168,24 +174,18 @@ def refreshScreen(window):
 	text_1 = font.render(f'{score_1}', True, fnt_colour)
 	text_2 = font.render(f'{score_2}', True, fnt_colour)
 
-	window.blit(text_1, text_1.get_rect(center = (win_w / 2, win_h * (1 / 4))))
-	window.blit(text_2, text_2.get_rect(center = (win_w / 2, win_h * (3 / 4))))
+	window.blit(text_1, text_1.get_rect(center = (win_w * (1 / 4), win_h / 2)))
+	window.blit(text_2, text_2.get_rect(center = (win_w * (3 / 4), win_h / 2)))
 
 	moveRacket	 ( rack_1 )
 	moveRacket	 ( rack_2 )
-
-	moveRacket	 ( rack_3 )
-	moveRacket	 ( rack_4 )
-
 	moveBall	 ( ball_1 )
 	#moveBall	 ( ball_2 )
 
 	rack_1.drawSelf ()
 	rack_2.drawSelf ()
-	rack_3.drawSelf ()
-	rack_4.drawSelf ()
 
-	pg.draw.line ( window, fnt_colour, (0, win_h / 2), (win_w, win_h / 2), size_l )
+	pg.draw.line ( window, fnt_colour, (win_w / 2, 0), (win_w / 2, win_h), size_l )
 
 	ball_1.drawSelf ()
 	#ball_2.drawSelf ()

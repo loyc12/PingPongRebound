@@ -2,6 +2,9 @@ import pygame as pg
 import GameObject as go
 import sys	# to exit properly
 
+# TODO : make an array of balls and rackets instead, so that the number can vary during runtime
+# TODO : make the ball restart's trajectory more random
+
 # ------------------------------------------- INITIALIZATION ------------------------------------------- #
 
 # screen setup & vars
@@ -10,7 +13,6 @@ win_h = 1024 #	window height
 
 pg.init()
 clock = pg.time.Clock()
-
 window = pg.display.set_mode((win_w, win_h))
 
 pg.display.set_caption('Pongtest') #	window title
@@ -44,14 +46,14 @@ score_2 = 0
 # setting up game objects: win, _x                  , _y                  , _w    , _h
 rack_1 = go.GameObject( 1, window, size_b              , (win_h - size_r) / 2, size_b, size_r )
 rack_2 = go.GameObject( 2, window, win_w - (2 * size_b), (win_h - size_r) / 2, size_b, size_r )
-ball_1 = go.GameObject( 1, window, (win_w - size_b) / 2, (win_h - size_b) / 2, size_b, size_b )
-#ball_2 = go.GameObject( 2, window, (win_w - size_b) / 2, (win_h - size_b) / 2, size_b, size_b )
+ball_1 = go.GameObject( 1, window, win_w * (1 / 4)     , (win_h - size_b) / 2, size_b, size_b )
+#ball_2 = go.GameObject( 2, window, win_w * (3 / 4)    , (win_h - size_b) / 2, size_b, size_b )
 
 # setting up object speeds
 rack_1.setSpeeds( 0, speed_r )
 rack_2.setSpeeds( 0, speed_r )
-ball_1.setSpeeds( speed_b, speed_b  * (2 / 3))
-#ball_2.setSpeeds( speed_b, speed_b  * (2 / 3))
+ball_1.setSpeeds( speed_b, speed_b)
+#ball_2.setSpeeds( speed_b, speed_b)
 
 # setting up ball directions
 ball_1.setDirs	( 1, 1 )
@@ -96,7 +98,7 @@ def handleInputs(key):
 			rack_2.fy += 1
 
 #  function : updating the ball position
-def moveBall(ball):	#						TODO: add sound effects
+def moveBall(ball):
 	global rack_1, rack_2, score_1, score_2
 
 	ball.updatePos ()
@@ -124,13 +126,14 @@ def moveBall(ball):	#						TODO: add sound effects
 		if ball.box.left <= 0:
 			score_2 += 1
 			ball.setDirs( -1, -ball.fy )
+			ball.setPos (win_w * (3 / 4), (win_h - size_b) / 2 )
 		elif ball.box.right >= win_w:
 			score_1 += 1
 			ball.setDirs( 1, -ball.fy )
+			ball.setPos (win_w * (1 / 4), (win_h - size_b) / 2 )
 
-		# reseting the ball's position
-		ball.setPos   ( (win_w - size_b) / 2, (win_h - size_b) / 2 )
-		ball.setSpeeds( speed_b, ball.dy * (2 / 3) )
+		# reseting the ball's speed
+		ball.setSpeeds( speed_b, ball.dy )
 
 	ball.clampPos ()
 

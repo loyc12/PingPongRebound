@@ -1,7 +1,14 @@
 import pygame as pg
 
+# TODO : make an 'interface' class to reroute the key events to, for future web use
+# TODO : add sound effects to collisions
+# TODO : use rect enter for positioning
+
+# ------------------------------------------ GAMEOBJECT CLASS ------------------------------------------ #
+
 # setting up game objects
 bgr_colour = pg.Color('black')
+fnt_colour = pg.Color('gray25')
 obj_colour = pg.Color('white')
 
 def getSign(value):
@@ -24,7 +31,7 @@ class GameObject:
 		self.fy = 0
 		self.box = pg.Rect(_x, _y, _w, _h)
 
-	def setPos(self, _x, _y):
+	def setPos(self, _x, _y): # TODO : set the center instead
 		self.box.x = _x
 		self.box.y = _y
 
