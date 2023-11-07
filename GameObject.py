@@ -1,8 +1,16 @@
 import pygame as pg
 
+# MASTER LIST
+# TODO : compile into webAssembly with pybox
 # TODO : make an 'interface' class to reroute the key events to, for future web use
-# TODO : add sound effects to collisions
+# TODO : make an ai class to control the rackets
+# TODO : allow racket control through sockets
+# TODO : if webAssembly is a bust, split logic and rendering
+
+# MINOR LIST
 # TODO : use rect enter for positioning
+# TODO : add sound effects to collisions
+# TODO : set the center for rect positioning
 
 # ------------------------------------------ GAMEOBJECT CLASS ------------------------------------------ #
 
@@ -31,7 +39,7 @@ class GameObject:
 		self.fy = 0
 		self.box = pg.Rect(_x, _y, _w, _h)
 
-	def setPos(self, _x, _y): # TODO : set the center instead
+	def setPos(self, _x, _y): # TODO : set the center for rect positioning
 		self.box.x = _x
 		self.box.y = _y
 
