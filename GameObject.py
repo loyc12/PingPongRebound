@@ -1,15 +1,5 @@
 import pygame as pg
 
-# MASTER LIST
-# TODO : compile into webAssembly with pybox
-# TODO : make an 'interface' class to reroute the key events to, for future web use
-# TODO : make an ai class to control the rackets
-# TODO : allow racket control through sockets
-# TODO : if webAssembly is a bust, split logic and rendering
-
-# MINOR LIST
-# TODO : use rect enter for positioning
-# TODO : add sound effects to collisions
 # TODO : set the center for rect positioning
 
 # ------------------------------------------ GAMEOBJECT CLASS ------------------------------------------ #
