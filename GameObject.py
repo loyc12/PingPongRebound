@@ -5,18 +5,14 @@ import pygame as pg
 # ------------------------------------------ GAMEOBJECT CLASS ------------------------------------------ #
 
 # setting up game objects
-max_speed = 50
 bgr_colour = pg.Color('black')
 fnt_colour = pg.Color('gray25')
 obj_colour = pg.Color('white')
 
-def getSign(value):
-	if (value > 0):
-		return 1
-	elif (value < 0):
-		return -1
-	else:
-		return 0
+max_speed = 50 #	max speed for objects (dx & dy)
+win_w = 2048 #		window width
+win_h = 1024 #		window height
+framerate = 60 #	max tick per second
 
 # object classes
 class GameObject:
@@ -28,11 +24,14 @@ class GameObject:
 		self.dy = 0
 		self.fx = 0
 		self.fy = 0
-		self.box = pg.Rect(_x, _y, _w, _h)
+		self.box = pg.Rect(0, 0, _w, _h)
+		self.setPos(_x, _y)
 
-	def setPos(self, _x, _y): # TODO : set the center for rect positioning
-		self.box.x = _x
-		self.box.y = _y
+	def setPos(self, _x, _y):
+		self.box.center = (_x, _y)
+
+	def setSize(self, _w, _h):
+		self.box.size = (_w, _h)
 
 	def setSpeeds(self, _dx, _dy):
 		self.dx = _dx
@@ -46,17 +45,17 @@ class GameObject:
 		self.box.x += self.dx * self.fx
 		self.box.y += self.dy * self.fy
 
-	def collide(self, type):
+	def collideWall(self, type):
 		if (type == "hor"):
 			self.fx *= -1
 		elif (type == "ver"):
 			self.fy *= -1
-		elif (type == "block"):
+		elif (type == "wall"):
 			self.fx = 0
 			self.fy = 0
 
 	# specifically to handle ball-to-racket collisions
-	def collideWith(self, other, mode):
+	def collideRack(self, other, mode):
 		if mode == "hor":
 			if self.fy > 0:
 				self.dy += other.dy * other.fy
@@ -68,15 +67,6 @@ class GameObject:
 			else:
 				self.dx -= other.dx * other.fx
 
-	def normalizeSpeed(self):
-		# make sure dy and dx are positive
-		if self.dy < 0:
-			self.dy *= -1
-			self.fy *= -1
-		if self.dx < 0:
-			self.dx *= -1
-			self.fx *= -1
-
 	def clampPos(self):
 		# prevent balls from going off screen
 		if (self.box.top <= 0):
@@ -87,6 +77,15 @@ class GameObject:
 			self.box.left = 0
 		if (self.box.right >= self.win.get_width()):
 			self.box.right = self.win.get_width()
+
+	def normalizeSpeed(self):
+		# make sure dy and dx are positive
+		if self.dy < 0:
+			self.dy *= -1
+			self.fy *= -1
+		if self.dx < 0:
+			self.dx *= -1
+			self.fx *= -1
 
 	# also normalizes (make dx & dy positive)
 	def clampSpeed(self):
