@@ -1,10 +1,11 @@
-import asyncio
 import pygame as pg
 import GameObject as go
+import GameInterface as gi
 import sys	# to exit properly
 
 # TODO : make an array of balls and rackets instead, so that the number can vary during runtime
 # TODO : make the ball restart's trajectory more random
+
 
 # ------------------------------------------- INITIALIZATION ------------------------------------------- #
 
@@ -29,8 +30,6 @@ speed_r = 6 #	racket speed increment
 
 f_abs = 0.75 #	by how much the ball bounces when it hits a wall
 f_rck = 1.10 #	by how much the ball bounces when it hits a racket
-
-hard_break = True # whether the racket stops immediately when changing direction
 
 score_1 = 0
 score_2 = 0
@@ -66,13 +65,13 @@ def handleInputs(key):
 		rack_1.fy = 0
 
 	elif key == pg.K_w:
-		if hard_break and rack_1.fy > 0:
+		if go.hard_break and rack_1.fy > 0:
 			rack_1.fy = 0
 		else:
 			rack_1.fy -= 1
 
 	elif key == pg.K_s:
-		if hard_break and rack_1.fy < 0:
+		if go.hard_break and rack_1.fy < 0:
 			rack_1.fy = 0
 		else:
 			rack_1.fy += 1
@@ -82,13 +81,13 @@ def handleInputs(key):
 		rack_2.fy = 0
 
 	elif key == pg.K_UP:
-		if hard_break and rack_2.fy > 0:
+		if go.hard_break and rack_2.fy > 0:
 			rack_2.fy = 0
 		else:
 			rack_2.fy -= 1
 
 	elif key == pg.K_DOWN:
-		if hard_break and rack_2.fy < 0:
+		if go.hard_break and rack_2.fy < 0:
 			rack_2.fy = 0
 		else:
 			rack_2.fy += 1
@@ -97,7 +96,8 @@ def handleInputs(key):
 def moveBall(ball):
 	global rack_1, rack_2, score_1, score_2
 
-	ball.updatePos ()
+	ball.updatePos  ()
+	ball.clampSpeed ()
 
 	# bouncing off the top and bottom
 	if ball.box.top <= 0 or ball.box.bottom >= go.win_h:
@@ -149,8 +149,9 @@ def moveRacket(rack):
 # function : redrawing on the screen
 def refreshScreen(window):
 
+	global rack_1, rack_2, ball_1 #, ball_2
+
 	window.fill	 ( go.bgr_colour )
-	pg.draw.line ( window, go.fnt_colour, (go.win_w / 2, 0), (go.win_w / 2, go.win_h), size_l )
 
 	text_1 = font.render(f'{score_1}', True, go.fnt_colour)
 	text_2 = font.render(f'{score_2}', True, go.fnt_colour)
@@ -158,22 +159,34 @@ def refreshScreen(window):
 	window.blit(text_1, text_1.get_rect(center = (go.win_w * (1 / 4), go.win_h / 2)))
 	window.blit(text_2, text_2.get_rect(center = (go.win_w * (3 / 4), go.win_h / 2)))
 
-	moveRacket	 ( rack_1 )
-	moveRacket	 ( rack_2 )
-	moveBall	 ( ball_1 )
-	#moveBall	 ( ball_2 )
-
 	rack_1.drawSelf ()
 	rack_2.drawSelf ()
+
+	pg.draw.line ( window, go.fnt_colour, (go.win_w / 2, 0), (go.win_w / 2, go.win_h), size_l )
+
 	ball_1.drawSelf ()
 	#ball_2.drawSelf ()
 
 	pg.display.flip ()			# drawing the next frame
-	clock.tick ( go.framerate )	# max tick per second
+
+def moveObjects():
+
+	global rack_1, rack_2, ball_1 #, ball_2
+
+	gi.moveRack( 1, "UP" ) #							DEBUG
+	print( f" > rack_1.fx == {rack_1.fx}" ) #				DEBUG
+
+	moveRacket	 ( rack_1 )
+	moveRacket	 ( rack_2 )
+
+	moveBall	 ( ball_1 )
+	#moveBall	 ( ball_2 )
 
 # ---------------------------------------------- MAIN LOOP ---------------------------------------------- #
 
-async def run():
+def run():
+
+	global rack_1, rack_2, ball_1 #, ball_2
 
 	# game logic loop
 	while True:
@@ -188,9 +201,9 @@ async def run():
 			elif event.type == pg.KEYDOWN:
 				handleInputs( event.key )
 
+		moveObjects  ()
 		refreshScreen( window )
-
-		await asyncio.sleep(0)
+		clock.tick ( go.framerate )	# max tick per second
 
 if __name__ == '__main__':
-	asyncio.run( run() )
+	run()

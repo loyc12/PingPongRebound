@@ -9,10 +9,11 @@ bgr_colour = pg.Color('black')
 fnt_colour = pg.Color('gray25')
 obj_colour = pg.Color('white')
 
-max_speed = 50 #	max speed for objects (dx & dy)
-win_w = 2048 #		window width
-win_h = 1024 #		window height
-framerate = 60 #	max tick per second
+max_speed = 50 #		max speed for objects (dx & dy)
+win_w = 2048 #			window width
+win_h = 1024 #			window height
+framerate = 60 #		max tick per second
+hard_break = False #	whether the racket stops immediately when changing direction
 
 # object classes
 class GameObject:

@@ -28,10 +28,8 @@ size_r = 160 #	racket lenght
 speed_b = 10 #	ball default speed
 speed_r = 6 #	racket speed increment
 
-f_abs = 0.50 #	by how much the ball bounces when it hits a wall
-f_rck = 1.05 #	by how much the ball bounces when it hits a racket
-
-hard_break = True # whether the racket stops immediately when changing direction
+f_abs = 0.75 #	by how much the ball bounces when it hits a wall
+f_rck = 1.10 #	by how much the ball bounces when it hits a racket
 
 score_1 = 0
 score_2 = 0
@@ -40,18 +38,20 @@ score_2 = 0
 
 # TODO : make an array of balls and rackets instead, so that the number can vary during runtime
 
-# setting up game objects: win   , _x                , _y                     , _w    , _h
-rack_1 = go.GameObject( 1, window, go.win_w * (1 / 4), go.win_h -  size_b     , size_r, size_b )
-rack_2 = go.GameObject( 2, window, go.win_w * (3 / 4), go.win_h - (3 * size_b), size_r, size_b )
-rack_3 = go.GameObject( 3, window, go.win_w * (1 / 4), 3 * size_b		      , size_r, size_b )
-rack_4 = go.GameObject( 4, window, go.win_w * (3 / 4), size_b	              , size_r, size_b )
+# setting up game objects: win   , _x                , _y                      , _w    , _h
+rack_1 = go.GameObject( 1, window, go.win_w * (1 / 4), go.win_h - size_b       , size_r, size_b )
+rack_2 = go.GameObject( 2, window, go.win_w * (3 / 4), go.win_h - ( 3 * size_b), size_r, size_b )
+rack_3 = go.GameObject( 3, window, go.win_w * (1 / 4), 3 * size_b		       , size_r, size_b )
+rack_4 = go.GameObject( 4, window, go.win_w * (3 / 4), size_b	               , size_r, size_b )
 
-ball_1 = go.GameObject( 1, window, go.win_w / 2      , go.win_h * (3 / 4)     , size_b, size_b )
-#ball_2 = go.GameObject( 2, window, go.win_w / 2      , go.win_h * (1 / 4)     , size_b, size_b )
+ball_1 = go.GameObject( 1, window, go.win_w / 2      , go.win_h * (3 / 4), size_b, size_b )
+#ball_2 = go.GameObject( 2, window, go.win_w / 2      , go.win_h * (1 / 4), size_b, size_b )
 
 # setting up object speeds
 rack_1.setSpeeds( speed_r, 0 )
 rack_2.setSpeeds( speed_r, 0 )
+rack_3.setSpeeds( speed_r, 0 )
+rack_4.setSpeeds( speed_r, 0 )
 ball_1.setSpeeds( speed_b / 2 , speed_b)
 #ball_2.setSpeeds( speed_b / 2 , speed_b)
 
@@ -69,12 +69,12 @@ def handleInputs(key):
 	if key == pg.K_w or key == pg.K_s:
 		rack_1.fx = 0
 	elif key == pg.K_a:
-		if hard_break and rack_1.fx > 0:
+		if go.hard_break and rack_1.fx > 0:
 			rack_1.fx = 0
 		else:
 			rack_1.fx -= 1
 	elif key == pg.K_d:
-		if hard_break and rack_1.fx < 0:
+		if go.hard_break and rack_1.fx < 0:
 			rack_1.fx = 0
 		else:
 			rack_1.fx += 1
@@ -83,26 +83,22 @@ def handleInputs(key):
 	if key == pg.K_UP or key == pg.K_DOWN:
 		rack_2.fx = 0
 	elif key == pg.K_LEFT:
-		if hard_break and rack_2.fx > 0:
+		if go.hard_break and rack_2.fx > 0:
 			rack_2.fx = 0
 		else:
 			rack_2.fx -= 1
 	elif key == pg.K_RIGHT:
-		if hard_break and rack_2.fx < 0:
+		if go.hard_break and rack_2.fx < 0:
 			rack_2.fx = 0
 		else:
 			rack_2.fx += 1
-
-	rack_3.fx = rack_1.fx
-	rack_3.dx = rack_1.dx
-	rack_4.fx = rack_2.fx
-	rack_4.dx = rack_2.dx
 
 #  function : updating the ball position
 def moveBall(ball):	#						TODO: add sound effects
 	global score_1, score_2, rack_1, rack_2, rack_3, rack_4
 
-	ball.updatePos ()
+	ball.updatePos  ()
+	ball.clampSpeed ()
 
 	# bouncing off the sides
 	if ball.box.left <= 0 or ball.box.right >= go.win_w:
@@ -141,7 +137,7 @@ def moveBall(ball):	#						TODO: add sound effects
 		if ball.box.top <= 0:
 			score_2 += 1
 			ball.setDirs( -ball.fx, -1 )
-			ball.setPos ( (go.win_w - size_b) / 2, go.win_h * (3 / 4) )
+			ball.setPos ( go.win_w / 2, go.win_h * (3 / 4) )
 
 		# reseting the ball's position
 		ball.setSpeeds( ball.dx / 2 , speed_b )
@@ -169,15 +165,6 @@ def refreshScreen(window):
 	window.blit(text_1, text_1.get_rect(center = (go.win_w / 2, go.win_h * (1 / 4))))
 	window.blit(text_2, text_2.get_rect(center = (go.win_w / 2, go.win_h * (3 / 4))))
 
-	moveRacket	 ( rack_1 )
-	moveRacket	 ( rack_2 )
-
-	moveRacket	 ( rack_3 )
-	moveRacket	 ( rack_4 )
-
-	moveBall	 ( ball_1 )
-	#moveBall	 ( ball_2 )
-
 	rack_1.drawSelf ()
 	rack_2.drawSelf ()
 	rack_3.drawSelf ()
@@ -189,11 +176,22 @@ def refreshScreen(window):
 	#ball_2.drawSelf ()
 
 	pg.display.flip ()	# drawing the next frame
-	clock.tick ( go.framerate )	# max tick per second
+
+def moveObjects():
+	moveRacket	 ( rack_1 )
+	moveRacket	 ( rack_2 )
+	#moveRacket	 ( rack_3 )
+	#moveRacket	 ( rack_4 )
+
+	rack_3.setPos( rack_1.box.centerx, go.win_h - rack_1.box.centery ) #	hacky way to make rack_3 move
+	rack_4.setPos( rack_2.box.centerx, go.win_h - rack_2.box.centery ) #	hacky way to make rack_4 move
+
+	moveBall	 ( ball_1 )
+	#moveBall	 ( ball_2 )
 
 # ---------------------------------------------- MAIN LOOP ---------------------------------------------- #
 
-async def run():
+def run():
 
 	# game logic loop
 	while True:
@@ -208,9 +206,9 @@ async def run():
 			elif event.type == pg.KEYDOWN:
 				handleInputs( event.key )
 
+		moveObjects  ()
 		refreshScreen( window )
-
-		await asyncio.sleep(0)
+		clock.tick ( go.framerate )	# max tick per second
 
 if __name__ == '__main__':
-	asyncio.run( run() )
+	run()
