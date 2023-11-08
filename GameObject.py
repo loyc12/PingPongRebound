@@ -5,6 +5,7 @@ import pygame as pg
 # ------------------------------------------ GAMEOBJECT CLASS ------------------------------------------ #
 
 # setting up game objects
+max_speed = 50
 bgr_colour = pg.Color('black')
 fnt_colour = pg.Color('gray25')
 obj_colour = pg.Color('white')
@@ -67,6 +68,15 @@ class GameObject:
 			else:
 				self.dx -= other.dx * other.fx
 
+	def normalizeSpeed(self):
+		# make sure dy and dx are positive
+		if self.dy < 0:
+			self.dy *= -1
+			self.fy *= -1
+		if self.dx < 0:
+			self.dx *= -1
+			self.fx *= -1
+
 	def clampPos(self):
 		# prevent balls from going off screen
 		if (self.box.top <= 0):
@@ -78,13 +88,14 @@ class GameObject:
 		if (self.box.right >= self.win.get_width()):
 			self.box.right = self.win.get_width()
 
-		# make sure dy and dx are positive
-		if self.dy < 0:
-			self.dy *= -1
-			self.fy *= -1
-		if self.dx < 0:
-			self.dx *= -1
-			self.fx *= -1
+	# also normalizes (make dx & dy positive)
+	def clampSpeed(self):
+		self.normalizeSpeed()
+		# make sure the object (ball) doesn't move too fast
+		if self.dy > max_speed:
+			self.dy = max_speed
+		if self.dx > max_speed:
+			self.dx = max_speed
 
 	def drawSelf(self):
 		pg.draw.rect(self.win, obj_colour, self.box)

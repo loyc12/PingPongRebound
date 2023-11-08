@@ -1,3 +1,4 @@
+import asyncio
 import Ping
 import Pong
 import Pongers
@@ -6,9 +7,9 @@ import Pongers
 # MASTER LIST
 # TODO : compile into webAssembly with pybox
 # TODO : make an 'interface' class to reroute the key events to, for future web use
-# TODO : make an ai class to control the rackets
+# TODO : make an ai class to control the rackets throught the interface
+# TODO : split logic and rendering
 # TODO : allow racket control through sockets
-# TODO : if webAssembly is a bust, split logic and rendering
 
 # MINOR LIST
 # TODO : use rect center for positioning (in GameObject class)
@@ -16,7 +17,11 @@ import Pongers
 # TODO : make the ball restart's trajectory more random
 # TODO : add sound effects to collisions (in GameObject class)
 
+def main():
+
+	#asyncio.run( Ping.run() )
+	asyncio.run( Pong.run() )
+	#asyncio.run( Pongers.run() )
+
 if __name__ == '__main__':
-	#Ping.py
-	Pong.py
-	#Pongers.py
+	main()

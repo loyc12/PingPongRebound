@@ -1,3 +1,4 @@
+import asyncio
 import pygame as pg
 import GameObject as go
 import sys	# to exit properly
@@ -9,17 +10,15 @@ import sys	# to exit properly
 # ------------------------------------------- INITIALIZATION ------------------------------------------- #
 
 # screen setup & vars
-win_w = 2048 #	window width
-win_h = 1024 #	window height
+win_w = 2048 #		window width
+win_h = 1024 #		window height
+framerate = 60 #	max tick per second
 
 pg.init()
 clock = pg.time.Clock()
 window = pg.display.set_mode((win_w, win_h))
 
 pg.display.set_caption('Pongtest') #	window title
-bgr_colour = pg.Color('black') #		background colour			TODO : use go.ColourName
-fnt_colour = pg.Color('gray25') #		font & line colour			TODO : use go.ColourName
-obj_colour = pg.Color('white') #		ball & racket colour		TODO : use go.ColourName
 
 size_l = 10 # 							middle line width
 fnt_size = 768 # 						font size
@@ -165,10 +164,10 @@ def moveRacket(rack):
 # function : redrawing on the screen
 def refreshScreen(window):
 
-	window.fill	 ( bgr_colour )
+	window.fill	 ( go.bgr_colour )
 
-	text_1 = font.render(f'{score_1}', True, fnt_colour)
-	text_2 = font.render(f'{score_2}', True, fnt_colour)
+	text_1 = font.render(f'{score_1}', True, go.fnt_colour)
+	text_2 = font.render(f'{score_2}', True, go.fnt_colour)
 
 	window.blit(text_1, text_1.get_rect(center = (win_w / 2, win_h * (1 / 4))))
 	window.blit(text_2, text_2.get_rect(center = (win_w / 2, win_h * (3 / 4))))
@@ -187,27 +186,31 @@ def refreshScreen(window):
 	rack_3.drawSelf ()
 	rack_4.drawSelf ()
 
-	pg.draw.line ( window, fnt_colour, (0, win_h / 2), (win_w, win_h / 2), size_l )
+	pg.draw.line ( window, go.fnt_colour, (0, win_h / 2), (win_w, win_h / 2), size_l )
 
 	ball_1.drawSelf ()
 	#ball_2.drawSelf ()
 
 	pg.display.flip ()	# drawing the next frame
-	clock.tick ( 60 )	# max tick per second
+	clock.tick ( framerate )	# max tick per second
 
 # ---------------------------------------------- MAIN LOOP ---------------------------------------------- #
 
-# game logic loop
-while True:
+async def run():
 
-	# handling inputs
-	for event in pg.event.get ():
+	# game logic loop
+	while True:
 
-		# quiting the game
-		if event.type == pg.QUIT or ( event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE ):
-			pg.quit ()
-			sys.exit ()
-		elif event.type == pg.KEYDOWN:
-			handleInputs( event.key )
+		# handling inputs
+		for event in pg.event.get ():
 
-	refreshScreen( window )
+			# quiting the game
+			if event.type == pg.QUIT or ( event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE ):
+				pg.quit ()
+				sys.exit ()
+			elif event.type == pg.KEYDOWN:
+				handleInputs( event.key )
+
+		refreshScreen( window )
+
+		await asyncio.sleep(0)
