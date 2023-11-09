@@ -1,4 +1,4 @@
-import GameInterface as gi
+import Pinger as p
 
 # MASTER LIST
 # TODO : try with websockets (?)
@@ -13,7 +13,7 @@ import GameInterface as gi
 
 def main():
 
-	g = gi.Game("Ping")
+	g = p.Pinger()
 	g.start()
 	g.run()
 

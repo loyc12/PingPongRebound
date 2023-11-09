@@ -3,6 +3,10 @@ import GameObject as go
 import sys	# to exit properly
 
 class Game:
+	name = "unnamed"
+
+	width = 2048
+	height = 1024
 
 	rackCount = 1
 	ballCount = 1
@@ -11,15 +15,17 @@ class Game:
 	size_l = 10
 	size_b = 20
 	size_r = 160
-	width = 2048
-	height = 1024
 	size_font = 768
 
-	factor_wall = 1.00
+	speed_b = 6
+	speed_r = 6
+	speed_m = 60
+	framerate = 60 # 		max fps
+
+	factor_wall = 0.75
 	factor_rack = 1.00
-	gravity = 0.5
+	gravity = 0.4
 	hard_break = True
-	framerate = 60 # 					max fps
 
 	col_bgr = pg.Color('black')
 	col_fnt = pg.Color('grey25')
@@ -27,15 +33,14 @@ class Game:
 
 	# ------------------------------------------- INITIALIZATION ------------------------------------------- #
 
-	def __init__(self, _name):
+	def __init__(self):
 		self.running = False
-		self.name = _name
 
 		pg.init()
 		self.clock = pg.time.Clock()
-		self.win = pg.display.set_mode((self.width, self.height)) #		TODO : abstract away from pygame's window ystem
+		self.win = pg.display.set_mode((self.width, self.height)) #		TODO : abstract away from pygame's window system
 		self.font = pg.font.Font(None, self.size_font) #				TODO : abstract away from pygame's window system
-		pg.display.set_caption(_name) #			 						TODO : abstract away from pygame's window system
+		pg.display.set_caption(self.name) #			 					TODO : abstract away from pygame's window system
 
 		self.rackets = []
 		self.balls = []
@@ -47,12 +52,13 @@ class Game:
 
 
 	def initRackets(self):
-		self.rackets.append( go.GameObject( 1, self.win, self.width * (2 / 4), self.height - self.size_b , self.size_r, self.size_b ))
-
+		self.rackets.append( go.GameObject( 1, self, self.width * (2 / 4), self.height - self.size_b , self.size_r, self.size_b ))
+		self.rackets[0].setSpeeds( self.speed_r, 0 )
 
 	def initBalls(self):
-		self.balls.append( go.GameObject( 1, self.win, self.width * (2 / 4), self.height * (1 / 16) , self.size_b, self.size_b ))
-		self.balls[0].setSpeeds( 0, 0 )
+		self.balls.append( go.GameObject( 1, self, self.width * (3 / 8), self.height * (1 / 8) , self.size_b, self.size_b ))
+		self.balls[0].setSpeeds( self.speed_b, 0 )
+		self.balls[0].setDirs( 1, 1 )
 
 
 	def initScores(self):
@@ -69,25 +75,26 @@ class Game:
 		if (target_id <= 0):
 			print("Error: no target selected")
 			return
-		for rack in self.rackets:
+		for i in range(len(self.rackets)):
+			rack = self.rackets[i]
 			if (rack.id == target_id):
 				if (move == "LEFT"):
-					if (go.hard_break and rack.fx > 0):
+					if (self.hard_break and rack.fx > 0):
 						rack.fx = 0
 					else:
 						rack.fx -= 1
 				elif (move == "RIGHT"):
-					if (go.hard_break and rack.fx < 0):
+					if (self.hard_break and rack.fx < 0):
 						rack.fx = 0
 					else:
 						rack.fx += 1
 				elif (move == "UP"):
-					if (go.hard_break and rack.fy > 0):
+					if (self.hard_break and rack.fy > 0):
 						rack.fy = 0
 					else:
 						rack.fy -= 1
 				elif (move == "DOWN"):
-					if (go.hard_break and rack.fy < 0):
+					if (self.hard_break and rack.fy < 0):
 						rack.fy = 0
 					else:
 						rack.fy += 1
@@ -98,10 +105,10 @@ class Game:
 					print("Error: invalid move")
 					return
 
-				print(f" > Moved rack_{target_id} {move} successfully")
 
 	def handleInputs(self, key):
-		for rack in self.rackets:
+		for i in range(len(self.rackets)):
+			rack = self.rackets[i]
 			if key == pg.K_s or key == pg.K_DOWN:
 				self.makeMove( rack.id, "STOP" )
 			elif key == pg.K_a or key == pg.K_LEFT:
@@ -134,8 +141,13 @@ class Game:
 		# main game loop
 		while self.running:
 			self.step()
+			self.clock.tick (self.framerate)
 
 		print("Game " + self.name + " is over")
+
+		pg.quit()
+		sys.exit()
+
 
 
 	def step(self):
@@ -144,19 +156,18 @@ class Game:
 			print("Game " + self.name + " is not running")
 			return
 
-		self.pygameInputs() #	TODO : abstract away from pygame's event system
+		self.pgLoop()
 
 		self.moveObjects()
 		self.refreshScreen()
-		self.clock.tick (self.framerate)
 
-	def pygameInputs(self):
+
+	def pgLoop(self): #						TODO : abstract away from pygame's event system
 		for event in pg.event.get():
 
 			# quiting the game
 			if event.type == pg.QUIT or ( event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE ):
-				pg.quit()
-				sys.exit()
+				self.running = False
 
 			# handling key presses
 			elif event.type == pg.KEYDOWN:
@@ -167,21 +178,21 @@ class Game:
 
 	def moveObjects(self):
 
-		for rack in self.rackets:
-			self.moveRacket(rack)
+		for i in range(len(self.rackets)):
+			self.moveRacket(self.rackets[i])
 
-		for ball in self.balls:
-			self.moveBall(ball)
+		for i in range(len(self.balls)):
+			self.moveBall(self.balls[i])
 
 
 	def moveRacket(self, rack):
-		rack.clampSpeed ()
+		rack.clampSpeed()
 		rack.updatePos()
 
 		# prevent racket from going off screen
-		if (rack.box.top <= 0 and rack.fy < 0) or (rack.box.bottom >= go.win_h and rack.fy > 0):
+		if (rack.box.top <= 0 and rack.fy < 0) or (rack.box.bottom >= self.height and rack.fy > 0):
 			rack.collideWall( "stop" )
-		if (rack.box.left <= 0 and rack.fx < 0) or (rack.box.right >= go.win_w and rack.fx > 0):
+		if (rack.box.left <= 0 and rack.fx < 0) or (rack.box.right >= self.width and rack.fx > 0):
 			rack.collideWall( "stop" )
 
 		rack.clampPos()
@@ -195,32 +206,33 @@ class Game:
 				ball.dy -= self.gravity
 
 		ball.clampSpeed()
+		ball.updatePos()
 
 		self.checkWalls( ball )
 		self.checkRackets( ball )
 		self.checkGoals( ball )
 
-		ball.updatePos()
 		ball.clampPos()
 
 	# bouncing on the walls
 	def checkWalls(self, ball):
-		# bouncing off the top and bottom
-		if ball.box.top <= 0 or ball.box.bottom >= go.win_h:
-			ball.collideWall( "y" )
-			ball.dy *= self.factor_wall
-			ball.clampSpeed()
+		if ball.box.left <= 0 or ball.box.right >= self.width or ball.box.top <= 0:
 
-		# bouncing off the left and right
-		if ball.box.left <= 0 or ball.box.right >= go.win_w:
-			ball.collideWall( "x" )
+			# bouncing off the sides
+			if ball.box.left <= 0 or ball.box.right >= self.width:
+				ball.collideWall( "x" )
+
+			# bouncing off the top
+			if ball.box.top <= 0:
+				ball.collideWall( "y" )
+				ball.dy = 1
+
 			ball.dx *= self.factor_wall
 			ball.clampSpeed()
 
-
 	# bouncing off the rackets
 	def checkRackets(self, ball):
-		for rack in self.rackets:
+		for rack in self.rackets: #		copies the racket's data
 			if ball.overlaps( rack ):
 				ball.collideWall( "y" )
 				ball.dy *= self.factor_rack
@@ -232,13 +244,11 @@ class Game:
 
 	# scoring a goal
 	def checkGoals(self, ball):
-		if ball.box.bottom >= go.win_h:
+		if ball.box.bottom >= self.height:
 			self.scores[0] = 0
-			ball.setDirs( -ball.fx / 2, 0 )
-
-			# reseting the ball's position
+			ball.setDirs( -ball.fx, 1 )
 			ball.setPos( ball.box.centerx, 0 )
-			ball.setSpeeds( (ball.dx + self.speed_b) / 3, (ball.dy + self.speed_b) / 3)
+			ball.setSpeeds( (ball.dx + self.speed_b) / 2, 0)
 			ball.clampSpeed()
 
 
@@ -248,27 +258,27 @@ class Game:
 
 	def refreshScreen(self):
 
-		self.win.fill( go.bgr_colour )
+		self.win.fill( self.col_bgr )
 
-		for rack in self.rackets:
+		for rack in self.rackets: # 	copies the racket's data
 			rack.drawSelf()
 
 		self.drawScores()
 		self.drawLines()
 
-		for ball in self.balls:
+		for ball in self.balls: # 		copies the ball's data
 			ball.drawSelf()
 
-		pg.display.flip()	# drawing the newly prepared frame
+		pg.display.flip() #				drawing the newly prepared frame
 
 
 	def drawLines(self):
 		#pg.draw.line ( self.win, self.col_fnt, ( self.width / 2, 0 ),  ( self.width / 2, self.height ), self.size_l )
 		#pg.draw.line ( self.win, self.col_fnt, ( 0, self.height / 2 ), ( self.width, self.height / 2 ), self.size_l )
-		return
+		pass
 
 
 	def drawScores(self):
-		for score in self.scores:
+		for score in self.scores: #		copies the racket's data
 			text = self.font.render(f'{score}', True, self.col_fnt)
 			self.win.blit( text, text.get_rect( center = ( self.width * (2 / 4), self.height * (2 / 4) )))
