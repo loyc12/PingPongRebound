@@ -1,7 +1,8 @@
 import pygame as pg
 import GameObject as go
-import sys	# to exit properly
+import sys #	to exit properly
 
+# game class
 class Game:
 	name = "unnamed"
 

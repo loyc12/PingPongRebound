@@ -1,10 +1,6 @@
 import pygame as pg
 
-# TODO : set the center for rect positioning
-
 # ------------------------------------------ GAMEOBJECT CLASS ------------------------------------------ #
-
-# setting up game objects
 
 def getSign(value):
 	if value < 0:
@@ -13,7 +9,7 @@ def getSign(value):
 		return 1
 	return 0
 
-# object classes
+# object class
 class GameObject:
 
 	def __init__(self, _id, _game, _x, _y, _w, _h):

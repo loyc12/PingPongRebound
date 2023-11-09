@@ -1,10 +1,16 @@
-import Pingest as p
+import Ping
+import Pinger
+import Pingest
+import Pong
+import Ponger
+import Pongest
+import astro
+
 
 # MASTER LIST
-# TODO : try with websockets (?)
-# TODO : make an ai class to control the rackets throught the interface
-# TODO : split logic and rendering
 # TODO : allow racket control through sockets
+# TODO : make an ai class to control the rackets throught the interface
+
 
 # MINOR LIST
 # TODO : make an 'asteroids' game (solo)
@@ -13,6 +19,6 @@ import Pingest as p
 
 
 if __name__ == '__main__':
-	g = p.Pingest()
+	g = Pingest()
 	g.start()
 	g.run()
