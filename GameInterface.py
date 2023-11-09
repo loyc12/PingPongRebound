@@ -270,10 +270,11 @@ class Game:
 
 		self.win.fill( self.col_bgr )
 
+		self.drawScores()
+
 		for rack in self.rackets: # 	copies the racket's data
 			rack.drawSelf()
 
-		self.drawScores()
 		self.drawLines()
 
 		for ball in self.balls: # 		copies the ball's data
