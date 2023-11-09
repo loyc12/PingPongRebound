@@ -3,7 +3,7 @@ import GameObject as go
 import GameInterface as gi
 
 class Pong(gi.Game):
-	name = "Ping"
+	name = "Pong"
 
 	width = 2048
 	height = 1024
@@ -38,19 +38,19 @@ class Pong(gi.Game):
 	def handleInputs(self, key):
 		# player 1
 		if key == pg.K_a:
-			self.makeMove( 1, "STOP" )
+			self.makeMove( 1, self.STOP )
 		elif key == pg.K_w:
-			self.makeMove( 1, "UP" )
+			self.makeMove( 1, self.UP )
 		elif key == pg.K_s:
-			self.makeMove( 1, "DOWN" )
+			self.makeMove( 1, self.DOWN )
 
 		# player 2
 		if key == pg.K_LEFT:
-			self.makeMove( 2, "STOP" )
+			self.makeMove( 2, self.STOP )
 		elif key == pg.K_UP:
-			self.makeMove( 2, "UP" )
+			self.makeMove( 2, self.UP )
 		elif key == pg.K_DOWN:
-			self.makeMove( 2, "DOWN" )
+			self.makeMove( 2, self.DOWN )
 
 
 	# bouncing off the rackets

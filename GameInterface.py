@@ -31,6 +31,12 @@ class Game:
 	col_fnt = pg.Color('grey25')
 	col_obj = pg.Color('white')
 
+	STOP = 0
+	UP = 1
+	RIGHT = 2
+	DOWN = 3
+	LEFT = 4
+
 	# ------------------------------------------- INITIALIZATION ------------------------------------------- #
 
 	def __init__(self):
@@ -78,29 +84,29 @@ class Game:
 		for i in range(len(self.rackets)):
 			rack = self.rackets[i]
 			if (rack.id == target_id):
-				if (move == "LEFT"):
-					if (self.hard_break and rack.fx > 0):
-						rack.fx = 0
-					else:
-						rack.fx -= 1
-				elif (move == "RIGHT"):
-					if (self.hard_break and rack.fx < 0):
-						rack.fx = 0
-					else:
-						rack.fx += 1
-				elif (move == "UP"):
+				if (move == self.STOP):
+					rack.fx = 0
+					rack.fy = 0
+				elif (move == self.UP):
 					if (self.hard_break and rack.fy > 0):
 						rack.fy = 0
 					else:
 						rack.fy -= 1
-				elif (move == "DOWN"):
+				elif (move == self.RIGHT):
+					if (self.hard_break and rack.fx < 0):
+						rack.fx = 0
+					else:
+						rack.fx += 1
+				elif (move == self.DOWN):
 					if (self.hard_break and rack.fy < 0):
 						rack.fy = 0
 					else:
 						rack.fy += 1
-				elif (move == "STOP"):
-					rack.fx = 0
-					rack.fy = 0
+				elif (move == self.LEFT):
+					if (self.hard_break and rack.fx > 0):
+						rack.fx = 0
+					else:
+						rack.fx -= 1
 				else:
 					print("Error: invalid move")
 					return
@@ -110,11 +116,11 @@ class Game:
 		for i in range(len(self.rackets)):
 			rack = self.rackets[i]
 			if key == pg.K_s or key == pg.K_DOWN:
-				self.makeMove( rack.id, "STOP" )
+				self.makeMove( rack.id, self.STOP )
 			elif key == pg.K_a or key == pg.K_LEFT:
-				self.makeMove( rack.id, "LEFT" )
+				self.makeMove( rack.id, self.LEFT )
 			elif key == pg.K_d or key == pg.K_RIGHT:
-				self.makeMove( rack.id, "RIGHT" )
+				self.makeMove( rack.id, self.RIGHT )
 
 	# ---------------------------------------------- CORE CMDS --------------------------------------------- #
 

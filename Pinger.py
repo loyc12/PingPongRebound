@@ -38,19 +38,19 @@ class Pinger(gi.Game):
 	def handleInputs(self, key):
 		# player 1
 		if key == pg.K_s:
-			self.makeMove( 1, "STOP" )
+			self.makeMove( 1, self.STOP )
 		elif key == pg.K_a:
-			self.makeMove( 1, "LEFT" )
+			self.makeMove( 1, self.LEFT )
 		elif key == pg.K_d:
-			self.makeMove( 1, "RIGHT" )
+			self.makeMove( 1, self.RIGHT )
 
 		# player 2
 		if key == pg.K_DOWN:
-			self.makeMove( 2, "STOP" )
+			self.makeMove( 2, self.STOP )
 		elif key == pg.K_LEFT:
-			self.makeMove( 2, "LEFT" )
+			self.makeMove( 2, self.LEFT )
 		elif key == pg.K_RIGHT:
-			self.makeMove( 2, "RIGHT" )
+			self.makeMove( 2, self.RIGHT )
 
 
 	def moveRacket(self, rack):
@@ -78,10 +78,10 @@ class Pinger(gi.Game):
 	def checkGoals(self, ball):
 		if ball.box.bottom >= self.height:
 			# checking who scored
-			if ball.box.left <= self.width / 2:
+			if ball.box.right < self.width / 2:
 				self.scores[1] += 1
 				ball.setDirs( -1, -1 )
-			if ball.box.right >= self.width / 2:
+			elif ball.box.left > self.width / 2:
 				self.scores[0] += 1
 				ball.setDirs( 1, -1 )
 
