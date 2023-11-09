@@ -5,9 +5,6 @@ import GameInterface as gi
 class Pinger(gi.Game):
 	name = "Pinger"
 
-	width = 2048
-	height = 1024
-
 	speed_b = 10
 
 	factor_rack = 0.95

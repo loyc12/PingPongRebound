@@ -5,9 +5,6 @@ import GameInterface as gi
 class Pongest(gi.Game):
 	name = "Pongest"
 
-	width = 2048
-	height = 1024
-
 	speed_b = 10
 
 	factor_rack = 1.10

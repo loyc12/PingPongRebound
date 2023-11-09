@@ -7,9 +7,6 @@ import GameInterface as gi
 class Pingest(gi.Game):
 	name = "Pingest"
 
-	width = 2048
-	height = 1024
-
 	speed_b = 10
 
 	factor_rack = 1.10
