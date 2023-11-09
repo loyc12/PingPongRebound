@@ -31,7 +31,7 @@ class Pingest(gi.Game):
 	def initBalls(self):
 		self.balls.append( go.GameObject( 1, self, self.width * (1 / 2), self.height * (1 / 4) , self.size_b, self.size_b ))
 		self.balls[0].setSpeeds( self.speed_b * (2 / 3), self.speed_b )
-		self.balls[0].setDirs( -1, 1 )
+		self.balls[0].setDirs( 1, 1 )
 
 
 	def initScores(self):
@@ -107,12 +107,12 @@ class Pingest(gi.Game):
 			if ball.box.top <= 0:
 				if self.last_ponger > 0:
 					self.scores[1] += 1
-				ball.setDirs( 1, -1 )
+				ball.setDirs( -1, -1 )
 				ball.setPos ( self.width * (1 / 2), self.height * (3 / 4) )
 			elif ball.box.bottom >= self.height:
 				if self.last_ponger > 0:
 					self.scores[0] += 1
-				ball.setDirs( -1, 1 )
+				ball.setDirs( 1, 1 )
 				ball.setPos ( self.width * (1 / 2), self.height * (1 / 4) )
 
 			# reseting the ball's speed

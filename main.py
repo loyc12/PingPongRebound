@@ -1,9 +1,9 @@
-import Ping
-import Pinger
-import Pingest
-import Pong
-import Ponger
-import Pongest
+from Ping import Ping
+from Pinger import Pinger
+from Pingest import Pingest
+from Pong import Pong
+from Ponger import Ponger
+from Pongest import Pongest
 
 
 # MASTER LIST
@@ -18,6 +18,6 @@ import Pongest
 
 
 if __name__ == '__main__':
-	g = Pingest()
+	g = Pong()
 	g.start()
 	g.run()
