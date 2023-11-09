@@ -99,8 +99,8 @@ class Game:
 					else:
 						rack.fy += 1
 				elif (move == "STOP"):
-					rack.fx == 0
-					rack.fy == 0
+					rack.fx = 0
+					rack.fy = 0
 				else:
 					print("Error: invalid move")
 					return
@@ -239,13 +239,12 @@ class Game:
 				ball.clampSpeed()
 				ball.collideRack( rack, "y" )
 				ball.setPos( ball.box.centerx, rack.box.centery - self.size_b ) # '-' because the ball is going above the racket
-				self.scores[0] += 1
 
 
 	# scoring a goal
 	def checkGoals(self, ball):
 		if ball.box.bottom >= self.height:
-			self.scores[0] = 0
+			self.scores[0] += 1
 			ball.setDirs( -ball.fx, 1 )
 			ball.setPos( ball.box.centerx, 0 )
 			ball.setSpeeds( (ball.dx + self.speed_b) / 2, 0)

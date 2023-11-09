@@ -11,7 +11,7 @@ class Pinger(gi.Game):
 	racketCount = 2
 	scoreCount = 2
 
-	speed_b = 6
+	speed_b = 10
 
 	factor_rack = 0.95
 
@@ -23,7 +23,7 @@ class Pinger(gi.Game):
 		self.rackets[1].setSpeeds( self.speed_r, 0 )
 
 	def initBalls(self):
-		self.balls.append( go.GameObject( 1, self, self.width * (1 / 4), self.height * (2 / 3) , self.size_b, self.size_b ))
+		self.balls.append( go.GameObject( 1, self, self.width * (2 / 4), self.height * (2 / 3) , self.size_b, self.size_b ))
 		self.balls[0].setSpeeds( self.speed_b * (2 / 3), self.speed_b * 2 )
 		self.balls[0].setDirs( 1, -1 )
 
@@ -35,19 +35,19 @@ class Pinger(gi.Game):
 	def handleInputs(self, key):
 		# player 1
 		if key == pg.K_s:
-			self.makeMove( self.rackets[0].id, "STOP" )
+			self.makeMove( 1, "STOP" )
 		elif key == pg.K_a:
-			self.makeMove( self.rackets[0].id, "LEFT" )
+			self.makeMove( 1, "LEFT" )
 		elif key == pg.K_d:
-			self.makeMove( self.rackets[0].id, "RIGHT" )
+			self.makeMove( 1, "RIGHT" )
 
 		# player 2
 		if key == pg.K_DOWN:
-			self.makeMove( self.rackets[1].id, "STOP" )
+			self.makeMove( 2, "STOP" )
 		elif key == pg.K_LEFT:
-			self.makeMove( self.rackets[1].id, "LEFT" )
+			self.makeMove( 2, "LEFT" )
 		elif key == pg.K_RIGHT:
-			self.makeMove( self.rackets[1].id, "RIGHT" )
+			self.makeMove( 2, "RIGHT" )
 
 	def moveRacket(self, rack):
 		rack.clampSpeed()
@@ -77,13 +77,13 @@ class Pinger(gi.Game):
 				self.scores[1] += 1
 				ball.setDirs( -1, -1 )
 			if ball.box.right >= self.width / 2:
-				self.scores[0]
+				self.scores[0] += 1
 				ball.setDirs( 1, -1 )
 
-		# reseting the ball's position
-		ball.setPos   ( (self.width - self.speed_b) / 2, self.height * (2 / 3) )
-		ball.setSpeeds( (ball.dx + self.speed_b) / 3, self.speed_b * 2 )
-		ball.clampSpeed()
+			# reseting the ball's position
+			ball.setPos   ( self.width * (1 / 2), self.height * (2 / 3) )
+			ball.setSpeeds( (ball.dx + self.speed_b) / 3, self.speed_b * 2 )
+			ball.clampSpeed()
 
 	def drawLines(self):
 		pg.draw.line ( self.win, self.col_fnt, ( self.width / 2, 0 ),  ( self.width / 2, self.height ), self.size_l )

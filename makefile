@@ -6,6 +6,9 @@ all:
 ping:
 	python3 ping.py
 
+pinger:
+	python3 pinger.py
+
 pong:
 	python3 pong.py
 
