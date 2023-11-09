@@ -12,12 +12,13 @@ class Game:
 	size_b = 20
 	size_r = 160
 	width = 2048
-	height = 1536
+	height = 1024
+	size_font = 768
 
 	factor_wall = 1.00
 	factor_rack = 1.00
-
-	font = pg.font.Font(None, 768) #	score font
+	gravity = 0.5
+	hard_break = True
 	framerate = 60 # 					max fps
 
 	col_bgr = pg.Color('black')
@@ -27,23 +28,86 @@ class Game:
 	# ------------------------------------------- INITIALIZATION ------------------------------------------- #
 
 	def __init__(self, _name):
+		self.running = False
 		self.name = _name
 
 		pg.init()
 		self.clock = pg.time.Clock()
-		self.win = pg.display.set_mode((self.width, self.height)) #			TODO : abstract away from pygame's window system
-		pg.display.set_caption(_name) #			 							TODO : abstract away from pygame's window system
+		self.win = pg.display.set_mode((self.width, self.height)) #		TODO : abstract away from pygame's window ystem
+		self.font = pg.font.Font(None, self.size_font) #				TODO : abstract away from pygame's window system
+		pg.display.set_caption(_name) #			 						TODO : abstract away from pygame's window system
 
-		self.rackets[self.rackCount]
-		self.balls[self.ballCount]
-		self.scores[self.scoreCount]
+		self.rackets = []
+		self.balls = []
+		self.scores = []
 
-		self.running = False
+		self.initRackets()
+		self.initBalls()
+		self.initScores()
+
+
+	def initRackets(self):
+		self.rackets.append( go.GameObject( 1, self.win, self.width * (2 / 4), self.height - self.size_b , self.size_r, self.size_b ))
+
+
+	def initBalls(self):
+		self.balls.append( go.GameObject( 1, self.win, self.width * (2 / 4), self.height * (1 / 16) , self.size_b, self.size_b ))
+		self.balls[0].setSpeeds( 0, 0 )
+
+
+	def initScores(self):
+		self.scores.append( 0 )
+
+
+	def reset(self):
+		raise NotImplementedError("Unimplemented : game.reset()")
+
 
 	# ---------------------------------------------- INTERFACE --------------------------------------------- #
 
-	def giveInput(self, _id, _input):
-		raise NotImplementedError("Subclass must implement giveInput method")
+	def makeMove(self, target_id, move):
+		if (target_id <= 0):
+			print("Error: no target selected")
+			return
+		for rack in self.rackets:
+			if (rack.id == target_id):
+				if (move == "LEFT"):
+					if (go.hard_break and rack.fx > 0):
+						rack.fx = 0
+					else:
+						rack.fx -= 1
+				elif (move == "RIGHT"):
+					if (go.hard_break and rack.fx < 0):
+						rack.fx = 0
+					else:
+						rack.fx += 1
+				elif (move == "UP"):
+					if (go.hard_break and rack.fy > 0):
+						rack.fy = 0
+					else:
+						rack.fy -= 1
+				elif (move == "DOWN"):
+					if (go.hard_break and rack.fy < 0):
+						rack.fy = 0
+					else:
+						rack.fy += 1
+				elif (move == "STOP"):
+					rack.fx == 0
+					rack.fy == 0
+				else:
+					print("Error: invalid move")
+					return
+
+				print(f" > Moved rack_{target_id} {move} successfully")
+
+	def handleInputs(self, key):
+		for rack in self.rackets:
+			if key == pg.K_s or key == pg.K_DOWN:
+				self.makeMove( rack.id, "STOP" )
+			elif key == pg.K_a or key == pg.K_LEFT:
+				self.makeMove( rack.id, "LEFT" )
+			elif key == pg.K_d or key == pg.K_RIGHT:
+				self.makeMove( rack.id, "RIGHT" )
 
 	# ---------------------------------------------- CORE CMDS --------------------------------------------- #
 
@@ -57,15 +121,10 @@ class Game:
 		print("Stopping game " + self.name)
 
 
-	def reset(self):
-		raise NotImplementedError("Subclass must implement reset method")
-
-
 	def getState(self):
-		raise NotImplementedError("Subclass must implement getState method")
+		raise NotImplementedError("Unimplemented : game.getState()")
 
 
-	# game logic loop
 	def run(self):
 
 		if self.running == False:
@@ -76,23 +135,33 @@ class Game:
 		while self.running:
 			self.step()
 
-		print("Game " + self.name + " is finished")
+		print("Game " + self.name + " is over")
 
 
 	def step(self):
-		# handling inputs
-		for event in pg.event.get ():
 
-			# quiting the game
-			if event.type == pg.QUIT or ( event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE ):
-				pg.quit ()
-				sys.exit ()
-			elif event.type == pg.KEYDOWN:
-				self.handleInputs( event.key )
+		if self.running == False:
+			print("Game " + self.name + " is not running")
+			return
+
+		self.pygameInputs() #	TODO : abstract away from pygame's event system
 
 		self.moveObjects()
 		self.refreshScreen()
-		self.clock.tick ()
+		self.clock.tick (self.framerate)
+
+	def pygameInputs(self):
+		for event in pg.event.get():
+
+			# quiting the game
+			if event.type == pg.QUIT or ( event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE ):
+				pg.quit()
+				sys.exit()
+
+			# handling key presses
+			elif event.type == pg.KEYDOWN:
+				self.handleInputs( event.key )
+
 
 	# ------------------------------------------- GAME MECHANICS ------------------------------------------- #
 
@@ -107,7 +176,7 @@ class Game:
 
 	def moveRacket(self, rack):
 		rack.clampSpeed ()
-		rack.updatePos  ()
+		rack.updatePos()
 
 		# prevent racket from going off screen
 		if (rack.box.top <= 0 and rack.fy < 0) or (rack.box.bottom >= go.win_h and rack.fy > 0):
@@ -115,15 +184,21 @@ class Game:
 		if (rack.box.left <= 0 and rack.fx < 0) or (rack.box.right >= go.win_w and rack.fx > 0):
 			rack.collideWall( "stop" )
 
-		rack.clampPos   ()
+		rack.clampPos()
 
 
-	def moveball(self, ball):
-		ball.clampSpeed ()
+	def moveBall(self, ball):
+		if self.gravity != 0:
+			if ball.fy > 0:
+				ball.dy += self.gravity
+			else:
+				ball.dy -= self.gravity
 
-		self.checkWalls(ball)
-		self.checkRackets(ball)
-		self.checkGoals(ball)
+		ball.clampSpeed()
+
+		self.checkWalls( ball )
+		self.checkRackets( ball )
+		self.checkGoals( ball )
 
 		ball.updatePos()
 		ball.clampPos()
@@ -152,18 +227,18 @@ class Game:
 				ball.clampSpeed()
 				ball.collideRack( rack, "y" )
 				ball.setPos( ball.box.centerx, rack.box.centery - self.size_b ) # '-' because the ball is going above the racket
+				self.scores[0] += 1
+
 
 	# scoring a goal
 	def checkGoals(self, ball):
 		if ball.box.bottom >= go.win_h:
-			# updating all (1) scores
-			for score in self.scores:
-				score += 1
+			self.scores[0] = 0
 			ball.setDirs( -ball.fx / 2, 0 )
 
 			# reseting the ball's position
-			ball.setPos( 0, go.win_h / 2 )
-			ball.setSpeeds( (ball.dx + self.speed_b) / 3, self.speed_b / 2)
+			ball.setPos( ball.box.centerx, 0 )
+			ball.setSpeeds( (ball.dx + self.speed_b) / 3, (ball.dy + self.speed_b) / 3)
 			ball.clampSpeed()
 
 
@@ -188,10 +263,12 @@ class Game:
 
 
 	def drawLines(self):
-		pg.draw.line ( self.win, self.col_fnt, ( self.width / 2, 0 ), ( self.width / 2, self.height ), self.size_l )
+		#pg.draw.line ( self.win, self.col_fnt, ( self.width / 2, 0 ),  ( self.width / 2, self.height ), self.size_l )
+		#pg.draw.line ( self.win, self.col_fnt, ( 0, self.height / 2 ), ( self.width, self.height / 2 ), self.size_l )
+		return
 
 
 	def drawScores(self):
 		for score in self.scores:
 			text = self.font.render(f'{score}', True, self.col_fnt)
-			self.win.blit( text, text.get_rect( center = ( self.width * (2 / 4), self.height * (2 / 4) ) ) )
+			self.win.blit( text, text.get_rect( center = ( self.width * (2 / 4), self.height * (2 / 4) )))

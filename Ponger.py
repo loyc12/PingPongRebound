@@ -102,28 +102,28 @@ def moveBall(ball):	#						TODO: add sound effects
 
 	# bouncing off the sides
 	if ball.box.left <= 0 or ball.box.right >= go.win_w:
-		ball.collideWall( "hor" )
+		ball.collideWall( "x" )
 		ball.dx *= f_abs
 
 	# bounce off the rackets
 	if ball.box.colliderect( rack_1.box ):
-		ball.collideWall( "ver" )
-		ball.collideRack( rack_1, "ver" )
+		ball.collideWall( "y" )
+		ball.collideRack( rack_1, "y" )
 		ball.setPos( ball.box.centerx, rack_1.box.centery - size_b )
 		ball.dy *= f_rck
 	elif ball.box.colliderect( rack_2.box ):
-		ball.collideWall( "ver" )
-		ball.collideRack( rack_2, "ver" )
+		ball.collideWall( "y" )
+		ball.collideRack( rack_2, "y" )
 		ball.setPos( ball.box.centerx, rack_2.box.centery - size_b )
 		ball.dy *= f_rck
 	elif ball.box.colliderect( rack_3.box ):
-		ball.collideWall( "ver" )
-		ball.collideRack( rack_3, "ver" )
+		ball.collideWall( "y" )
+		ball.collideRack( rack_3, "y" )
 		ball.setPos( ball.box.centerx, rack_3.box.centery + size_b )
 		ball.dy *= f_rck
 	elif ball.box.colliderect( rack_4.box ):
-		ball.collideWall( "ver" )
-		ball.collideRack( rack_4, "ver" )
+		ball.collideWall( "y" )
+		ball.collideRack( rack_4, "y" )
 		ball.setPos( ball.box.centerx, rack_4.box.centery + size_b )
 		ball.dy *= f_rck
 
@@ -150,7 +150,7 @@ def moveRacket(rack):
 
 	# prevent racket from going off screen
 	if (rack.box.left <= 0 and rack.fx < 0) or (rack.box.right >= go.win_w and rack.fx > 0):
-		rack.collideWall( "wall" )
+		rack.collideWall( "stop" )
 
 	rack.clampPos ()
 

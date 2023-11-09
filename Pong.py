@@ -100,19 +100,19 @@ def moveBall(ball):
 
 	# bouncing off the top and bottom
 	if ball.box.top <= 0 or ball.box.bottom >= go.win_h:
-		ball.collideWall( "ver" )
+		ball.collideWall( "y" )
 		ball.dy *= f_abs
 		ball.clampSpeed()
 
 	# bounce off the rackets
 	if ball.box.colliderect( rack_1.box ):
-		ball.collideWall( "hor" )
-		ball.collideRack( rack_1, "hor" )
+		ball.collideWall( "x" )
+		ball.collideRack( rack_1, "x" )
 		ball.setPos( rack_1.box.centerx + size_b, ball.box.centery )
 		ball.dx *= f_rck
 	elif ball.box.colliderect( rack_2.box ):
-		ball.collideWall( "hor" )
-		ball.collideRack( rack_2, "hor" )
+		ball.collideWall( "x" )
+		ball.collideRack( rack_2, "x" )
 		ball.setPos( rack_2.box.centerx - size_b, ball.box.centery )
 		ball.dx *= f_rck
 
@@ -141,7 +141,7 @@ def moveRacket(rack):
 
 	# prevent racket from going off screen
 	if (rack.box.top <= 0 and rack.fy < 0) or (rack.box.bottom >= go.win_h and rack.fy > 0):
-		rack.collideWall( "wall" )
+		rack.collideWall( "stop" )
 
 	rack.clampPos ()
 

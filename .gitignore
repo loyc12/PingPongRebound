@@ -1,6 +1,7 @@
 **/.env
 
 **/build/**
+**/__pycache__/**
 
 # 42
 *.DS_Store

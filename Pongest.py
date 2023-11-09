@@ -105,15 +105,15 @@ def moveBall(ball):	#						TODO: add sound effects
 
 	# bouncing off the sides
 	if ball.box.left <= 0 or ball.box.right >= go.win_w:
-		ball.collideWall( "hor" )
+		ball.collideWall( "x" )
 		ball.dx *= f_abs
 
 	# bounce off the rackets
 	for rack in [rack_1, rack_2, rack_3, rack_4]:
 		# checking each racket individually
 		if ball.box.colliderect( rack.box ):
-			ball.collideWall( "ver" )
-			ball.collideRack( rack, "ver" )
+			ball.collideWall( "y" )
+			ball.collideRack( rack, "y" )
 			ball.dy *= f_rck
 			last_ponger = rack.id
 
@@ -163,14 +163,14 @@ def moveRacket(rack):
 
 	# prevent racket from going off screen
 	if (rack.box.left <= 0 and rack.fx < 0) or (rack.box.right >= go.win_w and rack.fx > 0):
-		rack.collideWall( "wall" )
+		rack.collideWall( "stop" )
 
 	# prevent racket from crossing the middle line
 	if rack.id == 1 and rack.box.right > go.win_w / 2:
-		rack.collideWall( "wall" )
+		rack.collideWall( "stop" )
 		rack.setPos( (go.win_w - size_r) / 2, rack.box.centery )
 	elif rack.id == 2 and rack.box.left < go.win_w / 2:
-		rack.collideWall( "wall" )
+		rack.collideWall( "stop" )
 		rack.setPos( (go.win_w + size_r) / 2, rack.box.centery )
 
 	rack.clampPos ()

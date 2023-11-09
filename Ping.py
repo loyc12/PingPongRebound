@@ -103,26 +103,26 @@ def moveBall(ball):	#						TODO: add sound effects
 
 	# bouncing off the sides
 	if ball.box.left <= 0 or ball.box.right >= go.win_w:
-		ball.collideWall( "hor" )
+		ball.collideWall( "x" )
 		ball.dx *= f_abs
 
 	# bouncing off the top
 	if ball.box.top <= 0:
-		ball.collideWall( "ver" )
+		ball.collideWall( "y" )
 		ball.dx *= f_abs
 		ball.dy = 1
 
 	# bounce off a racket
 	if ball.box.colliderect( rack_1.box ) or ball.box.colliderect( rack_2.box ):
-		ball.collideWall( "ver" )
+		ball.collideWall( "y" )
 		ball.dy *= f_rck
 		ball.clampSpeed()
 
 		if ball.box.colliderect( rack_1.box ):
-			ball.collideRack( rack_1, "ver" )
+			ball.collideRack( rack_1, "y" )
 			ball.setPos( ball.box.centerx, rack_1.box.centery - size_b )
 		elif ball.box.colliderect( rack_2.box ):
-			ball.collideRack( rack_2, "ver" )
+			ball.collideRack( rack_2, "y" )
 			ball.setPos( ball.box.centerx, rack_2.box.centery - size_b )
 
 	# scoring a goal
@@ -148,14 +148,14 @@ def moveRacket(rack):
 
 	# prevent racket from going off screen
 	if (rack.box.left <= 0 and rack.fx < 0) or (rack.box.right >= go.win_w and rack.fx > 0):
-		rack.collideWall( "wall" )
+		rack.collideWall( "stop" )
 
 	# prevent racket from crossing the middle line
 	if rack.id == 1 and rack.box.right > go.win_w / 2:
-		rack.collideWall( "wall" )
+		rack.collideWall( "stop" )
 		rack.setPos( (go.win_w - size_r) / 2, rack.box.centery )
 	elif rack.id == 2 and rack.box.left < go.win_w / 2:
-		rack.collideWall( "wall" )
+		rack.collideWall( "stop" )
 		rack.setPos( (go.win_w + size_r) / 2, rack.box.centery )
 
 	rack.clampPos ()

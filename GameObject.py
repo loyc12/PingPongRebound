@@ -12,9 +12,9 @@ obj_colour = pg.Color('white') #														TODO : use GameInterface value ins
 
 max_speed = 60 #		max updatePos movement for objects (in x and y separatly)		TODO : use GameInterface value instead
 win_w = 2048 #			window width													TODO : use GameInterface value instead
-win_h = 1536 #			window height													TODO : use GameInterface value instead
+win_h = 1024 #			window height													TODO : use GameInterface value instead
 framerate = 60 #		max tick per second												TODO : use GameInterface value instead
-hard_break = False #	whether the racket stops immediately when changing direction	TODO : use GameInterface value instead
+hard_break = True #		whether the racket stops immediately when changing direction	TODO : use GameInterface value instead
 
 def getSign(value):
 	if value < 0:
@@ -52,10 +52,10 @@ class GameObject:
 
 	def updatePos(self):
 		# making sure the dx and dy are positive
-		self.normalizeSpeed()
+		self.clampSpeed()
 
 		# moving on x
-		if self.fy != 0:
+		if self.fx != 0:
 			if abs( self.dx * self.fx ) > max_speed:
 				self.box.x += max_speed * getSign(self.fx)
 			else:
@@ -75,22 +75,22 @@ class GameObject:
 		return False
 
 	def collideWall(self, type):
-		if type == "x" or type == "hor": # 				TODO : remove "hor" type
+		if type == "x":
 			self.fx *= -1
-		elif type == "y" or type == "ver": # 			TODO : remove "ver" type
+		elif type == "y":
 			self.fy *= -1
-		elif type == "stop" or type == "wall": # 		TODO : remove "wall" type
+		elif type == "stop":
 			self.fx = 0
 			self.fy = 0
 
 	# specifically to handle ball-to-racket collisions
 	def collideRack(self, other, type):
-		if type == "x" or type == "hor": # 				TODO : remove "hor" type
+		if type == "x":
 			if self.fy > 0:
 				self.dy += other.dy * other.fy
 			else:
 				self.dy -= other.dy * other.fy
-		elif type == "y" or type == "ver": # 			TODO : remove "ver" type
+		elif type == "y":
 			if self.fx > 0:
 				self.dx += other.dx * other.fx
 			else:
