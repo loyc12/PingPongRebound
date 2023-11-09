@@ -151,7 +151,7 @@ def moveBall(ball):	#						TODO: add sound effects
 
 		last_ponger = 0
 		# reseting the ball's position and movement
-		ball.setSpeeds( (speed_b + ball.dx) / 2 ,(speed_b + ball.dy) / 3 )
+		ball.setSpeeds( (speed_b + ball.dx) / 2, (speed_b + ball.dy) / 3 )
 		ball.setPos   ( go.win_w / 2, go.win_h / 2 )
 
 	ball.clampSpeed ()

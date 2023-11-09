@@ -2,8 +2,8 @@ import pygame as pg
 import GameObject as go
 import GameInterface as gi
 
-class Ponger(gi.Game):
-	name = "Ponger"
+class Pongest(gi.Game):
+	name = "Pongest"
 
 	width = 2048
 	height = 1024
@@ -15,6 +15,8 @@ class Ponger(gi.Game):
 
 	factor_rack = 1.10
 	gravity = 0
+
+	last_ponger = 0
 
 	def initRackets(self):
 		# setting up rackets :             id, game, _x                  , _y                       , _w         , _h
@@ -36,6 +38,8 @@ class Ponger(gi.Game):
 
 
 	def initScores(self):
+		self.scores.append( 0 )
+		self.scores.append( 0 )
 		self.scores.append( 0 )
 		self.scores.append( 0 )
 
@@ -97,6 +101,7 @@ class Ponger(gi.Game):
 				ball.dy *= self.factor_rack
 				ball.clampSpeed()
 				ball.collideRack( rack, "y" )
+				self.last_ponger = rack.id
 
 
 	# bouncing on the walls
@@ -112,28 +117,38 @@ class Ponger(gi.Game):
 	def checkGoals(self, ball):
 		if ball.box.top <= 0 or ball.box.bottom >= self.height:
 			# checking who scored
-			if ball.box.right <= self.width / 2:
-				self.scores[1] += 1
-				ball.setDirs( -1, -1 )
-				ball.setPos ( self.width * (3 / 4), self.height * (3 / 4) )
-			elif ball.box.left >= self.width / 2:
-				self.scores[0] += 1
-				ball.setDirs( 1, 1 )
-				ball.setPos ( self.width * (1 / 4), self.height * (1 / 4) )
+			if (self.last_ponger > 0):
+				self.scores[self.last_ponger - 1] += 1
+				ball.setDirs( -ball.fx, -ball.fy )
+			else:
+				if ball.fx < 0 and ball.fy < 0:
+					ball.setDirs( 1, -1 )
+				elif ball.fx > 0 and ball.fy < 0:
+					ball.setDirs( 1, 1 )
+				elif ball.fx > 0 and ball.fy > 0:
+					ball.setDirs( -1, 1 )
+				elif ball.fx < 0 and ball.fy > 0:
+					ball.setDirs( -1, -1 )
 
-			# reseting the ball's speed
-			ball.setSpeeds( ( self.speed_b + ball.dx ) * (1 / 2), self.speed_b * (2 / 3) )
+			# reseting the ball's position & speed
+			ball.setPos ( self.width / 2, self.height / 2 )
+			ball.setSpeeds( (self.speed_b + ball.dx) / 2, (self.speed_b + ball.dy) / 3 )
 			ball.clampSpeed()
+			self.last_ponger = 0
 
 
 	def drawLines(self):
 		pg.draw.line( self.win, self.col_fnt, ( self.width / 2, 0 ),  ( self.width / 2, self.height ), self.size_l )
-		#pg.draw.line( self.win, self.col_fnt, ( 0, self.height / 2 ), ( self.width, self.height / 2 ), self.size_l )
+		pg.draw.line( self.win, self.col_fnt, ( 0, self.height / 2 ), ( self.width, self.height / 2 ), self.size_l )
 
 
 	def drawScores(self):
 		text1 = self.font.render(f'{self.scores[0]}', True, self.col_fnt)
 		text2 = self.font.render(f'{self.scores[1]}', True, self.col_fnt)
+		text3 = self.font.render(f'{self.scores[2]}', True, self.col_fnt)
+		text4 = self.font.render(f'{self.scores[3]}', True, self.col_fnt)
 
-		self.win.blit( text1, text1.get_rect( center = ( self.width * (1 / 4), self.height * (2 / 4) )))
-		self.win.blit( text2, text2.get_rect( center = ( self.width * (3 / 4), self.height * (2 / 4) )))
+		self.win.blit( text1, text1.get_rect( center = ( self.width * (1 / 4), self.height * (1 / 4) )))
+		self.win.blit( text2, text2.get_rect( center = ( self.width * (3 / 4), self.height * (1 / 4) )))
+		self.win.blit( text3, text3.get_rect( center = ( self.width * (1 / 4), self.height * (3 / 4) )))
+		self.win.blit( text4, text4.get_rect( center = ( self.width * (3 / 4), self.height * (3 / 4) )))

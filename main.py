@@ -1,4 +1,4 @@
-import Ponger as p
+import Pongest as p
 
 # MASTER LIST
 # TODO : try with websockets (?)
@@ -13,7 +13,7 @@ import Ponger as p
 
 def main():
 
-	g = p.Ponger()
+	g = p.Pongest()
 	g.start()
 	g.run()
 

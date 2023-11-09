@@ -9,6 +9,9 @@ ping:
 pinger:
 	python3 pinger.py
 
+pingest:
+	python3 pingest.py
+
 pong:
 	python3 pong.py
 
