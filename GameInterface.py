@@ -120,12 +120,12 @@ class Game:
 
 	def start(self):
 		self.running = True
-		print("Starting game " + self.name)
+		print("Starting a game of " + self.name)
 
 
 	def stop(self):
 		self.running = False
-		print("Stopping game " + self.name)
+		print("Stopping a game of " + self.name)
 
 
 	def getState(self):
@@ -135,7 +135,7 @@ class Game:
 	def run(self):
 
 		if self.running == False:
-			print("Game " + self.name + " is not running")
+			print(f"{self.name} is not running")
 			return
 
 		# main game loop
@@ -143,7 +143,7 @@ class Game:
 			self.step()
 			self.clock.tick (self.framerate)
 
-		print("Game " + self.name + " is over")
+		print("The game of " + self.name + " is over")
 
 		pg.quit()
 		sys.exit()
@@ -153,7 +153,7 @@ class Game:
 	def step(self):
 
 		if self.running == False:
-			print("Game " + self.name + " is not running")
+			print(f"{self.name} is not running")
 			return
 
 		self.pgLoop()
