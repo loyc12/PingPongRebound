@@ -1,4 +1,4 @@
-import Pinger as p
+import Pong as p
 
 # MASTER LIST
 # TODO : try with websockets (?)
@@ -8,12 +8,12 @@ import Pinger as p
 
 # MINOR LIST
 # TODO : make an 'asteroids' game (solo)
-# TODO : make the ball restart's trajectory more random
+# TODO : make the ball restart's trajectory more random in Pong-type games
 # TODO : add sound effects to collisions (in GameObject class)
 
 def main():
 
-	g = p.Pinger()
+	g = p.Pong()
 	g.start()
 	g.run()
 

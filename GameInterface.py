@@ -25,7 +25,7 @@ class Game:
 	factor_wall = 0.75
 	factor_rack = 1.00
 	gravity = 0.4
-	hard_break = True
+	hard_break = False
 
 	col_bgr = pg.Color('black')
 	col_fnt = pg.Color('grey25')
@@ -199,20 +199,35 @@ class Game:
 
 
 	def moveBall(self, ball):
+
+		self.aplyGravity( ball )
+
+		ball.clampSpeed()
+		ball.updatePos()
+
+		self.checkRackets( ball )
+		self.checkWalls( ball )
+		self.checkGoals( ball )
+
+		ball.clampPos()
+
+	def aplyGravity(self, ball):
 		if self.gravity != 0:
 			if ball.fy > 0:
 				ball.dy += self.gravity
 			else:
 				ball.dy -= self.gravity
 
-		ball.clampSpeed()
-		ball.updatePos()
-
-		self.checkWalls( ball )
-		self.checkRackets( ball )
-		self.checkGoals( ball )
-
-		ball.clampPos()
+	# bouncing off the rackets
+	def checkRackets(self, ball):
+		for i in range(len(self.rackets)):
+			rack = self.rackets[i]
+			if ball.overlaps( rack ):
+				ball.setPos( ball.box.centerx, rack.box.centery - self.size_b ) # '-' because the ball is going above the racket
+				ball.collideWall( "x" )
+				ball.collideRack( "y" )
+				ball.dy *= self.factor_rack
+				ball.clampSpeed()
 
 	# bouncing on the walls
 	def checkWalls(self, ball):
@@ -229,16 +244,6 @@ class Game:
 
 			ball.dx *= self.factor_wall
 			ball.clampSpeed()
-
-	# bouncing off the rackets
-	def checkRackets(self, ball):
-		for rack in self.rackets: #		copies the racket's data
-			if ball.overlaps( rack ):
-				ball.collideWall( "y" )
-				ball.dy *= self.factor_rack
-				ball.clampSpeed()
-				ball.collideRack( rack, "y" )
-				ball.setPos( ball.box.centerx, rack.box.centery - self.size_b ) # '-' because the ball is going above the racket
 
 
 	# scoring a goal

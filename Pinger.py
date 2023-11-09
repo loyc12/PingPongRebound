@@ -15,15 +15,17 @@ class Pinger(gi.Game):
 
 	factor_rack = 0.95
 
+
 	def initRackets(self):
-		self.rackets.append( go.GameObject( 1, self, self.width * (1 / 4), self.height - self.size_b , self.size_r, self.size_b ))
+		self.rackets.append( go.GameObject( 1, self, self.width * (1 / 4), self.height - self.size_b, self.size_r, self.size_b ))
 		self.rackets[0].setSpeeds( self.speed_r, 0 )
 
-		self.rackets.append( go.GameObject( 2, self, self.width * (3 / 4), self.height - self.size_b , self.size_r, self.size_b ))
+		self.rackets.append( go.GameObject( 2, self, self.width * (3 / 4), self.height - self.size_b, self.size_r, self.size_b ))
 		self.rackets[1].setSpeeds( self.speed_r, 0 )
 
+
 	def initBalls(self):
-		self.balls.append( go.GameObject( 1, self, self.width * (2 / 4), self.height * (2 / 3) , self.size_b, self.size_b ))
+		self.balls.append( go.GameObject( 1, self, self.width * (2 / 4), self.height * (2 / 3), self.size_b, self.size_b ))
 		self.balls[0].setSpeeds( self.speed_b * (2 / 3), self.speed_b * 2 )
 		self.balls[0].setDirs( 1, -1 )
 
@@ -31,6 +33,7 @@ class Pinger(gi.Game):
 	def initScores(self):
 		self.scores.append( 0 )
 		self.scores.append( 0 )
+
 
 	def handleInputs(self, key):
 		# player 1
@@ -48,6 +51,7 @@ class Pinger(gi.Game):
 			self.makeMove( 2, "LEFT" )
 		elif key == pg.K_RIGHT:
 			self.makeMove( 2, "RIGHT" )
+
 
 	def moveRacket(self, rack):
 		rack.clampSpeed()
@@ -69,6 +73,7 @@ class Pinger(gi.Game):
 
 		rack.clampPos()
 
+
 	# scoring a goal
 	def checkGoals(self, ball):
 		if ball.box.bottom >= self.height:
@@ -81,13 +86,15 @@ class Pinger(gi.Game):
 				ball.setDirs( 1, -1 )
 
 			# reseting the ball's position
-			ball.setPos   ( self.width * (1 / 2), self.height * (2 / 3) )
+			ball.setPos( self.width * (1 / 2), self.height * (2 / 3) )
 			ball.setSpeeds( (ball.dx + self.speed_b) / 3, self.speed_b * 2 )
 			ball.clampSpeed()
+
 
 	def drawLines(self):
 		pg.draw.line ( self.win, self.col_fnt, ( self.width / 2, 0 ),  ( self.width / 2, self.height ), self.size_l )
 		#pg.draw.line ( self.win, self.col_fnt, ( 0, self.height / 2 ), ( self.width, self.height / 2 ), self.size_l )
+
 
 	def drawScores(self):
 		text1 = self.font.render(f'{self.scores[0]}', True, self.col_fnt)
