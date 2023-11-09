@@ -2,6 +2,8 @@ import pygame as pg
 import GameObject as go
 import GameInterface as gi
 
+# WIP : TODO : add directional gravity to spice things up
+
 class Pingest(gi.Game):
 	name = "Pingest"
 
