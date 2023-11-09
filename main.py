@@ -1,4 +1,4 @@
-import Pongest as p
+import Pingest as p
 
 # MASTER LIST
 # TODO : try with websockets (?)
@@ -11,12 +11,8 @@ import Pongest as p
 # TODO : make the ball restart's trajectory more random in Pong-type games
 # TODO : add sound effects to collisions (in GameObject class)
 
-def main():
-
-	g = p.Pongest()
-	g.start()
-	g.run()
-
 
 if __name__ == '__main__':
-	main()
+	g = p.Pingest()
+	g.start()
+	g.run()

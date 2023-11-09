@@ -8,9 +8,6 @@ class Pong(gi.Game):
 	width = 2048
 	height = 1024
 
-	racketCount = 2
-	scoreCount = 2
-
 	speed_b = 10
 
 	factor_rack = 1.10
@@ -66,6 +63,7 @@ class Pong(gi.Game):
 				ball.collideRack( rack, "x" )
 				ball.dx *= self.factor_rack
 				ball.clampSpeed()
+				self.last_ponger = rack.id
 
 
 	# bouncing on the walls
@@ -82,17 +80,20 @@ class Pong(gi.Game):
 		if ball.box.left <= 0 or ball.box.right >= self.width:
 			# checking who scored
 			if ball.box.left <= 0:
-				self.scores[1] += 1
+				if self.last_ponger > 0:
+					self.scores[1] += 1
 				ball.setDirs( -1, -ball.fy )
 				ball.setPos (self.width * (3 / 4), (self.height - self.size_b) / 2 )
 			if ball.box.right >= self.width:
-				self.scores[0] += 1
+				if self.last_ponger > 0:
+					self.scores[0] += 1
 				ball.setDirs( 1, -ball.fy )
 				ball.setPos (self.width * (1 / 4), (self.height - self.size_b) / 2 )
 
 			# reseting the ball's speed
 			ball.setSpeeds( self.speed_b, ball.dy )
 			ball.clampSpeed()
+			self.last_ponger = 0
 
 
 	def drawLines(self):
@@ -106,3 +107,9 @@ class Pong(gi.Game):
 
 		self.win.blit( text1, text1.get_rect( center = ( self.width * (1 / 4), self.height * (2 / 4) )))
 		self.win.blit( text2, text2.get_rect( center = ( self.width * (3 / 4), self.height * (2 / 4) )))
+
+
+if __name__ == '__main__':
+	g = Pong()
+	g.start()
+	g.run()

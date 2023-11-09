@@ -8,9 +8,6 @@ class Pinger(gi.Game):
 	width = 2048
 	height = 1024
 
-	racketCount = 2
-	scoreCount = 2
-
 	speed_b = 10
 
 	factor_rack = 0.95
@@ -79,16 +76,19 @@ class Pinger(gi.Game):
 		if ball.box.bottom >= self.height:
 			# checking who scored
 			if ball.box.right < self.width / 2:
-				self.scores[1] += 1
+				if self.last_ponger > 0:
+					self.scores[1] += 1
 				ball.setDirs( -1, -1 )
 			elif ball.box.left > self.width / 2:
-				self.scores[0] += 1
+				if self.last_ponger > 0:
+					self.scores[0] += 1
 				ball.setDirs( 1, -1 )
 
-			# reseting the ball's position
+			# reseting the ball's position & speed
 			ball.setPos( self.width * (1 / 2), self.height * (2 / 3) )
 			ball.setSpeeds( (ball.dx + self.speed_b) / 3, self.speed_b * 2 )
 			ball.clampSpeed()
+			self.last_ponger = 0
 
 
 	def drawLines(self):
@@ -102,3 +102,9 @@ class Pinger(gi.Game):
 
 		self.win.blit( text1, text1.get_rect( center = ( self.width * (1 / 4), self.height * (2 / 4) )))
 		self.win.blit( text2, text2.get_rect( center = ( self.width * (3 / 4), self.height * (2 / 4) )))
+
+
+if __name__ == '__main__':
+	g = Pinger()
+	g.start()
+	g.run()

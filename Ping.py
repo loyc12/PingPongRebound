@@ -27,3 +27,9 @@ class Ping(gi.Game):
 			ball.setPos( ball.box.centerx, 0 )
 			ball.setSpeeds( (ball.dx + self.speed_b) / 2, 0)
 			ball.clampSpeed()
+
+
+if __name__ == '__main__':
+	g = Ping()
+	g.start()
+	g.run()

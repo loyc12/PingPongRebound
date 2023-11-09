@@ -8,10 +8,6 @@ class Game:
 	width = 2048
 	height = 1024
 
-	rackCount = 1
-	ballCount = 1
-	scoreCount = 1
-
 	size_l = 10
 	size_b = 20
 	size_r = 160
@@ -30,6 +26,8 @@ class Game:
 	col_bgr = pg.Color('black')
 	col_fnt = pg.Color('grey25')
 	col_obj = pg.Color('white')
+
+	last_ponger = 0
 
 	STOP = 0
 	UP = 1
@@ -234,6 +232,7 @@ class Game:
 				ball.collideRack( "y" )
 				ball.dy *= self.factor_rack
 				ball.clampSpeed()
+				self.last_ponger = rack.id
 
 	# bouncing on the walls
 	def checkWalls(self, ball):
@@ -255,7 +254,8 @@ class Game:
 	# scoring a goal
 	def checkGoals(self, ball):
 		if ball.box.bottom >= self.height:
-			self.scores[0] += 1
+			if self.last_ponger > 0:
+				self.scores[0] += 1
 			ball.setDirs( -ball.fx, 1 )
 			ball.setPos( ball.box.centerx, 0 )
 			ball.setSpeeds( (ball.dx + self.speed_b) / 2, 0)

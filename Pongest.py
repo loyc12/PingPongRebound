@@ -8,15 +8,10 @@ class Pongest(gi.Game):
 	width = 2048
 	height = 1024
 
-	racketCount = 4
-	scoreCount = 2
-
 	speed_b = 10
 
 	factor_rack = 1.10
 	gravity = 0
-
-	last_ponger = 0
 
 	def initRackets(self):
 		# setting up rackets :             id, game, _x                  , _y                       , _w         , _h
@@ -32,9 +27,9 @@ class Pongest(gi.Game):
 
 
 	def initBalls(self):
-		self.balls.append( go.GameObject( 1, self, self.width * (1 / 4), self.height * (1 / 4) , self.size_b, self.size_b ))
-		self.balls[0].setSpeeds( self.speed_b, self.speed_b * (2 / 3) )
-		self.balls[0].setDirs( 1, 1 )
+		self.balls.append( go.GameObject( 1, self, self.width * (3 / 4), self.height * (3 / 4) , self.size_b, self.size_b ))
+		self.balls[0].setSpeeds( self.speed_b, (self.speed_b * (2 / 3) ))
+		self.balls[0].setDirs( -1, -1 )
 
 
 	def initScores(self):
@@ -152,3 +147,9 @@ class Pongest(gi.Game):
 		self.win.blit( text2, text2.get_rect( center = ( self.width * (3 / 4), self.height * (1 / 4) )))
 		self.win.blit( text3, text3.get_rect( center = ( self.width * (1 / 4), self.height * (3 / 4) )))
 		self.win.blit( text4, text4.get_rect( center = ( self.width * (3 / 4), self.height * (3 / 4) )))
+
+
+if __name__ == '__main__':
+	g = Pongest()
+	g.start()
+	g.run()
