@@ -1,19 +1,27 @@
 import pygame as pg
+#import GameInterface as gi
 
 # TODO : set the center for rect positioning
 
 # ------------------------------------------ GAMEOBJECT CLASS ------------------------------------------ #
 
 # setting up game objects
-bgr_colour = pg.Color('black')
-fnt_colour = pg.Color('gray25')
-obj_colour = pg.Color('white')
+bgr_colour = pg.Color('black') #														TODO : use GameInterface value instead
+fnt_colour = pg.Color('gray25') #														TODO : use GameInterface value instead
+obj_colour = pg.Color('white') #														TODO : use GameInterface value instead
 
-max_speed = 50 #		max speed for objects (dx & dy)
-win_w = 2048 #			window width
-win_h = 1024 #			window height
-framerate = 60 #		max tick per second
-hard_break = False #	whether the racket stops immediately when changing direction
+max_speed = 60 #		max updatePos movement for objects (in x and y separatly)		TODO : use GameInterface value instead
+win_w = 2048 #			window width													TODO : use GameInterface value instead
+win_h = 1536 #			window height													TODO : use GameInterface value instead
+framerate = 60 #		max tick per second												TODO : use GameInterface value instead
+hard_break = False #	whether the racket stops immediately when changing direction	TODO : use GameInterface value instead
+
+def getSign(value):
+	if value < 0:
+		return -1
+	if value > 0:
+		return 1
+	return 0
 
 # object classes
 class GameObject:
@@ -43,26 +51,46 @@ class GameObject:
 		self.fy = _fy
 
 	def updatePos(self):
-		self.box.x += self.dx * self.fx
-		self.box.y += self.dy * self.fy
+		# making sure the dx and dy are positive
+		self.normalizeSpeed()
+
+		# moving on x
+		if self.fy != 0:
+			if abs( self.dx * self.fx ) > max_speed:
+				self.box.x += max_speed * getSign(self.fx)
+			else:
+				self.box.x += self.dx * self.fx
+
+		# moving on y
+		if self.fy != 0:
+			if abs( self.dy * self.fy ) > max_speed:
+				self.box.y += max_speed * getSign(self.fy)
+			else:
+				self.box.y += self.dy * self.fy
+
+	# chekcs for collisions
+	def overlaps(self, other):
+		if self.box.colliderect(other.box):
+			return True
+		return False
 
 	def collideWall(self, type):
-		if (type == "hor"):
+		if type == "x" or type == "hor": # 				TODO : remove "hor" type
 			self.fx *= -1
-		elif (type == "ver"):
+		elif type == "y" or type == "ver": # 			TODO : remove "ver" type
 			self.fy *= -1
-		elif (type == "wall"):
+		elif type == "stop" or type == "wall": # 		TODO : remove "wall" type
 			self.fx = 0
 			self.fy = 0
 
 	# specifically to handle ball-to-racket collisions
-	def collideRack(self, other, mode):
-		if mode == "hor":
+	def collideRack(self, other, type):
+		if type == "x" or type == "hor": # 				TODO : remove "hor" type
 			if self.fy > 0:
 				self.dy += other.dy * other.fy
 			else:
 				self.dy -= other.dy * other.fy
-		elif mode == "ver":
+		elif type == "y" or type == "ver": # 			TODO : remove "ver" type
 			if self.fx > 0:
 				self.dx += other.dx * other.fx
 			else:
@@ -79,7 +107,7 @@ class GameObject:
 		if (self.box.right >= self.win.get_width()):
 			self.box.right = self.win.get_width()
 
-	def normalizeSpeed(self):
+	def clampSpeed(self):
 		# make sure dy and dx are positive
 		if self.dy < 0:
 			self.dy *= -1
@@ -87,15 +115,6 @@ class GameObject:
 		if self.dx < 0:
 			self.dx *= -1
 			self.fx *= -1
-
-	# also normalizes (make dx & dy positive)
-	def clampSpeed(self):
-		self.normalizeSpeed()
-		# make sure the object (ball) doesn't move too fast
-		if self.dy > max_speed:
-			self.dy = max_speed
-		if self.dx > max_speed:
-			self.dx = max_speed
 
 	def drawSelf(self):
 		pg.draw.rect(self.win, obj_colour, self.box)

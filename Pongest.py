@@ -1,6 +1,5 @@
 import pygame as pg
 import GameObject as go
-import GameInterface as gi
 import sys	# to exit properly
 
 # TODO : make an array of balls and rackets instead, so that the number can vary during runtime

@@ -1,6 +1,5 @@
 import pygame as pg
 import GameObject as go
-import GameInterface as gi
 import sys	# to exit properly
 
 # TODO : make an array of balls and rackets instead, so that the number can vary during runtime
@@ -172,9 +171,6 @@ def refreshScreen(window):
 def moveObjects():
 
 	global rack_1, rack_2, ball_1 #, ball_2
-
-	gi.moveRack( 1, "UP" ) #							DEBUG
-	print( f" > rack_1.fx == {rack_1.fx}" ) #				DEBUG
 
 	moveRacket	 ( rack_1 )
 	moveRacket	 ( rack_2 )
