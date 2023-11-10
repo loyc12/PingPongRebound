@@ -6,6 +6,9 @@ from Ponger import Ponger
 from Pongest import Pongest
 from Pongester import Pongester
 
+import pygame as pg
+from AiControler import AiControler as ai
+from PlayerControler import PlayerControler as pl
 
 
 # MASTER LIST
@@ -27,5 +30,29 @@ from Pongester import Pongester
 if __name__ == '__main__':
 
 	g = Pong()
+
+	bot = ai( g, "bot" )
+	g.addControler( bot )
+
+	player = pl( g, "player" )
+	g.addControler( player )
+
 	g.start()
-	g.run()
+
+	while g.running:
+		g.step()
+
+		# handling all inputs
+		for event in pg.event.get():
+			# quiting the game
+			if event.type == pg.QUIT or ( event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE ):
+				g.running = False
+
+			# handling key presses
+			elif event.type == pg.KEYDOWN:
+				player.handleKeyInput(event.key)
+
+		bot.playStep()
+		g.clock.tick (g.framerate)
+
+	g.pause()

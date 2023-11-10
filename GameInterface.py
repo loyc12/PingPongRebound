@@ -1,5 +1,6 @@
 import pygame as pg
 import GameObject as go
+import AiControler as ai
 import sys #	to exit properly
 
 # game class
@@ -49,6 +50,7 @@ class Game:
 
 		self.rackets = []
 		self.balls = []
+		self.controlers = []
 		self.scores = []
 
 		self.initRackets()
@@ -60,10 +62,20 @@ class Game:
 		self.rackets.append( go.GameObject( 1, self, self.width * (2 / 4), self.height - self.size_b, self.size_r, self.size_b ))
 		self.rackets[0].setSpeeds( self.speed_r, 0 )
 
+
 	def initBalls(self):
 		self.balls.append( go.GameObject( 1, self, self.width * (3 / 8), self.size_b, self.size_b, self.size_b ))
 		self.balls[0].setSpeeds( self.speed_b, 0 )
 		self.balls[0].setDirs( 1, 1 )
+
+
+	def addControler(self, controler):
+		if len(self.controlers) <= len (self.rackets):
+			controler.game = self
+			controler.setRacket( self.rackets[ len(self.controlers) ].id )
+			self.controlers.append( controler )
+		else:
+			raise Exception("Too many controlers for this game")
 
 
 	def initScores(self):
@@ -108,7 +120,7 @@ class Game:
 						rack.fx -= 1
 				else:
 					print("Error: invalid move")
-					return
+				return
 
 
 	def handleInputs(self, key):
@@ -121,6 +133,7 @@ class Game:
 			elif key == pg.K_d or key == pg.K_RIGHT:
 				self.makeMove( rack.id, self.RIGHT )
 
+
 	# ---------------------------------------------- CORE CMDS --------------------------------------------- #
 
 	def start(self):
@@ -128,13 +141,13 @@ class Game:
 		print("Starting a game of " + self.name)
 
 
-	def stop(self):
+	def pause(self):
 		self.running = False
-		print("Stopping a game of " + self.name)
+		print("Paused a game of " + self.name)
 
 
-	def getState(self):
-		raise NotImplementedError("Unimplemented : game.getState()")
+	def stop(self):
+		raise NotImplementedError("Unimplemented : game.stop()")
 
 
 	def run(self):
@@ -146,6 +159,7 @@ class Game:
 		# main game loop
 		while self.running:
 			self.step()
+			self.debugControler() #					NOTE : DEBUG
 			self.clock.tick (self.framerate)
 
 		print("The game of " + self.name + " is over")
@@ -154,22 +168,22 @@ class Game:
 		sys.exit()
 
 
-
 	def step(self):
 
 		if self.running == False:
 			print(f"{self.name} is not running")
 			return
 
-		self.gameControler()
-
 		self.moveObjects()
 		self.refreshScreen()
 
 
-	def gameControler(self): #						TODO : abstract away from pygame's event system
-		for event in pg.event.get():
+	def getState(self):
+		raise NotImplementedError("Unimplemented : game.getState()")
 
+
+	def debugControler(self): #						NOTE : DEBUG : use PlayerControler class instance instead
+		for event in pg.event.get():
 			# quiting the game
 			if event.type == pg.QUIT or ( event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE ):
 				self.running = False
@@ -182,7 +196,6 @@ class Game:
 	# ------------------------------------------- GAME MECHANICS ------------------------------------------- #
 
 	def moveObjects(self):
-
 		for i in range(len(self.rackets)):
 			self.moveRacket(self.rackets[i])
 
