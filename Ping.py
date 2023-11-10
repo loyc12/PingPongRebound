@@ -7,9 +7,11 @@ class Ping(gi.Game):
 	width = 1024
 	height = 1024
 
+
 	# bouncing off the rackets
 	def checkRackets(self, ball):
-		for rack in self.rackets: #		copies the racket's data
+		for i in range(len(self.rackets)):
+			rack = self.rackets[i]
 			if ball.overlaps( rack ):
 				ball.collideWall( "y" )
 				ball.dy *= self.factor_rack
