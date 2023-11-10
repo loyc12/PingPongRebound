@@ -9,9 +9,10 @@ from Pongester import Pongester
 
 
 # MASTER LIST
-# TODO : implement (get data)
-# TODO : make an ai class to control the rackets throught the interface
-# TODO : allow racket control through sockets
+# TODO : implement getData()
+# TODO : make a controler class to control call makeMove() and getData()
+# TODO : make an ai child class of controler
+# TODO : allow racket control through sockets (player child class of controler)
 # TODO : add a game start and game over screen
 
 

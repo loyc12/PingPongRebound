@@ -4,22 +4,22 @@ all:
 	python3 -m main
 
 ping:
-	python3 ping.py
+	python3 Ping.py
 
 pinger:
-	python3 pinger.py
+	python3 Pinger.py
 
 pingest:
-	python3 pingest.py
+	python3 Pingest.py
 
 pong:
-	python3 pong.py
+	python3 Pong.py
 
 ponger:
-	python3 ponger.py
+	python3 Ponger.py
 
 pongest:
-	python3 pongest.py
+	python3 Pongest.py
 
 pongester:
-	python3 pongester.py
+	python3 Pongester.py
