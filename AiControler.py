@@ -3,13 +3,13 @@ import GameControler as gc
 # controler class
 class AiControler(gc.GameControler):
 
-	auto_play = False
+	auto_play = True
 	allow_hard_break = False
-	play_frequency = 1
+	play_frequency = 60
 
 	step = 0
 
-	def playStep(self):
+	def playStep(self): # 					TODO : find out why the AI is super fast???
 		# using ai move instead (if set to auto play)
 		if self.auto_play:
 			if (self.step % self.play_frequency) == 0:

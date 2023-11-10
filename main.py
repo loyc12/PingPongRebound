@@ -6,10 +6,10 @@ from Ponger import Ponger
 from Pongest import Pongest
 from Pongester import Pongester
 
-import pygame as pg
 from AiControler import AiControler as ai
 from PlayerControler import PlayerControler as pl
 
+import pygame as pg
 
 # MASTER LIST
 # TODO : implement getData()
@@ -42,7 +42,7 @@ if __name__ == '__main__':
 	while g.running:
 		g.step()
 
-		# handling all inputs
+		# read local inputs
 		for event in pg.event.get():
 			# quiting the game
 			if event.type == pg.QUIT or ( event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE ):

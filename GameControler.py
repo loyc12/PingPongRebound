@@ -29,10 +29,6 @@ class GameControler:
 		self.game.makeMove( self.racket.id, move )
 
 
-	def getInfo(self):
-		return self.game.getState() #	TODO : implement this more (???)
-
-
 	def playStep(self):
 
 		if self.racket == 0:
@@ -40,3 +36,8 @@ class GameControler:
 
 		self.playMove( self.next_move )
 		self.next_move = 0
+
+
+	def getInfo(self):
+		return self.game.getState() #	TODO : implement this more (???)
+
