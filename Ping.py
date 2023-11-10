@@ -38,6 +38,11 @@ class Ping(gi.Game):
 			ball.setSpeeds( (ball.dx + self.speed_b) / 2, 0)
 			ball.clampSpeed()
 
+	def drawLines(self):
+		pg.draw.line( self.win, self.col_fnt, ( 0, 0 ), ( 0 , self.height ), self.size_l * 2 )
+		pg.draw.line( self.win, self.col_fnt, ( self.width, 0 ), ( self.width, self.height ), self.size_l * 2 )
+		pg.draw.line( self.win, self.col_fnt, ( 0, 0 ), ( self.width, 0 ), self.size_l * 2 )
+
 
 if __name__ == '__main__':
 	g = Ping()
