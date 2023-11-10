@@ -161,13 +161,13 @@ class Game:
 			print(f"{self.name} is not running")
 			return
 
-		self.pgLoop()
+		self.gameControler()
 
 		self.moveObjects()
 		self.refreshScreen()
 
 
-	def pgLoop(self): #						TODO : abstract away from pygame's event system
+	def gameControler(self): #						TODO : abstract away from pygame's event system
 		for event in pg.event.get():
 
 			# quiting the game
@@ -229,8 +229,8 @@ class Game:
 			rack = self.rackets[i]
 			if ball.overlaps( rack ):
 				ball.setPos( ball.box.centerx, rack.box.centery - self.size_b ) # '-' because the ball is going above the racket
-				ball.collideWall( "x" )
-				ball.collideRack( "y" )
+				ball.collideWall( "y" )
+				ball.collideRack( rack, "y" )
 				ball.dy *= self.factor_rack
 				ball.clampSpeed()
 				self.last_ponger = rack.id

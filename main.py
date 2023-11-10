@@ -18,6 +18,7 @@ from Pongest import Pongest
 
 
 if __name__ == '__main__':
-	g = Pong()
+
+	g = Pinger()
 	g.start()
 	g.run()

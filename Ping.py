@@ -4,7 +4,7 @@ import GameInterface as gi
 
 class Ping(gi.Game):
 	name = "Ping"
-	width = 1536
+	width = 1024
 	height = 1024
 
 	# bouncing off the rackets
