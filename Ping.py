@@ -4,8 +4,16 @@ import GameInterface as gi
 
 class Ping(gi.Game):
 	name = "Ping"
-	width = 1024
-	height = 1024
+
+	width = 1280
+	height = 1280
+
+	factor_wall = 0.90
+
+
+	def initRackets(self):
+		self.rackets.append( go.GameObject( 1, self, self.width * (2 / 4), self.height - (3 * self.size_b), self.size_r, self.size_b ))
+		self.rackets[0].setSpeeds( self.speed_r, 0 )
 
 
 	# bouncing off the rackets

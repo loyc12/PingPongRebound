@@ -6,7 +6,6 @@ class Pinger(gi.Game):
 	name = "Pinger"
 
 	speed_b = 10
-
 	factor_rack = 0.95
 
 

@@ -20,3 +20,6 @@ ponger:
 
 pongest:
 	python3 pongest.py
+
+pongester:
+	python3 pongester.py
