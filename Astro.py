@@ -4,10 +4,8 @@ import GameInterface as gi
 
 class Astro(gi.Game):
 	name = "Astro"
-	width = 1024
-	height = 1024
-
-	raise NotImplementedError("Unimplemented : Astro")
+	width = 1280
+	height = 1280
 
 
 if __name__ == '__main__':
