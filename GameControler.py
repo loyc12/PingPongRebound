@@ -1,7 +1,4 @@
-
-CONTROLER = 0
-PLAYER = 1
-BOT = 2
+import Addons as ad
 
 # controler class
 class GameControler:
@@ -11,7 +8,8 @@ class GameControler:
 	racket = None
 	next_move = 0
 
-	mode = CONTROLER
+	mode = ad.CONTROLER
+	isActive = True
 
 
 	def __init__(self, _game, _playerName):
@@ -28,7 +26,8 @@ class GameControler:
 
 
 	def playMove(self, move):
-		self.game.makeMove( self.racket.id, move )
+		if self.isActive:
+			self.game.makeMove( self.racket.id, move )
 
 
 	def setNextMove(self, move):
@@ -39,11 +38,10 @@ class GameControler:
 
 		if self.racket == 0:
 			raise ValueError("Error: no racket selected")
+		if self.isActive:
+			self.playMove( self.next_move )
+			self.next_move = 0
 
-		self.playMove( self.next_move )
-		self.next_move = 0
-
-
-	def getInfo(self):
-		return self.game.getState() #	TODO : implement this more (???)
+	def deactivate(self):
+		self.isActive = False
 

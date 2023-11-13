@@ -1,13 +1,7 @@
 import pygame as pg
+import Addons as ad
 
 # ------------------------------------------ GAMEOBJECT CLASS ------------------------------------------ #
-
-def getSign(value):
-	if value < 0:
-		return -1
-	if value > 0:
-		return 1
-	return 0
 
 # object class
 class GameObject:
@@ -43,14 +37,14 @@ class GameObject:
 		# moving on x
 		if self.fx != 0:
 			if abs( self.dx * self.fx ) > self.game.speed_m:
-				self.box.x += self.game.speed_m * getSign(self.fx)
+				self.box.x += self.game.speed_m * ad.getSign(self.fx)
 			else:
 				self.box.x += self.dx * self.fx
 
 		# moving on y
 		if self.fy != 0:
 			if abs( self.dy * self.fy ) > self.game.speed_m:
-				self.box.y += self.game.speed_m * getSign(self.fy)
+				self.box.y += self.game.speed_m * ad.getSign(self.fy)
 			else:
 				self.box.y += self.dy * self.fy
 

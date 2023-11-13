@@ -11,23 +11,20 @@ from PlayerControler import PlayerControler as pl
 
 import pygame as pg
 import asyncio as asy
+import sys #	to exit properly
 
 # MASTER LIST
-# TODO : implement getData()
 # TODO : test with sockets
 # TODO : allow racket control through sockets (player child class of controler)
 
 # FUNCTION LIST
-# TODO : gameIsFull()
-# TODO : gameHasPlayer()
-# TODO : __contains__()
+# TODO : implement game.getInfo()
 
 # DEBUG LIST
 
-
 # MINOR LIST
 # TODO : add a game start and game over screen
-# TODO : add gravity to pingest  (to make it an actua ping game lol)
+# TODO : add double-sided gravity to pingest (so it's an actual ping game lol)
 # TODO : make the ball restart's trajectory more random in Pong-type games
 # TODO : add sound effects to collisions (in GameObject class)
 # TODO : make an 'asteroids' game (solo)
@@ -58,9 +55,6 @@ def takeGameStep( game ):
 			game.controlers[0].handleKeyInput(event.key) # first game controler, aka player 1
 
 	game.makeBotsPlay()
-
-	for i in range(1, len(game.controlers)):
-		game.controlers[i].playStep()
 
 	game.clock.tick (game.framerate)
 

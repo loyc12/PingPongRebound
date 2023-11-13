@@ -52,25 +52,25 @@ class Pongester(gi.Game):
 	def handleInputs(self, key):
 		# player 1
 		if key == pg.K_s:
-			self.makeMove( 1, self.STOP )
-			self.makeMove( 3, self.STOP )
+			self.makeMove( 1, gi.ad.STOP )
+			self.makeMove( 3, gi.ad.STOP )
 		elif key == pg.K_a:
-			self.makeMove( 1, self.LEFT )
-			self.makeMove( 3, self.LEFT )
+			self.makeMove( 1, gi.ad.LEFT )
+			self.makeMove( 3, gi.ad.LEFT )
 		elif key == pg.K_d:
-			self.makeMove( 1, self.RIGHT )
-			self.makeMove( 3, self.RIGHT )
+			self.makeMove( 1, gi.ad.RIGHT )
+			self.makeMove( 3, gi.ad.RIGHT )
 
 		# player 2
 		if key == pg.K_LEFT:
-			self.makeMove( 2, self.STOP )
-			self.makeMove( 4, self.STOP )
+			self.makeMove( 2, gi.ad.STOP )
+			self.makeMove( 4, gi.ad.STOP )
 		elif key == pg.K_UP:
-			self.makeMove( 2, self.UP )
-			self.makeMove( 4, self.UP )
+			self.makeMove( 2, gi.ad.UP )
+			self.makeMove( 4, gi.ad.UP )
 		elif key == pg.K_DOWN:
-			self.makeMove( 2, self.DOWN )
-			self.makeMove( 4, self.DOWN )
+			self.makeMove( 2, gi.ad.DOWN )
+			self.makeMove( 4, gi.ad.DOWN )
 
 
 	# bouncing off the rackets

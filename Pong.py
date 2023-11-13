@@ -39,19 +39,19 @@ class Pong(gi.Game):
 	def handleInputs(self, key):
 		# player 1
 		if key == pg.K_a:
-			self.makeMove( 1, self.STOP )
+			self.makeMove( 1, gi.ad.STOP )
 		elif key == pg.K_w:
-			self.makeMove( 1, self.UP )
+			self.makeMove( 1, gi.ad.UP )
 		elif key == pg.K_s:
-			self.makeMove( 1, self.DOWN )
+			self.makeMove( 1, gi.ad.DOWN )
 
 		# player 2
 		if key == pg.K_LEFT:
-			self.makeMove( 2, self.STOP )
+			self.makeMove( 2, gi.ad.STOP )
 		elif key == pg.K_UP:
-			self.makeMove( 2, self.UP )
+			self.makeMove( 2, gi.ad.UP )
 		elif key == pg.K_DOWN:
-			self.makeMove( 2, self.DOWN )
+			self.makeMove( 2, gi.ad.DOWN )
 
 
 	# bouncing off the rackets

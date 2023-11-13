@@ -3,6 +3,7 @@ import GameObject as go
 import GameControler as gc
 import AiControler as ai
 import PlayerControler as pl
+import Addons as ad
 import sys #	to exit properly
 
 # game class
@@ -33,11 +34,6 @@ class Game:
 
 	last_ponger = 0
 
-	STOP = 0
-	UP = 1
-	RIGHT = 2
-	DOWN = 3
-	LEFT = 4
 
 	# ------------------------------------------- INITIALIZATION ------------------------------------------- #
 
@@ -92,8 +88,8 @@ class Game:
 	# --------------------------------------------- PLAYER & AI -------------------------------------------- #
 
 	def addBot(self, botname):
-		if (self.playerCount > self.racketCount):
-			raise Exception("Too many players for this game")
+		if (self.controlerCount >= self.racketCount):
+			raise Exception("Too many bots for this game")
 
 		bot = ai.AiControler( self, botname )
 		bot.setRacket( self.rackets[ len(self.controlers) ].id )
@@ -101,10 +97,12 @@ class Game:
 
 		self.controlerCount += 1
 
+		return ( bot )
+
 
 	def makeBotsPlay(self):
 		for i in range(1, len(self.controlers)):
-			if (self.controlers[i].mode == gc.BOT):
+			if (self.controlers[i].mode == gc.ad.BOT):
 				self.controlers[i].playStep()
 
 
@@ -118,6 +116,19 @@ class Game:
 
 		self.playerCount += 1
 
+		return ( player )
+
+
+	def isGameFull(self):
+		return ( self.playerCount >= self.racketCount )
+
+
+	def hasPlayer(self, username):
+		for i in range(len(self.controlers)):
+			if (self.controlers[i].username == username):
+				return ( True )
+		return ( False )
+
 
 	# ---------------------------------------------- INTERFACE --------------------------------------------- #
 
@@ -125,34 +136,38 @@ class Game:
 		if (target_id <= 0):
 			print("Error: no target selected")
 			return
+		if move < 0:
+			return
 		for i in range(len(self.rackets)):
 			rack = self.rackets[i]
 			if (rack.id == target_id):
-				if (move == self.STOP):
+				if move == ad.NULL:
+					return
+				elif (move == ad.STOP):
 					rack.fx = 0
 					rack.fy = 0
-				elif (move == self.UP):
+				elif (move == ad.UP):
 					if (self.hard_break and rack.fy > 0):
 						rack.fy = 0
 					else:
 						rack.fy -= 1
-				elif (move == self.RIGHT):
+				elif (move == ad.RIGHT):
 					if (self.hard_break and rack.fx < 0):
 						rack.fx = 0
 					else:
 						rack.fx += 1
-				elif (move == self.DOWN):
+				elif (move == ad.DOWN):
 					if (self.hard_break and rack.fy < 0):
 						rack.fy = 0
 					else:
 						rack.fy += 1
-				elif (move == self.LEFT):
+				elif (move == ad.LEFT):
 					if (self.hard_break and rack.fx > 0):
 						rack.fx = 0
 					else:
 						rack.fx -= 1
 				else:
-					print("Error: invalid move")
+					print("Error: invalid move : " + str(move))
 				return
 
 
@@ -160,11 +175,11 @@ class Game:
 		for i in range(len(self.rackets)):
 			rack = self.rackets[i]
 			if key == pg.K_s or key == pg.K_DOWN:
-				self.makeMove( rack.id, self.STOP )
+				self.makeMove( rack.id, ad.STOP )
 			elif key == pg.K_a or key == pg.K_LEFT:
-				self.makeMove( rack.id, self.LEFT )
+				self.makeMove( rack.id, ad.LEFT )
 			elif key == pg.K_d or key == pg.K_RIGHT:
-				self.makeMove( rack.id, self.RIGHT )
+				self.makeMove( rack.id, ad.RIGHT )
 
 
 	# ---------------------------------------------- CORE CMDS --------------------------------------------- #
@@ -211,10 +226,6 @@ class Game:
 		self.refreshScreen()
 
 
-	def getState(self):
-		raise NotImplementedError("Unimplemented : game.getState()")
-
-
 	def debugControler(self): #						NOTE : DEBUG : use PlayerControler class instance instead
 		for event in pg.event.get():
 			# quiting the game
@@ -224,6 +235,10 @@ class Game:
 			# handling key presses
 			elif event.type == pg.KEYDOWN:
 				self.handleInputs( event.key )
+
+
+	def getInfo(self): # NOTE : send this fct's value to the client
+		raise NotImplementedError("Unimplemented : game.getInfo()")
 
 
 	# ------------------------------------------- GAME MECHANICS ------------------------------------------- #
@@ -262,12 +277,14 @@ class Game:
 
 		ball.clampPos()
 
+
 	def aplyGravity(self, ball):
 		if self.gravity != 0:
 			if ball.fy > 0:
 				ball.dy += self.gravity
 			else:
 				ball.dy -= self.gravity
+
 
 	# bouncing off the rackets
 	def checkRackets(self, ball):
@@ -280,6 +297,7 @@ class Game:
 				ball.dy *= self.factor_rack
 				ball.clampSpeed()
 				self.last_ponger = rack.id
+
 
 	# bouncing on the walls
 	def checkWalls(self, ball):
