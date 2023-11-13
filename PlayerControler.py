@@ -4,12 +4,7 @@ import pygame as pg
 # controler class
 class PlayerControler(gc.GameControler):
 
-
-	def playStep(self):
-		# using ai move instead (if set to auto play)
-
-		self.playMove( self.next_move )
-
+	# NOTE : temporary (uses pygame keys)
 	def handleKeyInput(self, key):
 		if key == pg.K_SPACE or key == pg.K_KP0:
 			self.playMove( self.game.STOP )

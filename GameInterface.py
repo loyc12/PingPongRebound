@@ -41,6 +41,8 @@ class Game:
 
 	def __init__(self):
 		self.running = False
+		self.playerCount = 0
+		self.racketCount = 0
 
 		pg.init()
 		self.clock = pg.time.Clock()
@@ -61,12 +63,24 @@ class Game:
 	def initRackets(self):
 		self.rackets.append( go.GameObject( 1, self, self.width * (2 / 4), self.height - self.size_b, self.size_r, self.size_b ))
 		self.rackets[0].setSpeeds( self.speed_r, 0 )
+		self.racketCount = 1
 
 
 	def initBalls(self):
 		self.balls.append( go.GameObject( 1, self, self.width * (3 / 8), self.size_b, self.size_b, self.size_b ))
 		self.balls[0].setSpeeds( self.speed_b, 0 )
 		self.balls[0].setDirs( 1, 1 )
+
+
+	def initScores(self):
+		self.scores.append( 0 )
+
+
+	def reset(self):
+		raise NotImplementedError("Unimplemented : game.reset()")
+
+
+	# --------------------------------------------- PLAYER & AI -------------------------------------------- #
 
 
 	def addControler(self, controler):
@@ -76,14 +90,6 @@ class Game:
 			self.controlers.append( controler )
 		else:
 			raise Exception("Too many controlers for this game")
-
-
-	def initScores(self):
-		self.scores.append( 0 )
-
-
-	def reset(self):
-		raise NotImplementedError("Unimplemented : game.reset()")
 
 
 	# ---------------------------------------------- INTERFACE --------------------------------------------- #

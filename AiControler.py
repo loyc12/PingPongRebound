@@ -3,20 +3,18 @@ import GameControler as gc
 # controler class
 class AiControler(gc.GameControler):
 
-	auto_play = True
 	allow_hard_break = False
-	play_frequency = 60
+	play_frequency = 6
 
 	step = 0
 
-	def playStep(self): # 					TODO : find out why the AI is super fast???
-		# using ai move instead (if set to auto play)
-		if self.auto_play:
-			if (self.step % self.play_frequency) == 0:
-				self.findNextMove()
-				self.step = 0
-			self.step += 1
-		self.playMove( self.next_move )
+	def playStep(self):
+
+		# 	using ai move (if set to auto play)
+		if (self.step % self.play_frequency) == 0:
+			self.playMove( self.findNextMove() )
+			self.step = 0
+		self.step += 1
 
 
 	def findNextMove(self):
@@ -26,39 +24,34 @@ class AiControler(gc.GameControler):
 		ball = self.game.balls[0]
 
 		# handling left and right movement
-		if ball.box.centerx <= self.racket.box.left:
-			self.next_move = self.game.LEFT
-		elif ball.box.centerx >= self.racket.box.right:
-			self.next_move = self.game.RIGHT
+		if self.racket.dx != 0:
+			if ball.box.centerx <= self.racket.box.left:
+				return self.game.LEFT
+			elif ball.box.centerx >= self.racket.box.right:
+				return self.game.RIGHT
+			else: #								when ball is in front
+				if self.allow_hard_break: #		NOTE : eh, fucky behaviour
+					return self.game.STOP
+				if (ball.fx < 0):
+					return self.game.LEFT
+				elif (ball.fx > 0):
+					return self.game.RIGHT
+				else:
+					return self.game.STOP
 
 		# handling up and down movement
-		if ball.box.centery <= self.racket.box.top:
-			self.next_move = self.game.UP
-		elif ball.box.centery >= self.racket.box.bottom:
-			self.next_move = self.game.DOWN
+		elif self.racket.dy != 0:
+			if ball.box.centery <= self.racket.box.top:
+				return self.game.UP
+			elif ball.box.centery >= self.racket.box.bottom:
+				return self.game.DOWN
+			else: #								when ball is in front
+				if self.allow_hard_break : #	NOTE : eh, fucky behaviour
+					return self.game.STOP
+				elif (ball.fy < 0):
+					return self.game.UP
+				elif (ball.fy > 0):
+					return self.game.DOWN
+				else:
+					return self.game.STOP
 
-		# handling left and right movement (when ball is in front)
-		if ball.box.centerx > self.racket.box.left and ball.box.centerx < self.racket.box.right:
-			if (ball.fx < 0):
-				self.next_move = self.game.LEFT
-			elif (ball.fx > 0):
-				self.next_move = self.game.RIGHT
-			else:
-				self.next_move = self.game.STOP
-
-		# handling up and down movement (when ball is in front)
-		if ball.box.centery > self.racket.box.top and ball.box.centery < self.racket.box.bottom:
-			if (ball.fy < 0):
-				self.next_move = self.game.UP
-			elif (ball.fy > 0):
-				self.next_move = self.game.DOWN
-			else:
-				self.next_move = self.game.STOP
-
-
-		# handling hard break (if allowed)			NOTE : eh, fucky behaviour
-		if self.allow_hard_break:
-			if ball.box.centerx > self.racket.box.left and ball.box.centerx < self.racket.box.right:
-				self.next_move = self.game.STOP
-			if ball.box.centery > self.racket.box.top and ball.box.centery < self.racket.box.bottom:
-				self.next_move = self.game.STOP

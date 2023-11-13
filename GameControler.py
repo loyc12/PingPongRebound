@@ -3,6 +3,7 @@ import GameInterface as gi
 # controler class
 class GameControler:
 	name = "unnamed"
+	# gameType = "normal" # "tournament"
 	game = None
 	racket = None
 	next_move = 0
@@ -21,12 +22,12 @@ class GameControler:
 				self.racket = rack
 
 
-	def setNextMove(self, move):
-		self.next_move = move
-
-
 	def playMove(self, move):
 		self.game.makeMove( self.racket.id, move )
+
+
+	def setNextMove(self, move):
+		self.next_move = move
 
 
 	def playStep(self):
