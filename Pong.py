@@ -17,6 +17,13 @@ class Pong(gi.Game):
 		self.rackets.append( go.GameObject( 2, self, self.width - self.size_b, self.height  * (1 / 2), self.size_b, self.size_r ))
 		self.rackets[1].setSpeeds( 0, self.speed_r )
 
+		self.racketCount = 2
+
+
+	def initControlers(self):
+		self.addBot("bot 1")
+		self.addBot("bot 2")
+
 
 	def initBalls(self):
 		self.balls.append( go.GameObject( 1, self, self.width * (1 / 4), self.height * (1 / 2) , self.size_b, self.size_b ))

@@ -36,21 +36,15 @@ import asyncio as asy
 async def main():
 
 	game = Pong()
-
-	bot = ai( game, "bot" )
-	game.addControler( bot )
-
-	player = pl( game, "player" )
-	game.addControler( player )
-
+	game.addPlayer( "tester_1" )
 	game.start()
-	while game.running:
 
-		takeGameStep( game, player, bot )
+	while game.running:
+		takeGameStep( game )
 		await asy.sleep(0)
 
 
-def takeGameStep( game, player, bot ):
+def takeGameStep( game ):
 	game.step()
 
 	# read local inputs
@@ -61,9 +55,11 @@ def takeGameStep( game, player, bot ):
 
 		# handling key presses
 		elif event.type == pg.KEYDOWN:
-			player.handleKeyInput(event.key)
+			game.controlers[0].handleKeyInput(event.key) # first game controler, aka player 1
 
-	bot.playStep()
+	if len(game.controlers) > 1:
+		for i in range(1, len(game.controlers)):
+			game.controlers[i].playStep()
 
 	game.clock.tick (game.framerate)
 

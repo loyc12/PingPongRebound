@@ -1,4 +1,7 @@
-import GameInterface as gi
+
+CONTROLER = 0
+PLAYER = 1
+BOT = 2
 
 # controler class
 class GameControler:
@@ -7,6 +10,8 @@ class GameControler:
 	game = None
 	racket = None
 	next_move = 0
+
+	mode = CONTROLER
 
 
 	def __init__(self, _game, _playerName):

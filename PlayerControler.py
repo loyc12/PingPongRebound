@@ -4,6 +4,13 @@ import pygame as pg
 # controler class
 class PlayerControler(gc.GameControler):
 
+
+	def __init__(self, _game, _playerName,):
+		self.game = _game
+		self.name = _playerName
+		self.mode = gc.PLAYER
+
+
 	# NOTE : temporary (uses pygame keys)
 	def handleKeyInput(self, key):
 		if key == pg.K_SPACE or key == pg.K_KP0:

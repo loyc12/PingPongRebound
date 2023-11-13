@@ -1,6 +1,7 @@
 import pygame as pg
 import GameObject as go
 import AiControler as ai
+import PlayerControler as pl
 import sys #	to exit properly
 
 # game class
@@ -42,6 +43,7 @@ class Game:
 	def __init__(self):
 		self.running = False
 		self.playerCount = 0
+		self.controlerCount = 0
 		self.racketCount = 0
 
 		pg.init()
@@ -51,11 +53,12 @@ class Game:
 		pg.display.set_caption(self.name) #			 					TODO : abstract away from pygame's window system
 
 		self.rackets = []
-		self.balls = []
 		self.controlers = []
+		self.balls = []
 		self.scores = []
 
 		self.initRackets()
+		self.initControlers()
 		self.initBalls()
 		self.initScores()
 
@@ -63,7 +66,12 @@ class Game:
 	def initRackets(self):
 		self.rackets.append( go.GameObject( 1, self, self.width * (2 / 4), self.height - self.size_b, self.size_r, self.size_b ))
 		self.rackets[0].setSpeeds( self.speed_r, 0 )
+
 		self.racketCount = 1
+
+
+	def initControlers(self):
+		self.addBot("bot 1")
 
 
 	def initBalls(self):
@@ -82,14 +90,26 @@ class Game:
 
 	# --------------------------------------------- PLAYER & AI -------------------------------------------- #
 
+	def addBot(self, botname):
+		if (self.playerCount > self.racketCount):
+			raise Exception("Too many players for this game")
 
-	def addControler(self, controler):
-		if len(self.controlers) <= len (self.rackets):
-			controler.game = self
-			controler.setRacket( self.rackets[ len(self.controlers) ].id )
-			self.controlers.append( controler )
-		else:
-			raise Exception("Too many controlers for this game")
+		bot = ai.AiControler( self, botname )
+		bot.setRacket( self.rackets[ len(self.controlers) ].id )
+		self.controlers.append( bot )
+
+		self.controlerCount += 1
+
+
+	def addPlayer(self, username):
+		if (self.playerCount >= self.racketCount):
+			raise Exception("Too many players for this game")
+
+		player = pl.PlayerControler( self, username )
+		self.controlers[self.playerCount] = player
+		player.setRacket( self.rackets[ self.playerCount ].id )
+
+		self.playerCount += 1
 
 
 	# ---------------------------------------------- INTERFACE --------------------------------------------- #

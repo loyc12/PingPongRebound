@@ -14,7 +14,11 @@ class Ping(gi.Game):
 	def initRackets(self):
 		self.rackets.append( go.GameObject( 1, self, self.width * (2 / 4), self.height - (3 * self.size_b), self.size_r, self.size_b ))
 		self.rackets[0].setSpeeds( self.speed_r, 0 )
+		self.racketCount = 1
 
+
+	def initControlers(self):
+		self.addBot("bot 1")
 
 	# bouncing off the rackets
 	def checkRackets(self, ball):

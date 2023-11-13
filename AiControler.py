@@ -4,9 +4,16 @@ import GameControler as gc
 class AiControler(gc.GameControler):
 
 	allow_hard_break = False
-	play_frequency = 6
+	play_frequency = 12
 
 	step = 0
+
+
+	def __init__(self, _game, _playerName):
+		self.game = _game
+		self.name = _playerName
+		self.mode = gc.BOT
+
 
 	def playStep(self):
 

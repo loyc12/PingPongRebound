@@ -16,6 +16,12 @@ class Pinger(gi.Game):
 		self.rackets.append( go.GameObject( 2, self, self.width * (3 / 4), self.height - self.size_b, self.size_r, self.size_b ))
 		self.rackets[1].setSpeeds( self.speed_r, 0 )
 
+		self.racketCount = 2
+
+
+	def initControlers(self):
+		self.addBot("bot 1")
+		self.addBot("bot 2")
 
 	def initBalls(self):
 		self.balls.append( go.GameObject( 1, self, self.width * (2 / 4), self.height * (2 / 3), self.size_b, self.size_b ))

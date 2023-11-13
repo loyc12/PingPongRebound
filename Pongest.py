@@ -22,6 +22,15 @@ class Pongest(gi.Game):
 		self.rackets[2].setSpeeds( self.speed_r, 0 )
 		self.rackets[3].setSpeeds( self.speed_r, 0 )
 
+		self.racketCount = 4
+
+
+	def initControlers(self):
+		self.addBot("bot 1")
+		self.addBot("bot 2")
+		self.addBot("bot 3")
+		self.addBot("bot 4")
+
 
 	def initBalls(self):
 		self.balls.append( go.GameObject( 1, self, self.width * (3 / 4), self.height * (3 / 4) , self.size_b, self.size_b ))
