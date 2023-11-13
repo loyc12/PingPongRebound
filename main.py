@@ -57,9 +57,10 @@ def takeGameStep( game ):
 		elif event.type == pg.KEYDOWN:
 			game.controlers[0].handleKeyInput(event.key) # first game controler, aka player 1
 
-	if len(game.controlers) > 1:
-		for i in range(1, len(game.controlers)):
-			game.controlers[i].playStep()
+	game.makeBotsPlay()
+
+	for i in range(1, len(game.controlers)):
+		game.controlers[i].playStep()
 
 	game.clock.tick (game.framerate)
 

@@ -1,5 +1,6 @@
 import pygame as pg
 import GameObject as go
+import GameControler as gc
 import AiControler as ai
 import PlayerControler as pl
 import sys #	to exit properly
@@ -99,6 +100,12 @@ class Game:
 		self.controlers.append( bot )
 
 		self.controlerCount += 1
+
+
+	def makeBotsPlay(self):
+		for i in range(1, len(self.controlers)):
+			if (self.controlers[i].mode == gc.BOT):
+				self.controlers[i].playStep()
 
 
 	def addPlayer(self, username):
