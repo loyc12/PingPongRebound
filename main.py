@@ -33,7 +33,7 @@ import Addons as ad
 
 async def main():
 
-	game = Pongester()
+	game = Pong()
 
 	#game.addPlayer( "tester_1" )
 
