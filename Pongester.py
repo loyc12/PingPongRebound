@@ -8,11 +8,12 @@ class Pongester(gi.Game):
 	width = 1280
 	height = 1280
 
-	speed_b = 5
-	speed_m = 30
+	speed_b = 7.5
+	speed_m_b = 15
 	size_font = 512
 
 	factor_rack = 1.05
+	factor_wall = 0.5
 
 	def initRackets(self):
 		# setting up rackets :             id, game, _x                      , _y                       , _w         , _h
@@ -37,9 +38,9 @@ class Pongester(gi.Game):
 
 
 	def initBalls(self):
-		self.balls.append( go.GameObject( 1, self, self.width * (3 / 4), self.height * (1 / 4) , self.size_b, self.size_b ))
-		self.balls[0].setSpeeds( self.speed_b * (1 / 2), self.speed_b )
-		self.balls[0].setDirs( -1, 1 )
+		self.balls.append( go.GameObject( 1, self, self.width * (1 / 2), self.height * (1 / 2) , self.size_b, self.size_b ))
+		self.balls[0].setSpeeds( self.speed_b * (1 / 3), self.speed_b )
+		self.balls[0].setDirs( 1, -1 )
 
 
 	def initScores(self):
@@ -80,12 +81,15 @@ class Pongester(gi.Game):
 				if (rack.id == 1):
 					ball.setPos( ball.box.centerx, rack.box.centery + self.size_b ) # '+' because the ball is going under
 					ball.collideRack( rack, "y" )
+
 				elif (rack.id == 2):
 					ball.setPos( rack.box.centerx - self.size_b, ball.box.centery ) # '-' because the ball is going left
 					ball.collideRack( rack, "x" )
+
 				elif (rack.id == 3):
 					ball.setPos( ball.box.centerx, rack.box.centery - self.size_b ) # '-' because the ball is going over
 					ball.collideRack( rack, "y" )
+
 				elif (rack.id == 4):
 					ball.setPos( rack.box.centerx + self.size_b, ball.box.centery ) # '+' because the ball is going right
 					ball.collideRack( rack, "x" )
@@ -103,38 +107,29 @@ class Pongester(gi.Game):
 	# scoring a goal
 	def checkGoals(self, ball):
 		if ball.box.top <= 0 or ball.box.bottom >= self.height or ball.box.left <= 0 or ball.box.right >= self.width:
-			# checking who scored
-			if ball.fx < 0 and ball.fy < 0:
-				ball.setDirs( 1, -1 )
-				ball.setSpeeds( self.speed_b * (1 / 2), self.speed_b )
-				ball.setPos ( self.width * (1 / 4), self.height  * (3 / 4) )
-				if (self.last_ponger > 0):
-					self.scores[self.last_ponger - 1] += 1
-			elif ball.fx > 0 and ball.fy < 0:
-				ball.setDirs( 1, 1 )
-				ball.setSpeeds( self.speed_b, self.speed_b * (1 / 2) )
-				ball.setPos ( self.width * (1 / 4), self.height  * (1 / 4) )
-				if (self.last_ponger > 0):
-					self.scores[self.last_ponger - 1] += 1
-			elif ball.fx > 0 and ball.fy > 0:
-				ball.setDirs( -1, 1 )
-				ball.setSpeeds( self.speed_b * (1 / 2), self.speed_b )
-				ball.setPos ( self.width * (3 / 4), self.height  * (1 / 4) )
-				if (self.last_ponger > 0):
-					self.scores[self.last_ponger - 1] += 1
-			elif ball.fx < 0 and ball.fy > 0:
-				ball.setDirs( -1, -1 )
-				ball.setSpeeds( self.speed_b, self.speed_b * (1 / 2) )
-				ball.setPos ( self.width * (3 / 4), self.height  * (3 / 4) )
-				if (self.last_ponger > 0):
-					self.scores[self.last_ponger - 1] += 1
+			# increasing score
+			if (self.last_ponger > 0):
+				self.scores[self.last_ponger - 1] += 1
 
-			if ball.box.top <= 0 or ball.box.bottom >= self.height:
-				ball.setSpeeds( self.speed_b * (1 / 3), self.speed_b * (1 / 2) )
-			elif ball.box.left <= 0 or ball.box.right >= self.width:
-				ball.setSpeeds( self.speed_b * (1 / 2), self.speed_b * (1 / 3) )
+			# chcking how to respawn the ball
+			if self.last_ponger == 1 or self.last_ponger == 0 and ball.fx < 0 and ball.fy < 0:
+				ball.setDirs( -ball.fx, -1 )
+				ball.setSpeeds( self.speed_b * (1 / 3), self.speed_b )
 
-			# reseting the ball's speed
+			elif self.last_ponger == 2 or self.last_ponger == 0 and ball.fx > 0 and ball.fy < 0:
+				ball.setDirs( 1, -ball.fy )
+				ball.setSpeeds( self.speed_b, self.speed_b * (1 / 3) )
+
+			elif self.last_ponger == 3 or self.last_ponger == 0 and ball.fx > 0 and ball.fy > 0:
+				ball.setDirs( -ball.fx, 1 )
+				ball.setSpeeds( self.speed_b * (1 / 3), self.speed_b )
+
+			elif self.last_ponger == 4 or self.last_ponger == 0 and ball.fx < 0 and ball.fy > 0:
+				ball.setDirs( -1, -ball.fy )
+				ball.setSpeeds( self.speed_b, self.speed_b * (1 / 3) )
+
+			# reseting the ball's position
+			ball.setPos(self.width * (1 / 2), self.height * (1 / 2))
 			ball.clampSpeed()
 			self.last_ponger = 0
 

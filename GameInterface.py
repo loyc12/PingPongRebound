@@ -21,7 +21,8 @@ class Game:
 
 	speed_b = 10
 	speed_r = 5
-	speed_m = 60
+	speed_m_b = 60
+	speed_m_r = 60
 	framerate = 60 # 		max fps
 
 	factor_wall = 0.75
@@ -276,7 +277,7 @@ class Game:
 
 	def moveRacket(self, rack):
 		rack.clampSpeed()
-		rack.updatePos()
+		rack.updatePos(self.speed_m_r)
 
 		# prevent racket from going off screen
 		if (rack.box.top <= 0 and rack.fy < 0) or (rack.box.bottom >= self.height and rack.fy > 0):
@@ -292,7 +293,7 @@ class Game:
 		self.aplyGravity( ball )
 
 		ball.clampSpeed()
-		ball.updatePos()
+		ball.updatePos(self.speed_m_b)
 
 		self.checkRackets( ball )
 		self.checkWalls( ball )

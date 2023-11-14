@@ -64,7 +64,7 @@ class Ponger(gi.Game):
 
 	def moveRacket(self, rack):
 		rack.clampSpeed()
-		rack.updatePos()
+		rack.updatePos(self.speed_m_r)
 
 		# prevent racket from going off screen
 		if (rack.box.top <= 0 and rack.fy < 0) or (rack.box.bottom >= self.height and rack.fy > 0):

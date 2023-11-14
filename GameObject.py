@@ -30,21 +30,25 @@ class GameObject:
 		self.fx = _fx
 		self.fy = _fy
 
-	def updatePos(self):
+	def updatePos(self, max_speed):
 		# making sure the dx and dy are positive
 		self.clampSpeed()
 
 		# moving on x
 		if self.fx != 0:
-			if abs( self.dx * self.fx ) > self.game.speed_m:
-				self.box.x += self.game.speed_m * ad.getSign(self.fx)
+			if abs( self.dx * self.fx ) > max_speed:
+				if self.dx > max_speed:
+					self.dx = max_speed
+				self.box.x += max_speed * ad.getSign(self.fx)
 			else:
 				self.box.x += self.dx * self.fx
 
 		# moving on y
 		if self.fy != 0:
-			if abs( self.dy * self.fy ) > self.game.speed_m:
-				self.box.y += self.game.speed_m * ad.getSign(self.fy)
+			if abs( self.dy * self.fy ) > max_speed:
+				if self.dy > max_speed:
+					self.dy = max_speed
+				self.box.y += max_speed * ad.getSign(self.fy)
 			else:
 				self.box.y += self.dy * self.fy
 
