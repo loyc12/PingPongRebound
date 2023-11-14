@@ -94,6 +94,7 @@ class Game:
 
 		bot = ai.AiControler( self, botname )
 		bot.setRacket( self.rackets[ len(self.controlers) ].id )
+		bot.setFrequencyOffset( self.racketCount )
 		self.controlers.append( bot )
 
 		self.controlerCount += 1
@@ -104,7 +105,11 @@ class Game:
 	def makeBotsPlay(self):
 		for i in range(self.playerCount, self.controlerCount):
 			if (self.controlers[i].mode == gc.ad.BOT):
-				self.controlers[i].playStep()
+				if (self.step_count + self.controlers[i].frequency_offset % ad.BOT_FREQUENCY) == 0:
+					self.controlers[i].playStep()
+					time.sleep(0.1)
+		self.step_count += 1
+		self.step_count %= ad.BOT_FREQUENCY
 
 
 	def addPlayer(self, username):
@@ -241,11 +246,11 @@ class Game:
 		self.refreshScreen()
 
 		if self.playerCount < self.racketCount:
-			#self.makeBotsPlay()
-			if (self.step_count % ad.BOT_FREQUENCY) == 0:
-				self.makeBotsPlay()
-				self.step_count = 0
-			self.step_count += 1
+			self.makeBotsPlay()
+			#if (self.step_count % ad.BOT_FREQUENCY) == 0:
+				#self.makeBotsPlay()
+				#self.step_count = 0
+			#self.step_count += 1
 
 
 	def debugControler(self): #			NOTE : DEBUG : use PlayerControler class instance instead
