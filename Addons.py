@@ -12,7 +12,7 @@ DOWN = 4
 LEFT = 5
 
 
-BOT_FREQUENCY = 12
+BOT_FREQUENCY = 10
 
 
 def getSign(value):

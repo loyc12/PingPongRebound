@@ -66,11 +66,13 @@ class GameObject:
 	# specifically to handle ball-to-racket collisions
 	def collideRack(self, other, type):
 		if type == "x":
+			self.fx *= -1
 			if self.fy > 0:
 				self.dy += other.dy * other.fy
 			else:
 				self.dy -= other.dy * other.fy
 		elif type == "y":
+			self.fy *= -1
 			if self.fx > 0:
 				self.dx += other.dx * other.fx
 			else:

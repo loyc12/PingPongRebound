@@ -11,7 +11,7 @@ import sys #	to exit properly
 class Game:
 	name = "unnamed"
 
-	width = 2048
+	width = 1536
 	height = 1024
 
 	size_l = 10
@@ -19,14 +19,14 @@ class Game:
 	size_r = 160
 	size_font = 768
 
-	speed_b = 5
+	speed_b = 10
 	speed_r = 5
 	speed_m = 60
 	framerate = 60 # 		max fps
 
 	factor_wall = 0.75
-	factor_rack = 1.00
-	gravity = 0.4
+	factor_rack = 1.10
+	gravity = 0
 	hard_break = False
 
 	col_bgr = pg.Color('black')
@@ -78,7 +78,7 @@ class Game:
 
 	def initBalls(self):
 		self.balls.append( go.GameObject( 1, self, self.width * (3 / 8), self.size_b, self.size_b, self.size_b ))
-		self.balls[0].setSpeeds( self.speed_b, 0 )
+		self.balls[0].setSpeeds( self.speed_b, self.speed_b )
 		self.balls[0].setDirs( 1, 1 )
 
 
@@ -103,13 +103,14 @@ class Game:
 
 
 	def makeBotsPlay(self):
-		for i in range(self.playerCount, self.controlerCount):
-			if (self.controlers[i].mode == gc.ad.BOT):
-				if (self.step_count + self.controlers[i].frequency_offset % ad.BOT_FREQUENCY) == 0:
-					self.controlers[i].playStep()
-					time.sleep(0.1)
-		self.step_count += 1
-		self.step_count %= ad.BOT_FREQUENCY
+		if self.playerCount < self.racketCount:
+			for i in range(self.playerCount, self.controlerCount):
+				if (self.controlers[i].mode == gc.ad.BOT):
+					if (( self.step_count + self.controlers[i].frequency_offset ) % ad.BOT_FREQUENCY ) == 0:
+						self.controlers[i].playStep()
+						#time.sleep(0.25) # NOTE : DEBUG
+			self.step_count += 1
+			self.step_count %= ad.BOT_FREQUENCY
 
 
 	def addPlayer(self, username):
@@ -245,12 +246,7 @@ class Game:
 		self.moveObjects()
 		self.refreshScreen()
 
-		if self.playerCount < self.racketCount:
-			self.makeBotsPlay()
-			#if (self.step_count % ad.BOT_FREQUENCY) == 0:
-				#self.makeBotsPlay()
-				#self.step_count = 0
-			#self.step_count += 1
+		self.makeBotsPlay()
 
 
 	def debugControler(self): #			NOTE : DEBUG : use PlayerControler class instance instead
@@ -319,11 +315,11 @@ class Game:
 			rack = self.rackets[i]
 			if ball.overlaps( rack ):
 				ball.setPos( ball.box.centerx, rack.box.centery - self.size_b ) # '-' because the ball is going above the racket
-				ball.collideWall( "y" )
 				ball.collideRack( rack, "y" )
 				ball.dy *= self.factor_rack
 				ball.clampSpeed()
 				self.last_ponger = rack.id
+				self.scores[0] += 1
 
 
 	# bouncing on the walls
@@ -333,24 +329,22 @@ class Game:
 			# bouncing off the sides
 			if ball.box.left <= 0 or ball.box.right >= self.width:
 				ball.collideWall( "x" )
+				ball.dx *= self.factor_wall
 
-			# bouncing off the top
+			# bouncing off the top (no bounce factor)
 			if ball.box.top <= 0:
 				ball.collideWall( "y" )
-				ball.dy = 1
 
-			ball.dx *= self.factor_wall
 			ball.clampSpeed()
 
 
 	# scoring a goal
 	def checkGoals(self, ball):
 		if ball.box.bottom >= self.height:
-			if self.last_ponger > 0:
-				self.scores[0] += 1
+			self.scores[0] = 0
 			ball.setDirs( -ball.fx, 1 )
-			ball.setPos( ball.box.centerx, 0 )
-			ball.setSpeeds( (ball.dx + self.speed_b) / 2, 0)
+			ball.setPos( ball.box.centerx, self.size_b )
+			ball.setSpeeds( self.speed_b, self.speed_b )
 			ball.clampSpeed()
 
 
@@ -380,6 +374,7 @@ class Game:
 	def drawLines(self):
 		pg.draw.line( self.win, self.col_fnt, ( 0, 0 ), ( 0 , self.height ), self.size_l * 2 )
 		pg.draw.line( self.win, self.col_fnt, ( self.width, 0 ), ( self.width, self.height ), self.size_l * 2 )
+		pg.draw.line( self.win, self.col_fnt, ( 0, 0 ), ( self.width, 0 ), self.size_l * 2 )
 
 
 	def drawScores(self):

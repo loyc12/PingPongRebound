@@ -5,10 +5,7 @@ import GameInterface as gi
 class Pong(gi.Game):
 	name = "Pong"
 
-	speed_b = 10
-
-	factor_rack = 1.10
-	gravity = 0
+	width = 2048
 
 	def initRackets(self):
 		self.rackets.append( go.GameObject( 1, self, self.size_b, self.height * (1 / 2), self.size_b, self.size_r ))
@@ -63,7 +60,6 @@ class Pong(gi.Game):
 					ball.setPos( rack.box.centerx + self.size_b, ball.box.centery ) # '+' because the ball is going to the right
 				elif (rack.id == 2):
 					ball.setPos( rack.box.centerx - self.size_b, ball.box.centery ) # '-' because the ball is going to the left
-				ball.collideWall( "x" )
 				ball.collideRack( rack, "x" )
 				ball.dx *= self.factor_rack
 				ball.clampSpeed()

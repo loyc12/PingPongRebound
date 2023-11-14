@@ -9,9 +9,9 @@ class AiControler(gc.GameControler):
 
 	allow_hard_break = True
 	go_to_center = False # fucky with most games
+	play_frequency = 10
 	#stop_distance = 120
-	#play_frequency = 12
-	mf = 4
+	mf = 5
 
 	frequency_offset = 0;
 
@@ -25,7 +25,7 @@ class AiControler(gc.GameControler):
 
 
 	def setFrequencyOffset(self, racketCount):
-		self.frequency_offset = (self.racket.id / racketCount) * ad.BOT_FREQUENCY
+		self.frequency_offset = int( (self.racket.id / racketCount) * ad.BOT_FREQUENCY )
 
 
 	def playStep(self):

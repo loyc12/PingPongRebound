@@ -5,11 +5,6 @@ import GameInterface as gi
 class Ponger(gi.Game):
 	name = "Ponger"
 
-	speed_b = 10
-
-	factor_rack = 1.10
-	gravity = 0
-
 	def initRackets(self):
 		# setting up rackets :             id, game, _x                  , _y                       , _w         , _h
 		self.rackets.append( go.GameObject( 1, self, self.width * (1 / 4), self.size_b		        , self.size_r, self.size_b ))
@@ -96,10 +91,9 @@ class Ponger(gi.Game):
 					ball.setPos( ball.box.centerx, rack.box.centery + self.size_b ) # '+' because the ball is going under
 				elif (rack.id == 3 or rack.id == 4):
 					ball.setPos( ball.box.centerx, rack.box.centery - self.size_b ) # '-' because the ball is going over
-				ball.collideWall( "y" )
+				ball.collideRack( rack, "y" )
 				ball.dy *= self.factor_rack
 				ball.clampSpeed()
-				ball.collideRack( rack, "y" )
 				self.last_ponger = rack.id
 
 

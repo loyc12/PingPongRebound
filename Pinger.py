@@ -5,9 +5,9 @@ import GameInterface as gi
 class Pinger(gi.Game):
 	name = "Pinger"
 
-	speed_b = 10
+	width = 2048
+	gravity = 0.4
 	factor_rack = 0.95
-
 
 	def initRackets(self):
 		self.rackets.append( go.GameObject( 1, self, self.width * (1 / 4), self.height - self.size_b, self.size_r, self.size_b ))

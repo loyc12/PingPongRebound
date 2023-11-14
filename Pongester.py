@@ -8,11 +8,11 @@ class Pongester(gi.Game):
 	width = 1280
 	height = 1280
 
+	speed_b = 5
 	speed_m = 30
 	size_font = 512
 
 	factor_rack = 1.05
-	gravity = 0
 
 	def initRackets(self):
 		# setting up rackets :             id, game, _x                      , _y                       , _w         , _h
@@ -79,19 +79,15 @@ class Pongester(gi.Game):
 			if ball.overlaps( rack ):
 				if (rack.id == 1):
 					ball.setPos( ball.box.centerx, rack.box.centery + self.size_b ) # '+' because the ball is going under
-					ball.collideWall( "y" )
 					ball.collideRack( rack, "y" )
 				elif (rack.id == 2):
 					ball.setPos( rack.box.centerx - self.size_b, ball.box.centery ) # '-' because the ball is going left
-					ball.collideWall( "x" )
 					ball.collideRack( rack, "x" )
 				elif (rack.id == 3):
 					ball.setPos( ball.box.centerx, rack.box.centery - self.size_b ) # '-' because the ball is going over
-					ball.collideWall( "y" )
 					ball.collideRack( rack, "y" )
 				elif (rack.id == 4):
 					ball.setPos( rack.box.centerx + self.size_b, ball.box.centery ) # '+' because the ball is going right
-					ball.collideWall( "x" )
 					ball.collideRack( rack, "x" )
 
 				ball.dy *= self.factor_rack

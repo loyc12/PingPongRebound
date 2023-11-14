@@ -5,13 +5,14 @@ from Pong import Pong
 from Ponger import Ponger
 from Pongest import Pongest
 from Pongester import Pongester
+from GameInterface import Game
 
 from AiControler import AiControler as ai
 from PlayerControler import PlayerControler as pl
 
 import pygame as pg
 import asyncio as asy
-import sys #	to exit properly
+import Addons as ad
 
 # MASTER LIST
 # TODO : have each bot update on different frames
@@ -32,8 +33,8 @@ import sys #	to exit properly
 
 async def main():
 
-	game = Ponger()
-	game.addPlayer( "tester_1" )
+	game = Pongester()
+	#game.addPlayer( "tester_1" )
 	game.start()
 
 	while game.running:
@@ -44,7 +45,7 @@ async def main():
 def takeGameStep( game ):
 	game.step()
 
-	# read local inputs
+		# read local player inputs
 	for event in pg.event.get():
 		# quiting the game
 		if event.type == pg.QUIT or ( event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE ):
@@ -52,9 +53,8 @@ def takeGameStep( game ):
 
 		# handling key presses
 		elif event.type == pg.KEYDOWN:
-			game.controlers[0].handleKeyInput(event.key) # first game controler, aka player 1
-
-	#game.makeBotsPlay()
+			if game.controlers[0].mode == ad.PLAYER:
+				game.controlers[0].handleKeyInput(event.key) # first game controler, aka player 1
 
 	game.clock.tick (game.framerate)
 
