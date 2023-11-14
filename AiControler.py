@@ -1,12 +1,15 @@
 import GameControler as gc
 import Addons as ad
 
+# NOTE : this is a fairly dumb ai, especially for split screen games
+# NOTE : it could be improved by calculating the ball's trajectory and going where it will be
+
 # controler class
 class AiControler(gc.GameControler):
 
 	allow_hard_break = True
-	go_to_center = False # is fucky in ping and pinger
-	stop_distance = 120
+	go_to_center = False # fucky with most games
+	#stop_distance = 120
 	play_frequency = 12
 	mf = 4
 

@@ -31,7 +31,7 @@ import sys #	to exit properly
 
 async def main():
 
-	game = Pong()
+	game = Ponger()
 	game.addPlayer( "tester_1" )
 	game.start()
 

@@ -4,6 +4,7 @@ import GameControler as gc
 import AiControler as ai
 import PlayerControler as pl
 import Addons as ad
+import time #						NOTE : DEBUG
 import sys #	to exit properly
 
 # game class
@@ -35,6 +36,8 @@ class Game:
 	last_ponger = 0
 	step_count = 0
 
+	last_time = time.time_ns() #			NOTE : DEBUG
+
 
 	# ------------------------------------------- INITIALIZATION ------------------------------------------- #
 
@@ -48,6 +51,7 @@ class Game:
 		self.clock = pg.time.Clock()
 		self.win = pg.display.set_mode((self.width, self.height)) #		TODO : abstract away from pygame's window system
 		self.font = pg.font.Font(None, self.size_font) #				TODO : abstract away from pygame's window system
+		self.debug_font = pg.font.Font(None, 32) #						TODO : abstract away from pygame's window system
 		pg.display.set_caption(self.name) #			 					TODO : abstract away from pygame's window system
 
 		self.rackets = []
@@ -244,7 +248,7 @@ class Game:
 			self.step_count += 1
 
 
-	def debugControler(self): #						NOTE : DEBUG : use PlayerControler class instance instead
+	def debugControler(self): #			NOTE : DEBUG : use PlayerControler class instance instead
 		for event in pg.event.get():
 			# quiting the game
 			if event.type == pg.QUIT or ( event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE ):
@@ -363,6 +367,8 @@ class Game:
 		for ball in self.balls: # 		copies the ball's data
 			ball.drawSelf()
 
+		self.drawFps() #				NOTE : DEBUG
+
 		pg.display.flip() #				drawing the newly prepared frame
 
 
@@ -375,3 +381,14 @@ class Game:
 		for score in self.scores: #		copies the racket's data
 			text = self.font.render(f'{score}', True, self.col_fnt)
 			self.win.blit( text, text.get_rect( center = ( self.width * (2 / 4), self.height * (2 / 4) )))
+
+	def drawFps(self): #				NOTE : DEBUG
+		new_time = time.time_ns()
+		delta_time = new_time - self.last_time
+		self.last_time = new_time
+
+		#time.sleep(0.02)
+
+		text = self.debug_font.render(f'{int(1000000000 / delta_time)}', True, self.col_fnt)
+		#text = self.debug_font.render(f'{int(self.clock.get_fps())}', True, self.col_fnt)
+		self.win.blit( text, text.get_rect( center = ( 32, 32 )))
