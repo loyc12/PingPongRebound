@@ -81,10 +81,6 @@ class Game:
 		self.scores.append( 0 )
 
 
-	def reset(self):
-		raise NotImplementedError("Unimplemented : game.reset()")
-
-
 	# --------------------------------------------- PLAYER & AI -------------------------------------------- #
 
 	def addBot(self, botname):
@@ -130,6 +126,21 @@ class Game:
 		return ( False )
 
 
+	def getPlayer(self, username):
+		for i in range(len(self.controlers)):
+			if (self.controlers[i].username == username):
+				return ( self.controlers[i] )
+		return None
+
+
+	def handleUserInputs(self, username, key):
+		for i in range(len(self.controlers)):
+			if (self.controlers[i].username == username):
+				self.controlers[i].handleInputs( key )
+				return
+
+		raise Exception("Playernot found in this game")
+
 	# ---------------------------------------------- INTERFACE --------------------------------------------- #
 
 	def makeMove(self, target_id, move):
@@ -171,7 +182,7 @@ class Game:
 				return
 
 
-	def handleInputs(self, key):
+	def handlePygameInputs(self, key):
 		for i in range(len(self.rackets)):
 			rack = self.rackets[i]
 			if key == pg.K_s or key == pg.K_DOWN:
@@ -234,7 +245,7 @@ class Game:
 
 			# handling key presses
 			elif event.type == pg.KEYDOWN:
-				self.handleInputs( event.key )
+				self.handlePygameInputs( event.key )
 
 
 	def getInfo(self): # NOTE : send this fct's value to the client

@@ -43,7 +43,7 @@ class Ponger(gi.Game):
 		self.scores.append( 0 )
 
 
-	def handleInputs(self, key):
+	def handlePygameInputs(self, key):
 		# player 1
 		if key == pg.K_s:
 			self.makeMove( 1, gi.ad.STOP )

@@ -6,7 +6,7 @@ class GameControler:
 	# gameType = "normal" # "tournament"
 	game = None
 	racket = None
-	next_move = 0
+	next_move = ad.NULL
 
 	mode = ad.CONTROLER
 	isActive = True
@@ -40,7 +40,7 @@ class GameControler:
 			raise ValueError("Error: no racket selected")
 		if self.isActive:
 			self.playMove( self.next_move )
-			self.next_move = 0
+			self.next_move = ad.NULL
 
 	def deactivate(self):
 		self.isActive = False

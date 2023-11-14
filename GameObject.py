@@ -75,6 +75,7 @@ class GameObject:
 				self.dx += other.dx * other.fx
 			else:
 				self.dx -= other.dx * other.fx
+		self.clampSpeed()
 
 	def clampPos(self):
 		# prevent balls from going off screen
@@ -98,3 +99,69 @@ class GameObject:
 
 	def drawSelf(self):
 		pg.draw.rect(self.game.win, self.game.col_obj, self.box)
+
+
+
+	def isGoingLeft(self):
+		if self.fx < 0:
+			return True
+		return False
+
+	def isGoingRight(self):
+		if self.fx > 0:
+			return True
+		return False
+
+	def isGoingUp(self):
+		if self.fy < 0:
+			return True
+		return False
+
+	def isGoingDown(self):
+		if self.fy > 0:
+			return True
+		return False
+
+
+
+	def isLeftOfX(self, X):
+		if self.box.right <= X:
+			return True
+		return False
+
+	def isRightOfX(self, X):
+		if self.box.left >= X:
+			return True
+		return False
+
+	def isAboveY(self, Y):
+		if self.box.bottom <= Y:
+			return True
+		return False
+
+	def isBelowY(self, Y):
+		if self.box.top >= Y:
+			return True
+		return False
+
+
+
+	def isLeftOf(self, other):
+		if self.box.right <= other.box.left:
+			return True
+		return False
+
+	def isRightOf(self, other):
+		if self.box.left >= other.box.right:
+			return True
+		return False
+
+	def isAbove(self, other):
+		if self.box.bottom <= other.box.top:
+			return True
+		return False
+
+	def isBelow(self, other):
+		if self.box.top >= other.box.bottom:
+			return True
+		return False

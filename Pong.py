@@ -36,7 +36,7 @@ class Pong(gi.Game):
 		self.scores.append( 0 )
 
 
-	def handleInputs(self, key):
+	def handlePygameInputs(self, key):
 		# player 1
 		if key == pg.K_a:
 			self.makeMove( 1, gi.ad.STOP )
@@ -59,10 +59,10 @@ class Pong(gi.Game):
 		for i in range(len(self.rackets)):
 			rack = self.rackets[i]
 			if ball.overlaps( rack ):
-				if (rack.id == 0):
-					ball.setPos( rack.box.centerx - self.size_b, ball.box.centery ) # '-' because the ball is going to the left
-				elif (rack.id == 1):
+				if (rack.id == 1):
 					ball.setPos( rack.box.centerx + self.size_b, ball.box.centery ) # '+' because the ball is going to the right
+				elif (rack.id == 2):
+					ball.setPos( rack.box.centerx - self.size_b, ball.box.centery ) # '-' because the ball is going to the left
 				ball.collideWall( "x" )
 				ball.collideRack( rack, "x" )
 				ball.dx *= self.factor_rack
