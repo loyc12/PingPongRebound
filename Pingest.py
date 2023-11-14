@@ -7,7 +7,7 @@ import GameInterface as gi
 class Pingest(gi.Game):
 	name = "Pingest"
 
-	width = 2048
+	width = 1536
 	speed_b = 10
 	factor_rack = 1.10
 	gravity = 0
@@ -82,6 +82,20 @@ class Pingest(gi.Game):
 		rack.clampPos()
 
 
+	def aplyGravity(self, ball):
+		if self.gravity != 0:
+			if ball.box.centery > self.height / 2:
+				if ball.fy > 0:
+					ball.dy += self.gravity
+				else:
+					ball.dy -= self.gravity
+			if ball.box.centery < self.height / 2:
+				if ball.fy > 0:
+					ball.dy -= self.gravity
+				else:
+					ball.dy += self.gravity
+
+
 	# bouncing off the rackets
 	def checkRackets(self, ball):
 		for rack in self.rackets: #		copies the racket's data
@@ -122,7 +136,7 @@ class Pingest(gi.Game):
 				ball.setPos ( self.width * (1 / 2), self.height * (1 / 4) )
 
 			# reseting the ball's speed
-			ball.setSpeeds( (self.speed_b + ball.dx) * (1 / 3), (self.speed_b + ball.dx) * (1 / 2) )
+			ball.setSpeeds( (self.speed_b + ball.dx) * (1 / 3), self.speed_b )
 			ball.clampSpeed()
 			self.last_ponger = 0
 

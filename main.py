@@ -14,16 +14,15 @@ import asyncio as asy
 import sys #	to exit properly
 
 # MASTER LIST
-# TODO : test with sockets
-# TODO : allow racket control through sockets (player child class of controler)
+# TODO : integrate playerControler with sockets
 
 # FUNCTION LIST
-# TODO : implement game.getInfo()
+# TODO : implement game.getInfo()		(awaiting formating for that)
 
 # DEBUG LIST
 
 # MINOR LIST
-# TODO : add a game start and game over screen
+# TODO : add a game start and game over screen ?
 # TODO : add double-sided gravity to pingest (so it's an actual ping game lol)
 # TODO : make the ball restart's trajectory more random in Pong-type games
 # TODO : add sound effects to collisions (in GameObject class)
@@ -54,7 +53,7 @@ def takeGameStep( game ):
 		elif event.type == pg.KEYDOWN:
 			game.controlers[0].handleKeyInput(event.key) # first game controler, aka player 1
 
-	game.makeBotsPlay()
+	#game.makeBotsPlay()
 
 	game.clock.tick (game.framerate)
 

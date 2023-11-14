@@ -18,8 +18,8 @@ class Game:
 	size_r = 160
 	size_font = 768
 
-	speed_b = 6
-	speed_r = 6
+	speed_b = 5
+	speed_r = 5
 	speed_m = 60
 	framerate = 60 # 		max fps
 
@@ -33,6 +33,7 @@ class Game:
 	col_obj = pg.Color('white')
 
 	last_ponger = 0
+	step_count = 0
 
 
 	# ------------------------------------------- INITIALIZATION ------------------------------------------- #
@@ -97,7 +98,7 @@ class Game:
 
 
 	def makeBotsPlay(self):
-		for i in range(1, len(self.controlers)):
+		for i in range(self.playerCount, self.controlerCount):
 			if (self.controlers[i].mode == gc.ad.BOT):
 				self.controlers[i].playStep()
 
@@ -210,7 +211,6 @@ class Game:
 
 
 	def run(self):
-
 		if self.running == False:
 			print(f"{self.name} is not running")
 			return
@@ -235,6 +235,13 @@ class Game:
 
 		self.moveObjects()
 		self.refreshScreen()
+
+		if self.playerCount < self.racketCount:
+			#self.makeBotsPlay()
+			if (self.step_count % ad.BOT_FREQUENCY) == 0:
+				self.makeBotsPlay()
+				self.step_count = 0
+			self.step_count += 1
 
 
 	def debugControler(self): #						NOTE : DEBUG : use PlayerControler class instance instead
