@@ -62,46 +62,30 @@ class AiControler(gc.GameControler):
 
 		rack = self.racket
 
-		if rack.dx != 0: #						handling up and down movement
-			if rack.isRightOf( ball ):
+		if rack.dx != 0: #			handling up and down movement
+			if rack.isRightOf( ball ): #	when the ball is to the right of the racket
 				if self.allow_hard_break and rack.isGoingRight():
 					self.stopHere()
 				else:
 					self.goLeft( maxFactor )
 
-			elif rack.isLeftOf( ball ):
+			elif rack.isLeftOf( ball ): #	when the ball is to the left of the racket
 				if self.allow_hard_break and rack.isGoingLeft():
 					self.stopHere()
 				else:
 					self.goRight( maxFactor )
 
-			elif ball.isGoingLeft():
-				if self.allow_hard_break and  rack.isGoingRight():
-					self.stopHere()
-
-				elif ball.isLeftOfX( rack.box.centerx ):
-					if ball.dx > abs(rack.dx * rack.fx):
-						self.goLeft( maxFactor )
-					else:
-						return
-
-				elif ball.isRightOfX( rack.box.centerx ):
-					if ball.dx < abs(rack.dx * rack.fx):
-						self.goRight( maxFactor )
-					else:
-						return
-
-			elif ball.isGoingRight():
+			elif ball.isGoingRight(): #		when the ball is going to be to the right
 				if self.allow_hard_break and  rack.isGoingLeft():
 					self.stopHere()
 
-				elif ball.isRightOfX( rack.box.centerx ):
+				elif ball.isRightOfX( rack.box.centerx ): # the ball is on the right half of the racket
 					if ball.dx > abs(rack.dx * rack.fx):
 						self.goRight( maxFactor )
 					else:
 						return
 
-				elif ball.isLeftOfX( rack.box.centerx ):
+				elif ball.isLeftOfX( rack.box.centerx ): # the ball is on the left half of the racket
 					if ball.dx < abs(rack.dx * rack.fx):
 						self.goLeft( maxFactor )
 					else:
@@ -110,51 +94,67 @@ class AiControler(gc.GameControler):
 				else:
 					return
 
+			elif ball.isGoingLeft(): #		when the ball is going to be to the left
+				if self.allow_hard_break and  rack.isGoingRight():
+					self.stopHere()
+
+				elif ball.isLeftOfX( rack.box.centerx ): # the ball is on the left half of the racket
+					if ball.dx > abs(rack.dx * rack.fx):
+						self.goLeft( maxFactor )
+					else:
+						return
+
+				elif ball.isRightOfX( rack.box.centerx ): # the ball is on the right half of the racket
+					if ball.dx < abs(rack.dx * rack.fx):
+						self.goRight( maxFactor )
+					else:
+						return
+
 			else:
 				self.stopHere()
 
-		if rack.dy != 0: #						handling up and down movement
-			if rack.isBelow( ball ):
+		if rack.dy != 0: #			handling up and down movement
+			if rack.isBelow( ball ): #		when the ball is to the below of the racket
 				if self.allow_hard_break and rack.isGoingDown():
 					self.stopHere()
 				else:
 					self.goUp( maxFactor )
 
-			elif rack.isAbove( ball ):
+			elif rack.isAbove( ball ): #	when the ball is to the above of the racket
 				if self.allow_hard_break and rack.isGoingUp():
 					self.stopHere()
 				else:
 					self.goDown( maxFactor )
 
-			elif ball.isGoingUp():
-				if self.allow_hard_break and  rack.isGoingDown():
-					self.stopHere()
-
-				elif ball.isAboveY( rack.box.centery ):
-					if ball.dy > abs(rack.dy * rack.fy):
-						self.goUp( maxFactor )
-					else:
-						return
-
-				elif ball.isBelowY( rack.box.centery ):
-					if ball.dy < abs(rack.dy * rack.fy):
-						self.goDown( maxFactor )
-					else:
-						return
-
-			elif ball.isGoingDown():
+			elif ball.isGoingDown(): #		when the ball is going to be to below
 				if self.allow_hard_break and  rack.isGoingUp():
 					self.stopHere()
 
-				elif ball.isBelowY( rack.box.centery ):
+				elif ball.isBelowY( rack.box.centery ): # the ball is on the lower half of the racket
 					if ball.dy > abs(rack.dy * rack.fy):
 						self.goDown( maxFactor )
 					else:
 						return
 
-				elif ball.isAboveY( rack.box.centery ):
+				elif ball.isAboveY( rack.box.centery ): # the ball is on the upper half of the racket
 					if ball.dy < abs(rack.dy * rack.fy):
 						self.goUp( maxFactor )
+					else:
+						return
+
+			elif ball.isGoingUp(): #		when the ball is going to be above
+				if self.allow_hard_break and  rack.isGoingDown():
+					self.stopHere()
+
+				elif ball.isAboveY( rack.box.centery ): # the ball is on the upper half of the racket
+					if ball.dy > abs(rack.dy * rack.fy):
+						self.goUp( maxFactor )
+					else:
+						return
+
+				elif ball.isBelowY( rack.box.centery ): # the ball is on the lower half of the racket
+					if ball.dy < abs(rack.dy * rack.fy):
+						self.goDown( maxFactor )
 					else:
 						return
 
