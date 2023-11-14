@@ -14,6 +14,7 @@ import asyncio as asy
 import sys #	to exit properly
 
 # MASTER LIST
+# TODO : have each bot update on different frames
 # TODO : integrate playerControler with sockets
 
 # FUNCTION LIST
