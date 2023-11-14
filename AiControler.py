@@ -9,7 +9,7 @@ class AiControler(gc.GameControler):
 
 	allow_hard_break = True
 	go_to_center = True # fucky with most games
-	play_frequency = 10
+	play_frequency = 6
 	#stop_distance = 120
 	mf = 5
 
@@ -181,17 +181,29 @@ class AiControler(gc.GameControler):
 	def goTo(self, maxFactor, X, Y):
 		if self.racket.dx != 0:
 			if self.racket.isRightOfX( X ):
-				self.goLeft( maxFactor )
+				if self.racket.isGoingRight():
+					self.stopHere()
+				else:
+					self.goLeft( maxFactor )
 			elif self.racket.isLeftOfX( X ):
-				self.goRight( maxFactor )
+				if self.racket.isGoingLeft():
+					self.stopHere()
+				else:
+					self.goRight( maxFactor )
 			else:
 				self.stopHere()
 
 		elif self.racket.dy != 0:
 			if self.racket.isBelowY( Y ):
-				self.goUp( maxFactor )
+				if self.racket.isGoingDown():
+					self.stopHere()
+				else:
+					self.goUp( maxFactor )
 			elif self.racket.isAboveY( Y ):
-				self.goDown( maxFactor )
+				if self.racket.isGoingUp():
+					self.stopHere()
+				else:
+					self.goDown( maxFactor )
 			else:
 				self.stopHere()
 

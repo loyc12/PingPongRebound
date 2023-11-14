@@ -19,15 +19,15 @@ import Addons as ad
 # TODO : integrate playerControler with sockets
 
 # FUNCTION LIST
-# TODO : implement game.getInfo()	(awaiting formating for that)
+# TODO : implement game.getInfo()		(awaiting formating for that)
+# TODO : implement game.respawnBall()
 
 # DEBUG LIST
-# TODO : debug score_mode in games (goals or hits)
 
 # MINOR LIST
 # TODO : add a game start and game over screen ?
 # TODO : add double-sided gravity to pingest (so it's an actual ping game lol)
-# TODO : make the ball restart's trajectory more random in Pong-type games
+# TODO : figure out the ball respawn trajectory
 # TODO : add sound effects to collisions (in GameObject class)
 # TODO : make an 'asteroids' game (solo)
 # TODO : make obstacles type GameObjects in the base class (and use them in pongester)
