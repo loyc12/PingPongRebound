@@ -8,19 +8,11 @@ class Ping(gi.Game):
 	width = 1280
 	height = 1280
 
-	gravity = 0.4
+	gravity = 0.3
 	factor_rack = 1.00
-	factor_wall = 0.80
+	factor_wall = 0.6
 
-
-	def initRackets(self):
-		self.rackets.append( go.GameObject( 1, self, self.width * (2 / 4), self.height - (3 * self.size_b), self.size_r, self.size_b ))
-		self.rackets[0].setSpeeds( self.speed_r, 0 )
-		self.racketCount = 1
-
-
-	def initControlers(self):
-		self.addBot("bot 1")
+	score_mode = gi.ad.HITS
 
 
 	def initBalls(self):
@@ -32,11 +24,11 @@ class Ping(gi.Game):
 	# scoring a goal
 	def checkGoals(self, ball):
 		if ball.box.bottom >= self.height:
-			self.scores[0] = 0
 			ball.setDirs( -ball.fx, 1 )
-			ball.setPos( ball.box.centerx, self.size_b )
+			ball.setPos( (self.width + ball.box.centerx) / 3, self.size_b )
 			ball.setSpeeds( (ball.dx + self.speed_b) / 3, 0 )
 			ball.clampSpeed()
+			self.scorePoint( self.last_ponger, gi.ad.GOALS )
 
 
 if __name__ == '__main__':

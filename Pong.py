@@ -63,7 +63,7 @@ class Pong(gi.Game):
 				ball.collideRack( rack, "x" )
 				ball.dx *= self.factor_rack
 				ball.clampSpeed()
-				self.last_ponger = rack.id
+				self.scorePoint( rack.id, gi.ad.HITS )
 
 
 	# bouncing on the walls
@@ -81,12 +81,12 @@ class Pong(gi.Game):
 			# checking who scored
 			if ball.box.left <= 0:
 				if self.last_ponger > 0:
-					self.scores[1] += 1
+					self.scorePoint( 2, gi.ad.GOALS )
 				ball.setDirs( -1, -ball.fy )
 				ball.setPos (self.width * (3 / 4), (self.height - self.size_b) / 2 )
 			if ball.box.right >= self.width:
 				if self.last_ponger > 0:
-					self.scores[0] += 1
+					self.scorePoint( 1, gi.ad.GOALS )
 				ball.setDirs( 1, -ball.fy )
 				ball.setPos (self.width * (1 / 4), (self.height - self.size_b) / 2 )
 

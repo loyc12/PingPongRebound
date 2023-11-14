@@ -1,50 +1,32 @@
 {
-	"rackets": [
+	"racketInfo": [
 		{
-			"rack_id" : 1,		// id of the player's racket
-			"posX": 1234,		// racket's position on the x axis
-			"posY": 1234,		// racket's position on the y axis
-			"dir": "x",			// racket's orientation
-			"name": "player1",  // player's usernamename
-			"score" : 0,		// player's score
-			"collided" : false	// if the racket collided with a ball last frame
-		}, {
-			"rack_id" : 2,
-			"posX": 321,
-			"posY": 321,
-			"dir": "y",
-			"name": "player2",
-			"score" : 1,
-			"collided" : false
-		}, {
-			"rack_id" : 3,
-			"posX": 321,
-			"posY": 1234,
 			"dir": "x",
-			"name": "bot2",
-			"score" : 3,
-			"collided" : true
+			"name": "player 1"
 		}, {
-			"rack_id" : 4,
-			"posX": 1234,
-			"posY": 321,
 			"dir": "y",
-			"name": "bot4",
-			"score" : 2,
-			"collided" : false
+			"name": "player 2"
+		}, {
+			"dir": "x",
+			"name": "bot 2"
+		}, {
+			"dir": "y",
+			"name": "bot 4"
 		}
 	],
-	"balls": [
-		{
-			"ball_id" : 1,		// id of the ball
-			"posX": 321,		// ball's position on the x axis
-			"posY": 1234,		// ball's position on the y axis
-			"collided" : true	// if the ball collided with a racket last frame
-		},{
-			"ball_id" : 2,
-			"posX": 123,
-			"posY": 123,
-			"collided" : false
-		}
+	"racketPos": [
+		1, 2,
+		3, 4,
+		5, 6,
+		7, 8
+	],
+	"ballPos": [
+		1, 2
+	],
+	"score": [
+		1,
+		2,
+		3,
+		4
 	]
 }

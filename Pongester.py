@@ -96,7 +96,7 @@ class Pongester(gi.Game):
 
 				ball.dy *= self.factor_rack
 				ball.clampSpeed()
-				self.last_ponger = rack.id
+				self.scorePoint( rack.id, gi.ad.HITS )
 
 
 	# bouncing on the walls
@@ -109,7 +109,7 @@ class Pongester(gi.Game):
 		if ball.box.top <= 0 or ball.box.bottom >= self.height or ball.box.left <= 0 or ball.box.right >= self.width:
 			# increasing score
 			if (self.last_ponger > 0):
-				self.scores[self.last_ponger - 1] += 1
+				self.scorePoint( self.last_ponger, gi.ad.GOALS )
 
 			# chcking how to respawn the ball
 			if self.last_ponger == 1 or ( self.last_ponger == 0 and ball.fx < 0 and ball.fy < 0 ):

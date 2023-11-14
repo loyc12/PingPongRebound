@@ -19,9 +19,10 @@ import Addons as ad
 # TODO : integrate playerControler with sockets
 
 # FUNCTION LIST
-# TODO : implement game.getInfo()		(awaiting formating for that)
+# TODO : implement game.getInfo()	(awaiting formating for that)
 
 # DEBUG LIST
+# TODO : debug score_mode in games (goals or hits)
 
 # MINOR LIST
 # TODO : add a game start and game over screen ?
@@ -33,7 +34,7 @@ import Addons as ad
 
 async def main():
 
-	game = Pong()
+	game = Pingest()
 	game.addPlayer( "tester_1" )
 	game.start()
 

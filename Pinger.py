@@ -6,14 +6,15 @@ class Pinger(gi.Game):
 	name = "Pinger"
 
 	width = 2048
-	gravity = 0.4
+	gravity = 0.3
 	factor_rack = 0.95
+	factor_wall = 0.6
 
 	def initRackets(self):
-		self.rackets.append( go.GameObject( 1, self, self.width * (1 / 4), self.height - self.size_b, self.size_r, self.size_b ))
+		self.rackets.append( go.GameObject( 1, self, self.width * (1 / 3), self.height - self.size_b, self.size_r, self.size_b ))
 		self.rackets[0].setSpeeds( self.speed_r, 0 )
 
-		self.rackets.append( go.GameObject( 2, self, self.width * (3 / 4), self.height - self.size_b, self.size_r, self.size_b ))
+		self.rackets.append( go.GameObject( 2, self, self.width * (2 / 3), self.height - self.size_b, self.size_r, self.size_b ))
 		self.rackets[1].setSpeeds( self.speed_r, 0 )
 
 		self.racketCount = 2
@@ -73,24 +74,35 @@ class Pinger(gi.Game):
 		rack.clampPos()
 
 
+	# bouncing off the rackets
+	def checkRackets(self, ball):
+		for i in range(len(self.rackets)):
+			rack = self.rackets[i]
+			if ball.overlaps( rack ):
+				ball.setPos( ball.box.centerx, rack.box.centery - self.size_b ) # '-' because the ball is going above the racket
+				ball.collideRack( rack, "y" )
+				ball.dy *= self.factor_rack
+				ball.clampSpeed()
+				self.scorePoint( rack.id, gi.ad.HITS )
+
+
 	# scoring a goal
 	def checkGoals(self, ball):
 		if ball.box.bottom >= self.height:
 			# checking who scored
 			if ball.box.right < self.width / 2:
 				if self.last_ponger > 0:
-					self.scores[1] += 1
+					self.scorePoint( 2, gi.ad.GOALS )
 				ball.setDirs( -1, -1 )
 			elif ball.box.left > self.width / 2:
 				if self.last_ponger > 0:
-					self.scores[0] += 1
+					self.scorePoint( 1, gi.ad.GOALS )
 				ball.setDirs( 1, -1 )
 
 			# reseting the ball's position & speed
 			ball.setPos( self.width * (1 / 2), self.height * (2 / 3) )
 			ball.setSpeeds( (ball.dx + self.speed_b) / 3, self.speed_b * 2 )
 			ball.clampSpeed()
-			self.last_ponger = 0
 
 
 	def drawLines(self):

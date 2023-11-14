@@ -5,14 +5,12 @@ import GameInterface as gi
 class Pongest(gi.Game):
 	name = "Pongest"
 
-	width = 2048
-
 	def initRackets(self):
 		# setting up rackets :             id, game, _x                  , _y                       , _w         , _h
-		self.rackets.append( go.GameObject( 1, self, self.width * (1 / 4), self.size_b		        , self.size_r, self.size_b ))
-		self.rackets.append( go.GameObject( 2, self, self.width * (3 / 4), self.size_b	            , self.size_r, self.size_b ))
-		self.rackets.append( go.GameObject( 3, self, self.width * (1 / 4), self.height - self.size_b, self.size_r, self.size_b ))
-		self.rackets.append( go.GameObject( 4, self, self.width * (3 / 4), self.height - self.size_b, self.size_r, self.size_b ))
+		self.rackets.append( go.GameObject( 1, self, self.width * (2 / 7), self.size_b		        , self.size_r, self.size_b ))
+		self.rackets.append( go.GameObject( 2, self, self.width * (5 / 7), self.size_b	            , self.size_r, self.size_b ))
+		self.rackets.append( go.GameObject( 3, self, self.width * (2 / 7), self.height - self.size_b, self.size_r, self.size_b ))
+		self.rackets.append( go.GameObject( 4, self, self.width * (5 / 7), self.height - self.size_b, self.size_r, self.size_b ))
 
 		self.rackets[0].setSpeeds( self.speed_r, 0 )
 		self.rackets[1].setSpeeds( self.speed_r, 0 )
@@ -91,14 +89,16 @@ class Pongest(gi.Game):
 	def checkRackets(self, ball):
 		for rack in self.rackets: #		copies the racket's data
 			if ball.overlaps( rack ):
+
 				if (rack.id == 1 or rack.id == 2):
 					ball.setPos( ball.box.centerx, rack.box.centery + self.size_b ) # '+' because the ball is going under
 				elif (rack.id == 3 or rack.id == 4):
 					ball.setPos( ball.box.centerx, rack.box.centery - self.size_b ) # '-' because the ball is going over
+
 				ball.collideRack( rack, "y" )
 				ball.dy *= self.factor_rack
 				ball.clampSpeed()
-				self.last_ponger = rack.id
+				self.scorePoint( rack.id, gi.ad.HITS )
 
 
 	# bouncing on the walls
@@ -115,8 +115,9 @@ class Pongest(gi.Game):
 		if ball.box.top <= 0 or ball.box.bottom >= self.height:
 			# checking who scored
 			if (self.last_ponger > 0):
-				self.scores[self.last_ponger - 1] += 1
+				self.scorePoint( self.last_ponger, gi.ad.GOALS )
 				ball.setDirs( -ball.fx, -ball.fy )
+
 			else:
 				if ball.fx < 0 and ball.fy < 0:
 					ball.setDirs( 1, -1 )

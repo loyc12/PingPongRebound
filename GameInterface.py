@@ -9,7 +9,7 @@ import sys #	to exit properly
 
 # game class
 class Game:
-	name = "unnamed"
+	name = "Game"
 
 	width = 1536
 	height = 1024
@@ -36,6 +36,7 @@ class Game:
 
 	last_ponger = 0
 	step_count = 0
+	score_mode = ad.GOALS
 
 	last_time = time.time_ns() #			NOTE : DEBUG
 
@@ -67,7 +68,7 @@ class Game:
 
 
 	def initRackets(self):
-		self.rackets.append( go.GameObject( 1, self, self.width * (2 / 4), self.height - self.size_b, self.size_r, self.size_b ))
+		self.rackets.append( go.GameObject( 1, self, self.width * (1 / 2), self.height - self.size_b, self.size_r, self.size_b ))
 		self.rackets[0].setSpeeds( self.speed_r, 0 )
 
 		self.racketCount = 1
@@ -95,6 +96,7 @@ class Game:
 
 		bot = ai.AiControler( self, botname )
 		bot.setRacket( self.rackets[ len(self.controlers) ].id )
+		bot.recordDefaultPos()
 		bot.setFrequencyOffset( self.racketCount )
 		self.controlers.append( bot )
 
@@ -319,8 +321,7 @@ class Game:
 				ball.collideRack( rack, "y" )
 				ball.dy *= self.factor_rack
 				ball.clampSpeed()
-				self.last_ponger = rack.id
-				self.scores[0] += 1
+				self.scorePoint( rack.id, ad.HITS )
 
 
 	# bouncing on the walls
@@ -342,12 +343,30 @@ class Game:
 	# scoring a goal
 	def checkGoals(self, ball):
 		if ball.box.bottom >= self.height:
-			self.scores[0] = 0
 			ball.setDirs( -ball.fx, 1 )
 			ball.setPos( ball.box.centerx, self.size_b )
 			ball.setSpeeds( self.speed_b, self.speed_b )
 			ball.clampSpeed()
+			self.scorePoint( self.last_ponger, ad.GOALS )
 
+
+	def scorePoint(self, controler_id, mode):
+		if controler_id > 0:
+			if mode == ad.GOALS: #		if the ball went out of bounds
+				if self.score_mode == ad.GOALS: #	if goals give points
+					self.scores[controler_id - 1] += 1
+				else: # 							if racket hits give points
+					self.scores[controler_id - 1] = 0
+				self.last_ponger = 0
+
+			elif mode == ad.HITS: #		if the ball hit a racket
+				if self.score_mode == ad.HITS: #	if racket hits give points
+					self.scores[controler_id - 1] += 1
+				else: #								if goals give points
+					pass
+				self.last_ponger = controler_id
+		else:
+			self.last_ponger = 0
 
 	# ------------------------------------------- GAME RENDERING ------------------------------------------- #
 

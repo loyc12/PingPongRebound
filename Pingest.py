@@ -11,10 +11,10 @@ class Pingest(gi.Game):
 
 	def initRackets(self):
 		# setting up rackets :             id, game, _x                  , _y                             , _w         , _h
-		self.rackets.append( go.GameObject( 1, self, self.width * (1 / 3), (3 * self.size_b)              , self.size_r, self.size_b ))
-		self.rackets.append( go.GameObject( 2, self, self.width * (2 / 3), self.size_b	                  , self.size_r, self.size_b ))
-		self.rackets.append( go.GameObject( 3, self, self.width * (1 / 3), self.height - self.size_b      , self.size_r, self.size_b ))
-		self.rackets.append( go.GameObject( 4, self, self.width * (2 / 3), self.height - (3 * self.size_b), self.size_r, self.size_b ))
+		self.rackets.append( go.GameObject( 1, self, self.width * (2 / 7), (3 * self.size_b)              , self.size_r, self.size_b ))
+		self.rackets.append( go.GameObject( 2, self, self.width * (5 / 7), self.size_b	                  , self.size_r, self.size_b ))
+		self.rackets.append( go.GameObject( 3, self, self.width * (2 / 7), self.height - self.size_b      , self.size_r, self.size_b ))
+		self.rackets.append( go.GameObject( 4, self, self.width * (5 / 7), self.height - (3 * self.size_b), self.size_r, self.size_b ))
 
 		self.rackets[0].setSpeeds( self.speed_r, 0 )
 		self.rackets[1].setSpeeds( self.speed_r, 0 )
@@ -104,7 +104,7 @@ class Pingest(gi.Game):
 				ball.clampSpeed()
 				ball.collideRack( rack, "y" )
 				ball.dy *= self.factor_rack
-				self.last_ponger = rack.id
+				self.scorePoint( rack.id, gi.ad.HITS )
 
 
 	# bouncing on the walls
@@ -122,12 +122,12 @@ class Pingest(gi.Game):
 			# checking who scored
 			if ball.box.top <= 0:
 				if self.last_ponger > 0:
-					self.scores[1] += 1
+					self.scorePoint( 2, gi.ad.GOALS )
 				ball.setDirs( -1, -1 )
 				ball.setPos ( self.width * (1 / 2), self.height * (3 / 4) )
 			elif ball.box.bottom >= self.height:
 				if self.last_ponger > 0:
-					self.scores[0] += 1
+					self.scorePoint( 1, gi.ad.GOALS )
 				ball.setDirs( 1, 1 )
 				ball.setPos ( self.width * (1 / 2), self.height * (1 / 4) )
 

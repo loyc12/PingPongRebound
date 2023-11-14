@@ -8,12 +8,13 @@ import Addons as ad
 class AiControler(gc.GameControler):
 
 	allow_hard_break = True
-	go_to_center = False # fucky with most games
+	go_to_center = True # fucky with most games
 	play_frequency = 10
 	#stop_distance = 120
 	mf = 5
 
 	frequency_offset = 0;
+
 
 	step = 0
 
@@ -22,18 +23,21 @@ class AiControler(gc.GameControler):
 		self.game = _game
 		self.name = _playerName
 		self.mode = ad.BOT
+		self.defaultX = _game.width / 2
+		self.defaultY = _game.height / 2
 
 
 	def setFrequencyOffset(self, racketCount):
 		self.frequency_offset = int( (self.racket.id / racketCount) * ad.BOT_FREQUENCY )
 
 
+	def recordDefaultPos(self):
+		self.defaultX = self.racket.box.centerx
+		self.defaultY = self.racket.box.centery
+
+
 	def playStep(self):
 		if self.isActive:
-			#if (self.step % self.play_frequency) == 0:
-				#self.playAutoMove()
-				#self.step = 0
-			#self.step += 1
 			self.playAutoMove()
 		else:
 			raise ValueError("Error: bot is deactivated")
@@ -41,7 +45,7 @@ class AiControler(gc.GameControler):
 
 	def playAutoMove(self):
 		if self.go_to_center and self.isBallFar( self.game.balls[0] ):
-			self.goToCenter( self.mf )
+			self.goToDefaultPos( self.mf )
 		else:
 			self.goTowardsBall( self.mf, self.game.balls[0] )
 		return
@@ -174,29 +178,48 @@ class AiControler(gc.GameControler):
 				self.stopHere()
 
 
-	def goToCenter(self, maxFactor):
+	def goTo(self, maxFactor, X, Y):
 		if self.racket.dx != 0:
-			if self.racket.isRightOfX( self.game.width / 2 ):
+			if self.racket.isRightOfX( X ):
 				self.goLeft( maxFactor )
-			elif self.racket.isLeftOfX( self.game.width / 2 ):
+			elif self.racket.isLeftOfX( X ):
 				self.goRight( maxFactor )
 			else:
 				self.stopHere()
 
 		elif self.racket.dy != 0:
-			if self.racket.isBelowY( self.game.height / 2 ):
+			if self.racket.isBelowY( Y ):
 				self.goUp( maxFactor )
-			elif self.racket.isAboveY( self.game.height / 2 ):
+			elif self.racket.isAboveY( Y ):
 				self.goDown( maxFactor )
 			else:
 				self.stopHere()
 
+	def goToCenter(self, maxFactor):
+		self.goTo( maxFactor, self.game.width / 2, self.game.height / 2)
+
+	def goToDefaultPos(self, maxFactor):
+		self.goTo( maxFactor, self.defaultX, self.defaultY)
+
 
 	def isBallNear(self, ball):
-		if self.racket.dx != 0 and (self.game.height / 2 > self.racket.box.centery) == (self.game.height / 2 > ball.box.centery):
+
+		if self.game.name == "Pinger" or self.game.name == "Pinger":
+			if (self.game.width / 2 > self.racket.box.centerx) == (self.game.width / 2 > ball.box.centerx):
+				return True
+			return False
+
+		if self.racket.dx != 0:
+			if (self.game.height / 2 > self.racket.box.centery) == (self.game.height / 2 > ball.box.centery):
+				return True
+
+		if self.racket.dy != 0:
+			if (self.game.width / 2 > self.racket.box.centerx) == (self.game.width / 2 > ball.box.centerx):
+				return True
+
+		if self.game.name == "Game" or self.game.name == "Ping":
 			return True
-		if self.racket.dy != 0 and (self.game.width / 2 > self.racket.box.centerx) == (self.game.width / 2 > ball.box.centerx):
-			return True
+
 		return False
 
 	def isBallFar(self, ball):

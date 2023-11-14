@@ -7,10 +7,10 @@ class Ponger(gi.Game):
 
 	def initRackets(self):
 		# setting up rackets :             id, game, _x                  , _y                       , _w         , _h
-		self.rackets.append( go.GameObject( 1, self, self.width * (1 / 4), self.size_b		        , self.size_r, self.size_b ))
-		self.rackets.append( go.GameObject( 2, self, self.width * (3 / 4), self.size_b	            , self.size_r, self.size_b ))
-		self.rackets.append( go.GameObject( 3, self, self.width * (1 / 4), self.height - self.size_b, self.size_r, self.size_b ))
-		self.rackets.append( go.GameObject( 4, self, self.width * (3 / 4), self.height - self.size_b, self.size_r, self.size_b ))
+		self.rackets.append( go.GameObject( 1, self, self.width * (2 / 7), self.size_b		        , self.size_r, self.size_b ))
+		self.rackets.append( go.GameObject( 2, self, self.width * (5 / 7), self.size_b	            , self.size_r, self.size_b ))
+		self.rackets.append( go.GameObject( 3, self, self.width * (2 / 7), self.height - self.size_b, self.size_r, self.size_b ))
+		self.rackets.append( go.GameObject( 4, self, self.width * (5 / 7), self.height - self.size_b, self.size_r, self.size_b ))
 
 		self.rackets[0].setSpeeds( self.speed_r, 0 )
 		self.rackets[1].setSpeeds( self.speed_r, 0 )
@@ -87,14 +87,16 @@ class Ponger(gi.Game):
 	def checkRackets(self, ball):
 		for rack in self.rackets: #		copies the racket's data
 			if ball.overlaps( rack ):
+
 				if (rack.id == 1 or rack.id == 2):
 					ball.setPos( ball.box.centerx, rack.box.centery + self.size_b ) # '+' because the ball is going under
 				elif (rack.id == 3 or rack.id == 4):
 					ball.setPos( ball.box.centerx, rack.box.centery - self.size_b ) # '-' because the ball is going over
+
 				ball.collideRack( rack, "y" )
 				ball.dy *= self.factor_rack
 				ball.clampSpeed()
-				self.last_ponger = rack.id
+				self.scorePoint( rack.id, gi.ad.HITS )
 
 
 	# bouncing on the walls
@@ -109,22 +111,23 @@ class Ponger(gi.Game):
 	# scoring a goal
 	def checkGoals(self, ball):
 		if ball.box.top <= 0 or ball.box.bottom >= self.height:
+
 			# checking who scored
 			if ball.box.right <= self.width / 2:
 				if self.last_ponger > 0:
-					self.scores[1] += 1
+					self.scorePoint( 2, gi.ad.GOALS )
 				ball.setDirs( -1, -1 )
 				ball.setPos ( self.width * (3 / 4), self.height * (3 / 4) )
+
 			elif ball.box.left >= self.width / 2:
 				if self.last_ponger > 0:
-					self.scores[0] += 1
+					self.scorePoint( 1, gi.ad.GOALS )
 				ball.setDirs( 1, 1 )
 				ball.setPos ( self.width * (1 / 4), self.height * (1 / 4) )
 
 			# reseting the ball's speed
 			ball.setSpeeds( ( self.speed_b + ball.dx ) * (1 / 2), self.speed_b * (2 / 3) )
 			ball.clampSpeed()
-			self.last_ponger = 0
 
 
 	def drawLines(self):
