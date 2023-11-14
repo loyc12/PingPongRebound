@@ -34,9 +34,7 @@ import Addons as ad
 async def main():
 
 	game = Pong()
-
-	#game.addPlayer( "tester_1" )
-
+	game.addPlayer( "tester_1" )
 	game.start()
 
 	while game.running:
@@ -44,11 +42,10 @@ async def main():
 		await asy.sleep(0)
 
 
-def takeGameStep( game ):
-	game.step()
-
-		# read local player inputs
+def debugPlayerControler( game ):
+	# read local player inputs
 	for event in pg.event.get():
+
 		# quiting the game
 		if event.type == pg.QUIT or ( event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE ):
 			game.running = False
@@ -57,6 +54,12 @@ def takeGameStep( game ):
 		elif event.type == pg.KEYDOWN:
 			if game.controlers[0].mode == ad.PLAYER:
 				game.controlers[0].handleKeyInput(event.key) # first game controler, aka player 1
+
+
+def takeGameStep( game ):
+	game.step()
+
+	debugPlayerControler(game)
 
 	game.clock.tick (game.framerate)
 
