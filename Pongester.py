@@ -8,8 +8,7 @@ class Pongester(gi.Game):
 	width = 1280
 	height = 1280
 
-	speed_b = 7
-	speed_m_b = 21
+	speed_m_b = 20
 	size_font = 512
 
 

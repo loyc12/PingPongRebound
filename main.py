@@ -28,6 +28,7 @@ import Addons as ad
 # TODO : review ball respawn in pongest
 
 # MINOR LIST
+# TODO : make bots move last second to give a spin to the ball
 # TODO : add a game start and game over screen ?
 # TODO : add double-sided gravity to pingest (so it's an actual ping game lol)
 # TODO : figure out the ball respawn trajectory
@@ -37,8 +38,8 @@ import Addons as ad
 
 async def main():
 
-	game = Pong()
-	game.addPlayer( "tester_1" )
+	game = Ping()
+	#game.addPlayer( "tester_1" )
 	game.start()
 
 	while game.running:

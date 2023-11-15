@@ -7,7 +7,7 @@ class Pinger(gi.Game):
 
 	width = 2048
 	gravity = 0.3
-	factor_rack = 0.96
+	factor_rack = 1.0
 	factor_wall = 0.6
 
 	def initRackets(self):

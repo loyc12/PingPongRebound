@@ -62,31 +62,25 @@ class GameObject:
 	def collideWall(self, type):
 		if type == "x":
 			self.fx *= -1
-			self.dx *= self.game.factor_wall # test
+			self.dx *= self.game.factor_wall
 		elif type == "y":
 			self.fy *= -1
-			self.dy *= self.game.factor_wall # test
+			self.dy *= self.game.factor_wall
 		elif type == "stop":
 			self.fx = 0
 			self.fy = 0
 		self.clampSpeed()
 
 	# specifically to handle ball-to-racket collisions
-	def collideRack(self, other, type): # 							NOTE : revisit me
+	def collideRack(self, other, type):
 		if type == "x":
 			self.fx *= -1
-			self.dx *= self.game.factor_rack # test
-			if self.fy > 0:
-				self.dy += other.dy * other.fy
-			else:
-				self.dy -= other.dy * other.fy
+			self.dx *= self.game.factor_rack
+			self.dy += other.dy * other.fy * self.fy
 		elif type == "y":
 			self.fy *= -1
-			self.dy *= self.game.factor_rack # test
-			if self.fx > 0:
-				self.dx += other.dx * other.fx
-			else:
-				self.dx -= other.dx * other.fx
+			self.dy *= self.game.factor_rack
+			self.dx += other.dx * other.fx * self.fx
 		self.clampSpeed()
 
 	def clampPos(self):

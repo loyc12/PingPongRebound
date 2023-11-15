@@ -396,13 +396,19 @@ class Game:
 			text = self.font.render(f'{score}', True, self.col_fnt)
 			self.win.blit( text, text.get_rect( center = ( self.width * (2 / 4), self.height * (2 / 4) )))
 
+	delta_time = framerate * 2
+	smoothness = 15
+
 	def drawFps(self): #				NOTE : DEBUG
+
 		new_time = time.time_ns()
-		delta_time = new_time - self.last_time
+		self.delta_time *= self.smoothness - 1
+		self.delta_time += new_time - self.last_time
+		self.delta_time /= self.smoothness
 		self.last_time = new_time
 
 		#time.sleep(0.02)
 
-		text = self.debug_font.render(f'{int(1000000000 / delta_time)}', True, self.col_fnt)
+		text = self.debug_font.render(f'{int(1000000000 / self.delta_time)}', True, self.col_fnt)
 		#text = self.debug_font.render(f'{int(self.clock.get_fps())}', True, self.col_fnt)
 		self.win.blit( text, text.get_rect( center = ( 32, 32 )))
