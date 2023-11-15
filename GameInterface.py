@@ -1,7 +1,7 @@
 import pygame as pg
 import GameObject as go
 import GameControler as gc
-import AiControler as ai
+import BotControler as ai
 import PlayerControler as pl
 import Addons as ad
 import time #						NOTE : DEBUG
@@ -94,7 +94,7 @@ class Game:
 		if (self.controlerCount >= self.racketCount):
 			raise Exception("Too many bots for this game")
 
-		bot = ai.AiControler( self, botname )
+		bot = ai.BotControler( self, botname )
 		bot.setRacket( self.rackets[ len(self.controlers) ].id )
 		bot.recordDefaultPos()
 		bot.setFrequencyOffset( self.racketCount )
@@ -297,6 +297,8 @@ class Game:
 		ball.clampSpeed()
 		ball.updatePos(self.speed_m_b)
 
+		ball.clampPos()
+
 		self.checkRackets( ball )
 		self.checkWalls( ball )
 		self.checkGoals( ball )
@@ -306,10 +308,7 @@ class Game:
 
 	def aplyGravity(self, ball):
 		if self.gravity != 0:
-			if ball.fy > 0:
-				ball.dy += self.gravity
-			else:
-				ball.dy -= self.gravity
+			ball.dy += self.gravity * ball.fy
 
 
 	# bouncing off the rackets

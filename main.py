@@ -7,7 +7,7 @@ from Pongest import Pongest
 from Pongester import Pongester
 from GameInterface import Game
 
-from AiControler import AiControler as ai
+from BotControler import BotControler as ai
 from PlayerControler import PlayerControler as pl
 
 import pygame as pg
@@ -20,8 +20,11 @@ import Addons as ad
 # FUNCTION LIST
 # TODO : implement game.getInfo()		(awaiting formating for that)
 # TODO : implement game.respawnBall()
+# TODO : add a key to resawn the ball
 
 # DEBUG LIST
+# TODO : make the smart ai better at Pinger (move last minute to throw?)
+# TODO : make player 1 and 2 the most inward rackets in pingest
 
 # MINOR LIST
 # TODO : add a game start and game over screen ?
@@ -33,7 +36,7 @@ import Addons as ad
 
 async def main():
 
-	game = Pingest()
+	game = Pong()
 	#game.addPlayer( "tester_1" )
 	game.start()
 

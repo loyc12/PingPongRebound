@@ -26,3 +26,10 @@ def getSign(value):
 	if value > 0:
 		return 1
 	return 0
+
+def isInZone(x, y, border, game):
+	if x < border or x > ( game.width - border ):
+		return False
+	if y < border or y > ( game.height - border ):
+		return False
+	return True

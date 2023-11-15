@@ -5,16 +5,18 @@ import Addons as ad
 # NOTE : it could be improved by calculating the ball's trajectory and going where it will be
 
 # controler class
-class AiControler(gc.GameControler):
+class BotControler(gc.GameControler):
 
 	allow_hard_break = True
 	go_to_center = True # fucky with most games
-	play_frequency = 6
-	#stop_distance = 120
-	mf = 5
+	play_frequency = 12
+	max_search_dept = 4
+	mf = 4
+	difficulty = 1
 
 	frequency_offset = 0;
 
+	goal = ad.NULL
 
 	step = 0
 
@@ -34,6 +36,22 @@ class AiControler(gc.GameControler):
 	def recordDefaultPos(self):
 		self.defaultX = self.racket.box.centerx
 		self.defaultY = self.racket.box.centery
+		self.goal = self.findOwnGoal()
+
+	def findOwnGoal(self):
+		rack = self.racket
+
+		if rack.dx != 0:
+			if (self.defaultY < self.game.height / 2 ): # goal is on the top
+				return ad.UP
+			else:
+				return ad.DOWN
+
+		elif rack.dy != 0:
+			if (self.defaultX < ( self.game.width / 2 ) ): # goal is on the left
+				return ad.LEFT
+			else:
+				return ad.RIGHT
 
 
 	def playStep(self):
@@ -44,11 +62,17 @@ class AiControler(gc.GameControler):
 
 
 	def playAutoMove(self):
-		if self.go_to_center and self.isBallFar( self.game.balls[0] ):
-			self.goToDefaultPos( self.mf )
+
+		if self.difficulty == 0:
+			if self.go_to_center and self.isBallFar( self.game.balls[0] ):
+				self.goToDefaultPos( self.mf )
+			else:
+				self.goTowardsBall( self.mf, self.game.balls[0] )
+			return
+
 		else:
-			self.goTowardsBall( self.mf, self.game.balls[0] )
-		return
+			(X, Y) = self.findNextGoal(self.game.balls[0]) # 			NOTE : WOW
+			self.goTo(self.mf, X, Y)
 
 
 	def stopHere(self):
@@ -181,13 +205,16 @@ class AiControler(gc.GameControler):
 
 
 	def goTo(self, maxFactor, X, Y):
+
+		precision = self.game.size_r * 0.35
+
 		if self.racket.dx != 0:
-			if self.racket.isRightOfX( X ):
+			if self.racket.isRightOfX( X - precision  ):
 				if self.racket.isGoingRight():
 					self.stopHere()
 				else:
 					self.goLeft( maxFactor )
-			elif self.racket.isLeftOfX( X ):
+			elif self.racket.isLeftOfX( X + precision  ):
 				if self.racket.isGoingLeft():
 					self.stopHere()
 				else:
@@ -196,12 +223,12 @@ class AiControler(gc.GameControler):
 				self.stopHere()
 
 		elif self.racket.dy != 0:
-			if self.racket.isBelowY( Y ):
+			if self.racket.isBelowY( Y - precision ):
 				if self.racket.isGoingDown():
 					self.stopHere()
 				else:
 					self.goUp( maxFactor )
-			elif self.racket.isAboveY( Y ):
+			elif self.racket.isAboveY( Y + precision  ):
 				if self.racket.isGoingUp():
 					self.stopHere()
 				else:
@@ -209,8 +236,10 @@ class AiControler(gc.GameControler):
 			else:
 				self.stopHere()
 
+
 	def goToCenter(self, maxFactor):
 		self.goTo( maxFactor, self.game.width / 2, self.game.height / 2)
+
 
 	def goToDefaultPos(self, maxFactor):
 		self.goTo( maxFactor, self.defaultX, self.defaultY)
@@ -236,6 +265,65 @@ class AiControler(gc.GameControler):
 
 		return False
 
+
 	def isBallFar(self, ball):
 		return not self.isBallNear(ball)
+
+
+	def isInOwnGoal(self, X, Y, border):
+
+		if self.goal == ad.LEFT and X <= border:
+			return True
+		if self.goal == ad.RIGHT and X >= ( self.game.width - border ):
+			return True
+		if self.goal == ad.UP and Y <= border:
+			return True
+		if self.goal == ad.DOWN and Y >= ( self.game.height - border ):
+			return True
+
+		return False
+
+
+	def findNextGoal(self, ball):
+		X = ball.box.centerx
+		Y = ball.box.centery
+		dx = ball.dx
+		dy = ball.dy
+		fx = ball.fx
+		fy = ball.fy
+
+		border = 2 * self.game.size_b
+
+		dept = 0
+
+		# loops over all the "bounce points" of the ball's trajectory (untill max_search_dept is reached)
+		while dept <= self.max_search_dept:
+			dept += 1
+
+			# have the ball do one step
+			dy += self.game.gravity * fy # NOTE : assumes normal gravity
+			X += dx * fx
+			Y += dy * fy
+
+			while ad.isInZone( X, Y, border, self.game ):
+				dy += self.game.gravity * fy # NOTE : assumes normal gravity
+				X += dx * fx
+				Y += dy * fy
+
+			if self.isInOwnGoal( X, Y, border ):
+				return (X, Y)
+
+			# make ball bounce on edges
+			if X <= border or X >= ( self.game.width - border ):
+				fx *= -1
+				dx *= self.game.factor_wall
+			if Y <= border or Y >= ( self.game.height - border ):
+				fy *= -1
+				dx *= self.game.factor_wall
+
+
+		return (X, Y)
+
+
+
 

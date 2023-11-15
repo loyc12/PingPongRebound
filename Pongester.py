@@ -8,9 +8,10 @@ class Pongester(gi.Game):
 	width = 1280
 	height = 1280
 
-	speed_b = 7.5
-	speed_m_b = 15
+	speed_b = 7
+	speed_m_b = 21
 	size_font = 512
+
 
 	factor_rack = 1.05
 	factor_wall = 0.5
@@ -81,20 +82,23 @@ class Pongester(gi.Game):
 				if (rack.id == 1):
 					ball.setPos( ball.box.centerx, rack.box.centery + self.size_b ) # '+' because the ball is going under
 					ball.collideRack( rack, "y" )
+					ball.dy *= self.factor_rack
 
 				elif (rack.id == 2):
 					ball.setPos( rack.box.centerx - self.size_b, ball.box.centery ) # '-' because the ball is going left
 					ball.collideRack( rack, "x" )
+					ball.dx *= self.factor_rack
 
 				elif (rack.id == 3):
 					ball.setPos( ball.box.centerx, rack.box.centery - self.size_b ) # '-' because the ball is going over
 					ball.collideRack( rack, "y" )
+					ball.dy *= self.factor_rack
 
 				elif (rack.id == 4):
 					ball.setPos( rack.box.centerx + self.size_b, ball.box.centery ) # '+' because the ball is going right
 					ball.collideRack( rack, "x" )
+					ball.dx *= self.factor_rack
 
-				ball.dy *= self.factor_rack
 				ball.clampSpeed()
 				self.scorePoint( rack.id, gi.ad.HITS )
 
