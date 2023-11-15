@@ -34,8 +34,8 @@ import Addons as ad
 
 async def main():
 
-	game = Pingest()
-	game.addPlayer( "tester_1" )
+	game = Pong()
+	#game.addPlayer( "tester_1" )
 	game.start()
 
 	while game.running:

@@ -54,21 +54,21 @@ class AiControler(gc.GameControler):
 	def stopHere(self):
 		self.playMove( ad.STOP )
 
-	def goLeft(self, maxFactor):
-		if abs(self.racket.fx) <= maxFactor:
-			self.playMove( ad.LEFT )
+	def goUp(self, maxFactor):
+		if abs(self.racket.fy) <= maxFactor:
+			self.playMove( ad.UP )
 
 	def goRight(self, maxFactor):
 		if abs(self.racket.fx) <= maxFactor:
 			self.playMove( ad.RIGHT )
 
-	def goUp(self, maxFactor):
-		if abs(self.racket.fy) <= maxFactor:
-			self.playMove( ad.UP )
-
 	def goDown(self, maxFactor):
 		if abs(self.racket.fy) <= maxFactor:
 			self.playMove( ad.DOWN )
+
+	def goLeft(self, maxFactor):
+		if abs(self.racket.fx) <= maxFactor:
+			self.playMove( ad.LEFT )
 
 
 	def goTowardsBall(self, maxFactor, ball):
@@ -89,7 +89,7 @@ class AiControler(gc.GameControler):
 					self.goRight( maxFactor )
 
 			elif ball.isGoingRight(): #		when the ball is going to be to the right
-				if self.allow_hard_break and  rack.isGoingLeft():
+				if self.allow_hard_break and rack.isGoingLeft():
 					self.stopHere()
 
 				elif ball.isRightOfX( rack.box.centerx ): # the ball is on the right half of the racket
@@ -103,12 +103,11 @@ class AiControler(gc.GameControler):
 						self.goLeft( maxFactor )
 					else:
 						return
-
 				else:
 					return
 
 			elif ball.isGoingLeft(): #		when the ball is going to be to the left
-				if self.allow_hard_break and  rack.isGoingRight():
+				if self.allow_hard_break and rack.isGoingRight():
 					self.stopHere()
 
 				elif ball.isLeftOfX( rack.box.centerx ): # the ball is on the left half of the racket
@@ -122,6 +121,8 @@ class AiControler(gc.GameControler):
 						self.goRight( maxFactor )
 					else:
 						return
+				else:
+					return
 
 			else:
 				self.stopHere()
@@ -140,7 +141,7 @@ class AiControler(gc.GameControler):
 					self.goDown( maxFactor )
 
 			elif ball.isGoingDown(): #		when the ball is going to be to below
-				if self.allow_hard_break and  rack.isGoingUp():
+				if self.allow_hard_break and rack.isGoingUp():
 					self.stopHere()
 
 				elif ball.isBelowY( rack.box.centery ): # the ball is on the lower half of the racket
@@ -154,9 +155,11 @@ class AiControler(gc.GameControler):
 						self.goUp( maxFactor )
 					else:
 						return
+				else:
+					return
 
 			elif ball.isGoingUp(): #		when the ball is going to be above
-				if self.allow_hard_break and  rack.isGoingDown():
+				if self.allow_hard_break and rack.isGoingDown():
 					self.stopHere()
 
 				elif ball.isAboveY( rack.box.centery ): # the ball is on the upper half of the racket
@@ -170,7 +173,6 @@ class AiControler(gc.GameControler):
 						self.goDown( maxFactor )
 					else:
 						return
-
 				else:
 					return
 
@@ -229,7 +231,7 @@ class AiControler(gc.GameControler):
 			if (self.game.width / 2 > self.racket.box.centerx) == (self.game.width / 2 > ball.box.centerx):
 				return True
 
-		if self.game.name == "Game" or self.game.name == "Ping":
+		if self.game.name == "Game" or self.game.name == "Ping" or self.game.name == "Pongester":
 			return True
 
 		return False
