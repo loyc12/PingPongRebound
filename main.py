@@ -15,7 +15,6 @@ import asyncio as asy
 import Addons as ad
 
 # MASTER LIST
-# TODO : have each bot update on different frames
 # TODO : integrate playerControler with sockets
 
 # FUNCTION LIST
@@ -34,7 +33,7 @@ import Addons as ad
 
 async def main():
 
-	game = Pong()
+	game = Pingest()
 	#game.addPlayer( "tester_1" )
 	game.start()
 
