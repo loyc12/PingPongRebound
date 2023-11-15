@@ -25,6 +25,7 @@ class GameObject:
 	def setSpeeds(self, _dx, _dy):
 		self.dx = _dx
 		self.dy = _dy
+		self.clampSpeed()
 
 	def setDirs(self, _fx, _fy):
 		self.fx = _fx
@@ -61,22 +62,27 @@ class GameObject:
 	def collideWall(self, type):
 		if type == "x":
 			self.fx *= -1
+			self.dx *= self.game.factor_wall # test
 		elif type == "y":
 			self.fy *= -1
+			self.dy *= self.game.factor_wall # test
 		elif type == "stop":
 			self.fx = 0
 			self.fy = 0
+		self.clampSpeed()
 
 	# specifically to handle ball-to-racket collisions
-	def collideRack(self, other, type):
+	def collideRack(self, other, type): # 							NOTE : revisit me
 		if type == "x":
 			self.fx *= -1
+			self.dx *= self.game.factor_rack # test
 			if self.fy > 0:
 				self.dy += other.dy * other.fy
 			else:
 				self.dy -= other.dy * other.fy
 		elif type == "y":
 			self.fy *= -1
+			self.dy *= self.game.factor_rack # test
 			if self.fx > 0:
 				self.dx += other.dx * other.fx
 			else:

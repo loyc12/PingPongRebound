@@ -101,9 +101,7 @@ class Pingest(gi.Game):
 					ball.setPos( ball.box.centerx, rack.box.centery + self.size_b ) # '+' because the ball is going under
 				elif (rack.id == 3 or rack.id == 4):
 					ball.setPos( ball.box.centerx, rack.box.centery - self.size_b ) # '-' because the ball is going over
-				ball.clampSpeed()
 				ball.collideRack( rack, "y" )
-				ball.dy *= self.factor_rack
 				self.scorePoint( rack.id, gi.ad.HITS )
 
 
@@ -112,8 +110,6 @@ class Pingest(gi.Game):
 		# bouncing off the sides
 		if ball.box.left <= 0 or ball.box.right >= self.width:
 			ball.collideWall( "x" )
-			ball.dx *= self.factor_wall
-			ball.clampSpeed()
 
 
 	# scoring a goal
@@ -133,8 +129,6 @@ class Pingest(gi.Game):
 
 			# reseting the ball's speed
 			ball.setSpeeds( (self.speed_b + ball.dx) * (1 / 3), self.speed_b )
-			ball.clampSpeed()
-			self.last_ponger = 0
 
 
 	def drawLines(self):

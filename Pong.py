@@ -61,18 +61,13 @@ class Pong(gi.Game):
 				elif (rack.id == 2):
 					ball.setPos( rack.box.centerx - self.size_b, ball.box.centery ) # '-' because the ball is going to the left
 				ball.collideRack( rack, "x" )
-				ball.dx *= self.factor_rack
-				ball.clampSpeed()
 				self.scorePoint( rack.id, gi.ad.HITS )
 
 
 	# bouncing on the walls
 	def checkWalls(self, ball):
 		if ball.box.top <= 0 or ball.box.bottom >= self.height:
-
 			ball.collideWall( "y" )
-			ball.dy *= self.factor_wall
-			ball.clampSpeed()
 
 
 	# scoring a goal
@@ -92,8 +87,6 @@ class Pong(gi.Game):
 
 			# reseting the ball's speed
 			ball.setSpeeds( self.speed_b, ball.dy )
-			ball.clampSpeed()
-			self.last_ponger = 0
 
 
 	def drawLines(self):

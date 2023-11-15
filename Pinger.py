@@ -7,7 +7,7 @@ class Pinger(gi.Game):
 
 	width = 2048
 	gravity = 0.3
-	factor_rack = 0.95
+	factor_rack = 0.96
 	factor_wall = 0.6
 
 	def initRackets(self):
@@ -74,18 +74,6 @@ class Pinger(gi.Game):
 		rack.clampPos()
 
 
-	# bouncing off the rackets
-	def checkRackets(self, ball):
-		for i in range(len(self.rackets)):
-			rack = self.rackets[i]
-			if ball.overlaps( rack ):
-				ball.setPos( ball.box.centerx, rack.box.centery - self.size_b ) # '-' because the ball is going above the racket
-				ball.collideRack( rack, "y" )
-				ball.dy *= self.factor_rack
-				ball.clampSpeed()
-				self.scorePoint( rack.id, gi.ad.HITS )
-
-
 	# scoring a goal
 	def checkGoals(self, ball):
 		if ball.box.bottom >= self.height:
@@ -102,7 +90,6 @@ class Pinger(gi.Game):
 			# reseting the ball's position & speed
 			ball.setPos( self.width * (1 / 2), self.height * (2 / 3) )
 			ball.setSpeeds( (ball.dx + self.speed_b) / 3, self.speed_b * 2 )
-			ball.clampSpeed()
 
 
 	def drawLines(self):

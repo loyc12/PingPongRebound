@@ -25,6 +25,7 @@ import Addons as ad
 # DEBUG LIST
 # TODO : make the smart ai better at Pinger (move last minute to throw?)
 # TODO : make player 1 and 2 the most inward rackets in pingest
+# TODO : review ball respawn in pongest
 
 # MINOR LIST
 # TODO : add a game start and game over screen ?
@@ -37,7 +38,7 @@ import Addons as ad
 async def main():
 
 	game = Pong()
-	#game.addPlayer( "tester_1" )
+	game.addPlayer( "tester_1" )
 	game.start()
 
 	while game.running:

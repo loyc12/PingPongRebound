@@ -94,8 +94,6 @@ class Ponger(gi.Game):
 					ball.setPos( ball.box.centerx, rack.box.centery - self.size_b ) # '-' because the ball is going over
 
 				ball.collideRack( rack, "y" )
-				ball.dy *= self.factor_rack
-				ball.clampSpeed()
 				self.scorePoint( rack.id, gi.ad.HITS )
 
 
@@ -104,8 +102,6 @@ class Ponger(gi.Game):
 		# bouncing off the sides
 		if ball.box.left <= 0 or ball.box.right >= self.width:
 			ball.collideWall( "x" )
-			ball.dx *= self.factor_wall
-			ball.clampSpeed()
 
 
 	# scoring a goal
@@ -119,7 +115,7 @@ class Ponger(gi.Game):
 				ball.setDirs( -1, -1 )
 				ball.setPos ( self.width * (3 / 4), self.height * (3 / 4) )
 
-			elif ball.box.left >= self.width / 2:
+			else:
 				if self.last_ponger > 0:
 					self.scorePoint( 1, gi.ad.GOALS )
 				ball.setDirs( 1, 1 )
@@ -127,7 +123,6 @@ class Ponger(gi.Game):
 
 			# reseting the ball's speed
 			ball.setSpeeds( ( self.speed_b + ball.dx ) * (1 / 2), self.speed_b * (2 / 3) )
-			ball.clampSpeed()
 
 
 	def drawLines(self):

@@ -96,8 +96,6 @@ class Pongest(gi.Game):
 					ball.setPos( ball.box.centerx, rack.box.centery - self.size_b ) # '-' because the ball is going over
 
 				ball.collideRack( rack, "y" )
-				ball.dy *= self.factor_rack
-				ball.clampSpeed()
 				self.scorePoint( rack.id, gi.ad.HITS )
 
 
@@ -106,8 +104,6 @@ class Pongest(gi.Game):
 		# bouncing off the sides
 		if ball.box.left <= 0 or ball.box.right >= self.width:
 			ball.collideWall( "x" )
-			ball.dx *= self.factor_wall
-			ball.clampSpeed()
 
 
 	# scoring a goal
@@ -131,8 +127,6 @@ class Pongest(gi.Game):
 			# reseting the ball's position & speed
 			ball.setPos ( self.width / 2, self.height / 2 )
 			ball.setSpeeds( (self.speed_b + ball.dx) / 2, (self.speed_b + ball.dy) / 3 )
-			ball.clampSpeed()
-			self.last_ponger = 0
 
 
 	def drawLines(self):

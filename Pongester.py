@@ -82,24 +82,19 @@ class Pongester(gi.Game):
 				if (rack.id == 1):
 					ball.setPos( ball.box.centerx, rack.box.centery + self.size_b ) # '+' because the ball is going under
 					ball.collideRack( rack, "y" )
-					ball.dy *= self.factor_rack
 
 				elif (rack.id == 2):
 					ball.setPos( rack.box.centerx - self.size_b, ball.box.centery ) # '-' because the ball is going left
 					ball.collideRack( rack, "x" )
-					ball.dx *= self.factor_rack
 
 				elif (rack.id == 3):
 					ball.setPos( ball.box.centerx, rack.box.centery - self.size_b ) # '-' because the ball is going over
 					ball.collideRack( rack, "y" )
-					ball.dy *= self.factor_rack
 
 				elif (rack.id == 4):
 					ball.setPos( rack.box.centerx + self.size_b, ball.box.centery ) # '+' because the ball is going right
 					ball.collideRack( rack, "x" )
-					ball.dx *= self.factor_rack
 
-				ball.clampSpeed()
 				self.scorePoint( rack.id, gi.ad.HITS )
 
 
@@ -134,8 +129,6 @@ class Pongester(gi.Game):
 
 			# reseting the ball's position
 			ball.setPos(self.width * (1 / 2), self.height * (1 / 2))
-			ball.clampSpeed()
-			self.last_ponger = 0
 
 
 	def drawLines(self):

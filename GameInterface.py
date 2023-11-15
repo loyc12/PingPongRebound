@@ -296,14 +296,14 @@ class Game:
 
 		ball.clampSpeed()
 		ball.updatePos(self.speed_m_b)
-
 		ball.clampPos()
+
 
 		self.checkRackets( ball )
 		self.checkWalls( ball )
 		self.checkGoals( ball )
 
-		ball.clampPos()
+		ball.clampSpeed()
 
 
 	def aplyGravity(self, ball):
@@ -318,8 +318,6 @@ class Game:
 			if ball.overlaps( rack ):
 				ball.setPos( ball.box.centerx, rack.box.centery - self.size_b ) # '-' because the ball is going above the racket
 				ball.collideRack( rack, "y" )
-				ball.dy *= self.factor_rack
-				ball.clampSpeed()
 				self.scorePoint( rack.id, ad.HITS )
 
 
@@ -330,13 +328,11 @@ class Game:
 			# bouncing off the sides
 			if ball.box.left <= 0 or ball.box.right >= self.width:
 				ball.collideWall( "x" )
-				ball.dx *= self.factor_wall
 
 			# bouncing off the top (no bounce factor)
 			if ball.box.top <= 0:
 				ball.collideWall( "y" )
-
-			ball.clampSpeed()
+				ball.dy /= self.factor_wall
 
 
 	# scoring a goal
@@ -345,7 +341,6 @@ class Game:
 			ball.setDirs( -ball.fx, 1 )
 			ball.setPos( ball.box.centerx, self.size_b )
 			ball.setSpeeds( self.speed_b, self.speed_b )
-			ball.clampSpeed()
 			self.scorePoint( self.last_ponger, ad.GOALS )
 
 
