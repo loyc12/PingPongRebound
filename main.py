@@ -38,7 +38,7 @@ import Addons as ad
 
 async def main():
 
-	game = Ping()
+	game = Pong()
 	#game.addPlayer( "tester_1" )
 	game.start()
 

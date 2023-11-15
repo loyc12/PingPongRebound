@@ -88,8 +88,7 @@ class BotControler(gc.GameControler):
 							self.goDown( self.mf )
 
 			else:
-				(X, Y) = self.findNextGoal(self.game.balls[0]) # 			NOTE : WOW
-				self.goTo(self.mf, X, Y)
+				self.goToNextGoal( self.mf )
 
 
 	def stopHere(self):
@@ -110,6 +109,10 @@ class BotControler(gc.GameControler):
 	def goLeft(self, maxFactor):
 		if abs(self.racket.fx) <= maxFactor:
 			self.playMove( ad.LEFT )
+
+	def goToNextGoal(self, maxFactor):
+		(X, Y) = self.findNextGoal(self.game.balls[0])
+		self.goTo( maxFactor, X, Y )
 
 
 	def goTowardsBall(self, maxFactor, ball):
