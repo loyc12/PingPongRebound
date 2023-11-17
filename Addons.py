@@ -11,7 +11,6 @@ UP = 2
 RIGHT = 3
 DOWN = 4
 LEFT = 5
-BALL = 6
 
 # score modes
 GOALS = 0
