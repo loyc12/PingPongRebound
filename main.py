@@ -13,18 +13,19 @@ import asyncio as asy
 import Addons as ad
 
 # MASTER LIST
-# TODO : make a game manager class (runs an raay of games and prints their getInfo() output, step by step)
+# TODO : continue working on the gameManager class
 # TODO : integrate gameManager with sockets
 
 # FUNCTION LIST
-# TODO : implement game.getInfo()		(awaiting formating for that)
+# TODO : implement game.getInfo()
 
 # DEBUG LIST
-# TODO : make player 1 and 2 the most inward rackets in pingest
+# TODO : see if you can have multiple windows with pygame
+# TODO : put player 1 and 2 in oposite teams always
 # TODO : rework the ball respawn trajectory everywhere
 
 # MINOR LIST
-# TODO : adda "mode" argument to game.respawnBall()
+# TODO : adda "mode" argument to game.respawnBall() and use it when initializing the ball
 # TODO : add a game start and game over screen ?
 # TODO : add double-sided gravity to pingest (so it's an actual ping game lol)
 # TODO : add sound effects to collisions (in GameObject class)
@@ -53,17 +54,17 @@ def debugPlayerControler( game ):
 
 		# handling key presses
 		elif event.type == pg.KEYDOWN:
-			for i in range(len(game.controlers)):
+			for i in range( len( game.controlers )):
 				if game.controlers[i].mode == ad.PLAYER:
-					game.controlers[i].handleKeyInput(event.key) # first game controler, aka player 1
+					game.controlers[i].handleKeyInput( event.key ) # first game controler, aka player 1
 
 
 def takeGameStep( game ):
 	game.step()
 
-	debugPlayerControler(game)
+	debugPlayerControler( game )
 
-	game.clock.tick (game.framerate)
+	game.clock.tick ( game.framerate )
 
 if __name__ == '__main__':
 	asy.run(main())
