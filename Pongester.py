@@ -8,7 +8,8 @@ class Pongester(gi.Game):
 	width = 1280
 	height = 1280
 
-	speed_m_b = 20
+	speed_b = 7.5
+	speed_m_b = 15
 	size_font = 512
 
 
@@ -97,7 +98,7 @@ class Pongester(gi.Game):
 				self.scorePoint( rack.id, gi.ad.HITS )
 
 
-	# bouncing on the walls
+	# bouncing on the walls (walls are absent in Pongester)
 	def checkWalls(self, ball):
 		pass
 

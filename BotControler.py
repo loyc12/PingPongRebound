@@ -10,7 +10,7 @@ class BotControler(gc.GameControler):
 	allow_hard_break = True
 	go_to_default_pos = True
 
-	difficulty = ad.MEDIUM
+	difficulty = ad.HARD
 	play_frequency = ad.BOT_FREQUENCY
 	max_factor = ad.BOT_M_FACTOR
 

@@ -19,27 +19,24 @@ import Addons as ad
 
 # FUNCTION LIST
 # TODO : implement game.getInfo()		(awaiting formating for that)
-# TODO : implement game.respawnBall()
-# TODO : add a key to resawn the ball
 
 # DEBUG LIST
-# TODO : make the smart ai better at Pinger (move last minute to throw?)
 # TODO : make player 1 and 2 the most inward rackets in pingest
-# TODO : review ball respawn in pongest
+# TODO : rework the ball respawn trajectory everywhere
 
 # MINOR LIST
-# TODO : make bots move last second to give a spin to the ball
+# TODO : adda "mode" argument to game.respawnBall()
 # TODO : add a game start and game over screen ?
 # TODO : add double-sided gravity to pingest (so it's an actual ping game lol)
-# TODO : figure out the ball respawn trajectory everywhere
 # TODO : add sound effects to collisions (in GameObject class)
 # TODO : make an 'asteroids' game (solo)
 # TODO : make obstacles type GameObjects in the base class (and use them in pongester)
 
 async def main():
 
-	game = Pong()
+	game = Pingest()
 	game.addPlayer( "tester_1" )
+	game.addPlayer( "tester_2" )
 	game.start()
 
 	while game.running:
@@ -57,8 +54,9 @@ def debugPlayerControler( game ):
 
 		# handling key presses
 		elif event.type == pg.KEYDOWN:
-			if game.controlers[0].mode == ad.PLAYER:
-				game.controlers[0].handleKeyInput(event.key) # first game controler, aka player 1
+			for i in range(len(game.controlers)):
+				if game.controlers[i].mode == ad.PLAYER:
+					game.controlers[i].handleKeyInput(event.key) # first game controler, aka player 1
 
 
 def takeGameStep( game ):

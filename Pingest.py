@@ -7,14 +7,14 @@ import GameInterface as gi
 class Pingest(gi.Game):
 	name = "Pingest"
 
-	gravity = 0 # TODO : implement me here
+	gravity = 0
 
 	def initRackets(self):
 		# setting up rackets :             id, game, _x                  , _y                             , _w         , _h
 		self.rackets.append( go.GameObject( 1, self, self.width * (2 / 7), (3 * self.size_b)              , self.size_r, self.size_b ))
-		self.rackets.append( go.GameObject( 2, self, self.width * (5 / 7), self.size_b	                  , self.size_r, self.size_b ))
-		self.rackets.append( go.GameObject( 3, self, self.width * (2 / 7), self.height - self.size_b      , self.size_r, self.size_b ))
-		self.rackets.append( go.GameObject( 4, self, self.width * (5 / 7), self.height - (3 * self.size_b), self.size_r, self.size_b ))
+		self.rackets.append( go.GameObject( 2, self, self.width * (2 / 7), self.height - (3 * self.size_b), self.size_r, self.size_b ))
+		self.rackets.append( go.GameObject( 3, self, self.width * (5 / 7), self.size_b	                  , self.size_r, self.size_b ))
+		self.rackets.append( go.GameObject( 4, self, self.width * (5 / 7), self.height - self.size_b      , self.size_r, self.size_b ))
 
 		self.rackets[0].setSpeeds( self.speed_r, 0 )
 		self.rackets[1].setSpeeds( self.speed_r, 0 )
@@ -46,24 +46,24 @@ class Pingest(gi.Game):
 		# player 1
 		if key == pg.K_s:
 			self.makeMove( 1, gi.ad.STOP )
-			self.makeMove( 3, gi.ad.STOP )
+			self.makeMove( 4, gi.ad.STOP )
 		elif key == pg.K_a:
 			self.makeMove( 1, gi.ad.LEFT )
-			self.makeMove( 3, gi.ad.LEFT )
+			self.makeMove( 4, gi.ad.LEFT )
 		elif key == pg.K_d:
 			self.makeMove( 1, gi.ad.RIGHT )
-			self.makeMove( 3, gi.ad.RIGHT )
+			self.makeMove( 4, gi.ad.RIGHT )
 
 		# player 2
 		if key == pg.K_DOWN:
 			self.makeMove( 2, gi.ad.STOP )
-			self.makeMove( 4, gi.ad.STOP )
+			self.makeMove( 3, gi.ad.STOP )
 		elif key == pg.K_LEFT:
 			self.makeMove( 2, gi.ad.LEFT )
-			self.makeMove( 4, gi.ad.LEFT )
+			self.makeMove( 3, gi.ad.LEFT )
 		elif key == pg.K_RIGHT:
 			self.makeMove( 2, gi.ad.RIGHT )
-			self.makeMove( 4, gi.ad.RIGHT )
+			self.makeMove( 3, gi.ad.RIGHT )
 
 
 	def moveRacket(self, rack):
@@ -97,9 +97,9 @@ class Pingest(gi.Game):
 	def checkRackets(self, ball):
 		for rack in self.rackets: #		copies the racket's data
 			if ball.overlaps( rack ):
-				if (rack.id == 1 or rack.id == 2):
+				if (rack.id == 1 or rack.id == 3):
 					ball.setPos( ball.box.centerx, rack.box.centery + self.size_b ) # '+' because the ball is going under
-				elif (rack.id == 3 or rack.id == 4):
+				elif (rack.id == 2 or rack.id == 4):
 					ball.setPos( ball.box.centerx, rack.box.centery - self.size_b ) # '-' because the ball is going over
 				ball.collideRack( rack, "y" )
 				self.scorePoint( rack.id, gi.ad.HITS )
