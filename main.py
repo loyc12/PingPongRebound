@@ -20,12 +20,13 @@ import Addons as ad
 # TODO : implement game.getInfo()
 
 # DEBUG LIST
-# TODO : see if you can have multiple windows with pygame
+# TODO : see if you can have multiple windows with pygame (or just switch which game to render)
 # TODO : put player 1 and 2 in oposite teams always
 # TODO : rework the ball respawn trajectory everywhere
 
 # MINOR LIST
-# TODO : adda "mode" argument to game.respawnBall() and use it when initializing the ball
+# TODO : have pygame events be put in a queue, and parse from queue for movements in gameManager
+# TODO : add a "mode" argument to game.respawnBall() and use it when initializing the ball
 # TODO : add a game start and game over screen ?
 # TODO : add double-sided gravity to pingest (so it's an actual ping game lol)
 # TODO : add sound effects to collisions (in GameObject class)
