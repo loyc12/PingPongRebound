@@ -45,6 +45,7 @@ class Game:
 
 	def __init__(self):
 		self.running = False
+		self.over = False
 		self.playerCount = 0
 		self.controlerCount = 0
 		self.racketCount = 0
@@ -223,7 +224,9 @@ class Game:
 
 
 	def stop(self):
-		raise NotImplementedError("Unimplemented : game.stop()")
+		self.running = False
+		self.isOver = True
+		print("closed a game of " + self.name)
 
 
 	def run(self):

@@ -6,16 +6,15 @@ from Ponger import Ponger
 from Pongest import Pongest
 from Pongester import Pongester
 from GameInterface import Game
-
-from BotControler import BotControler as ai
-from PlayerControler import PlayerControler as pl
+from GameManager import main
 
 import pygame as pg
 import asyncio as asy
 import Addons as ad
 
 # MASTER LIST
-# TODO : integrate playerControler with sockets
+# TODO : make a game manager class (runs an raay of games and prints their getInfo() output, step by step)
+# TODO : integrate gameManager with sockets
 
 # FUNCTION LIST
 # TODO : implement game.getInfo()		(awaiting formating for that)
@@ -32,7 +31,7 @@ import Addons as ad
 # TODO : make an 'asteroids' game (solo)
 # TODO : make obstacles type GameObjects in the base class (and use them in pongester)
 
-async def main():
+async def debugTester():
 
 	game = Pingest()
 	game.addPlayer( "tester_1" )
@@ -65,7 +64,6 @@ def takeGameStep( game ):
 	debugPlayerControler(game)
 
 	game.clock.tick (game.framerate)
-
 
 if __name__ == '__main__':
 	asy.run(main())
