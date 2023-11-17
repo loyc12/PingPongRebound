@@ -109,7 +109,7 @@ class Pongester(gi.Game):
 			if (self.last_ponger > 0):
 				self.scorePoint( self.last_ponger, gi.ad.GOALS )
 
-			# chcking how to respawn the ball
+			# checking how to respawn the ball
 			if self.last_ponger == 1 or ( self.last_ponger == 0 and ball.fx < 0 and ball.fy < 0 ):
 				ball.setDirs( -ball.fx, -1 )
 				ball.setSpeeds( self.speed_b * (1 / 3), self.speed_b )
@@ -126,8 +126,11 @@ class Pongester(gi.Game):
 				ball.setDirs( -1, -ball.fy )
 				ball.setSpeeds( self.speed_b, self.speed_b * (1 / 3) )
 
-			# reseting the ball's position
-			ball.setPos(self.width * (1 / 2), self.height * (1 / 2))
+			self.respawnBall( ball )
+
+
+	def respawnBall(self, ball):
+		ball.setPos(self.width * (1 / 2), self.height * (1 / 2))
 
 
 	def drawLines(self):

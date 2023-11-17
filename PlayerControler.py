@@ -24,5 +24,8 @@ class PlayerControler(gc.GameControler):
 			self.playMove( ad.DOWN )
 		elif key == pg.K_a or key == pg.K_LEFT:
 			self.playMove( ad.LEFT )
-		elif (key != pg.K_SPACE):
+		elif (key == pg.K_RETURN):
+			for i in range(len(self.game.balls)):
+				self.game.respawnBall( self.game.balls[i] )
+		else:
 			print("Error: invalid move")

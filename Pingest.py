@@ -115,20 +115,26 @@ class Pingest(gi.Game):
 	# scoring a goal
 	def checkGoals(self, ball):
 		if ball.box.top <= 0 or ball.box.bottom >= self.height:
+
 			# checking who scored
 			if ball.box.top <= 0:
 				if self.last_ponger > 0:
 					self.scorePoint( 2, gi.ad.GOALS )
 				ball.setDirs( -1, -1 )
 				ball.setPos ( self.width * (1 / 2), self.height * (3 / 4) )
+
 			elif ball.box.bottom >= self.height:
 				if self.last_ponger > 0:
 					self.scorePoint( 1, gi.ad.GOALS )
 				ball.setDirs( 1, 1 )
 				ball.setPos ( self.width * (1 / 2), self.height * (1 / 4) )
 
-			# reseting the ball's speed
-			ball.setSpeeds( (self.speed_b + ball.dx) * (1 / 3), self.speed_b )
+			self.respawnBall( ball )
+
+
+	def respawnBall(self, ball):
+		ball.box.centerx = self.width * (1 / 2)
+		ball.setSpeeds( (self.speed_b + ball.dx) * (1 / 3), self.speed_b )
 
 
 	def drawLines(self):

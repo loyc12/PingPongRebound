@@ -112,17 +112,20 @@ class Ponger(gi.Game):
 			if ball.box.right <= self.width / 2:
 				if self.last_ponger > 0:
 					self.scorePoint( 2, gi.ad.GOALS )
-				ball.setDirs( -1, -1 )
+				ball.setDirs( -ball.fy, -1 )
 				ball.setPos ( self.width * (3 / 4), self.height * (3 / 4) )
 
 			else:
 				if self.last_ponger > 0:
 					self.scorePoint( 1, gi.ad.GOALS )
-				ball.setDirs( 1, 1 )
+				ball.setDirs( -ball.fy, 1 )
 				ball.setPos ( self.width * (1 / 4), self.height * (1 / 4) )
 
-			# reseting the ball's speed
-			ball.setSpeeds( ( self.speed_b + ball.dx ) * (1 / 2), self.speed_b * (2 / 3) )
+			self.respawnBall( ball )
+
+
+	def respawnBall(self, ball):
+		ball.setSpeeds( ( self.speed_b + ball.dx ) * (1 / 2), self.speed_b * (2 / 3) )
 
 
 	def drawLines(self):

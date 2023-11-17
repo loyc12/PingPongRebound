@@ -171,6 +171,14 @@ class Game:
 				elif (move == ad.STOP):
 					rack.fx = 0
 					rack.fy = 0
+				#elif (move == ad.BALL):
+				#	for i in range(len(self.balls)):
+				#		self.respawnBall( self.balls[i] )
+				elif (move == ad.LEFT):
+					if (self.hard_break and rack.fx > 0):
+						rack.fx = 0
+					else:
+						rack.fx -= 1
 				elif (move == ad.UP):
 					if (self.hard_break and rack.fy > 0):
 						rack.fy = 0
@@ -186,11 +194,6 @@ class Game:
 						rack.fy = 0
 					else:
 						rack.fy += 1
-				elif (move == ad.LEFT):
-					if (self.hard_break and rack.fx > 0):
-						rack.fx = 0
-					else:
-						rack.fx -= 1
 				else:
 					print("Error: invalid move : " + str(move))
 				return
@@ -255,12 +258,20 @@ class Game:
 	def debugControler(self): #			NOTE : DEBUG : use PlayerControler class instance instead
 		for event in pg.event.get():
 			# quiting the game
-			if event.type == pg.QUIT or ( event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE ):
+			if event.type == pg.QUIT:
 				self.running = False
 
 			# handling key presses
 			elif event.type == pg.KEYDOWN:
-				self.handlePygameInputs( event.key )
+				if event.key == pg.K_ESCAPE:
+					self.running = False
+
+				elif event.key == pg.K_RETURN:
+					for i in range(len(self.balls)):
+						self.respawnBall( self.balls[i] )
+
+				else:
+					self.handlePygameInputs( event.key )
 
 
 	def getInfo(self): # NOTE : send this fct's value to the client
@@ -338,10 +349,8 @@ class Game:
 	# scoring a goal
 	def checkGoals(self, ball):
 		if ball.box.bottom >= self.height:
-			ball.setDirs( -ball.fx, 1 )
-			ball.setPos( ball.box.centerx, self.size_b )
-			ball.setSpeeds( self.speed_b, self.speed_b )
 			self.scorePoint( self.last_ponger, ad.GOALS )
+			self.respawnBall( ball )
 
 
 	def scorePoint(self, controler_id, mode):
@@ -361,6 +370,12 @@ class Game:
 				self.last_ponger = controler_id
 		else:
 			self.last_ponger = 0
+
+
+	def respawnBall(self, ball):
+		ball.setDirs( -ball.fx, 1 )
+		ball.setPos( ball.box.centerx, self.size_b )
+		ball.setSpeeds( self.speed_b, self.speed_b )
 
 	# ------------------------------------------- GAME RENDERING ------------------------------------------- #
 

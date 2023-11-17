@@ -11,13 +11,21 @@ UP = 2
 RIGHT = 3
 DOWN = 4
 LEFT = 5
+BALL = 6
 
 # score modes
 GOALS = 0
 HITS = 1
 
+# bot difficulty
+EASY = 0
+MEDIUM = 1
+HARD = 2
+
 # bot stuff
+BOT_M_FACTOR = 4
 BOT_FREQUENCY = 10
+BOT_DEPTH = 4
 
 
 def getSign(value):

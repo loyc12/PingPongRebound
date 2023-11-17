@@ -109,24 +109,27 @@ class Pongest(gi.Game):
 	# scoring a goal
 	def checkGoals(self, ball):
 		if ball.box.top <= 0 or ball.box.bottom >= self.height:
+
 			# checking who scored
 			if (self.last_ponger > 0):
 				self.scorePoint( self.last_ponger, gi.ad.GOALS )
+				if self.last_ponger == 1:
+					ball.setDirs( -1, -1 )
+				elif self.last_ponger == 2:
+					ball.setDirs( 1, -1 )
+				elif self.last_ponger == 3:
+					ball.setDirs( -1, 1 )
+				elif self.last_ponger == 4:
+					ball.setDirs( 1, 1 )
+			else:
 				ball.setDirs( -ball.fx, -ball.fy )
 
-			else:
-				if ball.fx < 0 and ball.fy < 0:
-					ball.setDirs( 1, -1 )
-				elif ball.fx > 0 and ball.fy < 0:
-					ball.setDirs( 1, 1 )
-				elif ball.fx > 0 and ball.fy > 0:
-					ball.setDirs( -1, 1 )
-				elif ball.fx < 0 and ball.fy > 0:
-					ball.setDirs( -1, -1 )
+			self.respawnBall( ball )
 
-			# reseting the ball's position & speed
-			ball.setPos ( self.width / 2, self.height / 2 )
-			ball.setSpeeds( (self.speed_b + ball.dx) / 2, (self.speed_b + ball.dy) / 3 )
+
+	def respawnBall(self, ball):
+		ball.setPos ( self.width / 2, self.height / 2 )
+		ball.setSpeeds( (self.speed_b + ball.dx) / 2, (self.speed_b + ball.dy) / 3 )
 
 
 	def drawLines(self):

@@ -77,19 +77,23 @@ class Pinger(gi.Game):
 	# scoring a goal
 	def checkGoals(self, ball):
 		if ball.box.bottom >= self.height:
+
 			# checking who scored
 			if ball.box.right < self.width / 2:
 				if self.last_ponger > 0:
 					self.scorePoint( 2, gi.ad.GOALS )
 				ball.setDirs( -1, -1 )
+
 			elif ball.box.left > self.width / 2:
 				if self.last_ponger > 0:
 					self.scorePoint( 1, gi.ad.GOALS )
 				ball.setDirs( 1, -1 )
 
-			# reseting the ball's position & speed
-			ball.setPos( self.width * (1 / 2), self.height * (2 / 3) )
-			ball.setSpeeds( (ball.dx + self.speed_b) / 3, self.speed_b * 2 )
+			self.respawnBall( ball )
+
+	def respawnBall(self, ball):
+		ball.setPos( self.width * (1 / 2), self.height * (2 / 3) )
+		ball.setSpeeds( (ball.dx + self.speed_b) / 3, self.speed_b * 2 )
 
 
 	def drawLines(self):

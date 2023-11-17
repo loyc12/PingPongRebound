@@ -78,15 +78,19 @@ class Pong(gi.Game):
 				if self.last_ponger > 0:
 					self.scorePoint( 2, gi.ad.GOALS )
 				ball.setDirs( -1, -ball.fy )
-				ball.setPos (self.width * (3 / 4), (self.height - self.size_b) / 2 )
+				ball.setPos (self.width * (3 / 4), self.height * (1 / 2) )
 			if ball.box.right >= self.width:
 				if self.last_ponger > 0:
 					self.scorePoint( 1, gi.ad.GOALS )
 				ball.setDirs( 1, -ball.fy )
-				ball.setPos (self.width * (1 / 4), (self.height - self.size_b) / 2 )
+				ball.setPos (self.width * (1 / 4), self.height * (1 / 2))
 
-			# reseting the ball's speed
-			ball.setSpeeds( self.speed_b, ball.dy )
+			self.respawnBall( ball )
+
+
+	def respawnBall(self, ball):
+		ball.box.centery = self.height * (1 / 2)
+		ball.setSpeeds( self.speed_b, ball.dy )
 
 
 	def drawLines(self):

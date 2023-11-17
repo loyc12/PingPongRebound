@@ -20,14 +20,10 @@ class Ping(gi.Game):
 		self.balls[0].setSpeeds( self.speed_b, 0)
 		self.balls[0].setDirs( 1, 1 )
 
-
-	# scoring a goal
-	def checkGoals(self, ball):
-		if ball.box.bottom >= self.height:
-			ball.setDirs( -ball.fx, 1 )
-			ball.setPos( (self.width + ball.box.centerx) / 3, self.size_b )
-			ball.setSpeeds( (ball.dx + self.speed_b) / 3, 0 )
-			self.scorePoint( self.last_ponger, gi.ad.GOALS )
+	def respawnBall(self, ball):
+		ball.setDirs( -ball.fx, 1 )
+		ball.setPos( (self.width + ball.box.centerx) / 3, self.size_b )
+		ball.setSpeeds( (ball.dx + self.speed_b) / 3, 0 )
 
 
 if __name__ == '__main__':

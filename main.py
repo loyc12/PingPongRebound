@@ -31,7 +31,7 @@ import Addons as ad
 # TODO : make bots move last second to give a spin to the ball
 # TODO : add a game start and game over screen ?
 # TODO : add double-sided gravity to pingest (so it's an actual ping game lol)
-# TODO : figure out the ball respawn trajectory
+# TODO : figure out the ball respawn trajectory everywhere
 # TODO : add sound effects to collisions (in GameObject class)
 # TODO : make an 'asteroids' game (solo)
 # TODO : make obstacles type GameObjects in the base class (and use them in pongester)
@@ -39,7 +39,7 @@ import Addons as ad
 async def main():
 
 	game = Pong()
-	#game.addPlayer( "tester_1" )
+	game.addPlayer( "tester_1" )
 	game.start()
 
 	while game.running:
