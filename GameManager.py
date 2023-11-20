@@ -22,7 +22,7 @@ class GameManager:
 		self.gameDict = {}
 
 
-	def addGame( self, Initialiser ):
+	def addGame( self, Initialiser ): #			TODO : take game id as argument instead
 
 		# reset gameIDs when no game is running
 		if (self.gameCount == 0):
@@ -47,16 +47,19 @@ class GameManager:
 
 
 	def startGame( self, key ):
-		self.gameDict[key].addPlayer( "Player " + str( key ))
+		#self.gameDict[key].addPlayer( "Player " + str( key ))
 		self.gameDict[key].start()
 
 
 	async def tickGames(self):
-		for game in self.gameDict.values():
+		for key in self.gameDict.keys():
+			game = self.gameDict[key]
 			if game.over:
 				self.removeGame( game.id )
 			elif game.running:
 				self.runGameStep( game )
+				if key == self.playerID:
+					self.displayGame( game )
 
 		await asy.sleep(0)
 
@@ -64,7 +67,8 @@ class GameManager:
 	def runGameStep( self, game ):
 		if game.running:
 
-			game.step()
+			game.moveObjects()
+			game.makeBotsPlay()
 			game.clock.tick (game.framerate) # 	TODO : detach from pygame
 
 			#print ( game.getInfo() )
@@ -72,8 +76,14 @@ class GameManager:
 		else:
 			print (" This game is not running")
 
+	def displayGame( self, game ): # 			TODO : detach from pygame
+		if game.running:
+			game.refreshScreen()
+		else:
+			print (" This game is not running")
 
-	def takePlayerInputs( self ): # 								NOTE : DEBUG
+
+	def takePlayerInputs( self ): # 			NOTE : DEBUG
 		# read local player inputs
 		for event in pg.event.get():
 
@@ -85,24 +95,29 @@ class GameManager:
 					self.keep_going = False
 
 				# switches game to control # 						NOTE : DEBUG
-				if event.key == pg.K_0:
-					self.playerID = 0
-					print ("now playing noody")
-				elif event.key == pg.K_1:
-					self.playerID = 1
-					print ("now playing in game #" + str( self.playerID ))
-				elif event.key == pg.K_2:
-					self.playerID = 2
-					print ("now playing in game #" + str( self.playerID ))
-				elif event.key == pg.K_3:
-					self.playerID = 3
-					print ("now playing in game #" + str( self.playerID ))
-				elif event.key == pg.K_4:
-					self.playerID = 4
-					print ("now playing in game #" + str( self.playerID ))
-				elif event.key == pg.K_5:
-					self.playerID = 5
-					print ("now playing in game #" + str( self.playerID ))
+				if event.key == pg.K_0 or event.key == pg.K_1 or event.key == pg.K_2 or event.key == pg.K_3 or event.key == pg.K_4:
+					if event.key == pg.K_0:
+						self.playerID = 0
+						print ("now playing nobody")
+					elif event.key == pg.K_1:
+						self.playerID = 1
+						print ("now playing in game #" + str( self.playerID ))
+					elif event.key == pg.K_2:
+						self.playerID = 2
+						print ("now playing in game #" + str( self.playerID ))
+					elif event.key == pg.K_3:
+						self.playerID = 3
+						print ("now playing in game #" + str( self.playerID ))
+					elif event.key == pg.K_4:
+						self.playerID = 4
+						print ("now playing in game #" + str( self.playerID ))
+
+					try:
+						game = self.gameDict[self.playerID]
+						game.win = pg.display.set_mode((game.width, game.height)) # 	TODO : detach from pygame
+					except:
+						print ("Could not switch to game #" + str( self.playerID ))
+						self.playerID = 0
 
 				# handling game movement keys
 				else:
@@ -116,7 +131,9 @@ def main():
 	gm = GameManager()
 
 	gm.startGame( gm.addGame( Ping ))
+	gm.startGame( gm.addGame( Pinger ))
 	gm.startGame( gm.addGame( Pong ))
+	#gm.startGame( gm.addGame( Ponger ))
 
 	print ("select a player (1 to 5)")
 

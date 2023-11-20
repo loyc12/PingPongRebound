@@ -50,12 +50,12 @@ class Game:
 		self.controlerCount = 0
 		self.racketCount = 0
 
-		pg.init()
-		self.clock = pg.time.Clock()
-		self.win = pg.display.set_mode((self.width, self.height)) #		TODO : abstract away from pygame's window system
-		self.font = pg.font.Font(None, self.size_font) #				TODO : abstract away from pygame's window system
-		self.debug_font = pg.font.Font(None, 32) #						TODO : abstract away from pygame's window system
-		pg.display.set_caption(self.name) #			 					TODO : abstract away from pygame's window system
+		pg.init() #														TODO : abstract away from pygame's window system
+		pg.display.set_caption(self.name) #			 					TODO : ...
+		self.clock = pg.time.Clock() #									TODO : ...
+		self.win = pg.display.set_mode((self.width, self.height)) #		TODO : ...
+		self.font = pg.font.Font(None, self.size_font) #				TODO : ...
+		self.debug_font = pg.font.Font(None, 32) #						TODO : ...
 
 		self.rackets = []
 		self.controlers = []
@@ -253,9 +253,9 @@ class Game:
 			return
 
 		self.moveObjects()
+		self.makeBotsPlay()
 		self.refreshScreen()
 
-		self.makeBotsPlay()
 
 
 	def debugControler(self): #			NOTE : DEBUG : use PlayerControler class instance instead

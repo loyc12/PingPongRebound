@@ -13,11 +13,18 @@ import asyncio as asy
 import Addons as ad
 
 # MASTER LIST
+# TODO : add game sate dicts in gameInterface
 # TODO : continue working on the gameManager class
+# TODO : implement winning and losing
 # TODO : integrate gameManager with sockets
+# TODO : add game variables : isRunning, isOver, winnerID
+# TODO : add queues for gameManager to receive/send messages (gamesToStart, gameStartInfo, gamesToEnd, gameEndInfo)
 
 # FUNCTION LIST
-# TODO : implement game.getInfo()
+# TODO : make gm.addGame() take in a game id and player ids, nad map the player ids to racket ids
+# TODO : implement get/sendUpdateInfo()
+# TODO : implement get/sendStartState()
+# TODO : implement get/sendCloseState()
 
 # DEBUG LIST
 # TODO : see if you can have multiple windows with pygame (or just switch which game to render)
@@ -29,7 +36,7 @@ import Addons as ad
 # TODO : add a "mode" argument to game.respawnBall() and use it when initializing the ball
 # TODO : add a game start and game over screen ?
 # TODO : add double-sided gravity to pingest (so it's an actual ping game lol)
-# TODO : add sound effects to collisions (in GameObject class)
+# TODO : add sound effects to collisions (in GameObject class) ?
 # TODO : make an 'asteroids' game (solo)
 # TODO : make obstacles type GameObjects in the base class (and use them in pongester)
 
@@ -37,7 +44,6 @@ async def debugTester():
 
 	game = Pingest()
 	game.addPlayer( "tester_1" )
-	game.addPlayer( "tester_2" )
 	game.start()
 
 	while game.running:
@@ -68,4 +74,50 @@ def takeGameStep( game ):
 	game.clock.tick ( game.framerate )
 
 if __name__ == '__main__':
+	#asy.run(debugTester())
 	asy.run(main())
+
+
+
+#
+#
+#	GameLoop()
+#	{
+#		initGame()
+#		addPlayers()
+#		startGame()
+#			sendStartState()
+#
+#		while (isRunning)
+#			stepGame()
+#				updateObjects()
+#				makeBotsPlay()
+#				sendUpdateInfo() 			OR: renderScreen() (debug)
+#
+#		deleteGame()
+#			sendEndState()
+#	}
+#
+#	ManagerLoop()
+#	{
+#		addGames()
+#			initGame()
+#			addPlayers()
+#			sendStartState()
+#
+#		startGames()
+#
+#		tickGames()
+#			while (keepGoing)
+#			{
+#				if (isRunning)
+#					stepGame()
+#						updateObjects()
+#						makeBotsPlay()
+#						sendUpdateInfo()
+#				elif (isOver)
+#					deleteGame()
+#						sendEndState()
+# 			}
+#		}
+#
