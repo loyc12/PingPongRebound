@@ -145,7 +145,7 @@ class Ponger(gi.Game):
 if __name__ == '__main__': #		NOTE : DEBUG
 
 	pg.init()
-	window = pg.display.set_mode((10, 10))
+	window = pg.display.set_mode((1536, 1024))
 
 	g = Ponger(window, pg.time.Clock())
 	pg.display.set_caption(g.name)

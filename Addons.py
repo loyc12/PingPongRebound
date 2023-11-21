@@ -29,7 +29,7 @@ BOT_PRECISION = 40
 BOT_KICK_DISTANCE = 160
 
 # DEBUG
-WIN_SIZE = 256
+WIN_SIZE = 1280
 
 
 def getSign(value):

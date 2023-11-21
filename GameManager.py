@@ -76,14 +76,9 @@ class GameManager:
 			elif game.isRunning:
 				self.runGameStep( game )
 
-				if self.debugMode:
+				if self.debugMode: #				NOTE : DEBUG
 					if key == self.playerID:
 						self.displayGame( game )
-
-		if self.playerID == 0 and ( ad.WIN_SIZE != self.win.get_width() or ad.WIN_SIZE != self.win.get_height() ): # 	NOTE : DEBUG
-			self.win = pg.display.set_mode( (ad.WIN_SIZE, ad.WIN_SIZE) ) # 												NOTE : ...
-			self.win.fill( pg.Color('black') ) # 																		NOTE : ...
-			pg.display.set_caption("Game Manager") # 																	NOTE : ...
 
 		await asy.sleep(0)
 
@@ -127,6 +122,8 @@ class GameManager:
 				# switches game to control
 				if event.key == pg.K_0:
 					print ("please select a valid game (1-8)")
+					self.playerID = 0
+					self.emptyDisplay()
 
 				# switches game to control
 				elif event.key == pg.K_1 or event.key == pg.K_2 or event.key == pg.K_3 or event.key == pg.K_4 or event.key == pg.K_5 or event.key == pg.K_6 or event.key == pg.K_7 or event.key == pg.K_8 or event.key == pg.K_9:
@@ -155,8 +152,9 @@ class GameManager:
 						game = self.gameDict[self.playerID]
 					except:
 						print ("Could not switch to game #" + str( self.playerID ))
-						print ("no longer playeing in any game")
+						print ("no longer playing in any game")
 						self.playerID = 0
+						self.emptyDisplay()
 
 				# handling game movement keys
 				else:
@@ -166,15 +164,21 @@ class GameManager:
 						print ("Could not pass input from player for game #" + str( self.playerID ))
 
 
+	def emptyDisplay( self ):
+		pg.display.set_caption("Game Manager") # 			NOTE : DEBUG
+		self.win = pg.display.set_mode((2048, 1280)) # 		NOTE : ...
+		self.win.fill( pg.Color('black') ) # 				NOTE : ...
+
+
 def main():
 
 	gm = GameManager()
 
 	if (gm.debugMode):
-		pg.init() # 													NOTE : DEBUG
-		pg.display.set_caption("Game Manager") # 						NOTE : ...
-		gm.win = pg.display.set_mode((2048, 1024)) # 		NOTE : ...
-		gm.win.fill( pg.Color('black') ) # 								NOTE : ...
+		pg.init() # 										NOTE : DEBUG
+		pg.display.set_caption("Game Manager") # 			NOTE : ...
+		gm.win = pg.display.set_mode((2048, 1280)) # 		NOTE : ...
+		gm.win.fill( pg.Color('black') ) # 					NOTE : ...
 
 	addAllGames( gm )
 
