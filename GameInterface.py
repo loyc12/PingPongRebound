@@ -46,6 +46,10 @@ class Game:
 	def __init__(self):
 		self.running = False
 		self.over = False
+
+		self.debugMode = False
+		self.useAI = True
+
 		self.playerCount = 0
 		self.controlerCount = 0
 		self.racketCount = 0
@@ -250,8 +254,12 @@ class Game:
 			return
 
 		self.moveObjects()
-		self.makeBotsPlay()
-		self.refreshScreen()
+
+		if self.useAI:
+			self.makeBotsPlay()
+
+		if self.debugMode:
+			self.refreshScreen()
 
 
 

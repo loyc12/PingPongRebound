@@ -24,7 +24,9 @@ HARD = 2
 # bot stuff
 BOT_M_FACTOR = 4
 BOT_FREQUENCY = 10
-BOT_DEPTH = 4
+BOT_DEPTH = 5
+BOT_PRECISION = 40
+BOT_KICK_DISTANCE = 160
 
 
 def getSign(value):

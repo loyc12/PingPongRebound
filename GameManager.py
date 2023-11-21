@@ -10,40 +10,35 @@ from GameInterface import Game
 import pygame as pg
 import asyncio as asy
 import Addons as ad
+import sys
 
 class GameManager:
 
-	playerID = 0
+	playerID = 0 #									NOTE : DEBUG
 
 	def __init__( self ):
 		self.lastGameID = 0
 		self.gameCount = 0
-		self.keep_going = True
+		self.runGames = True
 		self.gameDict = {}
 
 
-	def addGame( self, Initialiser ): #			TODO : take game id as argument instead
-
-		# reset gameIDs when no game is running
-		if (self.gameCount == 0):
-			self.lastGameID = 0
+	def addGame( self, Initialiser, GameID): #		TODO : take game id as argument instead
 
 		newGame = Initialiser()
-		self.lastGameID += 1
-		self.gameCount += 1
-		self.gameDict[self.lastGameID] = newGame
+		newGame.debugMode = True #					NOTE : DEBUG
 
-		return self.lastGameID
+		self.gameDict[GameID] = newGame
+		self.gameCount += 1
+
+		return GameID
+
 
 
 	def removeGame( self, key ):
 		self.gameDict[key].stop()
 		self.gameDict.pop(key)
 		self.gameCount -= 1
-
-		# reset gameIDs when no game is running
-		if (self.gameCount == 0):
-			self.lastGameID = 0
 
 
 	def startGame( self, key ):
@@ -88,35 +83,46 @@ class GameManager:
 		for event in pg.event.get():
 
 			if event.type == pg.KEYDOWN:
-				# closes the game # 								NOTE : DEBUG
+				# closes the game # 						NOTE : DEBUG
 				if event.key == pg.K_ESCAPE:
 					for game in self.gameDict.values():
 						game.stop()
-					self.keep_going = False
+					self.runGames = False
+					sys.exit()
 
 				# switches game to control # 						NOTE : DEBUG
-				if event.key == pg.K_0 or event.key == pg.K_1 or event.key == pg.K_2 or event.key == pg.K_3 or event.key == pg.K_4:
-					if event.key == pg.K_0:
-						self.playerID = 0
-						print ("now playing nobody")
-					elif event.key == pg.K_1:
+				if event.key == pg.K_0:
+					print ("please select a valid game (1-8)")
+
+				# switches game to control # 						NOTE : DEBUG
+				elif event.key == pg.K_1 or event.key == pg.K_2 or event.key == pg.K_3 or event.key == pg.K_4 or event.key == pg.K_5 or event.key == pg.K_6 or event.key == pg.K_7 or event.key == pg.K_8 or event.key == pg.K_9:
+					if event.key == pg.K_1:
 						self.playerID = 1
-						print ("now playing in game #" + str( self.playerID ))
 					elif event.key == pg.K_2:
 						self.playerID = 2
-						print ("now playing in game #" + str( self.playerID ))
 					elif event.key == pg.K_3:
 						self.playerID = 3
-						print ("now playing in game #" + str( self.playerID ))
 					elif event.key == pg.K_4:
 						self.playerID = 4
-						print ("now playing in game #" + str( self.playerID ))
+					elif event.key == pg.K_5:
+						self.playerID = 5
+					elif event.key == pg.K_6:
+						self.playerID = 6
+					elif event.key == pg.K_7:
+						self.playerID = 7
+					elif event.key == pg.K_8:
+						self.playerID = 8
+					elif event.key == pg.K_9:
+						self.playerID = 9
+					print ("now playing in game #" + str( self.playerID ))
+
 
 					try:
 						game = self.gameDict[self.playerID]
 						game.win = pg.display.set_mode((game.width, game.height)) # 	TODO : detach from pygame
 					except:
 						print ("Could not switch to game #" + str( self.playerID ))
+						print ("now playing nobody")
 						self.playerID = 0
 
 				# handling game movement keys
@@ -130,14 +136,9 @@ class GameManager:
 def main():
 	gm = GameManager()
 
-	gm.startGame( gm.addGame( Ping ))
-	gm.startGame( gm.addGame( Pinger ))
-	gm.startGame( gm.addGame( Pong ))
-	#gm.startGame( gm.addGame( Ponger ))
+	addAllGames( gm )
 
-	print ("select a player (1 to 5)")
-
-	while gm.keep_going:
+	while gm.runGames:
 
 		gm.takePlayerInputs()
 
@@ -147,6 +148,26 @@ if __name__ == '__main__':
 	main()
 
 
+def addAllGames( gm ):
+	gameID = 1
 
+	gm.startGame( gm.addGame( Game, gameID ))
+	gameID += 1
+	gm.startGame( gm.addGame( Ping, gameID ))
+	gameID += 1
+	gm.startGame( gm.addGame( Pinger, gameID ))
+	gameID += 1
+	gm.startGame( gm.addGame( Pingest, gameID ))
+	gameID += 1
+	gm.startGame( gm.addGame( Pong, gameID ))
+	gameID += 1
+	gm.startGame( gm.addGame( Ponger, gameID ))
+	gameID += 1
+	gm.startGame( gm.addGame( Pongest, gameID ))
+	gameID += 1
+	gm.startGame( gm.addGame( Pongester, gameID ))
+	gameID += 1
+
+	print ("select a player (1-8)")
 
 

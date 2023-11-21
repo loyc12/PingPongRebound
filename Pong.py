@@ -109,5 +109,6 @@ class Pong(gi.Game):
 
 if __name__ == '__main__':
 	g = Pong()
+	g.debugMode = True
 	g.start()
 	g.run()

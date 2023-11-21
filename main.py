@@ -41,10 +41,11 @@ import Addons as ad
 # TODO : make an 'asteroids' game (solo)
 # TODO : make obstacles type GameObjects in the base class (and use them in pongester)
 
-async def debugTester():
+async def debugTester( Initialiser ):
 
-	game = Pingest()
-	game.addPlayer( "tester_1" )
+	game = Initialiser()
+	game.debugMode = True
+	game.addPlayer( "Tester 1" )
 	game.start()
 
 	while game.running:
@@ -70,17 +71,16 @@ def debugPlayerControler( game ):
 def takeGameStep( game ):
 	game.step()
 
-	debugPlayerControler( game )
+	if game.debugMode:
+		debugPlayerControler( game )
 
 	game.clock.tick ( game.framerate )
 
 if __name__ == '__main__':
-	#asy.run(debugTester())
+	#asy.run(debugTester( Pong ))
 	asy.run(main())
 
 
-
-#
 #
 #	GameLoop()
 #	{

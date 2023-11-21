@@ -15,8 +15,8 @@ class BotControler(gc.GameControler):
 	max_factor = ad.BOT_M_FACTOR
 
 	max_search_dept = ad.BOT_DEPTH
-	kick_distance = 140
-	precision = 40
+	precision = ad.BOT_PRECISION
+	kick_distance = ad.BOT_KICK_DISTANCE
 
 	goal = ad.NULL
 	frequency_offset = 0;

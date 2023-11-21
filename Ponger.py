@@ -142,5 +142,6 @@ class Ponger(gi.Game):
 
 if __name__ == '__main__':
 	g = Ponger()
+	g.debugMode = True
 	g.start()
 	g.run()

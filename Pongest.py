@@ -153,5 +153,6 @@ class Pongest(gi.Game):
 
 if __name__ == '__main__':
 	g = Pongest()
+	g.debugMode = True
 	g.start()
 	g.run()

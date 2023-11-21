@@ -28,5 +28,6 @@ class Ping(gi.Game):
 
 if __name__ == '__main__':
 	g = Ping()
+	g.debugMode = True
 	g.start()
 	g.run()

@@ -113,5 +113,6 @@ class Pinger(gi.Game):
 
 if __name__ == '__main__':
 	g = Pinger()
+	g.debugMode = True
 	g.start()
 	g.run()
