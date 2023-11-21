@@ -80,19 +80,19 @@ class Pongester(gi.Game):
 		for rack in self.rackets: #		copies the racket's data
 			if ball.overlaps( rack ):
 				if (rack.id == 1):
-					ball.setPos( ball.box.centerx, rack.box.centery + self.size_b ) # '+' because the ball is going under
+					ball.setPosY( rack.getPosY() + self.size_b ) # '+' because the ball is going under
 					ball.collideRack( rack, "y" )
 
 				elif (rack.id == 2):
-					ball.setPos( rack.box.centerx - self.size_b, ball.box.centery ) # '-' because the ball is going left
+					ball.setPosX( rack.getPosX() - self.size_b ) # '-' because the ball is going left
 					ball.collideRack( rack, "x" )
 
 				elif (rack.id == 3):
-					ball.setPos( ball.box.centerx, rack.box.centery - self.size_b ) # '-' because the ball is going over
+					ball.setPosY( rack.getPosY() - self.size_b ) # '-' because the ball is going over
 					ball.collideRack( rack, "y" )
 
 				elif (rack.id == 4):
-					ball.setPos( rack.box.centerx + self.size_b, ball.box.centery ) # '+' because the ball is going right
+					ball.setPosX( rack.getPosX() + self.size_b ) # '+' because the ball is going right
 					ball.collideRack( rack, "x" )
 
 				self.scorePoint( rack.id, gi.ad.HITS )
@@ -105,7 +105,7 @@ class Pongester(gi.Game):
 
 	# scoring a goal
 	def checkGoals(self, ball):
-		if ball.box.top <= 0 or ball.box.bottom >= self.height or ball.box.left <= 0 or ball.box.right >= self.width:
+		if ball.getTop() <= 0 or ball.getBottom() >= self.height or ball.getLeft() <= 0 or ball.getRight() >= self.width:
 			# increasing score
 			if (self.last_ponger > 0):
 				self.scorePoint( self.last_ponger, gi.ad.GOALS )

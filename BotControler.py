@@ -16,7 +16,7 @@ class BotControler(gc.GameControler):
 
 	max_search_dept = ad.BOT_DEPTH
 	kick_distance = 140
-	precision = 50
+	precision = 40
 
 	goal = ad.NULL
 	frequency_offset = 0;
@@ -41,8 +41,8 @@ class BotControler(gc.GameControler):
 
 
 	def recordDefaultPos(self):
-		self.defaultX = self.racket.box.centerx
-		self.defaultY = self.racket.box.centery
+		self.defaultX = self.racket.getPosX()
+		self.defaultY = self.racket.getPosY()
 		self.goal = self.findOwnGoal()
 
 
@@ -71,7 +71,7 @@ class BotControler(gc.GameControler):
 
 	def playAutoMove(self):
 		if self.difficulty == ad.EASY:
-			self.goTo( self.max_factor, self.game.balls[0].box.centerx, self.game.balls[0].box.centery )
+			self.goTo( self.max_factor, self.game.balls[0].getPosX(), self.game.balls[0].getPosY() )
 
 		elif self.difficulty == ad.MEDIUM:
 			if self.go_to_default_pos and not self.isOnSameSide( self.game.balls[0] ):
@@ -145,13 +145,13 @@ class BotControler(gc.GameControler):
 				if self.allow_hard_break and rack.isGoingLeft():
 					self.stopHere()
 
-				elif ball.isRightOfX( rack.box.centerx ): # the ball is on the right half of the racket
+				elif ball.isRightOfX( rack.getPosX() ): # the ball is on the right half of the racket
 					if ball.dx > abs(rack.dx * rack.fx):
 						self.goRight( maxFactor )
 					else:
 						return
 
-				elif ball.isLeftOfX( rack.box.centerx ): # the ball is on the left half of the racket
+				elif ball.isLeftOfX( rack.getPosX() ): # the ball is on the left half of the racket
 					if ball.dx < abs(rack.dx * rack.fx):
 						self.goLeft( maxFactor )
 					else:
@@ -163,13 +163,13 @@ class BotControler(gc.GameControler):
 				if self.allow_hard_break and rack.isGoingRight():
 					self.stopHere()
 
-				elif ball.isLeftOfX( rack.box.centerx ): # the ball is on the left half of the racket
+				elif ball.isLeftOfX( rack.getPosX() ): # the ball is on the left half of the racket
 					if ball.dx > abs(rack.dx * rack.fx):
 						self.goLeft( maxFactor )
 					else:
 						return
 
-				elif ball.isRightOfX( rack.box.centerx ): # the ball is on the right half of the racket
+				elif ball.isRightOfX( rack.getPosX() ): # the ball is on the right half of the racket
 					if ball.dx < abs(rack.dx * rack.fx):
 						self.goRight( maxFactor )
 					else:
@@ -197,13 +197,13 @@ class BotControler(gc.GameControler):
 				if self.allow_hard_break and rack.isGoingUp():
 					self.stopHere()
 
-				elif ball.isBelowY( rack.box.centery ): # the ball is on the lower half of the racket
+				elif ball.isBelowY( rack.getPosY() ): # the ball is on the lower half of the racket
 					if ball.dy > abs(rack.dy * rack.fy):
 						self.goDown( maxFactor )
 					else:
 						return
 
-				elif ball.isAboveY( rack.box.centery ): # the ball is on the upper half of the racket
+				elif ball.isAboveY( rack.getPosY() ): # the ball is on the upper half of the racket
 					if ball.dy < abs(rack.dy * rack.fy):
 						self.goUp( maxFactor )
 					else:
@@ -215,13 +215,13 @@ class BotControler(gc.GameControler):
 				if self.allow_hard_break and rack.isGoingDown():
 					self.stopHere()
 
-				elif ball.isAboveY( rack.box.centery ): # the ball is on the upper half of the racket
+				elif ball.isAboveY( rack.getPosY() ): # the ball is on the upper half of the racket
 					if ball.dy > abs(rack.dy * rack.fy):
 						self.goUp( maxFactor )
 					else:
 						return
 
-				elif ball.isBelowY( rack.box.centery ): # the ball is on the lower half of the racket
+				elif ball.isBelowY( rack.getPosY() ): # the ball is on the lower half of the racket
 					if ball.dy < abs(rack.dy * rack.fy):
 						self.goDown( maxFactor )
 					else:
@@ -274,17 +274,12 @@ class BotControler(gc.GameControler):
 
 	def isOnSameSide(self, ball):
 
-		if self.game.name == "Pinger" or self.game.name == "Pinger":
-			if (self.game.width / 2 > self.racket.box.centerx) == (self.game.width / 2 > ball.box.centerx):
-				return True
-			return False
-
 		if self.racket.dx != 0:
-			if (self.game.height / 2 > self.racket.box.centery) == (self.game.height / 2 > ball.box.centery):
+			if (self.game.height / 2 > self.racket.getPosY()) == (self.game.height / 2 > ball.getPosY()):
 				return True
 
 		if self.racket.dy != 0:
-			if (self.game.width / 2 > self.racket.box.centerx) == (self.game.width / 2 > ball.box.centerx):
+			if (self.game.width / 2 > self.racket.getPosX()) == (self.game.width / 2 > ball.getPosX()):
 				return True
 
 		if self.game.name == "Game" or self.game.name == "Ping" or self.game.name == "Pongester":
@@ -295,10 +290,10 @@ class BotControler(gc.GameControler):
 
 	def isCloserThan(self, ball, distance):
 		if self.racket.dx != 0:
-			if abs( self.racket.box.centery - ball.box.centery ) <= distance:
+			if abs( self.racket.getPosY() - ball.getPosY() ) <= distance:
 				return True
 		elif self.racket.dy != 0:
-			if abs( self.racket.box.centerx - ball.box.centerx ) <= distance:
+			if abs( self.racket.getPosX() - ball.getPosX() ) <= distance:
 				return True
 		return False
 
@@ -328,8 +323,8 @@ class BotControler(gc.GameControler):
 
 
 	def findNextGoal(self, ball):
-		X = ball.box.centerx
-		Y = ball.box.centery
+		X = ball.getPosX()
+		Y = ball.getPosY()
 		dx = ball.dx
 		dy = ball.dy
 		fx = ball.fx
@@ -360,9 +355,11 @@ class BotControler(gc.GameControler):
 			if X <= border or X >= ( self.game.width - border ):
 				fx *= -1
 				dx *= self.game.factor_wall
+				dy += self.game.gravity * fy # NOTE : assumes normal gravity
 			if Y <= border or Y >= ( self.game.height - border ):
 				fy *= -1
 				dy *= self.game.factor_wall
+				dy += self.game.gravity * fy # NOTE : assumes normal gravity
 
 
 		return (X, Y)

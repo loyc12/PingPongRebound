@@ -69,18 +69,16 @@ class Pongest(gi.Game):
 		rack.updatePos(self.speed_m_r)
 
 		# prevent racket from going off screen
-		if (rack.box.top <= 0 and rack.fy < 0) or (rack.box.bottom >= self.height and rack.fy > 0):
-			rack.collideWall( "stop" )
-		if (rack.box.left <= 0 and rack.fx < 0) or (rack.box.right >= self.width and rack.fx > 0):
+		if (not rack.isInScreen()):
 			rack.collideWall( "stop" )
 
 		# prevent racket from crossing the middle line
-		if (rack.id == 1 or rack.id == 3) and rack.box.right > self.width / 2:
+		if (rack.id == 1 or rack.id == 3) and rack.getRight() > self.width / 2:
 			rack.collideWall( "stop" )
-			rack.setPos( (self.width - self.size_r) / 2, rack.box.centery )
-		elif (rack.id == 2 or rack.id == 4) and rack.box.left < self.width / 2:
+			rack.setPosX( (self.width - self.size_r) / 2 )
+		elif (rack.id == 2 or rack.id == 4) and rack.getLeft() < self.width / 2:
 			rack.collideWall( "stop" )
-			rack.setPos( (self.width + self.size_r) / 2, rack.box.centery )
+			rack.setPosX( (self.width + self.size_r) / 2 )
 
 		rack.clampPos()
 
@@ -91,9 +89,9 @@ class Pongest(gi.Game):
 			if ball.overlaps( rack ):
 
 				if (rack.id == 1 or rack.id == 2):
-					ball.setPos( ball.box.centerx, rack.box.centery + self.size_b ) # '+' because the ball is going under
+					ball.setPosY( rack.getPosY() + self.size_b ) # '+' because the ball is going under
 				elif (rack.id == 3 or rack.id == 4):
-					ball.setPos( ball.box.centerx, rack.box.centery - self.size_b ) # '-' because the ball is going over
+					ball.setPosY( rack.getPosY() - self.size_b ) # '-' because the ball is going over
 
 				ball.collideRack( rack, "y" )
 				self.scorePoint( rack.id, gi.ad.HITS )
@@ -102,13 +100,13 @@ class Pongest(gi.Game):
 	# bouncing on the walls
 	def checkWalls(self, ball):
 		# bouncing off the sides
-		if ball.box.left <= 0 or ball.box.right >= self.width:
+		if ball.getLeft() <= 0 or ball.getRight() >= self.width:
 			ball.collideWall( "x" )
 
 
 	# scoring a goal
 	def checkGoals(self, ball):
-		if ball.box.top <= 0 or ball.box.bottom >= self.height:
+		if ball.getTop() <= 0 or ball.getBottom() >= self.height:
 
 			# checking who scored
 			if (self.last_ponger > 0):

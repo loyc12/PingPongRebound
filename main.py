@@ -30,6 +30,7 @@ import Addons as ad
 # TODO : see if you can have multiple windows with pygame (or just switch which game to render)
 # TODO : put player 1 and 2 in oposite teams always
 # TODO : rework the ball respawn trajectory everywhere
+# TODO : check hard difficulty's AI gravity management (imprecise(???))
 
 # MINOR LIST
 # TODO : have pygame events be put in a queue, and parse from queue for movements in gameManager

@@ -172,9 +172,6 @@ class Game:
 				elif (move == ad.STOP):
 					rack.fx = 0
 					rack.fy = 0
-				#elif (move == ad.BALL):
-				#	for i in range(len(self.balls)):
-				#		self.respawnBall( self.balls[i] )
 				elif (move == ad.LEFT):
 					if (self.hard_break and rack.fx > 0):
 						rack.fx = 0
@@ -296,9 +293,7 @@ class Game:
 		rack.updatePos(self.speed_m_r)
 
 		# prevent racket from going off screen
-		if (rack.box.top <= 0 and rack.fy < 0) or (rack.box.bottom >= self.height and rack.fy > 0):
-			rack.collideWall( "stop" )
-		if (rack.box.left <= 0 and rack.fx < 0) or (rack.box.right >= self.width and rack.fx > 0):
+		if (not rack.isInScreen()):
 			rack.collideWall( "stop" )
 
 		rack.clampPos()
@@ -330,28 +325,28 @@ class Game:
 		for i in range(len(self.rackets)):
 			rack = self.rackets[i]
 			if ball.overlaps( rack ):
-				ball.setPos( ball.box.centerx, rack.box.centery - self.size_b ) # '-' because the ball is going above the racket
+				ball.setPosY( rack.getPosY() - self.size_b ) # '-' because the ball is going above the racket
 				ball.collideRack( rack, "y" )
 				self.scorePoint( rack.id, ad.HITS )
 
 
 	# bouncing on the walls
 	def checkWalls(self, ball):
-		if ball.box.left <= 0 or ball.box.right >= self.width or ball.box.top <= 0:
+		if ball.getLeft() <= 0 or ball.getRight() >= self.width or ball.getTop() <= 0:
 
 			# bouncing off the sides
-			if ball.box.left <= 0 or ball.box.right >= self.width:
+			if ball.getLeft() <= 0 or ball.getRight() >= self.width:
 				ball.collideWall( "x" )
 
 			# bouncing off the top (no bounce factor)
-			if ball.box.top <= 0:
+			if ball.getTop() <= 0:
 				ball.collideWall( "y" )
 				ball.dy /= self.factor_wall
 
 
 	# scoring a goal
 	def checkGoals(self, ball):
-		if ball.box.bottom >= self.height:
+		if ball.getBottom() >= self.height:
 			self.scorePoint( self.last_ponger, ad.GOALS )
 			self.respawnBall( ball )
 
@@ -377,7 +372,7 @@ class Game:
 
 	def respawnBall(self, ball):
 		ball.setDirs( -ball.fx, 1 )
-		ball.setPos( ball.box.centerx, self.size_b )
+		ball.setPosY( self.size_b )
 		ball.setSpeeds( self.speed_b, self.speed_b )
 
 	# ------------------------------------------- GAME RENDERING ------------------------------------------- #

@@ -22,7 +22,7 @@ class Ping(gi.Game):
 
 	def respawnBall(self, ball):
 		ball.setDirs( -ball.fx, 1 )
-		ball.setPos( (self.width + ball.box.centerx) / 3, self.size_b )
+		ball.setPos( (self.width + ball.getPosX()) / 3, self.size_b )
 		ball.setSpeeds( (ball.dx + self.speed_b) / 3, 0 )
 
 

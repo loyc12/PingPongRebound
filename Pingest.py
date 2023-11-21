@@ -66,27 +66,14 @@ class Pingest(gi.Game):
 			self.makeMove( 3, gi.ad.RIGHT )
 
 
-	def moveRacket(self, rack):
-		rack.clampSpeed()
-		rack.updatePos(self.speed_m_r)
-
-		# prevent racket from going off screen
-		if (rack.box.top <= 0 and rack.fy < 0) or (rack.box.bottom >= self.height and rack.fy > 0):
-			rack.collideWall( "stop" )
-		if (rack.box.left <= 0 and rack.fx < 0) or (rack.box.right >= self.width and rack.fx > 0):
-			rack.collideWall( "stop" )
-
-		rack.clampPos()
-
-
 	def aplyGravity(self, ball):
 		if self.gravity != 0:
-			if ball.box.centery > self.height / 2:
+			if ball.getPosY() > self.height / 2:
 				if ball.fy > 0:
 					ball.dy += self.gravity
 				else:
 					ball.dy -= self.gravity
-			if ball.box.centery < self.height / 2:
+			if ball.getPosY() < self.height / 2:
 				if ball.fy > 0:
 					ball.dy -= self.gravity
 				else:
@@ -98,9 +85,9 @@ class Pingest(gi.Game):
 		for rack in self.rackets: #		copies the racket's data
 			if ball.overlaps( rack ):
 				if (rack.id == 1 or rack.id == 3):
-					ball.setPos( ball.box.centerx, rack.box.centery + self.size_b ) # '+' because the ball is going under
+					ball.setPosY( rack.getPosY() + self.size_b ) # '+' because the ball is going under
 				elif (rack.id == 2 or rack.id == 4):
-					ball.setPos( ball.box.centerx, rack.box.centery - self.size_b ) # '-' because the ball is going over
+					ball.setPosY( rack.getPosY() - self.size_b ) # '-' because the ball is going over
 				ball.collideRack( rack, "y" )
 				self.scorePoint( rack.id, gi.ad.HITS )
 
@@ -108,22 +95,22 @@ class Pingest(gi.Game):
 	# bouncing on the walls
 	def checkWalls(self, ball):
 		# bouncing off the sides
-		if ball.box.left <= 0 or ball.box.right >= self.width:
+		if ball.getLeft() <= 0 or ball.getRight() >= self.width:
 			ball.collideWall( "x" )
 
 
 	# scoring a goal
 	def checkGoals(self, ball):
-		if ball.box.top <= 0 or ball.box.bottom >= self.height:
+		if ball.getTop() <= 0 or ball.getBottom() >= self.height:
 
 			# checking who scored
-			if ball.box.top <= 0:
+			if ball.getTop() <= 0:
 				if self.last_ponger > 0:
 					self.scorePoint( 2, gi.ad.GOALS )
 				ball.setDirs( -1, -1 )
 				ball.setPos ( self.width * (1 / 2), self.height * (3 / 4) )
 
-			elif ball.box.bottom >= self.height:
+			elif ball.getBottom() >= self.height:
 				if self.last_ponger > 0:
 					self.scorePoint( 1, gi.ad.GOALS )
 				ball.setDirs( 1, 1 )
@@ -133,7 +120,7 @@ class Pingest(gi.Game):
 
 
 	def respawnBall(self, ball):
-		ball.box.centerx = self.width * (1 / 2)
+		ball.setPosX( self.width * (1 / 2) )
 		ball.setSpeeds( (self.speed_b + ball.dx) * (1 / 3), self.speed_b )
 
 

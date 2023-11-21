@@ -57,29 +57,29 @@ class Pong(gi.Game):
 			rack = self.rackets[i]
 			if ball.overlaps( rack ):
 				if (rack.id == 1):
-					ball.setPos( rack.box.centerx + self.size_b, ball.box.centery ) # '+' because the ball is going to the right
+					ball.setPosX( rack.getPosX() + self.size_b ) # '+' because the ball is going to the right
 				elif (rack.id == 2):
-					ball.setPos( rack.box.centerx - self.size_b, ball.box.centery ) # '-' because the ball is going to the left
+					ball.setPosX( rack.getPosX() - self.size_b ) # '-' because the ball is going to the left
 				ball.collideRack( rack, "x" )
 				self.scorePoint( rack.id, gi.ad.HITS )
 
 
 	# bouncing on the walls
 	def checkWalls(self, ball):
-		if ball.box.top <= 0 or ball.box.bottom >= self.height:
+		if ball.getTop() <= 0 or ball.getBottom() >= self.height:
 			ball.collideWall( "y" )
 
 
 	# scoring a goal
 	def checkGoals(self, ball):
-		if ball.box.left <= 0 or ball.box.right >= self.width:
+		if ball.getLeft() <= 0 or ball.getRight() >= self.width:
 			# checking who scored
-			if ball.box.left <= 0:
+			if ball.getLeft() <= 0:
 				if self.last_ponger > 0:
 					self.scorePoint( 2, gi.ad.GOALS )
 				ball.setDirs( -1, -ball.fy )
 				ball.setPos (self.width * (3 / 4), self.height * (1 / 2) )
-			if ball.box.right >= self.width:
+			if ball.getRight() >= self.width:
 				if self.last_ponger > 0:
 					self.scorePoint( 1, gi.ad.GOALS )
 				ball.setDirs( 1, -ball.fy )
@@ -89,7 +89,7 @@ class Pong(gi.Game):
 
 
 	def respawnBall(self, ball):
-		ball.box.centery = self.height * (1 / 2)
+		ball.setPosY( self.height * (1 / 2) )
 		ball.setSpeeds( self.speed_b, ball.dy )
 
 
