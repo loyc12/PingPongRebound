@@ -14,8 +14,8 @@ import sys
 
 class GameManager:
 
-	playerID = 0 #									NOTE : DEBUG
-	debugMode = True #								NOTE : DEBUG
+	playerID = 0 #							NOTE : DEBUG
+	debugMode = True #						NOTE : DEBUG
 
 	def __init__( self ):
 		self.lastGameID = 0
@@ -24,52 +24,52 @@ class GameManager:
 		self.gameDict = {}
 
 
-	def addGame( self, Initialiser, GameID): #		TODO : take game id as argument instead
+	def addGame( self, Initialiser, GameID):
 
-		newGame = Initialiser( self.win, pg.time.Clock() ) # 	TODO : detach from pygame
-		newGame.debugMode = self.debugMode #					NOTE : DEBUG
-
+		newGame = Initialiser( self.win, pg.time.Clock(), self.debugMode ) # 	TODO : detach from pygame
 		self.gameDict[GameID] = newGame
 		self.gameCount += 1
+
+		self.addPlayer( GameID, "Player " + str( GameID ), GameID ) #			NOTE : DEBUG
 
 		return GameID
 
 
 	def addPlayer( self, key, name, _playerID ):
 		try:
-			self.gameDict[key].addPlayer( name )
+			self.gameDict.get(key).addPlayer( name, _playerID )
 		except:
 			print ("Could not add player #" + str( _playerID ) + " to game #" + str( key ))
 
 
 	def removePlayer( self, key, _playerID ):
 		#try:
-		#	self.gameDict[key].removePlayer( _playerID )
+		#	self.gameDict.get(key).removePlayer( _playerID )
 		#except:
 		#	print ("Could not remove player #" + str( _playerID ) + " from game #" + str( key ))
 		pass
 
 
 	def startGame( self, key ):
-		#self.gameDict[key].addPlayer( "Player " + str( key ))
-		self.gameDict[key].start()
+		#self.gameDict.get(key).addPlayer( "Player " + str( key ))
+		self.gameDict.get(key).start()
 
 
 	def pauseGame( self, key ):
-		#self.gameDict[key].addPlayer( "Player " + str( key ))
-		self.gameDict[key].pause()
+		#self.gameDict.get(key).addPlayer( "Player " + str( key ))
+		self.gameDict.get(key).pause()
 
 
 	def removeGame( self, key ):
-		self.gameDict[key].stop()
+		self.gameDict.get(key).close()
 		self.gameDict.pop(key)
 		self.gameCount -= 1
 
 
 
-	async def tickGames(self):
+	def tickGames(self):
 		for key in self.gameDict.keys():
-			game = self.gameDict[key]
+			game = self.gameDict.get(key)
 
 			if game.isOver:
 				self.removeGame( game.id )
@@ -79,8 +79,6 @@ class GameManager:
 				if self.debugMode: #				NOTE : DEBUG
 					if key == self.playerID:
 						self.displayGame( game )
-
-		await asy.sleep(0)
 
 
 	def runGameStep( self, game ):
@@ -112,44 +110,54 @@ class GameManager:
 		for event in pg.event.get():
 
 			if event.type == pg.KEYDOWN:
+				k = event.key
+
 				# closes the game
-				if event.key == pg.K_ESCAPE:
+				if k == pg.K_ESCAPE:
 					for game in self.gameDict.values():
-						game.stop()
+						game.close()
 					self.runGames = False
 					sys.exit()
 
+				# respawns the ball
+				elif k == pg.K_RETURN:
+					try:
+						game = self.gameDict.get(self.playerID)
+						game.respawnAllBalls()
+						#game.respawnBall( game.balls[0] )
+					except:
+						print ( "coud not respawn the ball" )
+
 				# switches game to control
-				if event.key == pg.K_0:
+				elif k == pg.K_0:
 					print ("please select a valid game (1-8)")
 					self.playerID = 0
 					self.emptyDisplay()
 
 				# switches game to control
-				elif event.key == pg.K_1 or event.key == pg.K_2 or event.key == pg.K_3 or event.key == pg.K_4 or event.key == pg.K_5 or event.key == pg.K_6 or event.key == pg.K_7 or event.key == pg.K_8 or event.key == pg.K_9:
-					if event.key == pg.K_1:
+				elif k == pg.K_1 or k == pg.K_2 or k == pg.K_3 or k == pg.K_4 or k == pg.K_5 or k == pg.K_6 or k == pg.K_7 or k == pg.K_8 or k == pg.K_9:
+					if k == pg.K_1:
 						self.playerID = 1
-					elif event.key == pg.K_2:
+					elif k == pg.K_2:
 						self.playerID = 2
-					elif event.key == pg.K_3:
+					elif k == pg.K_3:
 						self.playerID = 3
-					elif event.key == pg.K_4:
+					elif k == pg.K_4:
 						self.playerID = 4
-					elif event.key == pg.K_5:
+					elif k == pg.K_5:
 						self.playerID = 5
-					elif event.key == pg.K_6:
+					elif k == pg.K_6:
 						self.playerID = 6
-					elif event.key == pg.K_7:
+					elif k == pg.K_7:
 						self.playerID = 7
-					elif event.key == pg.K_8:
+					elif k == pg.K_8:
 						self.playerID = 8
-					elif event.key == pg.K_9:
+					elif k == pg.K_9:
 						self.playerID = 9
 					print ("now playing in game #" + str( self.playerID ))
 
-
 					try:
-						game = self.gameDict[self.playerID]
+						self.gameDict.get(self.playerID).controlerCount += 0
 					except:
 						print ("Could not switch to game #" + str( self.playerID ))
 						print ("no longer playing in any game")
@@ -158,9 +166,13 @@ class GameManager:
 
 				# handling game movement keys
 				else:
-					if self.playerID > 0 and self.playerID < 9 and self.gameDict[self.playerID] and self.gameDict[self.playerID].controlers[0].mode == ad.PLAYER:
-						self.gameDict[self.playerID].controlers[0].handleKeyInput(event.key)
-					else:
+					try:
+						controler = self.gameDict.get(self.playerID).controlers[0]
+						if controler.mode == ad.PLAYER:
+							controler.handleKeyInput(k)
+						else:
+							print ("rack 1 is a bot")
+					except:
 						print ("Could not pass input from player for game #" + str( self.playerID ))
 
 
@@ -170,7 +182,7 @@ class GameManager:
 		self.win.fill( pg.Color('black') ) # 				NOTE : ...
 
 
-def main():
+async def main():  # ASYNC IS HERE
 
 	gm = GameManager()
 
@@ -186,10 +198,10 @@ def main():
 
 		if gm.debugMode:
 			gm.takePlayerInputs()
-		asy.run( gm.tickGames() ) # ASYNC IS HERE
 
-if __name__ == '__main__':
-	main()
+		gm.tickGames()
+
+	await asy.sleep(0)
 
 
 def addAllGames( gm ):
@@ -213,5 +225,8 @@ def addAllGames( gm ):
 	gameID += 1
 
 	print ("select a player (1-8)")
+
+if __name__ == '__main__':
+	asy.run( main())
 
 

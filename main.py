@@ -41,13 +41,18 @@ import Addons as ad
 
 async def debugTester( Initialiser ):
 
-	game = Initialiser()
-	game.debugMode = True
-	game.addPlayer( "Tester 1" )
+	pg.init() # 										NOTE : DEBUG
+	win = pg.display.set_mode((2048, 1280)) # 			NOTE : ...
+
+	game = Initialiser( win, pg.time.Clock(), True )
+	pg.display.set_caption("DEBUG") # 					NOTE : ...
+
+	game.addPlayer( "Tester 1", 1 )
 	game.start()
 
 	while game.isRunning:
 		takeGameStep( game )
+		game.refreshScreen()
 		await asy.sleep(0)
 
 
@@ -75,8 +80,7 @@ def takeGameStep( game ):
 	game.clock.tick ( game.framerate )
 
 if __name__ == '__main__':
-	#asy.run(debugTester( Pong ))
-	asy.run(main())
+	asy.run(debugTester( Pong ))
 
 
 #

@@ -1,7 +1,13 @@
 
 
 all:
-	python3 -m main
+	python3 GameManager.py
+
+debug:
+	python3 main.py
+
+game:
+	python3 GameInterface.py
 
 ping:
 	python3 Ping.py

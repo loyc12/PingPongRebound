@@ -114,11 +114,10 @@ if __name__ == '__main__': #		NOTE : DEBUG
 	pg.init()
 	window = pg.display.set_mode((2048, 1024))
 
-	g = Pong(window, pg.time.Clock())
+	g = Pong(window, pg.time.Clock(), True)
 	pg.display.set_caption(g.name)
 
 	#g.addPlayer( "Player 1", 1 )
 
-	g.debugMode = True
 	g.start()
 	g.run()

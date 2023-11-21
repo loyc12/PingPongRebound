@@ -38,27 +38,28 @@ class Game:
 	step_count = 0
 	score_mode = ad.GOALS
 
-	last_time = time.time_ns() #			NOTE : DEBUG
+	last_time = time.time_ns() #		NOTE : DEBUG
 
 
 	# ------------------------------------------- INITIALIZATION ------------------------------------------- #
 
-	def __init__(self, _win, _clock):
-		self.win = _win #					TODO : abstract away from pygame's window system
-		self.clock = _clock #				TODO : ...
+	def __init__(self, _win, _clock, debug = False): #	TODO : abstract away from pygame's window system
+		self.debugMode = debug
+
+		if self.debugMode:
+			self.win = _win #									TODO : ...
+			self.clock = _clock #								TODO : ...
+			self.font = pg.font.Font(None, self.size_font) #	TODO : abstract away from pygame's window system
+			self.debug_font = pg.font.Font(None, 32) #			TODO : ...
 
 		self.isRunning = False
 		self.isOver = False
 
-		self.debugMode = False
 		self.useAI = True
 
 		self.playerCount = 0
 		self.controlerCount = 0
 		self.racketCount = 0
-
-		self.font = pg.font.Font(None, self.size_font) #	TODO : abstract away from pygame's window system
-		self.debug_font = pg.font.Font(None, 32) #			TODO : ...
 
 		self.rackets = []
 		self.controlers = []
@@ -294,7 +295,7 @@ class Game:
 					self.handlePygameInputs( event.key )
 
 
-	def getInfo(self): # NOTE : send this fct's value to the client
+	def getInfo(self): #										 NOTE : send this fct's return value to the client
 		raise NotImplementedError("Unimplemented : game.getInfo()")
 
 
@@ -395,6 +396,12 @@ class Game:
 		ball.setPosY( self.size_b )
 		ball.setSpeeds( self.speed_b, self.speed_b )
 
+
+	def respawnAllBalls(self):
+		for i in range(len(self.balls)):
+			self.respawnBall( self.balls[i] )
+
+
 	# ------------------------------------------- GAME RENDERING ------------------------------------------- #
 
 	# TODO : abstract away from pygame's window system
@@ -446,3 +453,18 @@ class Game:
 		text = self.debug_font.render(f'{int(1000000000 / self.delta_time)}', True, self.col_fnt)
 		#text = self.debug_font.render(f'{int(self.clock.get_fps())}', True, self.col_fnt)
 		self.win.blit( text, text.get_rect( center = ( 32, 32 )))
+
+
+
+if __name__ == '__main__': #		NOTE : DEBUG
+
+	pg.init()
+	window = pg.display.set_mode((1280, 1280))
+
+	g = Game(window, pg.time.Clock(), True)
+	pg.display.set_caption(g.name)
+
+	#g.addPlayer( "Player 1", 1 )
+
+	g.start()
+	g.run()
