@@ -153,10 +153,12 @@ class GameObject:
 	# NOTE : IS ONLY FOR BALLS
 	def bounceOnRack(self, other, mode):
 		if mode == "x":
+			print("! ping !") # 						NOTE : DEBUG
 			self.fx *= -1
 			self.dx *= self.game.factor_rack
 			self.dy += other.getMvY() * self.fy
 		elif mode == "y":
+			print("! pong !") # 						NOTE : DEBUG
 			self.fy *= -1
 			self.dy *= self.game.factor_rack
 			self.dx += other.getMvX() * self.fx

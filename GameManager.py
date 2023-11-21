@@ -30,7 +30,7 @@ class GameManager:
 		self.gameDict[GameID] = newGame
 		self.gameCount += 1
 
-		self.addPlayer( GameID, "Player " + str( GameID ), GameID ) #			NOTE : DEBUG
+		#self.addPlayer( GameID, "Player " + str( GameID ), GameID ) #			NOTE : DEBUG
 
 		return GameID
 
@@ -121,12 +121,15 @@ class GameManager:
 
 				# respawns the ball
 				elif k == pg.K_RETURN:
-					try:
-						game = self.gameDict.get(self.playerID)
-						game.respawnAllBalls()
-						#game.respawnBall( game.balls[0] )
-					except:
-						print ( "coud not respawn the ball" )
+					if self.playerID != 0:
+						try:
+							game = self.gameDict.get(self.playerID)
+							game.respawnAllBalls()
+							#game.respawnBall( game.balls[0] )
+						except:
+							print ( "coud not respawn the ball" )
+					else:
+						print ( "please select a valid game (1-8)" )
 
 				# switches game to control
 				elif k == pg.K_0:
@@ -160,20 +163,23 @@ class GameManager:
 						self.gameDict.get(self.playerID).controlerCount += 0
 					except:
 						print ("Could not switch to game #" + str( self.playerID ))
-						print ("no longer playing in any game")
+						print ("please select a valid game (1-8)")
 						self.playerID = 0
 						self.emptyDisplay()
 
 				# handling game movement keys
 				else:
-					try:
-						controler = self.gameDict.get(self.playerID).controlers[0]
-						if controler.mode == ad.PLAYER:
-							controler.handleKeyInput(k)
-						else:
-							print ("rack 1 is a bot")
-					except:
-						print ("Could not pass input from player for game #" + str( self.playerID ))
+					if self.playerID != 0:
+						try:
+							controler = self.gameDict.get(self.playerID).controlers[0]
+							if controler.mode == ad.PLAYER:
+								controler.handleKeyInput(k)
+							else:
+								print ("a bot is playing controling this racket")
+						except:
+							print ("Could not pass input from player for game #" + str( self.playerID ))
+					else:
+						print ( "please select a valid game (1-8)" )
 
 
 	def emptyDisplay( self ):
