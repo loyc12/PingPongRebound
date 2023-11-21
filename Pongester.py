@@ -51,28 +51,30 @@ class Pongester(gi.Game):
 		self.scores.append( 0 )
 
 
-	def handlePygameInputs(self, key):
+	def handlePygameInputs(self, key): #		NOTE : DEBUG
 		# player 1
-		if key == pg.K_s:
-			self.makeMove( 1, gi.ad.STOP )
-			self.makeMove( 3, gi.ad.STOP )
-		elif key == pg.K_a:
-			self.makeMove( 1, gi.ad.LEFT )
-			self.makeMove( 3, gi.ad.LEFT )
-		elif key == pg.K_d:
-			self.makeMove( 1, gi.ad.RIGHT )
-			self.makeMove( 3, gi.ad.RIGHT )
+		if (self.controlers[0].mode == gi.gc.ad.PLAYER):
+			if key == pg.K_s:
+				self.makeMove( 1, gi.ad.STOP )
+				self.makeMove( 3, gi.ad.STOP )
+			elif key == pg.K_a:
+				self.makeMove( 1, gi.ad.LEFT )
+				self.makeMove( 3, gi.ad.LEFT )
+			elif key == pg.K_d:
+				self.makeMove( 1, gi.ad.RIGHT )
+				self.makeMove( 3, gi.ad.RIGHT )
 
 		# player 2
-		if key == pg.K_LEFT:
-			self.makeMove( 2, gi.ad.STOP )
-			self.makeMove( 4, gi.ad.STOP )
-		elif key == pg.K_UP:
-			self.makeMove( 2, gi.ad.UP )
-			self.makeMove( 4, gi.ad.UP )
-		elif key == pg.K_DOWN:
-			self.makeMove( 2, gi.ad.DOWN )
-			self.makeMove( 4, gi.ad.DOWN )
+		if (self.controlers[1].mode == gi.gc.ad.PLAYER):
+			if key == pg.K_LEFT:
+				self.makeMove( 2, gi.ad.STOP )
+				self.makeMove( 4, gi.ad.STOP )
+			elif key == pg.K_UP:
+				self.makeMove( 2, gi.ad.UP )
+				self.makeMove( 4, gi.ad.UP )
+			elif key == pg.K_DOWN:
+				self.makeMove( 2, gi.ad.DOWN )
+				self.makeMove( 4, gi.ad.DOWN )
 
 
 	# bouncing off the rackets
@@ -151,8 +153,16 @@ class Pongester(gi.Game):
 		self.win.blit( text4, text4.get_rect( center = ( self.width * (1 / 5), self.height * (1 / 2) )))
 
 
-if __name__ == '__main__':
-	g = Pongester()
+if __name__ == '__main__': #		NOTE : DEBUG
+
+	pg.init()
+	window = pg.display.set_mode((10, 10))
+
+	g = Pongester(window, pg.time.Clock())
+	pg.display.set_caption(g.name)
+
+	#g.addPlayer( "Player 1", 1 )
+
 	g.debugMode = True
 	g.start()
 	g.run()

@@ -37,7 +37,7 @@ class BotControler(gc.GameControler):
 
 
 	def setFrequencyOffset(self, racketCount):
-		self.frequency_offset = int( (self.racket.id / racketCount) * ad.BOT_FREQUENCY )
+		self.frequency_offset = int( (self.racketID / racketCount) * ad.BOT_FREQUENCY )
 
 
 	def recordDefaultPos(self):

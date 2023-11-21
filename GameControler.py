@@ -15,6 +15,7 @@ class GameControler:
 	def __init__(self, _game, _playerName):
 		self.game = _game
 		self.name = _playerName
+		self.racketID = 0
 
 	def setRacket(self, _racketID):
 		for i in range(len(self.game.rackets)):
@@ -23,11 +24,12 @@ class GameControler:
 				raise ValueError(f"Error: no racket with id {_racketID} found in {self.game.name}")
 			elif rack.id == _racketID:
 				self.racket = rack
+				self.racketID = rack.id
 
 
 	def playMove(self, move):
 		if self.isActive:
-			self.game.makeMove( self.racket.id, move )
+			self.game.makeMove( self.racketID , move )
 
 
 	def setNextMove(self, move):

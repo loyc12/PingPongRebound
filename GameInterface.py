@@ -43,9 +43,12 @@ class Game:
 
 	# ------------------------------------------- INITIALIZATION ------------------------------------------- #
 
-	def __init__(self):
-		self.running = False
-		self.over = False
+	def __init__(self, _win, _clock):
+		self.win = _win #					TODO : abstract away from pygame's window system
+		self.clock = _clock #				TODO : ...
+
+		self.isRunning = False
+		self.isOver = False
 
 		self.debugMode = False
 		self.useAI = True
@@ -54,12 +57,8 @@ class Game:
 		self.controlerCount = 0
 		self.racketCount = 0
 
-		pg.init() #														TODO : abstract away from pygame's window system
-		pg.display.set_caption(self.name) #			 					TODO : ...
-		self.clock = pg.time.Clock() #									TODO : ...
-		self.win = pg.display.set_mode((self.width, self.height)) #		TODO : ...
-		self.font = pg.font.Font(None, self.size_font) #				TODO : ...
-		self.debug_font = pg.font.Font(None, 32) #						TODO : ...
+		self.font = pg.font.Font(None, self.size_font) #	TODO : abstract away from pygame's window system
+		self.debug_font = pg.font.Font(None, 32) #			TODO : ...
 
 		self.rackets = []
 		self.controlers = []
@@ -121,11 +120,11 @@ class Game:
 			self.step_count %= ad.BOT_FREQUENCY
 
 
-	def addPlayer(self, username):
+	def addPlayer(self, username, playerID):
 		if (self.playerCount >= self.racketCount):
 			raise Exception("Too many players for this game")
 
-		player = pl.PlayerControler( self, username )
+		player = pl.PlayerControler( self, username, playerID )
 		self.controlers[self.playerCount] = player
 		player.setRacket( self.rackets[ self.playerCount ].id )
 
@@ -201,55 +200,66 @@ class Game:
 				return
 
 
-	def handlePygameInputs(self, key):
-		for i in range(len(self.rackets)):
-			rack = self.rackets[i]
-			if key == pg.K_s or key == pg.K_DOWN:
-				self.makeMove( rack.id, ad.STOP )
-			elif key == pg.K_a or key == pg.K_LEFT:
-				self.makeMove( rack.id, ad.LEFT )
-			elif key == pg.K_d or key == pg.K_RIGHT:
-				self.makeMove( rack.id, ad.RIGHT )
+	def handlePygameInputs(self, key): #		NOTE : DEBUG
+		for i in range(0, self.controlerCount):
+			if (self.controlers[i].mode == gc.ad.PLAYER):
+				rack = self.controlers[i].racket
+				if key == pg.K_s or key == pg.K_DOWN:
+					self.makeMove( rack.id, ad.STOP )
+				elif key == pg.K_a or key == pg.K_LEFT:
+					self.makeMove( rack.id, ad.LEFT )
+				elif key == pg.K_d or key == pg.K_RIGHT:
+					self.makeMove( rack.id, ad.RIGHT )
 
 
 	# ---------------------------------------------- CORE CMDS --------------------------------------------- #
 
 	def start(self):
-		self.running = True
+		self.isRunning = True
 		print("Starting a game of " + self.name)
 
 
 	def pause(self):
-		self.running = False
+		self.isRunning = False
 		print("Paused a game of " + self.name)
 
 
-	def stop(self):
-		self.running = False
+	def close(self):
+		self.isRunning = False
 		self.isOver = True
 		print("closed a game of " + self.name)
 
 
-	def run(self):
-		if self.running == False:
+	def run(self): #		NOTE : only in debug mode
+
+		if not self.debugMode:
+			print("cannot usse run() without debug mode")
+			return
+
+		if self.isOver:
+			print("The game of " + self.name + " is over")
+			pg.quit()
+			sys.exit()
+
+		if self.isRunning == False:
 			print(f"{self.name} is not running")
 			return
 
+		win = pg.display.set_mode((self.width, self.height)) #	TODO : abstract away from pygame's window system
+
 		# main game loop
-		while self.running:
+		while self.isRunning:
+			self.debugControler() #						NOTE : DEBUG
+
 			self.step()
-			self.debugControler() #					NOTE : DEBUG
-			self.clock.tick (self.framerate)
 
-		print("The game of " + self.name + " is over")
+			self.clock.tick (self.framerate) #			NOTE : DEBUG
 
-		pg.quit()
-		sys.exit()
 
 
 	def step(self):
 
-		if self.running == False:
+		if self.isRunning == False:
 			print(f"{self.name} is not running")
 			return
 
@@ -258,8 +268,10 @@ class Game:
 		if self.useAI:
 			self.makeBotsPlay()
 
+
 		if self.debugMode:
 			self.refreshScreen()
+
 
 
 
@@ -267,12 +279,12 @@ class Game:
 		for event in pg.event.get():
 			# quiting the game
 			if event.type == pg.QUIT:
-				self.running = False
+				self.close()
 
 			# handling key presses
 			elif event.type == pg.KEYDOWN:
 				if event.key == pg.K_ESCAPE:
-					self.running = False
+					self.close()
 
 				elif event.key == pg.K_RETURN:
 					for i in range(len(self.balls)):
@@ -417,8 +429,9 @@ class Game:
 			text = self.font.render(f'{score}', True, self.col_fnt)
 			self.win.blit( text, text.get_rect( center = ( self.width * (2 / 4), self.height * (2 / 4) )))
 
-	delta_time = framerate * 2
-	smoothness = 15
+
+	delta_time = framerate * 2 #		NOTE : DEBUG
+	smoothness = 15 #					NOTE : DEBUG
 
 	def drawFps(self): #				NOTE : DEBUG
 

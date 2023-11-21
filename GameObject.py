@@ -11,13 +11,13 @@ class GameObject:
 		self.id = _id
 		self.setSpeeds(0, 0)
 		self.setDirs(0, 0)
-
-		self.box = pg.Rect(0, 0, _w, _h) # 			TODO : REMOVE ME
 		self.setSize(_w, _h)
 		self.setPos(_x, _y)
 
+		self.box = pg.Rect(_game.width / 2, _game.height / 2, _w, _h) # 	NOTE : DEBUG
+
 	def drawSelf(self):
-		self.updateBox() # 							TODO : REMOVE ME
+		self.box.center = (self.px, self.py) # 								NOTE : DEBUG
 		pg.draw.rect(self.game.win, self.game.col_obj, self.box)
 
 
@@ -100,10 +100,6 @@ class GameObject:
 			else:
 				self.py += self.dy * self.fy
 
-		self.updateBox() # 							TODO : REMOVE ME
-
-	def updateBox(self): # 							TODO : REMOVE ME
-		self.box.center = (self.px, self.py)
 
 	def clampPos(self):
 		# prevent balls from going off screen

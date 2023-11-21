@@ -13,24 +13,22 @@ import asyncio as asy
 import Addons as ad
 
 # MASTER LIST
-# TODO : add game sate dicts in gameInterface
-# TODO : continue working on the gameManager class
+# TODO : add a player array in gameInterface for player ID
+# TODO : add game state dicts in gameInterface
 # TODO : implement winning and losing
 # TODO : integrate gameManager with sockets
-# TODO : add game variables : isRunning, isOver, winnerID
+# TODO : add game variable : winnerID
 # TODO : add queues for gameManager to receive/send messages (gamesToStart, gameStartInfo, gamesToEnd, gameEndInfo)
 
 # FUNCTION LIST
-# TODO : make gm.addGame() take in a game id and player ids, nad map the player ids to racket ids
+# TODO : make gm.addGame() take in player ids, and map them to racket ids
 # TODO : implement get/sendUpdateInfo()
 # TODO : implement get/sendStartState()
 # TODO : implement get/sendCloseState()
 
 # DEBUG LIST
-# TODO : see if you can have multiple windows with pygame (or just switch which game to render)
-# TODO : put player 1 and 2 in oposite teams always
+# TODO : make sure to always put player 1 and 2 in oposite teams
 # TODO : rework the ball respawn trajectory everywhere
-# TODO : check hard difficulty's AI gravity management (imprecise(???))
 
 # MINOR LIST
 # TODO : have pygame events be put in a queue, and parse from queue for movements in gameManager
@@ -48,7 +46,7 @@ async def debugTester( Initialiser ):
 	game.addPlayer( "Tester 1" )
 	game.start()
 
-	while game.running:
+	while game.isRunning:
 		takeGameStep( game )
 		await asy.sleep(0)
 
@@ -59,7 +57,7 @@ def debugPlayerControler( game ):
 
 		# quiting the game
 		if event.type == pg.QUIT or ( event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE ):
-			game.running = False
+			game.isRunning = False
 
 		# handling key presses
 		elif event.type == pg.KEYDOWN:
@@ -85,9 +83,11 @@ if __name__ == '__main__':
 #	GameLoop()
 #	{
 #		initGame()
+#			sendStartState()
+#
 #		addPlayers()
 #		startGame()
-#			sendStartState()
+#			game.start()
 #
 #		while (isRunning)
 #			stepGame()
@@ -97,6 +97,7 @@ if __name__ == '__main__':
 #
 #		deleteGame()
 #			sendEndState()
+#			game.close()
 #	}
 #
 #	ManagerLoop()

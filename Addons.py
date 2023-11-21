@@ -28,6 +28,9 @@ BOT_DEPTH = 5
 BOT_PRECISION = 40
 BOT_KICK_DISTANCE = 160
 
+# DEBUG
+WIN_SIZE = 256
+
 
 def getSign(value):
 	if value < 0:

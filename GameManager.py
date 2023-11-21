@@ -15,6 +15,7 @@ import sys
 class GameManager:
 
 	playerID = 0 #									NOTE : DEBUG
+	debugMode = True #								NOTE : DEBUG
 
 	def __init__( self ):
 		self.lastGameID = 0
@@ -25,14 +26,38 @@ class GameManager:
 
 	def addGame( self, Initialiser, GameID): #		TODO : take game id as argument instead
 
-		newGame = Initialiser()
-		newGame.debugMode = True #					NOTE : DEBUG
+		newGame = Initialiser( self.win, pg.time.Clock() ) # 	TODO : detach from pygame
+		newGame.debugMode = self.debugMode #					NOTE : DEBUG
 
 		self.gameDict[GameID] = newGame
 		self.gameCount += 1
 
 		return GameID
 
+
+	def addPlayer( self, key, name, _playerID ):
+		try:
+			self.gameDict[key].addPlayer( name )
+		except:
+			print ("Could not add player #" + str( _playerID ) + " to game #" + str( key ))
+
+
+	def removePlayer( self, key, _playerID ):
+		#try:
+		#	self.gameDict[key].removePlayer( _playerID )
+		#except:
+		#	print ("Could not remove player #" + str( _playerID ) + " from game #" + str( key ))
+		pass
+
+
+	def startGame( self, key ):
+		#self.gameDict[key].addPlayer( "Player " + str( key ))
+		self.gameDict[key].start()
+
+
+	def pauseGame( self, key ):
+		#self.gameDict[key].addPlayer( "Player " + str( key ))
+		self.gameDict[key].pause()
 
 
 	def removeGame( self, key ):
@@ -41,26 +66,30 @@ class GameManager:
 		self.gameCount -= 1
 
 
-	def startGame( self, key ):
-		#self.gameDict[key].addPlayer( "Player " + str( key ))
-		self.gameDict[key].start()
-
 
 	async def tickGames(self):
 		for key in self.gameDict.keys():
 			game = self.gameDict[key]
-			if game.over:
+
+			if game.isOver:
 				self.removeGame( game.id )
-			elif game.running:
+			elif game.isRunning:
 				self.runGameStep( game )
-				if key == self.playerID:
-					self.displayGame( game )
+
+				if self.debugMode:
+					if key == self.playerID:
+						self.displayGame( game )
+
+		if self.playerID == 0 and ( ad.WIN_SIZE != self.win.get_width() or ad.WIN_SIZE != self.win.get_height() ): # 	NOTE : DEBUG
+			self.win = pg.display.set_mode( (ad.WIN_SIZE, ad.WIN_SIZE) ) # 												NOTE : ...
+			self.win.fill( pg.Color('black') ) # 																		NOTE : ...
+			pg.display.set_caption("Game Manager") # 																	NOTE : ...
 
 		await asy.sleep(0)
 
 
 	def runGameStep( self, game ):
-		if game.running:
+		if game.isRunning:
 
 			game.moveObjects()
 			game.makeBotsPlay()
@@ -71,10 +100,15 @@ class GameManager:
 		else:
 			print (" This game is not running")
 
-	def displayGame( self, game ): # 			TODO : detach from pygame
-		if game.running:
+	def displayGame( self, game ): # 			NOTE : DEBUG
+		if game.isRunning:
+			if game.width != self.win.get_width() or game.height != self.win.get_height(): # 		TODO : detach from pygame
+				self.win = pg.display.set_mode( (game.width, game.height) )
+				pg.display.set_caption( game.name ) #
+
 			game.refreshScreen()
 		else:
+			self.win.fill( self.col_bgr )
 			print (" This game is not running")
 
 
@@ -83,18 +117,18 @@ class GameManager:
 		for event in pg.event.get():
 
 			if event.type == pg.KEYDOWN:
-				# closes the game # 						NOTE : DEBUG
+				# closes the game
 				if event.key == pg.K_ESCAPE:
 					for game in self.gameDict.values():
 						game.stop()
 					self.runGames = False
 					sys.exit()
 
-				# switches game to control # 						NOTE : DEBUG
+				# switches game to control
 				if event.key == pg.K_0:
 					print ("please select a valid game (1-8)")
 
-				# switches game to control # 						NOTE : DEBUG
+				# switches game to control
 				elif event.key == pg.K_1 or event.key == pg.K_2 or event.key == pg.K_3 or event.key == pg.K_4 or event.key == pg.K_5 or event.key == pg.K_6 or event.key == pg.K_7 or event.key == pg.K_8 or event.key == pg.K_9:
 					if event.key == pg.K_1:
 						self.playerID = 1
@@ -119,30 +153,36 @@ class GameManager:
 
 					try:
 						game = self.gameDict[self.playerID]
-						game.win = pg.display.set_mode((game.width, game.height)) # 	TODO : detach from pygame
 					except:
 						print ("Could not switch to game #" + str( self.playerID ))
-						print ("now playing nobody")
+						print ("no longer playeing in any game")
 						self.playerID = 0
 
 				# handling game movement keys
 				else:
-					if self.playerID > 0 and self.playerID < 6 and self.gameDict[self.playerID] and self.gameDict[self.playerID].controlers[0].mode == ad.PLAYER:
+					if self.playerID > 0 and self.playerID < 9 and self.gameDict[self.playerID] and self.gameDict[self.playerID].controlers[0].mode == ad.PLAYER:
 						self.gameDict[self.playerID].controlers[0].handleKeyInput(event.key)
 					else:
 						print ("Could not pass input from player for game #" + str( self.playerID ))
 
 
 def main():
+
 	gm = GameManager()
+
+	if (gm.debugMode):
+		pg.init() # 													NOTE : DEBUG
+		pg.display.set_caption("Game Manager") # 						NOTE : ...
+		gm.win = pg.display.set_mode((2048, 1024)) # 		NOTE : ...
+		gm.win.fill( pg.Color('black') ) # 								NOTE : ...
 
 	addAllGames( gm )
 
 	while gm.runGames:
 
-		gm.takePlayerInputs()
-
-		asy.run( gm.tickGames() ) # ASYNNC IS HERE
+		if gm.debugMode:
+			gm.takePlayerInputs()
+		asy.run( gm.tickGames() ) # ASYNC IS HERE
 
 if __name__ == '__main__':
 	main()

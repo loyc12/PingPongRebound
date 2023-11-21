@@ -6,10 +6,11 @@ import Addons as ad
 class PlayerControler(gc.GameControler):
 
 
-	def __init__(self, _game, _playerName,):
+	def __init__(self, _game, _playerName, _playerID):
 		self.game = _game
 		self.name = _playerName
 		self.mode = ad.PLAYER
+		self.playerID = _playerID
 
 
 	# NOTE : temporary (uses pygame keys)

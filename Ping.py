@@ -26,8 +26,16 @@ class Ping(gi.Game):
 		ball.setSpeeds( (ball.dx + self.speed_b) / 3, 0 )
 
 
-if __name__ == '__main__':
-	g = Ping()
+if __name__ == '__main__': #		NOTE : DEBUG
+
+	pg.init()
+	window = pg.display.set_mode((10, 10))
+
+	g = Ping(window, pg.time.Clock())
+	pg.display.set_caption(g.name)
+
+	#g.addPlayer( "Player 1", 1 )
+
 	g.debugMode = True
 	g.start()
 	g.run()
