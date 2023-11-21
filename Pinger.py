@@ -59,14 +59,14 @@ class Pinger(gi.Game):
 
 		# prevent racket from going off screen
 		if (not rack.isInScreen()):
-			rack.collideWall( "stop" )
+			rack.bounceOnWall( "stop" )
 
 		# prevent racket from crossing the middle line
 		if rack.id == 1 and rack.getRight() > self.width / 2:
-			rack.collideWall( "stop" )
+			rack.bounceOnWall( "stop" )
 			rack.setPosX( (self.width - self.size_r) / 2 )
 		elif rack.id == 2 and rack.getLeft() < self.width / 2:
-			rack.collideWall( "stop" )
+			rack.bounceOnWall( "stop" )
 			rack.setPosX( (self.width + self.size_r) / 2 )
 
 		rack.clampPos()

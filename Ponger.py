@@ -68,14 +68,14 @@ class Ponger(gi.Game):
 
 		# prevent racket from going off screen
 		if (not rack.isInScreen()):
-			rack.collideWall( "stop" )
+			rack.bounceOnWall( "stop" )
 
 		# prevent racket from crossing the middle line
 		if (rack.id == 1 or rack.id == 3) and rack.getRight() > self.width / 2:
-			rack.collideWall( "stop" )
+			rack.bounceOnWall( "stop" )
 			rack.setPosX( (self.width - self.size_r) / 2 )
 		elif (rack.id == 2 or rack.id == 4) and rack.getLeft() < self.width / 2:
-			rack.collideWall( "stop" )
+			rack.bounceOnWall( "stop" )
 			rack.setPosX( (self.width + self.size_r) / 2 )
 
 		rack.clampPos()
@@ -84,14 +84,14 @@ class Ponger(gi.Game):
 	# bouncing off the rackets
 	def checkRackets(self, ball):
 		for rack in self.rackets: #		copies the racket's data
-			if ball.overlaps( rack ):
+			if ball.isOverlaping( rack ):
 
 				if (rack.id == 1 or rack.id == 2):
 					ball.setPosY( rack.getPosY() + self.size_b ) # '+' because the ball is going under
 				elif (rack.id == 3 or rack.id == 4):
 					ball.setPosY( rack.getPosY() - self.size_b ) # '-' because the ball is going over
 
-				ball.collideRack( rack, "y" )
+				ball.bounceOnRack( rack, "y" )
 				self.scorePoint( rack.id, gi.ad.HITS )
 
 
@@ -99,7 +99,7 @@ class Ponger(gi.Game):
 	def checkWalls(self, ball):
 		# bouncing off the sides
 		if ball.getLeft() <= 0 or ball.getRight() >= self.width:
-			ball.collideWall( "x" )
+			ball.bounceOnWall( "x" )
 
 
 	# scoring a goal

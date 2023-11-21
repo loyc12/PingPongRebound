@@ -294,7 +294,7 @@ class Game:
 
 		# prevent racket from going off screen
 		if (not rack.isInScreen()):
-			rack.collideWall( "stop" )
+			rack.bounceOnWall( "stop" )
 
 		rack.clampPos()
 
@@ -324,9 +324,9 @@ class Game:
 	def checkRackets(self, ball):
 		for i in range(len(self.rackets)):
 			rack = self.rackets[i]
-			if ball.overlaps( rack ):
+			if ball.isOverlaping( rack ):
 				ball.setPosY( rack.getPosY() - self.size_b ) # '-' because the ball is going above the racket
-				ball.collideRack( rack, "y" )
+				ball.bounceOnRack( rack, "y" )
 				self.scorePoint( rack.id, ad.HITS )
 
 
@@ -336,11 +336,11 @@ class Game:
 
 			# bouncing off the sides
 			if ball.getLeft() <= 0 or ball.getRight() >= self.width:
-				ball.collideWall( "x" )
+				ball.bounceOnWall( "x" )
 
 			# bouncing off the top (no bounce factor)
 			if ball.getTop() <= 0:
-				ball.collideWall( "y" )
+				ball.bounceOnWall( "y" )
 				ball.dy /= self.factor_wall
 
 
@@ -353,17 +353,17 @@ class Game:
 
 	def scorePoint(self, controler_id, mode):
 		if controler_id > 0:
-			if mode == ad.GOALS: #		if the ball went out of bounds
-				if self.score_mode == ad.GOALS: #	if goals give points
+			if mode == ad.GOALS: #					if the ball went out of bounds
+				if self.score_mode == ad.GOALS: #		if goals give points
 					self.scores[controler_id - 1] += 1
-				else: # 							if racket hits give points
+				else: # 								if racket hits give points
 					self.scores[controler_id - 1] = 0
 				self.last_ponger = 0
 
-			elif mode == ad.HITS: #		if the ball hit a racket
-				if self.score_mode == ad.HITS: #	if racket hits give points
+			elif mode == ad.HITS: #					if the ball hit a racket
+				if self.score_mode == ad.HITS: #		if racket hits give points
 					self.scores[controler_id - 1] += 1
-				else: #								if goals give points
+				else: #									if goals give points
 					pass
 				self.last_ponger = controler_id
 		else:

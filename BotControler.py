@@ -330,7 +330,7 @@ class BotControler(gc.GameControler):
 		fx = ball.fx
 		fy = ball.fy
 
-		border = 2 * self.game.size_b
+		border = self.game.size_b * (2 / 3)
 
 		dept = 0
 
@@ -355,11 +355,9 @@ class BotControler(gc.GameControler):
 			if X <= border or X >= ( self.game.width - border ):
 				fx *= -1
 				dx *= self.game.factor_wall
-				dy += self.game.gravity * fy # NOTE : assumes normal gravity
 			if Y <= border or Y >= ( self.game.height - border ):
 				fy *= -1
 				dy *= self.game.factor_wall
-				dy += self.game.gravity * fy # NOTE : assumes normal gravity
 
 
 		return (X, Y)

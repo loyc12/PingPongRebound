@@ -83,12 +83,12 @@ class Pingest(gi.Game):
 	# bouncing off the rackets
 	def checkRackets(self, ball):
 		for rack in self.rackets: #		copies the racket's data
-			if ball.overlaps( rack ):
+			if ball.isOverlaping( rack ):
 				if (rack.id == 1 or rack.id == 3):
 					ball.setPosY( rack.getPosY() + self.size_b ) # '+' because the ball is going under
 				elif (rack.id == 2 or rack.id == 4):
 					ball.setPosY( rack.getPosY() - self.size_b ) # '-' because the ball is going over
-				ball.collideRack( rack, "y" )
+				ball.bounceOnRack( rack, "y" )
 				self.scorePoint( rack.id, gi.ad.HITS )
 
 
@@ -96,7 +96,7 @@ class Pingest(gi.Game):
 	def checkWalls(self, ball):
 		# bouncing off the sides
 		if ball.getLeft() <= 0 or ball.getRight() >= self.width:
-			ball.collideWall( "x" )
+			ball.bounceOnWall( "x" )
 
 
 	# scoring a goal

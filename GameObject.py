@@ -123,6 +123,16 @@ class GameObject:
 			return False
 		return True
 
+	def isOnScreenX(self):
+		if self.getLeft() < 0 or self.getRight() > self.game.width:
+			return False
+		return True
+
+	def isOnScreenY(self):
+		if self.getTop() < 0 or self.getBottom() > self.game.height:
+			return False
+		return True
+
 
 # ---------------------------------------------- COLLISION --------------------------------------------- #
 
@@ -131,10 +141,6 @@ class GameObject:
 			if self.getBottom() >= other.getTop() and self.getTop() <= other.getBottom():
 				return True
 		return False
-
-	def overlaps(self, other): # 					TODO : REMOVE ME
-		return self.isOverlaping(other)
-
 
 	# NOTE : IS ONLY FOR BALLS
 	def bounceOnWall(self, mode):
@@ -148,9 +154,6 @@ class GameObject:
 			self.stopDirs()
 		self.clampSpeed()
 
-	def collideWall(self, type): # 					TODO : REMOVE ME
-		self.bounceOnWall(type)
-
 	# NOTE : IS ONLY FOR BALLS
 	def bounceOnRack(self, other, mode):
 		if mode == "x":
@@ -162,9 +165,6 @@ class GameObject:
 			self.dy *= self.game.factor_rack
 			self.dx += other.getMvX() * self.fx
 		self.clampSpeed()
-
-	def collideRack(self, other, type): # 			TODO : REMOVE ME
-		self.bounceOnRack(other, type)
 
 
 # ---------------------------------------------- MOVEMENT ---------------------------------------------- #
@@ -237,22 +237,22 @@ class GameObject:
 
 
 	def isLeftOfX(self, X):
-		if self.getRight() <= X:
+		if self.getRight() < X:
 			return True
 		return False
 
 	def isRightOfX(self, X):
-		if self.getLeft() >= X:
+		if self.getLeft() > X:
 			return True
 		return False
 
 	def isAboveY(self, Y):
-		if self.getBottom() <= Y:
+		if self.getBottom() < Y:
 			return True
 		return False
 
 	def isBelowY(self, Y):
-		if self.getTop() >= Y:
+		if self.getTop() > Y:
 			return True
 		return False
 

@@ -55,19 +55,19 @@ class Pong(gi.Game):
 	def checkRackets(self, ball):
 		for i in range(len(self.rackets)):
 			rack = self.rackets[i]
-			if ball.overlaps( rack ):
+			if ball.isOverlaping( rack ):
 				if (rack.id == 1):
 					ball.setPosX( rack.getPosX() + self.size_b ) # '+' because the ball is going to the right
 				elif (rack.id == 2):
 					ball.setPosX( rack.getPosX() - self.size_b ) # '-' because the ball is going to the left
-				ball.collideRack( rack, "x" )
+				ball.bounceOnRack( rack, "x" )
 				self.scorePoint( rack.id, gi.ad.HITS )
 
 
 	# bouncing on the walls
 	def checkWalls(self, ball):
 		if ball.getTop() <= 0 or ball.getBottom() >= self.height:
-			ball.collideWall( "y" )
+			ball.bounceOnWall( "y" )
 
 
 	# scoring a goal
