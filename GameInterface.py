@@ -269,11 +269,11 @@ class Game:
 		if self.useAI:
 			self.makeBotsPlay()
 
-
 		if self.debugMode:
 			self.refreshScreen()
-
-
+		else:
+			#self.sendUpdateInfo()
+			pass
 
 
 	def debugControler(self): #			NOTE : DEBUG : use PlayerControler class instance instead

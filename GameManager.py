@@ -97,8 +97,6 @@ class GameManager:
 			game.makeBotsPlay()
 			game.clock.tick (game.framerate) # 	TODO : detach from pygame
 
-			#print ( game.getInfo() )
-
 		else:
 			print (" This game is not running")
 

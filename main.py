@@ -15,8 +15,7 @@ import Addons as ad
 # MASTER LIST
 # TODO : allow removing players from games via GameManager
 # TODO : implement gamesToEnd queue to avoid issue with deleting games while iterating over gameDict
-# TODO : add game state dicts in gameInterface
-# TODO : implement winning and losing
+# TODO : add game state dicts in gameManager or gameInterface to be return with getInfo
 # TODO : add queues for gameManager to receive/send messages (gamesToStart, gameStartInfo, gamesToEnd, gameEndInfo, playerEvents)
 # TODO : integrate gameManager with sockets
 
@@ -28,11 +27,10 @@ import Addons as ad
 
 # DEBUG LIST
 # TODO : make sure to always put player 1 and 2 in oposite teams
+# TODO : add a "mode" argument to game.respawnBall() and use it when initializing the ball
 # TODO : rework the ball respawn trajectory everywhere
 
 # MINOR LIST
-# TODO : add a "mode" argument to game.respawnBall() and use it when initializing the ball
-# TODO : add a game start and game over screen ?
 # TODO : add double-sided gravity to pingest (so it's an actual ping game lol)
 # TODO : add sound effects to collisions (in GameObject class) ?
 # TODO : make an 'asteroids' game (solo)
@@ -113,16 +111,21 @@ if __name__ == '__main__':
 #		startGames()
 #
 #		tickGames()
-#			while (keepGoing)
+#			while (runGames)
 #			{
-#				if (isRunning)
-#					stepGame()
-#						updateObjects()
-#						makeBotsPlay()
-#						sendUpdateInfo()
-#				elif (isOver)
-#					deleteGame()
-#						sendEndState()
+#				for game in gameDict
+#					{
+#					if (isRunning)
+#						stepGame()
+#							updateObjects()
+#							makeBotsPlay()
+#					elif (isOver)
+#						deleteGame()
+#							sendEndState()
+#							game.close()
+# 					}
 # 			}
+
+#			sendUpdateInfo() (sends the dictionary of game states)
 #		}
 #
