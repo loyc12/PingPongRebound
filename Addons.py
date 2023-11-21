@@ -16,7 +16,7 @@ LEFT = 5
 GOALS = 0
 HITS = 1
 
-WIN_SCORE = 3
+WIN_SCORE = 8
 
 # bot difficulty
 EASY = 0
