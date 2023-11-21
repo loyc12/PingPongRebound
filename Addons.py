@@ -12,9 +12,11 @@ RIGHT = 3
 DOWN = 4
 LEFT = 5
 
-# score modes
+# scores
 GOALS = 0
 HITS = 1
+
+WIN_SCORE = 3
 
 # bot difficulty
 EASY = 0

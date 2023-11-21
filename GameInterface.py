@@ -47,15 +47,15 @@ class Game:
 		self.debugMode = debug
 
 		if self.debugMode:
-			self.win = _win #									TODO : ...
+			self.win = _win #									TODO : abstract away from pygame's window system
 			self.clock = _clock #								TODO : ...
-			self.font = pg.font.Font(None, self.size_font) #	TODO : abstract away from pygame's window system
+			self.font = pg.font.Font(None, self.size_font) #	TODO : ...
 			self.debug_font = pg.font.Font(None, 32) #			TODO : ...
 
 		self.isRunning = False
 		self.isOver = False
-
 		self.useAI = True
+		self.winner_id = 0
 
 		self.playerCount = 0
 		self.controlerCount = 0
@@ -389,6 +389,17 @@ class Game:
 				self.last_ponger = controler_id
 		else:
 			self.last_ponger = 0
+
+		for i in range(len(self.scores)):
+			score = self.scores[i]
+			if score >= ad.WIN_SCORE:
+				self.winGame( i + 1 )
+
+
+	def winGame(self, controler_id):
+		self.winner_id = controler_id
+		self.isOver = True
+		print( f"Player {controler_id} won the game of {self.name}" )
 
 
 	def respawnBall(self, ball):

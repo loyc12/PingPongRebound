@@ -13,12 +13,12 @@ import asyncio as asy
 import Addons as ad
 
 # MASTER LIST
-# TODO : add a player array in gameInterface for player ID
+# TODO : allow removing players from games via GameManager
+# TODO : implement gamesToEnd queue to avoid issue with deleting games while iterating over gameDict
 # TODO : add game state dicts in gameInterface
 # TODO : implement winning and losing
+# TODO : add queues for gameManager to receive/send messages (gamesToStart, gameStartInfo, gamesToEnd, gameEndInfo, playerEvents)
 # TODO : integrate gameManager with sockets
-# TODO : add game variable : winnerID
-# TODO : add queues for gameManager to receive/send messages (gamesToStart, gameStartInfo, gamesToEnd, gameEndInfo)
 
 # FUNCTION LIST
 # TODO : make gm.addGame() take in player ids, and map them to racket ids
@@ -31,7 +31,6 @@ import Addons as ad
 # TODO : rework the ball respawn trajectory everywhere
 
 # MINOR LIST
-# TODO : have pygame events be put in a queue, and parse from queue for movements in gameManager
 # TODO : add a "mode" argument to game.respawnBall() and use it when initializing the ball
 # TODO : add a game start and game over screen ?
 # TODO : add double-sided gravity to pingest (so it's an actual ping game lol)

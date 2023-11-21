@@ -17,6 +17,7 @@ class GameControler:
 		self.name = _playerName
 		self.racketID = 0
 
+
 	def setRacket(self, _racketID):
 		for i in range(len(self.game.rackets)):
 			rack = self.game.rackets[i]
@@ -43,6 +44,7 @@ class GameControler:
 		if self.isActive:
 			self.playMove( self.next_move )
 			self.next_move = ad.NULL
+
 
 	def deactivate(self):
 		self.isActive = False

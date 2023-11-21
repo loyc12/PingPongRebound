@@ -30,16 +30,17 @@ class GameManager:
 		self.gameDict[GameID] = newGame
 		self.gameCount += 1
 
-		#self.addPlayer( GameID, "Player " + str( GameID ), GameID ) #			NOTE : DEBUG
+		if self.debugMode:
+			self.addPlayer( GameID, "Player " + str( GameID ), GameID ) #		NOTE : DEBUG
 
 		return GameID
 
 
-	def addPlayer( self, key, name, _playerID ):
+	def addPlayer( self, key, name, playerID ):
 		try:
-			self.gameDict.get(key).addPlayer( name, _playerID )
+			self.gameDict.get(key).addPlayer( name, playerID )
 		except:
-			print ("Could not add player #" + str( _playerID ) + " to game #" + str( key ))
+			print ("Could not add player #" + str( playerID ) + " to game #" + str( key ))
 
 
 	def removePlayer( self, key, _playerID ):
@@ -51,12 +52,10 @@ class GameManager:
 
 
 	def startGame( self, key ):
-		#self.gameDict.get(key).addPlayer( "Player " + str( key ))
 		self.gameDict.get(key).start()
 
 
 	def pauseGame( self, key ):
-		#self.gameDict.get(key).addPlayer( "Player " + str( key ))
 		self.gameDict.get(key).pause()
 
 
@@ -68,17 +67,27 @@ class GameManager:
 
 
 	def tickGames(self):
-		for key in self.gameDict.keys():
-			game = self.gameDict.get(key)
+		try :
+			for key in self.gameDict.keys():
+				game = self.gameDict.get( key )
 
-			if game.isOver:
-				self.removeGame( game.id )
-			elif game.isRunning:
-				self.runGameStep( game )
+				if game.isOver:
+					if self.playerID == key:
+						print ("this game no longer exists")
+						print ("please select a valid game (1-8)")
+						self.playerID = 0
+						self.emptyDisplay()
 
-				if self.debugMode: #				NOTE : DEBUG
-					if key == self.playerID:
-						self.displayGame( game )
+					self.removeGame( key )
+
+				elif game.isRunning:
+					self.runGameStep( game )
+
+					if self.debugMode: #				NOTE : DEBUG
+						if key == self.playerID:
+							self.displayGame( game )
+		except:
+			print("GameManager Error : tickGames() : removed item while iterating over gameDict")
 
 
 	def runGameStep( self, game ):
@@ -100,9 +109,6 @@ class GameManager:
 				pg.display.set_caption( game.name ) #
 
 			game.refreshScreen()
-		else:
-			self.win.fill( self.col_bgr )
-			print (" This game is not running")
 
 
 	def takePlayerInputs( self ): # 			NOTE : DEBUG
@@ -160,7 +166,7 @@ class GameManager:
 					print ("now playing in game #" + str( self.playerID ))
 
 					try:
-						self.gameDict.get(self.playerID).controlerCount += 0
+						tmp = self.gameDict[self.playerID]
 					except:
 						print ("Could not switch to game #" + str( self.playerID ))
 						print ("please select a valid game (1-8)")
@@ -171,6 +177,7 @@ class GameManager:
 				else:
 					if self.playerID != 0:
 						try:
+							tmp = self.gameDict[self.playerID]
 							controler = self.gameDict.get(self.playerID).controlers[0]
 							if controler.mode == ad.PLAYER:
 								controler.handleKeyInput(k)
@@ -183,6 +190,7 @@ class GameManager:
 
 
 	def emptyDisplay( self ):
+		print("here")
 		pg.display.set_caption("Game Manager") # 			NOTE : DEBUG
 		self.win = pg.display.set_mode((2048, 1280)) # 		NOTE : ...
 		self.win.fill( pg.Color('black') ) # 				NOTE : ...
