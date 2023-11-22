@@ -144,13 +144,15 @@ class Ponger(gi.Game):
 
 if __name__ == '__main__': #		NOTE : DEBUG
 
-	pg.init()
-	window = pg.display.set_mode((1536, 1024))
+	g = Ponger(True)
 
-	g = Ponger(window, pg.time.Clock(), True)
+	pg.init()
+	g.setWindow(pg.display.set_mode((1280, 1280)))
 	pg.display.set_caption(g.name)
 
-	#g.addPlayer( "Player 1", 1 )
-
+	g.printControlers()
+	g.addPlayer( "Player 1", 1 )
+	g.printControlers()
 	g.start()
+	g.printControlers()
 	g.run()

@@ -26,7 +26,9 @@ class GameManager:
 
 	def addGame( self, Initialiser, GameID):
 
-		newGame = Initialiser( self.win, pg.time.Clock(), self.debugMode ) # 	TODO : detach from pygame
+		newGame = Initialiser( self.debugMode ) # 	TODO : detach from pygame
+		if self.debugMode:
+			newGame.setWindow(self.win)
 		self.gameDict[GameID] = newGame
 		self.gameCount += 1
 
@@ -67,12 +69,13 @@ class GameManager:
 
 
 	def tickGames(self):
-		try :
+		try: #		 NOTE : ineloquent but ffs why the fuck can't you edit a dict while itterating in it...
+			 #				like isn't that the whole fucking point of not using a different type of container
 			for key in self.gameDict.keys():
 				game = self.gameDict.get( key )
 
-				if game.isOver:
-					if self.playerID == key:
+				if game.state == ad.ENDING:
+					if self.debugMode and self.playerID == key:
 						print ("this game no longer exists")
 						print ("please select a valid game (1-8)")
 						self.playerID = 0
@@ -80,7 +83,7 @@ class GameManager:
 
 					self.removeGame( key )
 
-				elif game.isRunning:
+				elif game.state == ad.PLAYING:
 					self.runGameStep( game )
 
 					if self.debugMode: #				NOTE : DEBUG
@@ -91,7 +94,7 @@ class GameManager:
 
 
 	def runGameStep( self, game ):
-		if game.isRunning:
+		if game.state == ad.PLAYING:
 
 			game.moveObjects()
 			game.makeBotsPlay()
@@ -101,8 +104,8 @@ class GameManager:
 			print (" This game is not running")
 
 	def displayGame( self, game ): # 			NOTE : DEBUG
-		if game.isRunning:
-			if game.width != self.win.get_width() or game.height != self.win.get_height(): # 		TODO : detach from pygame
+		if game.state == ad.PLAYING:
+			if game.width != self.win.get_width() or game.height != self.win.get_height(): # 	TODO : detach from pygame
 				self.win = pg.display.set_mode( (game.width, game.height) )
 				pg.display.set_caption( game.name ) #
 
@@ -126,12 +129,12 @@ class GameManager:
 				# respawns the ball
 				elif k == pg.K_RETURN:
 					if self.playerID != 0:
-						try:
+						if self.gameDict.get(self.playerID) != None:
 							game = self.gameDict.get(self.playerID)
 							game.respawnAllBalls()
-							#game.respawnBall( game.balls[0] )
-						except:
-							print ( "coud not respawn the ball" )
+							print ( "respawning the ball(s)" )
+						else:
+							print ( "coud not respawn the ball(s)" )
 					else:
 						print ( "please select a valid game (1-8)" )
 
@@ -163,28 +166,26 @@ class GameManager:
 						self.playerID = 9
 					print ("now playing in game #" + str( self.playerID ))
 
-					try:
-						tmp = self.gameDict[self.playerID]
-					except:
+					if self.gameDict.get(self.playerID) == None:
 						print ("Could not switch to game #" + str( self.playerID ))
 						print ("please select a valid game (1-8)")
 						self.playerID = 0
 						self.emptyDisplay()
-
-				# handling game movement keys
-				else:
-					if self.playerID != 0:
-						try:
-							tmp = self.gameDict[self.playerID]
-							controler = self.gameDict.get(self.playerID).controlers[0]
-							if controler.mode == ad.PLAYER:
-								controler.handleKeyInput(k)
-							else:
-								print ("a bot is playing controling this racket")
-						except:
-							print ("Could not pass input from player for game #" + str( self.playerID ))
 					else:
+						pg.display.set_caption( self.gameDict.get(self.playerID).name )
+
+				# handling movement keys presses
+				else:
+					if self.gameDict.get(self.playerID) == None:
+						if self.playerID != 0:
+							print ("game #" + str( self.playerID ) + " does not exist")
 						print ( "please select a valid game (1-8)" )
+					else:
+						controler = self.gameDict.get(self.playerID).controlers[0]
+						if controler.mode != ad.PLAYER:
+							print ("cannot move a bot's racket")
+						else:
+							controler.handleKeyInput(k)
 
 
 	def emptyDisplay( self ):
@@ -199,10 +200,8 @@ async def main():  # ASYNC IS HERE
 	gm = GameManager()
 
 	if (gm.debugMode):
-		pg.init() # 										NOTE : DEBUG
-		pg.display.set_caption("Game Manager") # 			NOTE : ...
-		gm.win = pg.display.set_mode((2048, 1280)) # 		NOTE : ...
-		gm.win.fill( pg.Color('black') ) # 					NOTE : ...
+		pg.init()
+		gm.emptyDisplay()
 
 	addAllGames( gm )
 
@@ -213,10 +212,13 @@ async def main():  # ASYNC IS HERE
 
 		gm.tickGames()
 
-	await asy.sleep(0)
+	if gm.debugMode:
+		await asy.sleep(0)
+	else: # 					NOTE : put fps here if not in debugMode
+		pass
 
 
-def addAllGames( gm ):
+def addAllGames( gm ): #									NOTE : DEBUG
 	gameID = 1
 
 	gm.startGame( gm.addGame( Game, gameID ))

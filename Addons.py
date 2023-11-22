@@ -16,7 +16,20 @@ LEFT = 5
 GOALS = 0
 HITS = 1
 
+# game stuff
 WIN_SCORE = 8
+
+STARTING = 0
+PLAYING = 1
+ENDING = 2
+#PAUSED = 3
+
+SOLO = 0
+DUAL = 1
+FREEPLAY = 2
+TOURN_RND_1 = 3
+TOURN_RND_2 = 4
+#TOURN_RND_3 = 5
 
 # bot difficulty
 EASY = 0

@@ -62,11 +62,11 @@ class BotControler(gc.GameControler):
 				return ad.RIGHT
 
 
-	def playStep(self):
-		if self.isActive:
+	def playMove(self, move = ad.NULL):
+		if move == ad.NULL:
 			self.playAutoMove()
 		else:
-			raise ValueError("Error: bot is deactivated")
+			self.game.makeMove( self.racketID, move )
 
 
 	def playAutoMove(self):

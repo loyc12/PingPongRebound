@@ -155,10 +155,10 @@ class Pongester(gi.Game):
 
 if __name__ == '__main__': #		NOTE : DEBUG
 
-	pg.init()
-	window = pg.display.set_mode((1280, 1280))
+	g = Pongester(True)
 
-	g = Pongester(window, pg.time.Clock(), True)
+	pg.init()
+	g.setWindow(pg.display.set_mode((1280, 1280)))
 	pg.display.set_caption(g.name)
 
 	#g.addPlayer( "Player 1", 1 )

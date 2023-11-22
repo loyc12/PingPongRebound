@@ -13,6 +13,7 @@ import asyncio as asy
 import Addons as ad
 
 # MASTER LIST
+# TODO : only add bots to game on start
 # TODO : allow removing players from games via GameManager
 # TODO : implement gamesToEnd queue to avoid issue with deleting games while iterating over gameDict
 # TODO : add game state dicts in gameManager or gameInterface to be return with getInfo

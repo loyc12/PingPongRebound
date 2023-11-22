@@ -6,10 +6,8 @@ class GameControler:
 	# gameType = "normal" # "tournament"
 	game = None
 	racket = None
-	next_move = ad.NULL
 
 	mode = ad.CONTROLER
-	isActive = True
 
 
 	def __init__(self, _game, _playerName):
@@ -29,23 +27,11 @@ class GameControler:
 
 
 	def playMove(self, move):
-		if self.isActive:
-			self.game.makeMove( self.racketID , move )
-
-
-	def setNextMove(self, move):
-		self.next_move = move
-
-
-	def playStep(self):
-
 		if self.racket == 0:
-			raise ValueError("Error: no racket selected")
-		if self.isActive:
-			self.playMove( self.next_move )
-			self.next_move = ad.NULL
-
-
-	def deactivate(self):
-		self.isActive = False
-
+			print("Error: no racket selected")
+		elif self.game.state == ad.STARTING:
+			print("The game has not started yet")
+		elif self.game.state == ad.ENDING:
+			print("The game is over")
+		elif move != ad.NULL:
+			self.game.makeMove( self.racketID, move )

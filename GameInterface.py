@@ -4,12 +4,13 @@ import GameControler as gc
 import BotControler as ai
 import PlayerControler as pl
 import Addons as ad
-import time #						NOTE : DEBUG
+import time #											NOTE : DEBUG
 import sys #	to exit properly
 
 # game class
 class Game:
 	name = "Game"
+	modde = ad.SOLO
 
 	width = 1536
 	height = 1024
@@ -38,24 +39,21 @@ class Game:
 	step_count = 0
 	score_mode = ad.GOALS
 
-	last_time = time.time_ns() #		NOTE : DEBUG
+	last_time = time.time_ns() #						NOTE : DEBUG
 
 
 	# ------------------------------------------- INITIALIZATION ------------------------------------------- #
 
-	def __init__(self, _win, _clock, debug = False): #	TODO : abstract away from pygame's window system
+	def __init__(self, debug = False):
+
 		self.debugMode = debug
+		if self.debugMode: #							NOTE : DEBUG
+			self.font = pg.font.Font(None, self.size_font)
+			self.debug_font = pg.font.Font(None, 32)
 
-		if self.debugMode:
-			self.win = _win #									TODO : abstract away from pygame's window system
-			self.clock = _clock #								TODO : ...
-			self.font = pg.font.Font(None, self.size_font) #	TODO : ...
-			self.debug_font = pg.font.Font(None, 32) #			TODO : ...
-
-		self.isRunning = False
-		self.isOver = False
+		self.state = ad.STARTING
 		self.useAI = True
-		self.winner_id = 0
+		self.winner_id = 0 #							NOTE : this is the score id (to allow teams)
 
 		self.playerCount = 0
 		self.controlerCount = 0
@@ -67,7 +65,6 @@ class Game:
 		self.scores = []
 
 		self.initRackets()
-		self.initControlers()
 		self.initBalls()
 		self.initScores()
 
@@ -77,10 +74,6 @@ class Game:
 		self.rackets[0].setSpeeds( self.speed_r, 0 )
 
 		self.racketCount = 1
-
-
-	def initControlers(self):
-		self.addBot("bot 1")
 
 
 	def initBalls(self):
@@ -95,6 +88,11 @@ class Game:
 
 	# --------------------------------------------- PLAYER & AI -------------------------------------------- #
 
+	def initBots(self):
+		while self.controlerCount < self.racketCount:
+			self.addBot("bot #" + str(self.racketCount - self.controlerCount))
+
+
 	def addBot(self, botname):
 		if (self.controlerCount >= self.racketCount):
 			raise Exception("Too many bots for this game")
@@ -106,7 +104,6 @@ class Game:
 		self.controlers.append( bot )
 
 		self.controlerCount += 1
-
 		return ( bot )
 
 
@@ -115,27 +112,36 @@ class Game:
 			for i in range(self.playerCount, self.controlerCount):
 				if (self.controlers[i].mode == gc.ad.BOT):
 					if (( self.step_count + self.controlers[i].frequency_offset ) % ad.BOT_FREQUENCY ) == 0:
-						self.controlers[i].playStep()
+						self.controlers[i].playMove()
 						#time.sleep(0.25) # NOTE : DEBUG
 			self.step_count += 1
 			self.step_count %= ad.BOT_FREQUENCY
 
 
 	def addPlayer(self, username, playerID):
-		if (self.playerCount >= self.racketCount):
-			raise Exception("Too many players for this game")
+		if self.state != ad.STARTING:
+			print ("cannot add players once the game started")
+		elif (self.isGameFull()):
+			print ("this game is full")
 
 		player = pl.PlayerControler( self, username, playerID )
-		self.controlers[self.playerCount] = player
 		player.setRacket( self.rackets[ self.playerCount ].id )
+		self.controlers.append( player )
 
 		self.playerCount += 1
-
+		self.controlerCount += 1
 		return ( player )
 
 
-	def isGameFull(self):
-		return ( self.playerCount >= self.racketCount )
+	def removePlayer(self, playerID): #						NOTE : do we close empty games here (?)
+		for i in range(len(self.controlers)):
+			if (self.controlers[i].playerID == playerID):
+				racketID = self.controlers[i].racketID
+				self.controlers.pop(i)
+				self.playerCount -= 1
+				self.controlerCount -= 1
+				#return ( racketID )
+		print ("player #" + str(playerID) + " not found in this game")
 
 
 	def hasPlayer(self, username):
@@ -145,11 +151,25 @@ class Game:
 		return ( False )
 
 
-	def getPlayer(self, username):
+	def getPlayerControler(self, username):
 		for i in range(len(self.controlers)):
 			if (self.controlers[i].username == username):
 				return ( self.controlers[i] )
 		return None
+
+
+	def isGameFull(self):
+		return ( self.playerCount >= self.racketCount )
+
+
+	def isGameEmpty(self):
+		return ( self.playerCount == 0 )
+
+
+	def printControlers(self):
+		print( "controler list: " )
+		for i in range(len(self.controlers)):
+			print( "racket #" + str(i + 1) + " : " + self.controlers[i].name)
 
 
 	def handleUserInputs(self, username, key):
@@ -158,7 +178,7 @@ class Game:
 				self.controlers[i].handleInputs( key )
 				return
 
-		raise Exception("Playernot found in this game")
+		print ("player " + username + " not found in this game")
 
 	# ---------------------------------------------- INTERFACE --------------------------------------------- #
 
@@ -216,40 +236,36 @@ class Game:
 	# ---------------------------------------------- CORE CMDS --------------------------------------------- #
 
 	def start(self):
-		self.isRunning = True
-		print("Starting a game of " + self.name)
-
-
-	def pause(self):
-		self.isRunning = False
-		print("Paused a game of " + self.name)
+		if (self.state == ad.STARTING):
+			self.initBots()
+			self.state = ad.PLAYING
+			print("Starting a game of " + self.name)
+		else:
+			print("Game is either running or over")
 
 
 	def close(self):
-		self.isRunning = False
-		self.isOver = True
+		self.state = ad.ENDING
 		print("closed a game of " + self.name)
 
 
 	def run(self): #		NOTE : only in debug mode
 
 		if not self.debugMode:
-			print("cannot usse run() without debug mode")
+			print("cannot use run() without debug mode")
 			return
 
-		if self.isOver:
+		if self.state == ad.ENDING:
 			print("The game of " + self.name + " is over")
 			pg.quit()
 			sys.exit()
 
-		if self.isRunning == False:
+		if self.state != ad.PLAYING:
 			print(f"{self.name} is not running")
 			return
 
-		win = pg.display.set_mode((self.width, self.height)) #	TODO : abstract away from pygame's window system
-
 		# main game loop
-		while self.isRunning:
+		while self.state == ad.PLAYING:
 			self.debugControler() #						NOTE : DEBUG
 
 			self.step()
@@ -260,7 +276,7 @@ class Game:
 
 	def step(self):
 
-		if self.isRunning == False:
+		if self.state != ad.PLAYING:
 			print(f"{self.name} is not running")
 			return
 
@@ -295,7 +311,7 @@ class Game:
 					self.handlePygameInputs( event.key )
 
 
-	def getInfo(self): #										 NOTE : send this fct's return value to the client
+	def getInfo(self): #				 NOTE : send this fct's return value to the client
 		raise NotImplementedError("Unimplemented : game.getInfo()")
 
 
@@ -398,7 +414,7 @@ class Game:
 
 	def winGame(self, controler_id):
 		self.winner_id = controler_id
-		self.isOver = True
+		self.state = ad.ENDING
 		print( f"Player {controler_id} won the game of {self.name}" )
 
 
@@ -415,9 +431,12 @@ class Game:
 
 	# ------------------------------------------- GAME RENDERING ------------------------------------------- #
 
-	# TODO : abstract away from pygame's window system
+	def setWindow(self, _win):
+		self.win = _win
+		self.clock = pg.time.Clock()
 
-	def refreshScreen(self):
+
+	def refreshScreen(self): #			NOTE : DEBUG
 
 		self.win.fill( self.col_bgr )
 
@@ -469,10 +488,10 @@ class Game:
 
 if __name__ == '__main__': #		NOTE : DEBUG
 
-	pg.init()
-	window = pg.display.set_mode((1280, 1280))
+	g = Game(True)
 
-	g = Game(window, pg.time.Clock(), True)
+	pg.init()
+	g.setWindow(pg.display.set_mode((1280, 1280)))
 	pg.display.set_caption(g.name)
 
 	#g.addPlayer( "Player 1", 1 )

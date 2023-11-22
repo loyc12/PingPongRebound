@@ -1,43 +1,80 @@
-// init infos
-{
+{ // send in init info packet (when you join the lobby)
 	"gameID": 1,
-	"playerIDs": [
+	"gameInfo": {
+		"gameName": "Pong",
+		"gameType": "single",
+		"gameState": "starting"
+	},
+	"racketDirs": [
+		"x",
+		"y",
+		"x",
+		"y"
+	]
+}
+
+{ // send in player info packet (when players change in lobby)
+	"gameID": 1,
+	"playerInfo": [ // login and racket id
 		{
-			"player 1" : 1,
-			"player 2" : 2,
-			"player 3" : 3,
-			"player 4" : 4
+			"llord": [
+				{
+					"playerID": 25,
+					"racketID": 1,
+					"teamID": 0
+				}
+			],
+			"vjean": [
+				{
+					"playerID": 16,
+					"racketID": 2,
+					"teamID": 0
+				}
+			],
+			"ghebert": [
+				{
+					"playerID": 36,
+					"racketID": 3,
+					"teamID": 0
+				}
+			],
+			"bot_2": [
+				{
+					"playerID": 0, // 0 == bot
+					"racketID": 4,
+					"teamID": 0
+				}
+			]
 		}
-	],
-	"racketInfo": [
-		{
-			"dir": "x",
-			"name": "player 1"
-		}, {
-			"dir": "y",
-			"name": "player 2"
-		}, {
-			"dir": "x",
-			"name": "bot 2"
-		}, {
-			"dir": "y",
-			"name": "bot 4"
-		}
-	],
-	// UPDATE INFOS BELOW
+	]
+}
+
+{ // send in update info packet (when game ticks)
+	"gameID": 1,
 	"racketPos": [
-		x1, y1,
-		x2, y2,
-		x3, y3,
-		x4, y4
+		"x1", "y1", // stringify scores
+		"x2", "y2",
+		"x3", "y3",
+		"x4", "y4"
 	],
 	"ballPos": [
-		x1, y1
+		"x1", "y1"
 	],
 	"score": [
-		s1,
-		s2,
-		s3,
-		s4
+		"s1",
+		"s2",
+		"s3",
+		"s4"
+	]
+}
+
+{ // send in closing info packet (once game ends)
+	"gameID": 1,
+	"wining team": 1,
+	"score": [
+		"s1",
+		"s2",
+		"s3",
+		"s4"
 	]
 }
