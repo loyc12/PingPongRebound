@@ -376,7 +376,6 @@ class Game:
 			# bouncing off the top (no bounce factor)
 			if ball.getTop() <= 0:
 				ball.bounceOnWall( "y" )
-				ball.dy /= self.factor_wall
 
 
 	# scoring a goal

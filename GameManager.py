@@ -24,7 +24,54 @@ class GameManager:
 		self.gameDict = {}
 
 
-	def addGame( self, Initialiser, GameID):
+	def getMaxPlayerCount( self, gameType ):
+		if gameType == "Game": #			NOTE : DEBUG
+			return 1
+		elif gameType == "Ping":
+			return 1
+		elif gameType == "Pinger":
+			return 2
+		elif gameType == "Pingest":
+			return 4
+		elif gameType == "Pong":
+			return 2
+		elif gameType == "Ponger":
+			return 4
+		elif gameType == "Pongest":
+			return 4
+		elif gameType == "Pongester":
+			return 4
+		else:
+			return 0
+
+	def getInitialiser( self, gameType ):
+		if gameType == "Game": #			NOTE : DEBUG
+			return Game
+		elif gameType == "Ping":
+			return Ping
+		elif gameType == "Pinger":
+			return Pinger
+		elif gameType == "Pingest":
+			return Pingest
+		elif gameType == "Pong":
+			return Pong
+		elif gameType == "Ponger":
+			return Ponger
+		elif gameType == "Pongest":
+			return Pongest
+		elif gameType == "Pongester":
+			return Pongester
+		else:
+			return None
+
+
+	def addGame( self, gameType, GameID):
+
+		Initialiser = self.getInitialiser( gameType )
+
+		if (Initialiser == None):
+			print ("could not add game of type " + gameType)
+			return 0
 
 		newGame = Initialiser( self.debugMode ) # 	TODO : detach from pygame
 		if self.debugMode:
@@ -32,33 +79,29 @@ class GameManager:
 		self.gameDict[GameID] = newGame
 		self.gameCount += 1
 
-		if self.debugMode:
-			self.addPlayer( GameID, "Player " + str( GameID ), GameID ) #		NOTE : DEBUG
+		#if self.debugMode:
+			#self.addPlayerToGame( GameID, "Tester " + str( GameID ), GameID ) #		NOTE : DEBUG
 
 		return GameID
 
 
-	def addPlayer( self, key, name, playerID ):
+	def addPlayerToGame( self, playerID, name, key ):
 		try:
 			self.gameDict.get(key).addPlayer( name, playerID )
 		except:
-			print ("Could not add player #" + str( playerID ) + " to game #" + str( key ))
-
-
-	def removePlayer( self, key, _playerID ):
-		#try:
-		#	self.gameDict.get(key).removePlayer( _playerID )
-		#except:
-		#	print ("Could not remove player #" + str( _playerID ) + " from game #" + str( key ))
-		pass
+			print ("could not add player #" + str( playerID ) + " to game #" + str( key ))
 
 
 	def startGame( self, key ):
 		self.gameDict.get(key).start()
 
 
-	def pauseGame( self, key ):
-		self.gameDict.get(key).pause()
+	def removePlayerFromGame( self, _playerID, key ):
+		#try:
+		#	self.gameDict.get(key).removePlayer( _playerID )
+		#except:
+		#	print ("Could not remove player #" + str( _playerID ) + " from game #" + str( key ))
+		pass
 
 
 	def removeGame( self, key ):
@@ -101,7 +144,7 @@ class GameManager:
 			game.clock.tick (game.framerate) # 	TODO : detach from pygame
 
 		else:
-			print (" This game is not running")
+			print ("this game is not running")
 
 	def displayGame( self, game ): # 			NOTE : DEBUG
 		if game.state == ad.PLAYING:
@@ -221,21 +264,21 @@ async def main():  # ASYNC IS HERE
 def addAllGames( gm ): #									NOTE : DEBUG
 	gameID = 1
 
-	gm.startGame( gm.addGame( Game, gameID ))
+	gm.startGame( gm.addGame( "Game", gameID )) #			NOTE : DEBUG
 	gameID += 1
-	gm.startGame( gm.addGame( Ping, gameID ))
+	gm.startGame( gm.addGame( "Ping", gameID ))
 	gameID += 1
-	gm.startGame( gm.addGame( Pinger, gameID ))
+	gm.startGame( gm.addGame( "Pinger", gameID ))
 	gameID += 1
-	gm.startGame( gm.addGame( Pingest, gameID ))
+	gm.startGame( gm.addGame( "Pingest", gameID ))
 	gameID += 1
-	gm.startGame( gm.addGame( Pong, gameID ))
+	gm.startGame( gm.addGame( "Pong", gameID ))
 	gameID += 1
-	gm.startGame( gm.addGame( Ponger, gameID ))
+	gm.startGame( gm.addGame( "Ponger", gameID ))
 	gameID += 1
-	gm.startGame( gm.addGame( Pongest, gameID ))
+	gm.startGame( gm.addGame( "Pongest", gameID ))
 	gameID += 1
-	gm.startGame( gm.addGame( Pongester, gameID ))
+	gm.startGame( gm.addGame( "Pongester", gameID ))
 	gameID += 1
 
 	print ("select a player (1-8)")

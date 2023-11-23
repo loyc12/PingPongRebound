@@ -32,6 +32,7 @@ import Addons as ad
 # TODO : rework the ball respawn trajectory everywhere
 
 # MINOR LIST
+# TODO : turn ping into pi and turn game into po
 # TODO : add double-sided gravity to pingest (so it's an actual ping game lol)
 # TODO : add sound effects to collisions (in GameObject class) ?
 # TODO : make an 'asteroids' game (solo)

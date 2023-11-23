@@ -18,6 +18,10 @@ pinger:
 pingest:
 	python3 Pingest.py
 
+
+po:
+	python3 Po.py
+
 pong:
 	python3 Pong.py
 
