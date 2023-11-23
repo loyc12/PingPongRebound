@@ -6,6 +6,7 @@ class Pong(gi.Game):
 	name = "Pong"
 
 	width = 2048
+	racketCount = 2
 
 	def initRackets(self):
 		self.rackets.append( go.GameObject( 1, self, self.size_b, self.height * (1 / 2), self.size_b, self.size_r ))
@@ -13,8 +14,6 @@ class Pong(gi.Game):
 
 		self.rackets.append( go.GameObject( 2, self, self.width - self.size_b, self.height  * (1 / 2), self.size_b, self.size_r ))
 		self.rackets[1].setSpeeds( 0, self.speed_r )
-
-		self.racketCount = 2
 
 
 	def initControlers(self):

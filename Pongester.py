@@ -12,9 +12,9 @@ class Pongester(gi.Game):
 	speed_m_b = 15
 	size_font = 512
 
-
 	factor_rack = 1.05
 	factor_wall = 0.5
+	racketCount = 4
 
 	def initRackets(self):
 		# setting up rackets :             id, game, _x                      , _y                       , _w         , _h
@@ -27,8 +27,6 @@ class Pongester(gi.Game):
 		self.rackets[1].setSpeeds( 0, self.speed_r )
 		self.rackets[2].setSpeeds( self.speed_r, 0 )
 		self.rackets[3].setSpeeds( 0, self.speed_r )
-
-		self.racketCount = 4
 
 
 	def initControlers(self):

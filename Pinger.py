@@ -7,6 +7,7 @@ class Pinger(gi.Game):
 
 	width = 2048
 	gravity = 0.3
+	racketCount = 2
 	factor_rack = 1.0
 	factor_wall = 0.6
 
@@ -16,8 +17,6 @@ class Pinger(gi.Game):
 
 		self.rackets.append( go.GameObject( 2, self, self.width * (2 / 3), self.height - self.size_b, self.size_r, self.size_b ))
 		self.rackets[1].setSpeeds( self.speed_r, 0 )
-
-		self.racketCount = 2
 
 
 	def initControlers(self):

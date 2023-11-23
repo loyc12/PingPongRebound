@@ -8,6 +8,7 @@ class Pingest(gi.Game):
 	name = "Pingest"
 
 	gravity = 0
+	racketCount = 4
 
 	def initRackets(self):
 		# setting up rackets :             id, game, _x                  , _y                             , _w         , _h
@@ -20,8 +21,6 @@ class Pingest(gi.Game):
 		self.rackets[1].setSpeeds( self.speed_r, 0 )
 		self.rackets[2].setSpeeds( self.speed_r, 0 )
 		self.rackets[3].setSpeeds( self.speed_r, 0 )
-
-		self.racketCount = 4
 
 
 	def initControlers(self):

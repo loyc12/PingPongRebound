@@ -29,6 +29,7 @@ class Game:
 	factor_wall = 0.75
 	factor_rack = 1.10
 	gravity = 0
+	racketCount = 1
 	hard_break = False
 
 	col_bgr = pg.Color('black')
@@ -57,7 +58,6 @@ class Game:
 
 		self.playerCount = 0
 		self.controlerCount = 0
-		self.racketCount = 0
 
 		self.rackets = []
 		self.controlers = []
@@ -72,8 +72,6 @@ class Game:
 	def initRackets(self):
 		self.rackets.append( go.GameObject( 1, self, self.width * (1 / 2), self.height - self.size_b, self.size_r, self.size_b ))
 		self.rackets[0].setSpeeds( self.speed_r, 0 )
-
-		self.racketCount = 1
 
 
 	def initBalls(self):
