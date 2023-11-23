@@ -45,7 +45,9 @@ class Game:
 
 	# ------------------------------------------- INITIALIZATION ------------------------------------------- #
 
-	def __init__(self, debug = False):
+	def __init__(self, gameID, debug = False):
+
+		self.gameID = gameID
 
 		self.debugMode = debug
 		if self.debugMode: #							NOTE : DEBUG
@@ -479,14 +481,14 @@ class Game:
 
 		text = self.debug_font.render(f'{int(1000000000 / self.delta_time)}', True, self.col_fnt)
 		#text = self.debug_font.render(f'{int(self.clock.get_fps())}', True, self.col_fnt)
-		self.win.blit( text, text.get_rect( center = ( 32, 32 )))
+		self.win.blit( text, text.get_rect( center = ( 64, 32 )))
 
 
 
 if __name__ == '__main__': #		NOTE : DEBUG
 
 	pg.init()
-	g = Game(True)
+	g = Game(1, True)
 
 	g.setWindow(pg.display.set_mode((1280, 1280)))
 	pg.display.set_caption(g.name)

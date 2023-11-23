@@ -156,7 +156,7 @@ class Pingest(gi.Game):
 if __name__ == '__main__': #		NOTE : DEBUG
 
 	pg.init()
-	g = Pingest(True)
+	g = Pingest(1, True)
 
 	g.setWindow(pg.display.set_mode((1280, 1280)))
 	pg.display.set_caption(g.name)

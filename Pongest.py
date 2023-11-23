@@ -8,9 +8,10 @@ class Pongest(gi.Game):
 	width = 1280
 	height = 1280
 
-	speed_b = 7.5
-	speed_m_b = 15
+	speed_b = 6.6667
+	speed_m_b = 20
 	size_font = 512
+	size_l = 14
 
 	factor_rack = 1.05
 	factor_wall = 0.5
@@ -154,7 +155,7 @@ class Pongest(gi.Game):
 if __name__ == '__main__': #		NOTE : DEBUG
 
 	pg.init()
-	g = Pongest(True)
+	g = Pongest(1, True)
 
 	g.setWindow(pg.display.set_mode((1280, 1280)))
 	pg.display.set_caption(g.name)

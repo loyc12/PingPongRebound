@@ -9,63 +9,27 @@ from Pongest import Pongest
 
 import pygame as pg
 import asyncio as asy
+import random as rdm
 import Addons as ad
 import sys
 
 class GameManager:
 
-	playerID = 0 #							NOTE : DEBUG
-	debugMode = True #						NOTE : DEBUG
+	gameTypeCount = 8
 
-	def __init__( self ):
-		self.lastGameID = 0
+	windowID = 0 #							NOTE : DEBUG
+
+	def __init__( self, _debugMode = True ):
+		self.debugMode = _debugMode #		NOTE : DEBUG
+
 		self.gameCount = 0
+		self.maxGameCount = 0
 		self.runGames = True
+
 		self.gameDict = {}
 
 
-	def getMaxPlayerCount( self, gameType ):
-		if gameType == "Pi":
-			return Pi.maxPlayerCount
-		elif gameType == "Ping":
-			return Ping.maxPlayerCount
-		elif gameType == "Pinger":
-			return Pinger.maxPlayerCount
-		elif gameType == "Pingest":
-			return Pingest.maxPlayerCount
-		elif gameType == "Po":
-			return Po.maxPlayerCount
-		elif gameType == "Pong":
-			return Pong.maxPlayerCount
-		elif gameType == "Ponger":
-			return Ponger.maxPlayerCount
-		elif gameType == "Pongest":
-			return Pongest.maxPlayerCount
-		else:
-			return 0
-
-	def getInitialiser( self, gameType ):
-		if gameType == "Pi":
-			return Pi
-		elif gameType == "Ping":
-			return Ping
-		elif gameType == "Pinger":
-			return Pinger
-		elif gameType == "Pingest":
-			return Pingest
-		elif gameType == "Po":
-			return Po
-		elif gameType == "Pong":
-			return Pong
-		elif gameType == "Ponger":
-			return Ponger
-		elif gameType == "Pongest":
-			return Pongest
-		else:
-			return None
-
-
-	def addGame( self, gameType, GameID):
+	def addGame( self, gameType, gameID):
 
 		Initialiser = self.getInitialiser( gameType )
 
@@ -73,16 +37,18 @@ class GameManager:
 			print ("could not add game of type " + gameType)
 			return 0
 
-		newGame = Initialiser( self.debugMode ) # 	TODO : detach from pygame
+		newGame = Initialiser( gameID, self.debugMode ) # 	TODO : detach from pygame
 		if self.debugMode:
 			newGame.setWindow(self.win)
-		self.gameDict[GameID] = newGame
+		self.gameDict[gameID] = newGame
 		self.gameCount += 1
+		if self.gameCount > self.maxGameCount:
+			self.maxGameCount = self.gameCount
 
 		#if self.debugMode:
 			#self.addPlayerToGame( GameID, "Tester " + str( GameID ), GameID ) #		NOTE : DEBUG
 
-		return GameID
+		return gameID
 
 
 	def addPlayerToGame( self, playerID, name, key ):
@@ -110,32 +76,6 @@ class GameManager:
 		self.gameCount -= 1
 
 
-
-	def tickGames(self):
-		try: #		 NOTE : ineloquent but ffs why the fuck can't you edit a dict while itterating in it...
-			 #				like isn't that the whole fucking point of not using a different type of container
-			for key in self.gameDict.keys():
-				game = self.gameDict.get( key )
-
-				if game.state == ad.ENDING:
-					if self.debugMode and self.playerID == key:
-						print ("this game no longer exists")
-						print ("please select a valid game (1-8)")
-						self.playerID = 0
-						self.emptyDisplay()
-
-					self.removeGame( key )
-
-				elif game.state == ad.PLAYING:
-					self.runGameStep( game )
-
-					if self.debugMode: #				NOTE : DEBUG
-						if key == self.playerID:
-							self.displayGame( game )
-		except:
-			print("GameManager Error : tickGames() : removed item while iterating over gameDict")
-
-
 	def runGameStep( self, game ):
 		if game.state == ad.PLAYING:
 
@@ -146,21 +86,43 @@ class GameManager:
 		else:
 			print ("this game is not running")
 
-	def displayGame( self, game ): # 			NOTE : DEBUG
-		if game.state == ad.PLAYING:
-			if game.width != self.win.get_width() or game.height != self.win.get_height(): # 	TODO : detach from pygame
-				self.win = pg.display.set_mode( (game.width, game.height) )
-				pg.display.set_caption( game.name ) #
-
-			game.refreshScreen()
 
 
-	def takePlayerInputs( self ): # 			NOTE : DEBUG
+	def tickGames(self):
+		try: #		 NOTE : ineloquent but ffs why the fuck can't you edit a dict while itterating in it...
+			 #				like isn't that the whole fucking point of not using a different type of container
+			for key in self.gameDict.keys():
+				game = self.gameDict.get( key )
+
+				if game.state == ad.ENDING:
+					if self.debugMode and self.windowID == key:
+						print ("this game no longer exists")
+						print ("please select a valid game (1-8)")
+						self.windowID = 0
+						self.emptyDisplay()
+
+					else: #								send closing info packet from here
+						pass
+
+					self.removeGame( key )
+
+				elif game.state == ad.PLAYING:
+					self.runGameStep( game )
+
+					if self.debugMode: #				NOTE : DEBUG
+						if key == self.windowID:
+							self.displayGame( game )
+		except:
+			print("GameManager Error : tickGames() : removed item while iterating over gameDict")
+
+
+	def takePlayerInputs( self ): # 					NOTE : DEBUG
 		# read local player inputs
 		for event in pg.event.get():
 
 			if event.type == pg.KEYDOWN:
 				k = event.key
+				initialID = self.windowID
 
 				# closes the game
 				if k == pg.K_ESCAPE:
@@ -171,71 +133,152 @@ class GameManager:
 
 				# respawns the ball
 				elif k == pg.K_RETURN:
-					if self.playerID != 0:
-						if self.gameDict.get(self.playerID) != None:
-							game = self.gameDict.get(self.playerID)
+					if self.windowID != 0:
+						if self.gameDict.get(self.windowID) != None:
+							game = self.gameDict.get(self.windowID)
 							game.respawnAllBalls()
 							print ( "respawning the ball(s)" )
 						else:
 							print ( "coud not respawn the ball(s)" )
 					else:
 						print ( "please select a valid game (1-8)" )
+					return
 
-				# switches game to control
+				# rotate game to view
+				elif k == pg.K_q or k == pg.K_e:
+					if k == pg.K_e:
+						self.windowID += 1
+					else:
+						self.windowID -= 1
+
+					if self.windowID <= 0:
+						self.windowID = self.maxGameCount
+					elif self.windowID > self.maxGameCount:
+						self.windowID = 1
+
+				# select game to view
 				elif k == pg.K_0:
-					print ("please select a valid game (1-8)")
-					self.playerID = 0
-					self.emptyDisplay()
+					self.windowID = 0
+				elif k == pg.K_1:
+					self.windowID = 1
+				elif k == pg.K_2:
+					self.windowID = 2
+				elif k == pg.K_3:
+					self.windowID = 3
+				elif k == pg.K_4:
+					self.windowID = 4
+				elif k == pg.K_5:
+					self.windowID = 5
+				elif k == pg.K_6:
+					self.windowID = 6
+				elif k == pg.K_7:
+					self.windowID = 7
+				elif k == pg.K_8:
+					self.windowID = 8
+				elif k == pg.K_9:
+					self.windowID = 9
 
-				# switches game to control
-				elif k == pg.K_1 or k == pg.K_2 or k == pg.K_3 or k == pg.K_4 or k == pg.K_5 or k == pg.K_6 or k == pg.K_7 or k == pg.K_8 or k == pg.K_9:
-					if k == pg.K_1:
-						self.playerID = 1
-					elif k == pg.K_2:
-						self.playerID = 2
-					elif k == pg.K_3:
-						self.playerID = 3
-					elif k == pg.K_4:
-						self.playerID = 4
-					elif k == pg.K_5:
-						self.playerID = 5
-					elif k == pg.K_6:
-						self.playerID = 6
-					elif k == pg.K_7:
-						self.playerID = 7
-					elif k == pg.K_8:
-						self.playerID = 8
-					elif k == pg.K_9:
-						self.playerID = 9
-					print ("now playing in game #" + str( self.playerID ))
-
-					if self.gameDict.get(self.playerID) == None:
-						print ("Could not switch to game #" + str( self.playerID ))
-						print ("please select a valid game (1-8)")
-						self.playerID = 0
+				# checks if viewed game changed
+				if initialID != self.windowID:
+					if self.gameDict.get(self.windowID) == None:
+						print( "could not switch to game #" + str( self.windowID ) )
+						print( "please select a valid game (1-8)" )
 						self.emptyDisplay()
 					else:
-						pg.display.set_caption( self.gameDict.get(self.playerID).name )
+						print( "now playing in game #" + str( self.windowID ) )
+						pg.display.set_caption( self.gameDict.get(self.windowID).name )
+					return
 
 				# handling movement keys presses
+				if self.gameDict.get(self.windowID) == None:
+					if self.windowID != 0:
+						print( "game #" + str( self.windowID ) + " no longer exists" )
+					print( "please select a valid game (1-8)" )
 				else:
-					if self.gameDict.get(self.playerID) == None:
-						if self.playerID != 0:
-							print ("game #" + str( self.playerID ) + " does not exist")
-						print ( "please select a valid game (1-8)" )
+					controler = self.gameDict.get(self.windowID).controlers[0]
+					if controler.mode != ad.PLAYER:
+						print ( "cannot move a bot's racket" )
 					else:
-						controler = self.gameDict.get(self.playerID).controlers[0]
-						if controler.mode != ad.PLAYER:
-							print ("cannot move a bot's racket")
-						else:
-							controler.handleKeyInput(k)
+						controler.handleKeyInput(k)
+
+
+
+	def displayGame( self, game ): # 			NOTE : DEBUG
+		if game.state == ad.PLAYING:
+			if game.width != self.win.get_width() or game.height != self.win.get_height(): # 	TODO : detach from pygame
+				self.win = pg.display.set_mode( (game.width, game.height) )
+				pg.display.set_caption( game.name ) #
+
+			game.refreshScreen()
 
 
 	def emptyDisplay( self ):
-		print("here")
 		pg.display.set_caption("Game Manager") # 			NOTE : DEBUG
 		self.win = pg.display.set_mode((2048, 1280)) # 		NOTE : ...
 		self.win.fill( pg.Color('black') ) # 				NOTE : ...
+
+
+	@staticmethod
+	def getMaxPlayerCount( gameType ):
+		if gameType == "Pi":
+			return Pi.maxPlayerCount
+		elif gameType == "Ping":
+			return Ping.maxPlayerCount
+		elif gameType == "Pinger":
+			return Pinger.maxPlayerCount
+		elif gameType == "Pingest":
+			return Pingest.maxPlayerCount
+		elif gameType == "Po":
+			return Po.maxPlayerCount
+		elif gameType == "Pong":
+			return Pong.maxPlayerCount
+		elif gameType == "Ponger":
+			return Ponger.maxPlayerCount
+		elif gameType == "Pongest":
+			return Pongest.maxPlayerCount
+		else:
+			return 0
+
+	@staticmethod
+	def getRandomGameType():
+		value = rdm.randint(0, GameManager.gameTypeCount - 1 )
+		if value == 0:
+			return "Pi"
+		elif value == 1:
+			return "Ping"
+		elif value == 2:
+			return "Pinger"
+		elif value == 3:
+			return "Pingest"
+		elif value == 4:
+			return "Po"
+		elif value == 5:
+			return "Pong"
+		elif value == 6:
+			return "Ponger"
+		elif value == 7:
+			return "Pongest"
+
+	@staticmethod
+	def getInitialiser( gameType ):
+		if gameType == "Pi":
+			return Pi
+		elif gameType == "Ping":
+			return Ping
+		elif gameType == "Pinger":
+			return Pinger
+		elif gameType == "Pingest":
+			return Pingest
+		elif gameType == "Po":
+			return Po
+		elif gameType == "Pong":
+			return Pong
+		elif gameType == "Ponger":
+			return Ponger
+		elif gameType == "Pongest":
+			return Pongest
+		else:
+			return None
 
 
 async def main():  # ASYNC IS HERE
@@ -257,7 +300,7 @@ async def main():  # ASYNC IS HERE
 
 	if gm.debugMode:
 		await asy.sleep(0)
-	else: # 					NOTE : put fps here if not in debugMode
+	else: # 											NOTE : put fps here if not in debugMode
 		pass
 
 
