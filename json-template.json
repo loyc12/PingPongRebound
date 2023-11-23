@@ -1,8 +1,15 @@
-{ // send in init info packet (when you join the lobby)
+{ // join request packet (when asking to play a game)
+	"playerName": "llord",
+	"playerID": 25,
+	"gameType": "pong",
+	"gameMode": "solo"
+}
+
+{ // init info packet (when you join a lobby)
 	"gameID": 1,
 	"gameInfo": {
-		"gameName": "Pong",
-		"gameType": "single",
+		"gameType": "pong", // random == doesn't matter (create random one if none are joinable)
+		"gameMode": "solo", // solo, dual, freeplay, tournament
 		"gameState": "starting"
 	},
 	"racketDirs": [
@@ -10,13 +17,15 @@
 		"y",
 		"x",
 		"y"
-	]
+	],
+	// followed by initial update and player info packets
 }
 
-{ // send in player info packet (when players change in lobby)
+{ // player info packet (when players change in lobby)
 	"gameID": 1,
 	"playerInfo": [ // login and racket id
 		{
+			"isConfirmed": false,
 			"llord": [
 				{
 					"playerID": 25,
@@ -49,7 +58,7 @@
 	]
 }
 
-{ // send in update info packet (when game ticks)
+{ // update info packet (when game ticks)
 	"gameID": 1,
 	"racketPos": [
 		"x1", "y1", // stringify scores
@@ -60,7 +69,7 @@
 	"ballPos": [
 		"x1", "y1"
 	],
-	"score": [
+	"scores": [
 		"s1",
 		"s2",
 		"s3",
@@ -68,10 +77,10 @@
 	]
 }
 
-{ // send in closing info packet (once game ends)
+{ // closing info packet (once game ends)
 	"gameID": 1,
-	"wining team": 1,
-	"score": [
+	"winingTeam": 1,
+	"scores": [
 		"s1",
 		"s2",
 		"s3",
