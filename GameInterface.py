@@ -409,10 +409,10 @@ class Game:
 				self.winGame( i + 1 )
 
 
-	def winGame(self, controler_id):
-		self.winner_id = controler_id
+	def winGame(self, teamID):
+		self.winner_id = teamID
 		self.state = ad.ENDING
-		print( f"Player {controler_id} won the game of {self.name}" )
+		print( f"Team #{ teamID } won the game of { self.name }" )
 
 
 	def respawnBall(self, ball):
@@ -485,13 +485,15 @@ class Game:
 
 if __name__ == '__main__': #		NOTE : DEBUG
 
+	pg.init()
 	g = Game(True)
 
-	pg.init()
 	g.setWindow(pg.display.set_mode((1280, 1280)))
 	pg.display.set_caption(g.name)
 
-	#g.addPlayer( "Player 1", 1 )
-
+	g.printControlers()
+	g.addPlayer( "Player 1", 1 )
+	g.printControlers()
 	g.start()
+	g.printControlers()
 	g.run()

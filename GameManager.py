@@ -1,11 +1,11 @@
+from Pi import Pi
 from Ping import Ping
 from Pinger import Pinger
 from Pingest import Pingest
+from Po import Po
 from Pong import Pong
 from Ponger import Ponger
 from Pongest import Pongest
-from Pongester import Pongester
-from GameInterface import Game
 
 import pygame as pg
 import asyncio as asy
@@ -25,42 +25,42 @@ class GameManager:
 
 
 	def getMaxPlayerCount( self, gameType ):
-		if gameType == "Game": #			NOTE : DEBUG
-			return 1
+		if gameType == "Pi":
+			return Pi.maxPlayerCount
 		elif gameType == "Ping":
-			return 1
+			return Ping.maxPlayerCount
 		elif gameType == "Pinger":
-			return 2
+			return Pinger.maxPlayerCount
 		elif gameType == "Pingest":
-			return 4
+			return Pingest.maxPlayerCount
+		elif gameType == "Po":
+			return Po.maxPlayerCount
 		elif gameType == "Pong":
-			return 2
+			return Pong.maxPlayerCount
 		elif gameType == "Ponger":
-			return 4
+			return Ponger.maxPlayerCount
 		elif gameType == "Pongest":
-			return 4
-		elif gameType == "Pongester":
-			return 4
+			return Pongest.maxPlayerCount
 		else:
 			return 0
 
 	def getInitialiser( self, gameType ):
-		if gameType == "Game": #			NOTE : DEBUG
-			return Game
+		if gameType == "Pi":
+			return Pi
 		elif gameType == "Ping":
 			return Ping
 		elif gameType == "Pinger":
 			return Pinger
 		elif gameType == "Pingest":
 			return Pingest
+		elif gameType == "Po":
+			return Po
 		elif gameType == "Pong":
 			return Pong
 		elif gameType == "Ponger":
 			return Ponger
 		elif gameType == "Pongest":
 			return Pongest
-		elif gameType == "Pongester":
-			return Pongester
 		else:
 			return None
 
@@ -261,24 +261,24 @@ async def main():  # ASYNC IS HERE
 		pass
 
 
-def addAllGames( gm ): #									NOTE : DEBUG
+def addAllGames( gm ): #								NOTE : DEBUG
 	gameID = 1
 
-	gm.startGame( gm.addGame( "Game", gameID )) #			NOTE : DEBUG
+	gm.startGame( gm.addGame( "Pi", gameID ))
+	gameID += 1
+	gm.startGame( gm.addGame( "Po", gameID ))
 	gameID += 1
 	gm.startGame( gm.addGame( "Ping", gameID ))
 	gameID += 1
-	gm.startGame( gm.addGame( "Pinger", gameID ))
-	gameID += 1
-	gm.startGame( gm.addGame( "Pingest", gameID ))
-	gameID += 1
 	gm.startGame( gm.addGame( "Pong", gameID ))
+	gameID += 1
+	gm.startGame( gm.addGame( "Pinger", gameID ))
 	gameID += 1
 	gm.startGame( gm.addGame( "Ponger", gameID ))
 	gameID += 1
-	gm.startGame( gm.addGame( "Pongest", gameID ))
+	gm.startGame( gm.addGame( "Pingest", gameID ))
 	gameID += 1
-	gm.startGame( gm.addGame( "Pongester", gameID ))
+	gm.startGame( gm.addGame( "Pongest", gameID ))
 	gameID += 1
 
 	print ("select a player (1-8)")

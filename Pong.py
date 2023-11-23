@@ -110,9 +110,9 @@ class Pong(gi.Game):
 
 if __name__ == '__main__': #		NOTE : DEBUG
 
+	pg.init()
 	g = Pong(True)
 
-	pg.init()
 	g.setWindow(pg.display.set_mode((1280, 1280)))
 	pg.display.set_caption(g.name)
 

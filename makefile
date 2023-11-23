@@ -9,6 +9,10 @@ debug:
 game:
 	python3 GameInterface.py
 
+
+po:
+	python3 Pi.py
+
 ping:
 	python3 Ping.py
 
@@ -30,6 +34,3 @@ ponger:
 
 pongest:
 	python3 Pongest.py
-
-pongester:
-	python3 Pongester.py

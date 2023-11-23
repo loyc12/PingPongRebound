@@ -1,10 +1,10 @@
-from Ping import Ping
-from Pinger import Pinger
-from Pingest import Pingest
+from Pi import Ping
+from Ping import Pinger
+from Ponger import Pingest
 from Pong import Pong
-from Ponger import Ponger
-from Pongest import Pongest
-from Pongester import Pongester
+from Pinger import Ponger
+from Pingest import Pongest
+from Pongest import Pongester
 from GameInterface import Game
 from GameManager import main
 

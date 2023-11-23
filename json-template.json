@@ -69,6 +69,7 @@
 	"ballPos": [
 		"x1", "y1"
 	],
+	"lastPonger": 1,
 	"scores": [
 		"s1",
 		"s2",
