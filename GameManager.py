@@ -54,7 +54,7 @@ class GameManager:
 	def addPlayerToGame( self, playerID, name, key ):
 		if ( self.gameDict.get(key)):
 			self.gameDict.get(key).addPlayer( name, playerID )
-		else
+		else:
 			print ("could not add player #" + str( playerID ) + " to game #" + str( key ))
 
 
