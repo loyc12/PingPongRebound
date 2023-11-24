@@ -52,9 +52,9 @@ class GameManager:
 
 
 	def addPlayerToGame( self, playerID, name, key ):
-		try:
+		if ( self.gameDict.get(key)):
 			self.gameDict.get(key).addPlayer( name, playerID )
-		except:
+		else
 			print ("could not add player #" + str( playerID ) + " to game #" + str( key ))
 
 
@@ -63,8 +63,8 @@ class GameManager:
 
 
 	def removePlayerFromGame( self, _playerID, key ):
-		if ( self.gameDict.get(key).removePlayer( _playerID )):
-			pass
+		if ( self.gameDict.get(key)):
+			self.gameDict.get(key).removePlayer( _playerID )
 		else:
 			print ("player #" + str( _playerID ) + " is absent from game #" + str( key ))
 
