@@ -496,6 +496,8 @@ class Game:
 		infoDict["gameInfo"] = self.getGameInfo()
 		infoDict["racketCount"] = self.racketCount
 		infoDict["racketDirs"] = self.getRacketDirs()
+		#infoDict["racketInitPos"] #										NOTE : IMPLEMENT ME
+		infoDict["ballInitPos"] = ( self.widht / 2,  self.height / 2 ) #	NOTE : broche a foin
 		infoDict["teamCount"] = len(self.scores)
 
 		return ( infoDict )
@@ -505,29 +507,37 @@ class Game:
 	def getGameInfo(self):
 		gameDict = {}
 
+		#gameDict["gameState"] = self.getState()
 		gameDict["gameType"] = self.name
+		gameDict["gameMode"] = self.getMode()
+		return ( gameDict )
+
+
+	def getMode( self ):
 
 		if (self.mode == ad.SOLO):
-			gameDict["gameMode"] = "solo"
+			return "solo"
 		elif (self.mode == ad.DUAL):
-			gameDict["gameMode"] = "dual"
+			return "dual"
 		elif (self.mode == ad.FREEPLAY):
-			gameDict["gameMode"] = "freeplay"
+			return "freeplay"
 		elif (self.mode == ad.TOURN_RND_1):
-			gameDict["gameMode"] = "tournament (1)"
+			return "tournament (1)"
 		elif (self.mode == ad.TOURN_RND_2):
-			gameDict["gameMode"] = "tournament (2)"
+			return "tournament (2)"
 		else:
-			gameDict["gameMode"] = "unknown"
+			return "unknown"
 
+
+	def getState(self):
 		if (self.state == ad.STARTING):
-			gameDict["gameState"] = "starting"
+			return "starting"
 		elif (self.state == ad.PLAYING):
-			gameDict["gameState"] = "playing"
+			return "playing"
 		elif (self.state == ad.ENDING):
-			gameDict["gameState"] = "ending"
-
-		return ( gameDict )
+			return "ending"
+		else:
+			return "unknown"
 
 
 	# @staticmethod
@@ -546,10 +556,52 @@ class Game:
 		return ( dirs )
 
 
+	# @staticmethod
+	def getRacketInitPos(self): #					NOTE : IMPLEMENT ME
+		pass
+
+
+	# @staticmethod
+	def getBallInitPos(self): #						NOTE : IMPLEMENT ME
+		pass
+
+
+	def getUpdateInfo(self):
+		infoDict = {}
+
+		infoDict["gameID"] = self.gameID
+		#infoDict["gameState"] = self.getState()
+		infoDict["lastPonger"] = self.last_ponger
+		infoDict["ballPos"] = self.getBallPos()
+		infoDict["racketPos"] = self.getRacketPos()
+		infoDict["scores"] = self.scores
+
+		return ( infoDict )
+
+
+	def getRacketPos(self):
+		pos = []
+
+		for i in range(len(self.rackets)):
+			pos.append( self.rackets[i].getPos() )
+
+		return ( pos )
+
+
+	def getBallPos(self):
+		pos = []
+
+		for i in range(len(self.balls)):
+			pos.append( self.balls[i].getPos() )
+
+		return ( pos )
+
+
 	def getEndInfo(self):
 		infoDict = {}
 
 		infoDict["gameID"] = self.gameID
+		#infoDict["gameState"] = self.getState()
 		infoDict["winingTeam"] = self.winnerID
 		infoDict["scores"] = self.scores
 
