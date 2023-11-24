@@ -87,31 +87,38 @@ class GameManager:
 
 
 	def tickGames(self):
-		try: #		 NOTE : ineloquent but ffs why the fuck can't you edit a dict while itterating in it...
+		deleteList = []
+		#try: #		 NOTE : ineloquent but ffs why the fuck can't you edit a dict while itterating in it...
 			 #				like isn't that the whole fucking point of not using a different type of container
-			for key in self.gameDict.keys():
-				game = self.gameDict.get( key )
+		for key in self.gameDict.keys():
+			game = self.gameDict.get( key )
 
-				if game.state == ad.ENDING:
-					if self.debugMode and self.windowID == key:
-						print ("this game no longer exists")
-						print ("please select a valid game (1-8)")
-						self.windowID = 0
-						self.emptyDisplay()
+			if game.state == ad.STARTING:
+				pass #								send player info packet from here
 
-					else: #								send closing info packet from here
-						pass
+			elif game.state == ad.PLAYING:
+				self.runGameStep( game )
 
-					self.removeGame( key )
+				if self.debugMode: #				NOTE : DEBUG
+					if key == self.windowID:
+						self.displayGame( game )
 
-				elif game.state == ad.PLAYING:
-					self.runGameStep( game )
+			elif game.state == ad.ENDING:
+				if self.debugMode and self.windowID == key:
+					print ("this game no longer exists")
+					print ("please select a valid game (1-8)")
+					self.windowID = 0
+					self.emptyDisplay()
 
-					if self.debugMode: #				NOTE : DEBUG
-						if key == self.windowID:
-							self.displayGame( game )
-		except:
-			print("GameManager Error : tickGames() : removed item while iterating over gameDict")
+				else: #								send closing info packet from here
+					pass
+
+				deleteList.append(key)
+
+		for key in deleteList:
+			self.removeGame( key )
+		#except:
+			#print("Warning : GameManager.tickGames() : removed item while iterating over gameDict")
 
 
 	def takePlayerInputs( self ): # 					NOTE : DEBUG
@@ -205,17 +212,17 @@ class GameManager:
 
 	def displayGame( self, game ): # 						NOTE : DEBUG
 		if game.state == ad.PLAYING:
-			if game.width != self.win.get_width() or game.height != self.win.get_height(): # 	TODO : detach from pygame
+			if game.width != self.win.get_width() or game.height != self.win.get_height():
 				self.win = pg.display.set_mode( (game.width, game.height) )
 				pg.display.set_caption( game.name ) #
 
 			game.refreshScreen()
 
 
-	def emptyDisplay( self ):
-		pg.display.set_caption("Game Manager") # 			NOTE : DEBUG
-		self.win = pg.display.set_mode((2048, 1280)) # 		NOTE : ...
-		self.win.fill( pg.Color('black') ) # 				NOTE : ...
+	def emptyDisplay( self ): # 							NOTE : DEBUG
+		pg.display.set_caption("Game Manager")
+		self.win = pg.display.set_mode((2048, 1280))
+		self.win.fill( pg.Color('black') )
 
 
 	@staticmethod
@@ -237,8 +244,34 @@ class GameManager:
 		elif gameType == "Pongest":
 			return Pongest.maxPlayerCount
 		else:
-			print ( "GameManager Error : getMaxPlayerCount() : invalid game type" )
+			print ( "Error : GameManager.getMaxPlayerCount() : invalid game type" )
 			return 0
+
+
+	@staticmethod
+	def getInitialiser( gameType, rdmStart = 4 ):
+		if gameType == "Pi":
+			return Pi
+		elif gameType == "Ping":
+			return Ping
+		elif gameType == "Pinger":
+			return Pinger
+		elif gameType == "Pingest":
+			return Pingest
+		elif gameType == "Po":
+			return Po
+		elif gameType == "Pong":
+			return Pong
+		elif gameType == "Ponger":
+			return Ponger
+		elif gameType == "Pongest":
+			return Pongest
+		elif gameType == "Random":
+			return GameManager.getRandomGameType(rdmStart)
+		else:
+			print ( "Error : GameManager.getInitialiser() : invalid game type" )
+			return None
+
 
 	@staticmethod
 	def getRandomGameType(playerCount = 1):
@@ -249,7 +282,7 @@ class GameManager:
 		elif playerCount == 4:
 			start = 4
 		else:
-			print( "GameManager Error : getRandomGameType() : invalid player count" )
+			print( "Error : GameManager.getRandomGameType() : invalid player count" )
 			return None
 
 		value = rdm.randint(start, GameManager.gameTypeCount - 1 )
@@ -269,27 +302,6 @@ class GameManager:
 			return "Ponger"
 		elif value == 7:
 			return "Pongest"
-
-	@staticmethod
-	def getInitialiser( gameType ):
-		if gameType == "Pi":
-			return Pi
-		elif gameType == "Ping":
-			return Ping
-		elif gameType == "Pinger":
-			return Pinger
-		elif gameType == "Pingest":
-			return Pingest
-		elif gameType == "Po":
-			return Po
-		elif gameType == "Pong":
-			return Pong
-		elif gameType == "Ponger":
-			return Ponger
-		elif gameType == "Pongest":
-			return Pongest
-		else:
-			return None
 
 
 async def main():  # ASYNC IS HERE

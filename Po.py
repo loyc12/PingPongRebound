@@ -13,7 +13,6 @@ class Po(gi.Game):
 	score_mode = gi.ad.HITS
 
 
-
 if __name__ == '__main__': #		NOTE : DEBUG
 
 	pg.init()

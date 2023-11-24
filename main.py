@@ -40,6 +40,8 @@ async def debugTester( Initialiser ):
 	pg.init()
 	g = Initialiser(1, True)
 
+	print ( g.getInitInfo() )
+
 	g.setWindow(pg.display.set_mode((g.width, g.height)))
 	pg.display.set_caption(g.name)
 
@@ -49,6 +51,9 @@ async def debugTester( Initialiser ):
 	g.start()
 	g.printControlers()
 	g.run()
+
+	print ( g.getEndInfo() )
+
 
 if __name__ == '__main__':
 	asy.run(debugTester( Pong ))

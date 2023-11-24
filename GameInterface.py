@@ -10,7 +10,11 @@ import sys #	to exit properly
 # game class
 class Game:
 	name = "Game"
-	modde = ad.SOLO
+	mode = ad.SOLO
+	racketCount = 1
+	state = ad.STARTING
+	hard_break = False
+	score_mode = ad.GOALS
 
 	width = 1536
 	height = 1024
@@ -29,19 +33,15 @@ class Game:
 	factor_wall = 0.75
 	factor_rack = 1.10
 	gravity = 0
-	racketCount = 1
-	hard_break = False
 
 	col_bgr = pg.Color('black')
 	col_fnt = pg.Color('grey25')
 	col_obj = pg.Color('white')
 
-	last_ponger = 0
-	step_count = 0
-	score_mode = ad.GOALS
-
 	last_time = time.time_ns() #						NOTE : DEBUG
 
+	last_ponger = 0
+	step_count = 0
 
 	# ------------------------------------------- INITIALIZATION ------------------------------------------- #
 
@@ -49,14 +49,16 @@ class Game:
 
 		self.gameID = gameID
 
+		self.last_ponger = 0
+		self.step_count = 0
+
 		self.debugMode = debug
 		if self.debugMode: #							NOTE : DEBUG
 			self.font = pg.font.Font(None, self.size_font)
 			self.debug_font = pg.font.Font(None, 32)
 
-		self.state = ad.STARTING
 		self.useAI = True
-		self.winner_id = 0 #							NOTE : this is the score id (to allow teams)
+		self.winnerID = 0 #				NOTE : this is the scores[] index (to allow teams)
 
 		self.playerCount = 0
 		self.controlerCount = 0
@@ -311,10 +313,6 @@ class Game:
 					self.handlePygameInputs( event.key )
 
 
-	def getInfo(self): #				 NOTE : send this fct's return value to the client
-		raise NotImplementedError("Unimplemented : game.getInfo()")
-
-
 	# ------------------------------------------- GAME MECHANICS ------------------------------------------- #
 
 	def moveObjects(self):
@@ -405,6 +403,7 @@ class Game:
 		else:
 			self.last_ponger = 0
 
+		# check if someone won
 		for i in range(len(self.scores)):
 			score = self.scores[i]
 			if score >= ad.WIN_SCORE:
@@ -412,7 +411,7 @@ class Game:
 
 
 	def winGame(self, teamID):
-		self.winner_id = teamID
+		self.winnerID = teamID
 		self.state = ad.ENDING
 		print( f"Team #{ teamID } won the game of { self.name }" )
 
@@ -483,6 +482,78 @@ class Game:
 		#text = self.debug_font.render(f'{int(self.clock.get_fps())}', True, self.col_fnt)
 		self.win.blit( text, text.get_rect( center = ( 64, 32 )))
 
+
+	# ----------------------------------------- GAME INFO PACKETS ------------------------------------------ #
+
+
+	# @staticmethod
+	def getInitInfo(self):
+		infoDict = {}
+
+		infoDict["gameID"] = self.gameID
+		infoDict["width"] = self.width
+		infoDict["height"] = self.height
+		infoDict["gameInfo"] = self.getGameInfo()
+		infoDict["racketCount"] = self.racketCount
+		infoDict["racketDirs"] = self.getRacketDirs()
+		infoDict["teamCount"] = len(self.scores)
+
+		return ( infoDict )
+
+
+	# @staticmethod
+	def getGameInfo(self):
+		gameDict = {}
+
+		gameDict["gameType"] = self.name
+
+		if (self.mode == ad.SOLO):
+			gameDict["gameMode"] = "solo"
+		elif (self.mode == ad.DUAL):
+			gameDict["gameMode"] = "dual"
+		elif (self.mode == ad.FREEPLAY):
+			gameDict["gameMode"] = "freeplay"
+		elif (self.mode == ad.TOURN_RND_1):
+			gameDict["gameMode"] = "tournament (1)"
+		elif (self.mode == ad.TOURN_RND_2):
+			gameDict["gameMode"] = "tournament (2)"
+		else:
+			gameDict["gameMode"] = "unknown"
+
+		if (self.state == ad.STARTING):
+			gameDict["gameState"] = "starting"
+		elif (self.state == ad.PLAYING):
+			gameDict["gameState"] = "playing"
+		elif (self.state == ad.ENDING):
+			gameDict["gameState"] = "ending"
+
+		return ( gameDict )
+
+
+	# @staticmethod
+	def getRacketDirs(self):
+		dirs = []
+
+		for i in range(len(self.rackets)):
+
+			if self.rackets[i].dx != 0:
+				dirs.append( "x" )
+			elif self.rackets[i].dy != 0:
+				dirs.append( "y" )
+			else:
+				dirs.append( "unknown" )
+
+		return ( dirs )
+
+
+	def getEndInfo(self):
+		infoDict = {}
+
+		infoDict["gameID"] = self.gameID
+		infoDict["winingTeam"] = self.winnerID
+		infoDict["scores"] = self.scores
+
+		return ( infoDict )
 
 
 if __name__ == '__main__': #		NOTE : DEBUG

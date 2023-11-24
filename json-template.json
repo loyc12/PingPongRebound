@@ -1,25 +1,27 @@
 { // join request packet (when asking to play a game)
 	"playerName": "llord",
 	"playerID": 25,
-	"gameType": "pong",
-	"gameMode": "solo"
+	"gameType": "pong", // random == doesn't matter (create random one if none are joinable)
+	"gameMode": "solo" // solo, dual, freeplay, tournament
 }
 
 { // init info packet (when you join a lobby)
 	"gameID": 1,
+	"width": 2048,
+	"height": 1024,
 	"gameInfo": {
-		"gameType": "pong", // random == doesn't matter (create random one if none are joinable)
-		"gameMode": "solo", // solo, dual, freeplay, tournament
-		"gameState": "starting",
-		"width": 2048,
-		"height": 1024
+		"gameType": "pong",
+		"gameMode": "solo",
+		"gameState": "starting"
 	},
+	"racketCount" : 4,
 	"racketDirs": [
 		"x",
 		"y",
 		"x",
 		"y"
 	],
+	"teamCount": 1
 	// followed by initial update and player info packets
 }
 
