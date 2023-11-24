@@ -493,9 +493,7 @@ if __name__ == '__main__': #		NOTE : DEBUG
 	g.setWindow(pg.display.set_mode((1280, 1280)))
 	pg.display.set_caption(g.name)
 
-	g.printControlers()
-	g.addPlayer( "Player 1", 1 )
-	g.printControlers()
+	#g.addPlayer( "Player 1", 1 )
+
 	g.start()
-	g.printControlers()
 	g.run()

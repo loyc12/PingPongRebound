@@ -41,19 +41,18 @@ import Addons as ad
 
 async def debugTester( Initialiser ):
 
-	pg.init() # 										NOTE : DEBUG
-	win = pg.display.set_mode((2048, 1280)) # 			NOTE : ...
+	pg.init()
+	g = Initialiser(1, True)
 
-	game = Initialiser( 1, True )
-	pg.display.set_caption("DEBUG") # 					NOTE : ...
+	g.setWindow(pg.display.set_mode((g.width, g.height)))
+	pg.display.set_caption(g.name)
 
-	game.addPlayer( "Tester 1", 1 )
-	game.start()
-
-	while game.isRunning:
-		takeGameStep( game )
-		game.refreshScreen()
-		await asy.sleep(0)
+	g.printControlers()
+	g.addPlayer( "Player 1", 1 )
+	g.printControlers()
+	g.start()
+	g.printControlers()
+	g.run()
 
 
 def debugPlayerControler( game ):
