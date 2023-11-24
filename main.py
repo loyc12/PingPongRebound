@@ -61,7 +61,7 @@ def debugPlayerControler( game ):
 
 		# quiting the game
 		if event.type == pg.QUIT or ( event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE ):
-			game.isRunning = False
+			game.state = ad.ENDING
 
 		# handling key presses
 		elif event.type == pg.KEYDOWN:
