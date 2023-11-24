@@ -19,7 +19,7 @@ class GameManager:
 
 	windowID = 0 #							NOTE : DEBUG
 
-	def __init__( self, _debugMode = True ):
+	def __init__( self, _debugMode = False ):
 		self.debugMode = _debugMode #		NOTE : DEBUG
 
 		self.gameCount = 0
@@ -306,7 +306,7 @@ class GameManager:
 
 async def main():  # ASYNC IS HERE
 
-	gm = GameManager()
+	gm = GameManager(True)
 
 	if (gm.debugMode):
 		pg.init()
@@ -323,7 +323,7 @@ async def main():  # ASYNC IS HERE
 
 	if gm.debugMode:
 		await asy.sleep(0)
-	else: # 											NOTE : put fps here if not in debugMode
+	else: # 											NOTE : put game ticks here if not in debugMode
 		pass
 
 

@@ -12,11 +12,13 @@ from GameManager import main
 import asyncio as asy
 import pygame as pg
 
+# IMPORTANT: UNIMPORT PYGAME FROM THE FINAL PROJECT (ONLY USED FOR DEBUGGING)
+
 # MASTER LIST
 # TODO : allow removing players from games via GameManager
-# TODO : implement gamesToEnd queue to avoid issue with deleting games while iterating over gameDict
+# TODO : Detach enteriely from pygame when not in debug mode
 # TODO : add game state dicts in gameManager or gameInterface to be return with getInfo
-# TODO : add queues for gameManager to receive/send messages (gamesToStart, gameStartInfo, gamesToEnd, gameEndInfo, playerEvents)
+# TODO : add queues for gameManager to receive/send messages (gameStartInfo, gameEndInfo, playerEvents)
 
 # FUNCTION LIST
 # TODO : implement get/sendUpdateInfo()
