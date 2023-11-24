@@ -497,8 +497,8 @@ class Game:
 		infoDict["racketCount"] = self.racketCount
 		infoDict["racketDirs"] = self.getRacketDirs()
 		#infoDict["racketInitPos"] #										NOTE : IMPLEMENT ME
-		infoDict["ballInitPos"] = ( self.widht / 2,  self.height / 2 ) #	NOTE : broche a foin
-		infoDict["teamCount"] = len(self.scores)
+		infoDict["ballInitPos"] = ( self.width / 2,  self.height / 2 ) #	NOTE : broche a foin
+		infoDict["teamCount"] = len( self.scores )
 
 		return ( infoDict )
 
@@ -566,6 +566,9 @@ class Game:
 		pass
 
 
+	def getPlayerInfo(self): #						NOTE : IMPLEMENT ME
+		pass
+
 	def getUpdateInfo(self):
 		infoDict = {}
 
@@ -582,7 +585,7 @@ class Game:
 	def getRacketPos(self):
 		pos = []
 
-		for i in range(len(self.rackets)):
+		for i in range( len( self.rackets )):
 			pos.append( self.rackets[i].getPos() )
 
 		return ( pos )
@@ -591,7 +594,7 @@ class Game:
 	def getBallPos(self):
 		pos = []
 
-		for i in range(len(self.balls)):
+		for i in range( len( self.balls )):
 			pos.append( self.balls[i].getPos() )
 
 		return ( pos )

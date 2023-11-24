@@ -12,19 +12,20 @@ from GameManager import main
 import asyncio as asy
 import pygame as pg
 
+
+
 # IMPORTANT: UNIMPORT PYGAME FROM THE FINAL PROJECT (ONLY USED FOR DEBUGGING)
+
+
 
 # MASTER LIST
 # TODO : allow removing players from games via GameManager
-# TODO : Detach enteriely from pygame when not in debug mode
+# TODO : detach entirely from pygame when not in debug mode
 # TODO : add game state dicts in gameManager or gameInterface to be return with getInfo
 # TODO : add queues for gameManager to receive/send messages (gameStartInfo, gameEndInfo, playerEvents)
 
 # FUNCTION LIST
-# TODO : implement get/sendUpdateInfo()
-# TODO : implement get/sendPlayerInfo()
-# TODO : implement get/sendEndInfo()
-# TODO : implement get/sendStartInfo()
+# TODO : finish implementing the info accessors in game manager
 
 # DEBUG LIST
 # TODO : make sure to always put player 1 and 2 in oposite teams
@@ -52,6 +53,9 @@ async def debugTester( Initialiser ):
 	g.printControlers()
 	g.start()
 	g.printControlers()
+
+	print ( g.getUpdateInfo() )
+
 	g.run()
 
 	print ( g.getEndInfo() )
