@@ -1,3 +1,9 @@
+import pygame as pg
+import asyncio as asy
+import random as rdm
+import Addons as ad
+import sys
+
 from Pi import Pi
 from Ping import Ping
 from Pinger import Pinger
@@ -6,12 +12,6 @@ from Po import Po
 from Pong import Pong
 from Ponger import Ponger
 from Pongest import Pongest
-
-import pygame as pg
-import asyncio as asy
-import random as rdm
-import Addons as ad
-import sys
 
 class GameManager:
 
@@ -63,12 +63,10 @@ class GameManager:
 
 
 	def removePlayerFromGame( self, _playerID, key ):
-		#try:
-		#	self.gameDict.get(key).removePlayer( _playerID )
-		#except:
-		#	print ("Could not remove player #" + str( _playerID ) + " from game #" + str( key ))
-		pass
-
+		if ( self.gameDict.get(key).removePlayer( _playerID )):
+			pass
+		else:
+			print ("player #" + str( _playerID ) + " is absent from game #" + str( key ))
 
 	def removeGame( self, key ):
 		self.gameDict.get(key).close()
@@ -84,7 +82,7 @@ class GameManager:
 			game.clock.tick (game.framerate) # 	TODO : detach from pygame
 
 		else:
-			print ("this game is not running")
+			print (" this game is not currently running ")
 
 
 
@@ -122,72 +120,74 @@ class GameManager:
 
 			if event.type == pg.KEYDOWN:
 				k = event.key
-				initialID = self.windowID
 
-				# closes the game
-				if k == pg.K_ESCAPE:
-					for game in self.gameDict.values():
-						game.close()
-					self.runGames = False
-					sys.exit()
+				if self.debugMode:
+					initialID = self.windowID
 
-				# respawns the ball
-				elif k == pg.K_RETURN:
-					if self.windowID != 0:
-						if self.gameDict.get(self.windowID) != None:
-							game = self.gameDict.get(self.windowID)
-							game.respawnAllBalls()
-							print ( "respawning the ball(s)" )
+					# closes the game
+					if k == pg.K_ESCAPE:
+						for game in self.gameDict.values():
+							game.close()
+						self.runGames = False
+						sys.exit()
+
+					# respawns the ball
+					elif k == ad.RETURN:
+						if self.windowID != 0:
+							if self.gameDict.get(self.windowID) != None:
+								game = self.gameDict.get(self.windowID)
+								game.respawnAllBalls()
+								print ( "respawning the ball(s)" )
+							else:
+								print ( "coud not respawn the ball(s)" )
 						else:
-							print ( "coud not respawn the ball(s)" )
-					else:
-						print ( "please select a valid game (1-8)" )
-					return
+							print ( "please select a valid game (1-8)" )
+						return
 
-				# rotate game to view
-				elif k == pg.K_q or k == pg.K_e:
-					if k == pg.K_e:
-						self.windowID += 1
-					else:
-						self.windowID -= 1
+					# rotate game to view
+					elif k == pg.K_q or k == pg.K_e:
+						if k == pg.K_e:
+							self.windowID += 1
+						else:
+							self.windowID -= 1
 
-					if self.windowID <= 0:
-						self.windowID = self.maxGameCount
-					elif self.windowID > self.maxGameCount:
+						if self.windowID <= 0:
+							self.windowID = self.maxGameCount
+						elif self.windowID > self.maxGameCount:
+							self.windowID = 1
+
+					# select game to view
+					elif k == pg.K_0:
+						self.windowID = 0
+					elif k == pg.K_1:
 						self.windowID = 1
+					elif k == pg.K_2:
+						self.windowID = 2
+					elif k == pg.K_3:
+						self.windowID = 3
+					elif k == pg.K_4:
+						self.windowID = 4
+					elif k == pg.K_5:
+						self.windowID = 5
+					elif k == pg.K_6:
+						self.windowID = 6
+					elif k == pg.K_7:
+						self.windowID = 7
+					elif k == pg.K_8:
+						self.windowID = 8
+					elif k == pg.K_9:
+						self.windowID = 9
 
-				# select game to view
-				elif k == pg.K_0:
-					self.windowID = 0
-				elif k == pg.K_1:
-					self.windowID = 1
-				elif k == pg.K_2:
-					self.windowID = 2
-				elif k == pg.K_3:
-					self.windowID = 3
-				elif k == pg.K_4:
-					self.windowID = 4
-				elif k == pg.K_5:
-					self.windowID = 5
-				elif k == pg.K_6:
-					self.windowID = 6
-				elif k == pg.K_7:
-					self.windowID = 7
-				elif k == pg.K_8:
-					self.windowID = 8
-				elif k == pg.K_9:
-					self.windowID = 9
-
-				# checks if viewed game changed
-				if initialID != self.windowID:
-					if self.gameDict.get(self.windowID) == None:
-						print( "could not switch to game #" + str( self.windowID ) )
-						print( "please select a valid game (1-8)" )
-						self.emptyDisplay()
-					else:
-						print( "now playing in game #" + str( self.windowID ) )
-						pg.display.set_caption( self.gameDict.get(self.windowID).name )
-					return
+					# checks if viewed game changed
+					if initialID != self.windowID:
+						if self.gameDict.get(self.windowID) == None:
+							print( "could not switch to game #" + str( self.windowID ) )
+							print( "please select a valid game (1-8)" )
+							self.emptyDisplay()
+						else:
+							print( "now playing in game #" + str( self.windowID ) )
+							pg.display.set_caption( self.gameDict.get(self.windowID).name )
+						return
 
 				# handling movement keys presses
 				if self.gameDict.get(self.windowID) == None:
@@ -203,7 +203,7 @@ class GameManager:
 
 
 
-	def displayGame( self, game ): # 			NOTE : DEBUG
+	def displayGame( self, game ): # 						NOTE : DEBUG
 		if game.state == ad.PLAYING:
 			if game.width != self.win.get_width() or game.height != self.win.get_height(): # 	TODO : detach from pygame
 				self.win = pg.display.set_mode( (game.width, game.height) )
@@ -237,24 +237,35 @@ class GameManager:
 		elif gameType == "Pongest":
 			return Pongest.maxPlayerCount
 		else:
+			print ( "GameManager Error : getMaxPlayerCount() : invalid game type" )
 			return 0
 
 	@staticmethod
-	def getRandomGameType():
-		value = rdm.randint(0, GameManager.gameTypeCount - 1 )
+	def getRandomGameType(playerCount = 1):
+		if playerCount == 1:
+			start = 0
+		elif playerCount == 2:
+			start = 2
+		elif playerCount == 4:
+			start = 4
+		else:
+			print( "GameManager Error : getRandomGameType() : invalid player count" )
+			return None
+
+		value = rdm.randint(start, GameManager.gameTypeCount - 1 )
 		if value == 0:
 			return "Pi"
-		elif value == 1:
-			return "Ping"
 		elif value == 2:
-			return "Pinger"
-		elif value == 3:
-			return "Pingest"
+			return "Ping"
 		elif value == 4:
-			return "Po"
-		elif value == 5:
-			return "Pong"
+			return "Pinger"
 		elif value == 6:
+			return "Pingest"
+		elif value == 1:
+			return "Po"
+		elif value == 3:
+			return "Pong"
+		elif value == 5:
 			return "Ponger"
 		elif value == 7:
 			return "Pongest"

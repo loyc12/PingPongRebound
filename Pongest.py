@@ -1,6 +1,7 @@
-import pygame as pg
-import GameObject as go
-import GameInterface as gi
+from master import pg
+from master import go
+from master import gi
+import Addons as ad
 
 class Pongest(gi.Game):
 	name = "Pongest"
@@ -53,25 +54,25 @@ class Pongest(gi.Game):
 	def handlePygameInputs(self, key): #		NOTE : DEBUG
 		# player 1
 		if (self.controlers[0].mode == gi.gc.ad.PLAYER):
-			if key == pg.K_s:
+			if key == ad.KS:
 				self.makeMove( 1, gi.ad.STOP )
 				self.makeMove( 3, gi.ad.STOP )
-			elif key == pg.K_a:
+			elif key == ad.KA:
 				self.makeMove( 1, gi.ad.LEFT )
 				self.makeMove( 3, gi.ad.LEFT )
-			elif key == pg.K_d:
+			elif key == ad.KD:
 				self.makeMove( 1, gi.ad.RIGHT )
 				self.makeMove( 3, gi.ad.RIGHT )
 
 		# player 2
 		if (self.controlers[1].mode == gi.gc.ad.PLAYER):
-			if key == pg.K_LEFT:
+			if key == ad.LEFT:
 				self.makeMove( 2, gi.ad.STOP )
 				self.makeMove( 4, gi.ad.STOP )
-			elif key == pg.K_UP:
+			elif key == ad.UP:
 				self.makeMove( 2, gi.ad.UP )
 				self.makeMove( 4, gi.ad.UP )
-			elif key == pg.K_DOWN:
+			elif key == ad.DOWN:
 				self.makeMove( 2, gi.ad.DOWN )
 				self.makeMove( 4, gi.ad.DOWN )
 

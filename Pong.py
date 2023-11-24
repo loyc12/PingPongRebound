@@ -1,6 +1,7 @@
-import pygame as pg
-import GameObject as go
-import GameInterface as gi
+from master import pg
+from master import go
+from master import gi
+import Addons as ad
 
 class Pong(gi.Game):
 	name = "Pong"
@@ -35,20 +36,20 @@ class Pong(gi.Game):
 	def handlePygameInputs(self, key): #		NOTE : DEBUG
 		# player 1
 		if (self.controlers[0].mode == gi.gc.ad.PLAYER):
-			if key == pg.K_a:
+			if key == ad.KA:
 				self.makeMove( 1, gi.ad.STOP )
-			elif key == pg.K_w:
+			elif key == ad.KW:
 				self.makeMove( 1, gi.ad.UP )
-			elif key == pg.K_s:
+			elif key == ad.KS:
 				self.makeMove( 1, gi.ad.DOWN )
 
 		# player 2
 		if (self.controlers[1].mode == gi.gc.ad.PLAYER):
-			if key == pg.K_LEFT:
+			if key == ad.LEFT:
 				self.makeMove( 2, gi.ad.STOP )
-			elif key == pg.K_UP:
+			elif key == ad.UP:
 				self.makeMove( 2, gi.ad.UP )
-			elif key == pg.K_DOWN:
+			elif key == ad.DOWN:
 				self.makeMove( 2, gi.ad.DOWN )
 
 

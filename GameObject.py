@@ -1,4 +1,4 @@
-import pygame as pg
+from master import pg
 import Addons as ad
 
 # ------------------------------------------ GAMEOBJECT CLASS ------------------------------------------ #

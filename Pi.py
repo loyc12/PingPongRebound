@@ -1,6 +1,6 @@
-import pygame as pg
-import GameObject as go
-import GameInterface as gi
+from master import pg
+from master import go
+from master import gi
 
 class Pi(gi.Game):
 	name = "Pi"

@@ -1,8 +1,8 @@
-import pygame as pg
-import GameObject as go
-import GameControler as gc
-import BotControler as ai
+from master import pg
+from master import go
+from master import gc
 import PlayerControler as pl
+import BotControler as bc
 import Addons as ad
 import time #											NOTE : DEBUG
 import sys #	to exit properly
@@ -97,7 +97,7 @@ class Game:
 		if (self.controlerCount >= self.racketCount):
 			raise Exception("Too many bots for this game")
 
-		bot = ai.BotControler( self, botname )
+		bot = bc.BotControler( self, botname )
 		bot.setRacket( self.rackets[ len(self.controlers) ].id )
 		bot.recordDefaultPos()
 		bot.setFrequencyOffset( self.racketCount )
@@ -225,11 +225,11 @@ class Game:
 		for i in range(0, self.controlerCount):
 			if (self.controlers[i].mode == gc.ad.PLAYER):
 				rack = self.controlers[i].racket
-				if key == pg.K_s or key == pg.K_DOWN:
+				if key == ad.KS or key == ad.DOWN:
 					self.makeMove( rack.id, ad.STOP )
-				elif key == pg.K_a or key == pg.K_LEFT:
+				elif key == ad.KA or key == ad.LEFT:
 					self.makeMove( rack.id, ad.LEFT )
-				elif key == pg.K_d or key == pg.K_RIGHT:
+				elif key == ad.KD or key == ad.RIGHT:
 					self.makeMove( rack.id, ad.RIGHT )
 
 
@@ -303,7 +303,7 @@ class Game:
 				if event.key == pg.K_ESCAPE:
 					self.close()
 
-				elif event.key == pg.K_RETURN:
+				elif event.key == ad.RETURN:
 					for i in range(len(self.balls)):
 						self.respawnBall( self.balls[i] )
 

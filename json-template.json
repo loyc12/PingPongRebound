@@ -10,7 +10,9 @@
 	"gameInfo": {
 		"gameType": "pong", // random == doesn't matter (create random one if none are joinable)
 		"gameMode": "solo", // solo, dual, freeplay, tournament
-		"gameState": "starting"
+		"gameState": "starting",
+		"width": 2048,
+		"height": 1024
 	},
 	"racketDirs": [
 		"x",
@@ -28,6 +30,7 @@
 			"isConfirmed": false,
 			"llord": [
 				{
+					"isBot": false,
 					"playerID": 25,
 					"racketID": 1,
 					"teamID": 0
@@ -35,6 +38,7 @@
 			],
 			"vjean": [
 				{
+					"isBot": false,
 					"playerID": 16,
 					"racketID": 2,
 					"teamID": 0
@@ -42,6 +46,7 @@
 			],
 			"ghebert": [
 				{
+					"isBot": false,
 					"playerID": 36,
 					"racketID": 3,
 					"teamID": 0
@@ -49,7 +54,8 @@
 			],
 			"bot_2": [
 				{
-					"playerID": 0, // 0 == bot
+					"isBot": true,
+					"playerID": 4,
 					"racketID": 4,
 					"teamID": 0
 				}
@@ -60,16 +66,16 @@
 
 { // update info packet (when game ticks)
 	"gameID": 1,
+	"lastPonger": 1,
+	"ballPos": [
+		"x1", "y1"
+	],
 	"racketPos": [
 		"x1", "y1", // stringify scores
 		"x2", "y2",
 		"x3", "y3",
 		"x4", "y4"
 	],
-	"ballPos": [
-		"x1", "y1"
-	],
-	"lastPonger": 1,
 	"scores": [
 		"s1",
 		"s2",

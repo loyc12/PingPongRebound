@@ -1,4 +1,4 @@
-import GameControler as gc
+from master import gc
 import Addons as ad
 
 # NOTE : this is a fairly dumb ai, especially for split screen games
