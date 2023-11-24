@@ -1,10 +1,11 @@
-from Pi import Ping
-from Ping import Pinger
-from Ponger import Pingest
+from Pi import Pi
+from Po import Po
+from Ping import Ping
 from Pong import Pong
-from Pinger import Ponger
-from Pingest import Pongest
-from Pongest import Pongester
+from Pinger import Pinger
+from Ponger import Ponger
+from Pingest import Pingest
+from Pongest import Pongest
 from GameInterface import Game
 from GameManager import main
 
@@ -43,7 +44,7 @@ async def debugTester( Initialiser ):
 	pg.init() # 										NOTE : DEBUG
 	win = pg.display.set_mode((2048, 1280)) # 			NOTE : ...
 
-	game = Initialiser( win, pg.time.Clock(), True )
+	game = Initialiser( 1, True )
 	pg.display.set_caption("DEBUG") # 					NOTE : ...
 
 	game.addPlayer( "Tester 1", 1 )

@@ -159,7 +159,7 @@ if __name__ == '__main__': #		NOTE : DEBUG
 	pg.init()
 	g = Pingest(1, True)
 
-	g.setWindow(pg.display.set_mode((1280, 1280)))
+	g.setWindow(pg.display.set_mode((Pingest.width, Pingest.height)))
 	pg.display.set_caption(g.name)
 
 	#g.addPlayer( "Player 1", 1 )

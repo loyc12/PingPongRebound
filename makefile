@@ -10,7 +10,7 @@ game:
 	python3 GameInterface.py
 
 
-po:
+pi:
 	python3 Pi.py
 
 ping:

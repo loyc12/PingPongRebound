@@ -5,12 +5,12 @@ import Addons as ad
 import sys
 
 from Pi import Pi
-from Ping import Ping
-from Pinger import Pinger
-from Pingest import Pingest
 from Po import Po
+from Ping import Ping
 from Pong import Pong
+from Pinger import Pinger
 from Ponger import Ponger
+from Pingest import Pingest
 from Pongest import Pongest
 
 class GameManager:
