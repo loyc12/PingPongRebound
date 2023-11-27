@@ -21,6 +21,7 @@ if cfg.DEBUG_MODE:
 
 
 # MASTER LIST
+# TODO : use different self.____Lock like mutexes to protect dicts and individual games
 # TODO : allow removing players from games via GameManager
 # TODO : add game state dicts in gameManager or gameInterface to be return with getInfo
 # TODO : add queues for gameManager to receive/send messages (gameStartInfo, gameEndInfo, playerEvents)

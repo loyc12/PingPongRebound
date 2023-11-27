@@ -26,59 +26,128 @@ class GameManager:
 
 		self.gameCount = 0
 		self.maxGameCount = 0
-		self.runGames = True
+		self.runGames = False
 
 		self.lock = asy.Lock()
-		self.t0 = None
-		self.t1 = None
-		self.sleep_loss = 0.001# Rough estimate. Will adjust over time
+		self.previousTime = 0.0
+		self.currentTime = 0.0
+		self.meanDt = cfg.FRAME_DELAY #		NOTE : DEBUG
+		self.sleep_loss = 0.001 # 			NOTE : will adjust itself over time
 
 		self.gameDict = {}
 
-
-	def addGame( self, gameType, gameID):
-
-		Initialiser = self.getInitialiser( gameType )
-
-		if (Initialiser == None):
-			print ("could not add game of type " + gameType)
-			return 0
-
-		newGame = Initialiser( gameID ) # 	TODO : detach from pygame
 		if cfg.DEBUG_MODE:
-			newGame.setWindow(self.win)
-		self.gameDict[gameID] = newGame
-		self.gameCount += 1
-		if self.gameCount > self.maxGameCount:
-			self.maxGameCount = self.gameCount
+			pg.init()
+			self.win = pg.display.set_mode((2048, 1280))
+			pg.display.set_caption("Game Manager")
 
-		#if cfg.DEBUG_MODE:
-			#self.addPlayerToGame( GameID, "Tester " + str( GameID ), GameID ) #		NOTE : DEBUG
+
+	# ---------------------------------------------- GAME CMDS --------------------------------------------- #
+
+	async def addGame( self, gameType, gameID):
+		async with self.lock:
+			Initialiser = self.getInitialiser( gameType )
+
+			if (Initialiser == None):
+				print ("could not add game of type " + gameType)
+				return 0
+
+			if (self.gameDict.get( gameID ) != None):
+				print ("game #" + str( gameID ) + " already exists")
+				return 0
+
+			self.gameDict[ gameID ] = Initialiser( gameID )
+
+			if cfg.DEBUG_MODE:
+				self.gameDict.get( gameID ).setWindow(self.win)
+				self.addPlayerToGame( gameID, "Tester " + str( gameID ), gameID ) #		NOTE : DEBUG
+
+				if len( self.gameDict ) > self.maxGameCount:
+					self.maxGameCount = len( self.gameDict )
+
+			if not self.runGames:
+				self.runGames = True
+
+				#asy.get_event_loop().create_task(self.mainloop())
 
 		return gameID
 
 
-	def addPlayerToGame( self, playerID, name, key ):
-		if ( self.gameDict.get(key)):
-			self.gameDict.get(key).addPlayer( name, playerID )
-		else:
-			print ("could not add player #" + str( playerID ) + " to game #" + str( key ))
+	async def removeGame( self, gameID ):
+		async with self.lock: #						NOTE : not needed, makes shit crash
+			game = self.gameDict.get( gameID )
+
+			if game == None:
+				print ("game #" + str( gameID ) + " does not exist")
+				return
+
+			game.close()
+			self.gameDict.pop(gameID)
+
+			if len ( self.gameDict ) == 0:
+				self.runGames = False
 
 
-	def startGame( self, key ):
-		self.gameDict.get(key).start()
+	async def addPlayerToGame( self, playerID, name, gameID ):
+
+		async with self.lock:
+			game = self.gameDict.get( gameID )
+
+			if game == None:
+				print ("game #" + str( gameID ) + " does not exist")
+				print ("could not add player #" + str( playerID ) + " to game #" + str( gameID ))
+				return
+
+			self.gameDict.get( gameID ).addPlayer( name, playerID )
 
 
-	def removePlayerFromGame( self, _playerID, key ):
-		if ( self.gameDict.get(key)):
-			self.gameDict.get(key).removePlayer( _playerID )
-		else:
-			print ("player #" + str( _playerID ) + " is absent from game #" + str( key ))
+	async def removePlayerFromGame( self, playerID, gameID ):
+		async with self.lock:
+			game = self.gameDict.get( gameID )
 
-	def removeGame( self, key ):
-		self.gameDict.get(key).close()
-		self.gameDict.pop(key)
-		self.gameCount -= 1
+			if game == None:
+				print ("game #" + str( gameID ) + " does not exist")
+				print ("could not remove player #" + str( playerID ) + " from game #" + str( gameID ))
+				return
+
+			if not game.hasPlayer( playerID ):
+				print ("player #" + str( playerID ) + " is absent from game #" + str( gameID ))
+				print ("could not remove player #" + str( playerID ) + " from game #" + str( gameID ))
+				return
+
+			# NOTE : to know how to handle player leaving
+			#if game.state == ad.STARTING:
+			#	pass
+			#elif game.state == ad.PLAYING:
+			#	pass
+			#elif game.state == ad.ENDING:
+			#	pass
+
+			game.removePlayer( playerID )
+
+
+	async def startGame( self, gameID ):
+		async with self.lock:
+			game = self.gameDict.get( gameID )
+
+			if game == None:
+				print ("game #" + str( gameID ) + " does not exist")
+				print ("could not start game #" + str( gameID ))
+				return
+
+			game.start()
+
+
+	async def closeGame( self, gameID ):
+		async with self.lock:
+			game = self.gameDict.get( gameID )
+
+			if game == None:
+				print ("game #" + str( gameID ) + " does not exist")
+				print ("could not close close #" + str( gameID ))
+				return
+
+			game.close()
 
 
 	def runGameStep( self, game ):
@@ -86,78 +155,108 @@ class GameManager:
 
 			game.moveObjects()
 			game.makeBotsPlay()
-			game.tickTime() #						NOTE : DEBUG
+			game.tickTime() #			NOTE : only does stuff in debug mode
 
 		else:
 			print (" this game is not currently running ")
 
 
-
 	async def tickGames(self):
 		deleteList = []
-		async with self.lock:
-			for key, game in self.gameDict.items():
+		#async with self.lock: #					NOTE : useless???
+		for key, game in self.gameDict.items():
 
-				if game.state == ad.STARTING:
-					pass #								send player info packet from here
+			if game.state == ad.STARTING:
+				pass #								send player info packet from here
 
-				elif game.state == ad.PLAYING:
-					self.runGameStep( game )
+			elif game.state == ad.PLAYING:
+				game.step( False )
 
-					if cfg.DEBUG_MODE: #				NOTE : DEBUG
-						if key == self.windowID:
-							self.displayGame( game )
+				if cfg.DEBUG_MODE: #				NOTE : DEBUG
+					if key == self.windowID:
+						self.displayGame( game )
 
-				elif game.state == ad.ENDING:
-					if cfg.DEBUG_MODE and self.windowID == key:
-						print ("this game no longer exists")
-						print ("please select a valid game (1-8)")
-						self.windowID = 0
-						self.emptyDisplay()
+			elif game.state == ad.ENDING:
+				if cfg.DEBUG_MODE and self.windowID == key:
+					print ( "this game no longer exists" )
+					print ( "please select a valid game (1-8)" )
+					self.windowID = 0
+					self.emptyDisplay()
 
-					else: #								send closing info packet from here
-						pass
+				else: #								send closing info packet from here
+					pass
 
-					deleteList.append(key)
+				deleteList.append(key)
 
-			for key in deleteList:
-				self.removeGame( key )
+		for key in deleteList:
+			await self.removeGame( key )
 
 
 	def getNextSleepDelay(self):
-		self.t1 = time.monotonic()
-		dt = self.t1 - self.t0
-		self.t0 = self.t1
+		self.currentTime = time.monotonic()
+		dt = self.currentTime - self.previousTime
+		self.previousTime = self.currentTime
+		#print('time between frames: ', dt)
 
-		diversion = dt - cfg.FRAME_DELAY
+		self.meanDt = self.meanDt * 0.95 + dt * 0.05
+		print('mean between frames: ', self.meanDt)
 
-		correction = (diversion - self.sleep_loss) * 0.1
-		self.sleep_loss += correction # (diversion - self.sleep_loss) * 0.1
+		diversion = cfg.FRAME_DELAY - dt
+
+		correction = ( self.sleep_loss + diversion) * 0.1
+
+		self.sleep_loss -= correction
+
+		delay = ( cfg.FRAME_DELAY - self.sleep_loss ) - 0.002
+
+		#print('next sleep delay   : ', delay)
 		#print("delta time: ", dt, "diversion: ", diversion, "sleep loss: ", self.sleep_loss, "correction: ", correction)
-		#print('next sleep delay: ', cfg.FRAME_DELAY - self.sleep_loss)
-		return cfg.FRAME_DELAY - self.sleep_loss
+
+		return delay
+
+
+# NOTE : this does not work precisely due to sleep being a bitch
+#
+#	async def SmartSleep(self):
+#		self.currentTime = time.monotonic()
+#		print("frame_time : ", str( self.currentTime - self.debugTime ))
+#		self.debugTime = self.currentTime
+#
+#		dt = self.currentTime - self.previousTime #how long processing took
+#
+#		delay = cfg.FRAME_DELAY - dt
+#
+#		if (delay > 0):
+#			await asy.sleep( delay )
+#			#print("delay : " + str( delay ) + "\t : dt : " + str( dt ))
+#
+#		self.previousTime = time.monotonic()
 
 
 	async def mainloop(self):
 
-		await asy.sleep(cfg.FRAME_DELAY - self.sleep_loss)
+		print( ">  STARTING MAINLOOP  <" )
 
-		if  not cfg.DEBUG_MODE:
+		self.currentTime = time.monotonic()
+		await asy.sleep( cfg.FRAME_DELAY - self.sleep_loss )
+
+		if not cfg.DEBUG_MODE:
 			while self.runGames:
 				await self.tickGames()
-				await asy.sleep(self.getNextSleepDelay())
+				await asy.sleep( self.getNextSleepDelay() )
 
 		else:
-			pg.init()
 			self.emptyDisplay()
-			addAllGames( self )
 
 			while self.runGames:
 				self.takePlayerInputs()
 				await self.tickGames()
+				await asy.sleep( self.getNextSleepDelay() )
 
-		print('MAINLOOP EXIT !')
+		print( ">  EXITED MAINLOOP  <" )
 
+
+	# ---------------------------------------------- DEBUG CMDS -------------------------------------------- #
 
 	def takePlayerInputs( self ): # 					NOTE : DEBUG
 		# read local player inputs
@@ -248,7 +347,7 @@ class GameManager:
 
 
 
-	def displayGame( self, game ): # 						NOTE : DEBUG
+	def displayGame( self, game ): # 					NOTE : DEBUG
 		if game.state == ad.PLAYING:
 			if game.width != self.win.get_width() or game.height != self.win.get_height():
 				self.win = pg.display.set_mode( (game.width, game.height) )
@@ -257,11 +356,36 @@ class GameManager:
 			game.refreshScreen()
 
 
-	def emptyDisplay( self ): # 							NOTE : DEBUG
+	def emptyDisplay( self ): # 						NOTE : DEBUG
 		pg.display.set_caption("Game Manager")
 		self.win = pg.display.set_mode((2048, 1280))
 		self.win.fill( pg.Color('black') )
 
+
+	async def addAllGames( self ): #					NOTE : DEBUG
+		gameID = 1
+
+		await self.startGame( await self.addGame( "Pi", gameID ))
+		gameID += 1
+		await self.startGame( await self.addGame( "Po", gameID ))
+		gameID += 1
+		await self.startGame( await self.addGame( "Ping", gameID ))
+		gameID += 1
+		await self.startGame( await self.addGame( "Pong", gameID ))
+		gameID += 1
+		await self.startGame( await self.addGame( "Pinger", gameID ))
+		gameID += 1
+		await self.startGame( await self.addGame( "Ponger", gameID ))
+		gameID += 1
+		await self.startGame( await self.addGame( "Pingest", gameID ))
+		gameID += 1
+		await self.startGame( await self.addGame( "Pongest", gameID ))
+		gameID += 1
+
+		print ("select a player (1-8)")
+
+
+	# ---------------------------------------------- INFO CMDS --------------------------------------------- #
 
 	@staticmethod
 	def getMaxPlayerCount( gameType ):
@@ -342,48 +466,11 @@ class GameManager:
 			return "Pongest"
 
 
-async def main():
-
+def testAllGames():
 	gm = GameManager()
+	asy.run ( gm.addAllGames() )
+	asy.run ( gm.mainloop() )
 
-	if  not cfg.DEBUG_MODE:
-		while gm.runGames:
-			await gm.tickGames()
-			await asy.sleep(cfg.FRAME_DELAY)
-
-	else:
-		pg.init()
-		gm.emptyDisplay()
-		addAllGames( gm )
-
-		while gm.runGames:
-			gm.takePlayerInputs()
-			await gm.tickGames()
-
-
-def addAllGames( gm ): #					NOTE : DEBUG
-	gameID = 1
-
-	gm.startGame( gm.addGame( "Pi", gameID ))
-	gameID += 1
-	gm.startGame( gm.addGame( "Po", gameID ))
-	gameID += 1
-	gm.startGame( gm.addGame( "Ping", gameID ))
-	gameID += 1
-	gm.startGame( gm.addGame( "Pong", gameID ))
-	gameID += 1
-	gm.startGame( gm.addGame( "Pinger", gameID ))
-	gameID += 1
-	gm.startGame( gm.addGame( "Ponger", gameID ))
-	gameID += 1
-	gm.startGame( gm.addGame( "Pingest", gameID ))
-	gameID += 1
-	gm.startGame( gm.addGame( "Pongest", gameID ))
-	gameID += 1
-
-	print ("select a player (1-8)")
 
 if __name__ == '__main__':
-	asy.run( main())
-
-
+	testAllGames()

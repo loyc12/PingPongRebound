@@ -107,12 +107,11 @@ class Game:
 
 
 	def makeBotsPlay(self):
-		if self.playerCount < self.racketCount:
+		if self.useAI and self.playerCount < self.racketCount:
 			for i in range(self.playerCount, self.controlerCount):
 				if (self.controlers[i].mode == gc.ad.BOT):
 					if (( self.step_count + self.controlers[i].frequency_offset ) % ad.BOT_FREQUENCY ) == 0:
 						self.controlers[i].playMove()
-						#time.sleep(0.25) # NOTE : DEBUG
 			self.step_count += 1
 			self.step_count %= ad.BOT_FREQUENCY
 
@@ -266,33 +265,26 @@ class Game:
 		# main game loop
 		while self.state == ad.PLAYING:
 			self.debugControler()
-			self.step()
-			self.tickTime()
+			self.step( True )
+			self.clock.tick (self.framerate)
 
 
 
-	def step(self):
+	def step(self, display = True):
 
 		if self.state != ad.PLAYING:
-			print(f"{self.name} is not running")
+			print( str( self.name ) + " is not running" )
 			return
 
 		self.moveObjects()
-
-		if self.useAI:
-			self.makeBotsPlay()
+		self.makeBotsPlay()
 
 		if cfg.DEBUG_MODE:
-			self.refreshScreen()
+			self.clock.tick(0)
+			if (display):
+				self.refreshScreen()
 		else:
 			#self.sendUpdateInfo()
-			pass
-
-
-	def tickTime(self):
-		if cfg.DEBUG_MODE:
-			self.clock.tick (self.framerate)
-		else: #											NOTE : do we need this (?)
 			pass
 
 
