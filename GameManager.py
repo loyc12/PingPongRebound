@@ -31,8 +31,8 @@ class GameManager:
 		self.lock = asy.Lock()
 		self.previousTime = 0.0
 		self.currentTime = 0.0
-		self.meanDt = cfg.FRAME_DELAY #		NOTE : DEBUG
 		self.sleep_loss = 0.001 # 			NOTE : will adjust itself over time
+		self.meanDt = cfg.FRAME_DELAY #		NOTE : DEBUG
 
 		self.gameDict = {}
 
@@ -68,7 +68,7 @@ class GameManager:
 			if not self.runGames:
 				self.runGames = True
 
-				#asy.get_event_loop().create_task(self.mainloop())
+				#asy.get_event_loop().create_task(self.mainloop()) #					NOTE : does nothing ?
 
 		return gameID
 
@@ -207,7 +207,7 @@ class GameManager:
 
 		self.sleep_loss -= correction
 
-		delay = ( cfg.FRAME_DELAY - self.sleep_loss ) - 0.002
+		delay = ( cfg.FRAME_DELAY - self.sleep_loss ) * 0.85
 
 		#print('next sleep delay   : ', delay)
 		#print("delta time: ", dt, "diversion: ", diversion, "sleep loss: ", self.sleep_loss, "correction: ", correction)
