@@ -1,9 +1,6 @@
 from master import gc
 import Addons as ad
 
-# NOTE : this is a fairly dumb ai, especially for split screen games
-# NOTE : it could be improved by calculating the ball's trajectory and going where it will be
-
 # controler class
 class BotControler(gc.GameControler):
 

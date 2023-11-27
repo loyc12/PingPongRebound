@@ -3,6 +3,7 @@ if cfg.DEBUG_MODE:
 	from master import pg
 	import sys #	to exit properly
 import asyncio as asy
+import time
 import random as rdm
 import Addons as ad
 
@@ -87,12 +88,11 @@ class GameManager:
 
 
 
-	def tickGames(self):
+	async def tickGames(self):
 		deleteList = []
 		#try: #		 NOTE : ineloquent but ffs why the fuck can't you edit a dict while itterating in it...
 			 #				like isn't that the whole fucking point of not using a different type of container
-		for key in self.gameDict.keys():
-			game = self.gameDict.get( key )
+		for key, game in self.gameDict.items():
 
 			if game.state == ad.STARTING:
 				pass #								send player info packet from here
@@ -118,8 +118,33 @@ class GameManager:
 
 		for key in deleteList:
 			self.removeGame( key )
-		#except:
-			#print("Warning : GameManager.tickGames() : removed item while iterating over gameDict")
+
+
+	def getNextSleepDelay(self):
+		self.t1 = time.monotonic()
+		dt = self.t1 - self.t0
+		self.t0 = self.t1
+
+		diversion = dt - cfg.FRAME_DELAY
+
+		correction = (diversion - self.sleep_loss) * 0.1
+		self.sleep_loss += correction # (diversion - self.sleep_loss) * 0.1
+		#print("delta time: ", dt, "diversion: ", diversion, "sleep loss: ", self.sleep_loss, "correction: ", correction)
+		#print('next sleep delay: ', cfg.FRAME_DELAY - self.sleep_loss)
+		return cfg.FRAME_DELAY - self.sleep_loss
+
+
+	async def mainloop(self):
+
+		await asy.sleep(cfg.FRAME_DELAY - self.sleep_loss)
+
+		while self.runGames:
+			#print('Async while running games')
+			await self.tickGames()
+
+			await asy.sleep(self.getNextSleepDelay())
+
+		print('MAINLOOP EXIT !')
 
 
 	def takePlayerInputs( self ): # 					NOTE : DEBUG
@@ -305,7 +330,7 @@ class GameManager:
 			return "Pongest"
 
 
-async def main():  # ASYNC IS HERE
+async def main():
 
 	gm = GameManager()
 
@@ -320,15 +345,15 @@ async def main():  # ASYNC IS HERE
 		if cfg.DEBUG_MODE:
 			gm.takePlayerInputs()
 
-		gm.tickGames()
+		await gm.tickGames()
 
 	if cfg.DEBUG_MODE:
 		await asy.sleep(0)
-	else: # 											NOTE : put non pg game ticks here
+	else: # 								NOTE : put non pg game ticks here
 		await asy.sleep(cfg.FRAME_DELAY)
 
 
-def addAllGames( gm ): #								NOTE : DEBUG
+def addAllGames( gm ): #					NOTE : DEBUG
 	gameID = 1
 
 	gm.startGame( gm.addGame( "Pi", gameID ))
