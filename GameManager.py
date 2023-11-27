@@ -80,7 +80,7 @@ class GameManager:
 
 			game.moveObjects()
 			game.makeBotsPlay()
-			game.clock.tick (game.framerate) # 	TODO : detach from pygame
+			game.tickTime() #						NOTE : DEBUG
 
 		else:
 			print (" this game is not currently running ")
@@ -325,7 +325,7 @@ async def main():  # ASYNC IS HERE
 	if cfg.DEBUG_MODE:
 		await asy.sleep(0)
 	else: # 											NOTE : put non pg game ticks here
-		pass
+		await asy.sleep(cfg.FRAME_DELAY)
 
 
 def addAllGames( gm ): #								NOTE : DEBUG

@@ -45,7 +45,11 @@ BOT_PRECISION = 40
 BOT_KICK_DISTANCE = 160
 
 # DEBUG
-WIN_SIZE = 1280
+if cfg.DEBUG_MODE:
+	WIN_SIZE = 1280
+	COL_BGR = pg.Color('black')
+	COL_FNT = pg.Color('grey25')
+	COL_OBJ = pg.Color('white')
 
 def getSign(value):
 	if value < 0:

@@ -30,15 +30,11 @@ class Game:
 	speed_r = 5
 	speed_m_b = 60
 	speed_m_r = 60
-	framerate = 60 # 		max fps
+	framerate = cfg.FRAMERATE # 		max fps
 
 	factor_wall = 0.75
 	factor_rack = 1.10
 	gravity = 0
-
-	col_bgr = pg.Color('black')
-	col_fnt = pg.Color('grey25')
-	col_obj = pg.Color('white')
 
 	last_time = time.time_ns() #						NOTE : DEBUG
 
@@ -252,7 +248,7 @@ class Game:
 		print("closed a game of " + self.name)
 
 
-	def run(self): #		NOTE : only in debug mode
+	def run(self): #									NOTE : DEBUG
 
 		if not cfg.DEBUG_MODE:
 			print("cannot use run() without debug mode")
@@ -269,11 +265,9 @@ class Game:
 
 		# main game loop
 		while self.state == ad.PLAYING:
-			self.debugControler() #						NOTE : DEBUG
-
+			self.debugControler()
 			self.step()
-
-			self.clock.tick (self.framerate) #			NOTE : DEBUG
+			self.tickTime()
 
 
 
@@ -295,7 +289,14 @@ class Game:
 			pass
 
 
-	def debugControler(self): #			NOTE : DEBUG : use PlayerControler class instance instead
+	def tickTime(self):
+		if cfg.DEBUG_MODE:
+			self.clock.tick (self.framerate)
+		else: #											NOTE : do we need this (?)
+			pass
+
+
+	def debugControler(self):
 		for event in pg.event.get():
 			# quiting the game
 			if event.type == pg.QUIT:
@@ -437,7 +438,7 @@ class Game:
 
 	def refreshScreen(self): #			NOTE : DEBUG
 
-		self.win.fill( self.col_bgr )
+		self.win.fill( ad.COL_BGR )
 
 		self.drawScores()
 
@@ -455,14 +456,14 @@ class Game:
 
 
 	def drawLines(self):
-		pg.draw.line( self.win, self.col_fnt, ( 0, 0 ), ( 0 , self.height ), self.size_l * 2 )
-		pg.draw.line( self.win, self.col_fnt, ( self.width, 0 ), ( self.width, self.height ), self.size_l * 2 )
-		pg.draw.line( self.win, self.col_fnt, ( 0, 0 ), ( self.width, 0 ), self.size_l * 2 )
+		pg.draw.line( self.win, ad.COL_FNT, ( 0, 0 ), ( 0 , self.height ), self.size_l * 2 )
+		pg.draw.line( self.win, ad.COL_FNT, ( self.width, 0 ), ( self.width, self.height ), self.size_l * 2 )
+		pg.draw.line( self.win, ad.COL_FNT, ( 0, 0 ), ( self.width, 0 ), self.size_l * 2 )
 
 
 	def drawScores(self):
 		for score in self.scores: #		copies the racket's data
-			text = self.font.render(f'{score}', True, self.col_fnt)
+			text = self.font.render(f'{score}', True, ad.COL_FNT)
 			self.win.blit( text, text.get_rect( center = ( self.width * (2 / 4), self.height * (2 / 4) )))
 
 
@@ -479,8 +480,8 @@ class Game:
 
 		#time.sleep(0.02)
 
-		text = self.debug_font.render(f'{int(1000000000 / self.delta_time)}', True, self.col_fnt)
-		#text = self.debug_font.render(f'{int(self.clock.get_fps())}', True, self.col_fnt)
+		text = self.debug_font.render(f'{int(1000000000 / self.delta_time)}', True, ad.COL_FNT)
+		#text = self.debug_font.render(f'{int(self.clock.get_fps())}', True, ad.COL_FNT)
 		self.win.blit( text, text.get_rect( center = ( 64, 32 )))
 
 

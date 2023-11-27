@@ -18,8 +18,8 @@ if cfg.DEBUG_MODE:
     KD = pg.K_d
     NZERO = pg.K_KP0
 
-else:
-	# keyboard keys # TODO: Change them, these are wrong. Check with javascript event key codes.
+else: #				TODO: Change them, these are wrong. Check with javascript event key codes.
+	# keyboard keys
 	UP =     'up'
 	DOWN =   'dn'
 	LEFT =   'lf'

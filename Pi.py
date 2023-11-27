@@ -33,8 +33,10 @@ if __name__ == '__main__': #		NOTE : DEBUG
 	pg.init()
 	g = Pi(1)
 
-	g.setWindow(pg.display.set_mode((Pi.width, Pi.height)))
-	pg.display.set_caption(g.name)
+	if cfg.DEBUG_MODE:
+		g.setWindow( pg.display.set_mode( (Pi.width, Pi.height) ))
+		pg.display.set_caption(g.name)
+
 
 	#g.addPlayer( "Player 1", 1 )
 

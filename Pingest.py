@@ -136,19 +136,19 @@ class Pingest(gi.Game):
 
 
 	def drawLines(self):
-		pg.draw.line( self.win, self.col_fnt, ( self.width / 2, 0 ),  ( self.width / 2, self.height ), self.size_l )
-		pg.draw.line( self.win, self.col_fnt, ( self.width, 0 ), ( self.width, self.height ), self.size_l * 2)
+		pg.draw.line( self.win, ad.COL_FNT, ( self.width / 2, 0 ),  ( self.width / 2, self.height ), self.size_l )
+		pg.draw.line( self.win, ad.COL_FNT, ( self.width, 0 ), ( self.width, self.height ), self.size_l * 2)
 
-		pg.draw.line( self.win, self.col_fnt, ( 0, 0 ), ( 0, self.height ), self.size_l * 2 )
-		pg.draw.line( self.win, self.col_fnt, ( 0, self.height / 2 ), ( self.width, self.height / 2 ), self.size_l )
+		pg.draw.line( self.win, ad.COL_FNT, ( 0, 0 ), ( 0, self.height ), self.size_l * 2 )
+		pg.draw.line( self.win, ad.COL_FNT, ( 0, self.height / 2 ), ( self.width, self.height / 2 ), self.size_l )
 
 
 
 	def drawScores(self):
-		text1 = self.font.render(f'{self.scores[0]}', True, self.col_fnt)
-		text2 = self.font.render(f'{self.scores[1]}', True, self.col_fnt)
-		text3 = self.font.render(f'{self.scores[2]}', True, self.col_fnt)
-		text4 = self.font.render(f'{self.scores[3]}', True, self.col_fnt)
+		text1 = self.font.render(f'{self.scores[0]}', True, ad.COL_FNT)
+		text2 = self.font.render(f'{self.scores[1]}', True, ad.COL_FNT)
+		text3 = self.font.render(f'{self.scores[2]}', True, ad.COL_FNT)
+		text4 = self.font.render(f'{self.scores[3]}', True, ad.COL_FNT)
 
 		self.win.blit( text1, text1.get_rect( center = ( self.width * (1 / 4), self.height * (1 / 4) )))
 		self.win.blit( text2, text2.get_rect( center = ( self.width * (3 / 4), self.height * (1 / 4) )))
@@ -161,8 +161,9 @@ if __name__ == '__main__': #		NOTE : DEBUG
 	pg.init()
 	g = Pingest(1)
 
-	g.setWindow(pg.display.set_mode((Pingest.width, Pingest.height)))
-	pg.display.set_caption(g.name)
+	if cfg.DEBUG_MODE:
+		g.setWindow( pg.display.set_mode( (Pingest.width, Pingest.height) ))
+		pg.display.set_caption(g.name)
 
 	#g.addPlayer( "Player 1", 1 )
 

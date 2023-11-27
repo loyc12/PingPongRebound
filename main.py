@@ -42,25 +42,29 @@ if cfg.DEBUG_MODE:
 
 async def debugTester( Initialiser ):
 
-	pg.init()
-	g = Initialiser(1)
+	if cfg.DEBUG_MODE:
+		pg.init()
+		g = Initialiser(1)
 
-	print ( g.getInitInfo() )
+		print ( g.getInitInfo() )
 
-	g.setWindow(pg.display.set_mode((g.width, g.height)))
-	pg.display.set_caption(g.name)
+		g.setWindow(pg.display.set_mode((g.width, g.height)))
+		pg.display.set_caption(g.name)
 
-	g.printControlers()
-	g.addPlayer( "Player 1", 1 )
-	g.printControlers()
-	g.start()
-	g.printControlers()
+		g.printControlers()
+		g.addPlayer( "Player 1", 1 )
+		g.printControlers()
+		g.start()
+		g.printControlers()
 
-	print ( g.getUpdateInfo() )
+		print ( g.getUpdateInfo() )
 
-	g.run()
+		g.run()
 
-	print ( g.getEndInfo() )
+		print ( g.getEndInfo() )
+
+	else:
+		print ( "Debug mode is off" )
 
 
 if __name__ == '__main__':

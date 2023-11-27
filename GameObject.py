@@ -16,11 +16,15 @@ class GameObject:
 		self.setSize(_w, _h)
 		self.setPos(_x, _y)
 
-		self.box = pg.Rect(_game.width / 2, _game.height / 2, _w, _h) # 	NOTE : DEBUG
+		if (cfg.DEBUG_MODE):
+			self.box = pg.Rect(_game.width / 2, _game.height / 2, _w, _h) # 	NOTE : DEBUG
 
-	def drawSelf(self):
-		self.box.center = (self.px, self.py) # 								NOTE : DEBUG
-		pg.draw.rect(self.game.win, self.game.col_obj, self.box)
+	def drawSelf(self): # 														NOTE : DEBUG
+		if (cfg.DEBUG_MODE):
+			self.box.center = (self.px, self.py)
+			pg.draw.rect(self.game.win, ad.COL_OBJ, self.box)
+		else:
+			print ("GameObject.drawSelf() is a DEBUG_MODE function")
 
 
 # ---------------------------------------------- POSITION ---------------------------------------------- #
