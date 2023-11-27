@@ -1,3 +1,4 @@
+from master import cfg
 from master import gc
 import Addons as ad
 
@@ -24,7 +25,7 @@ class PlayerControler(gc.GameControler):
 			self.playMove( ad.DOWN )
 		elif key == ad.KA or key == ad.LEFT:
 			self.playMove( ad.LEFT )
-		elif (self.game.debugMode and key == ad.RETURN): #		NOTE : DEBUG
+		elif (cfg.DEBUG_MODE and key == ad.RETURN): #		NOTE : DEBUG
 			for i in range(len(self.game.balls)):
 				self.game.respawnBall( self.game.balls[i] )
 		else:

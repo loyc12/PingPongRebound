@@ -1,4 +1,6 @@
-from master import pg
+from master import cfg
+if cfg.DEBUG_MODE:
+	from master import pg
 from master import go
 from master import gi
 import Addons as ad
@@ -112,7 +114,7 @@ class Pong(gi.Game):
 if __name__ == '__main__': #		NOTE : DEBUG
 
 	pg.init()
-	g = Pong(1, True)
+	g = Pong(1)
 
 	g.setWindow(pg.display.set_mode((Pong.width, Pong.height)))
 	pg.display.set_caption(g.name)

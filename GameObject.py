@@ -1,4 +1,6 @@
-from master import pg
+from master import cfg
+if cfg.DEBUG_MODE:
+	from master import pg
 import Addons as ad
 
 # ------------------------------------------ GAMEOBJECT CLASS ------------------------------------------ #

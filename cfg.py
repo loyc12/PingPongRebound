@@ -1,0 +1,3 @@
+DEBUG_MODE = True
+FRAMERATE = 60 # Test limit
+FRAME_DELAY = 1.0 / FRAMERATE

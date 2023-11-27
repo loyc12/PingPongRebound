@@ -1,8 +1,10 @@
-import pygame as pg
+from master import cfg
+if cfg.DEBUG_MODE:
+	from master import pg
+	import sys #	to exit properly
 import asyncio as asy
 import random as rdm
 import Addons as ad
-import sys
 
 from Pi import Pi
 from Po import Po
@@ -19,8 +21,7 @@ class GameManager:
 
 	windowID = 0 #							NOTE : DEBUG
 
-	def __init__( self, _debugMode = False ):
-		self.debugMode = _debugMode #		NOTE : DEBUG
+	def __init__( self ):
 
 		self.gameCount = 0
 		self.maxGameCount = 0
@@ -37,15 +38,15 @@ class GameManager:
 			print ("could not add game of type " + gameType)
 			return 0
 
-		newGame = Initialiser( gameID, self.debugMode ) # 	TODO : detach from pygame
-		if self.debugMode:
+		newGame = Initialiser( gameID ) # 	TODO : detach from pygame
+		if cfg.DEBUG_MODE:
 			newGame.setWindow(self.win)
 		self.gameDict[gameID] = newGame
 		self.gameCount += 1
 		if self.gameCount > self.maxGameCount:
 			self.maxGameCount = self.gameCount
 
-		#if self.debugMode:
+		#if cfg.DEBUG_MODE:
 			#self.addPlayerToGame( GameID, "Tester " + str( GameID ), GameID ) #		NOTE : DEBUG
 
 		return gameID
@@ -99,12 +100,12 @@ class GameManager:
 			elif game.state == ad.PLAYING:
 				self.runGameStep( game )
 
-				if self.debugMode: #				NOTE : DEBUG
+				if cfg.DEBUG_MODE: #				NOTE : DEBUG
 					if key == self.windowID:
 						self.displayGame( game )
 
 			elif game.state == ad.ENDING:
-				if self.debugMode and self.windowID == key:
+				if cfg.DEBUG_MODE and self.windowID == key:
 					print ("this game no longer exists")
 					print ("please select a valid game (1-8)")
 					self.windowID = 0
@@ -128,7 +129,7 @@ class GameManager:
 			if event.type == pg.KEYDOWN:
 				k = event.key
 
-				if self.debugMode:
+				if cfg.DEBUG_MODE:
 					initialID = self.windowID
 
 					# closes the game
@@ -306,9 +307,9 @@ class GameManager:
 
 async def main():  # ASYNC IS HERE
 
-	gm = GameManager(True)
+	gm = GameManager()
 
-	if (gm.debugMode):
+	if (cfg.DEBUG_MODE):
 		pg.init()
 		gm.emptyDisplay()
 
@@ -316,14 +317,14 @@ async def main():  # ASYNC IS HERE
 
 	while gm.runGames:
 
-		if gm.debugMode:
+		if cfg.DEBUG_MODE:
 			gm.takePlayerInputs()
 
 		gm.tickGames()
 
-	if gm.debugMode:
+	if cfg.DEBUG_MODE:
 		await asy.sleep(0)
-	else: # 											NOTE : put game ticks here if not in debugMode
+	else: # 											NOTE : put non pg game ticks here
 		pass
 
 

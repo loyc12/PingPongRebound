@@ -1,4 +1,6 @@
-from master import pg
+from master import cfg
+if cfg.DEBUG_MODE:
+	from master import pg
 from master import gi
 
 class Po(gi.Game):
@@ -16,7 +18,7 @@ class Po(gi.Game):
 if __name__ == '__main__': #		NOTE : DEBUG
 
 	pg.init()
-	g = Po(1, True)
+	g = Po(1)
 
 	g.setWindow(pg.display.set_mode((Po.width, Po.height)))
 	pg.display.set_caption(g.name)

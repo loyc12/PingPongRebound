@@ -10,7 +10,9 @@ from GameInterface import Game
 from GameManager import main
 
 import asyncio as asy
-import pygame as pg
+import cfg
+if cfg.DEBUG_MODE:
+	from master import pg
 
 
 
@@ -41,7 +43,7 @@ import pygame as pg
 async def debugTester( Initialiser ):
 
 	pg.init()
-	g = Initialiser(1, True)
+	g = Initialiser(1)
 
 	print ( g.getInitInfo() )
 

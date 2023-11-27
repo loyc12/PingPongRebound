@@ -1,4 +1,6 @@
-from master import pg
+from master import cfg
+if cfg.DEBUG_MODE:
+	from master import pg
 from master import go
 from master import gi
 import Addons as ad
@@ -157,7 +159,7 @@ class Pingest(gi.Game):
 if __name__ == '__main__': #		NOTE : DEBUG
 
 	pg.init()
-	g = Pingest(1, True)
+	g = Pingest(1)
 
 	g.setWindow(pg.display.set_mode((Pingest.width, Pingest.height)))
 	pg.display.set_caption(g.name)

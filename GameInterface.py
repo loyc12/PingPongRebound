@@ -1,11 +1,13 @@
-from master import pg
+from master import cfg
+if cfg.DEBUG_MODE:
+	from master import pg
+	import sys #	to exit properly
 from master import go
 from master import gc
 import PlayerControler as pl
 import BotControler as bc
 import Addons as ad
 import time #											NOTE : DEBUG
-import sys #	to exit properly
 
 # game class
 class Game:
@@ -45,15 +47,14 @@ class Game:
 
 	# ------------------------------------------- INITIALIZATION ------------------------------------------- #
 
-	def __init__(self, gameID, debug = False):
+	def __init__(self, gameID):
 
 		self.gameID = gameID
 
 		self.last_ponger = 0
 		self.step_count = 0
 
-		self.debugMode = debug
-		if self.debugMode: #							NOTE : DEBUG
+		if cfg.DEBUG_MODE:
 			self.font = pg.font.Font(None, self.size_font)
 			self.debug_font = pg.font.Font(None, 32)
 
@@ -253,7 +254,7 @@ class Game:
 
 	def run(self): #		NOTE : only in debug mode
 
-		if not self.debugMode:
+		if not cfg.DEBUG_MODE:
 			print("cannot use run() without debug mode")
 			return
 
@@ -287,7 +288,7 @@ class Game:
 		if self.useAI:
 			self.makeBotsPlay()
 
-		if self.debugMode:
+		if cfg.DEBUG_MODE:
 			self.refreshScreen()
 		else:
 			#self.sendUpdateInfo()
@@ -614,7 +615,7 @@ class Game:
 if __name__ == '__main__': #		NOTE : DEBUG
 
 	pg.init()
-	g = Game(1, True)
+	g = Game(1)
 
 	g.setWindow(pg.display.set_mode((1280, 1280)))
 	pg.display.set_caption(g.name)
