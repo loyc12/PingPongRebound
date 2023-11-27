@@ -28,6 +28,11 @@ class GameManager:
 		self.maxGameCount = 0
 		self.runGames = True
 
+		self.lock = asy.Lock()
+		self.t0 = None
+		self.t1 = None
+		self.sleep_loss = 0.001# Rough estimate. Will adjust over time
+
 		self.gameDict = {}
 
 
@@ -90,34 +95,33 @@ class GameManager:
 
 	async def tickGames(self):
 		deleteList = []
-		#try: #		 NOTE : ineloquent but ffs why the fuck can't you edit a dict while itterating in it...
-			 #				like isn't that the whole fucking point of not using a different type of container
-		for key, game in self.gameDict.items():
+		async with self.lock:
+			for key, game in self.gameDict.items():
 
-			if game.state == ad.STARTING:
-				pass #								send player info packet from here
+				if game.state == ad.STARTING:
+					pass #								send player info packet from here
 
-			elif game.state == ad.PLAYING:
-				self.runGameStep( game )
+				elif game.state == ad.PLAYING:
+					self.runGameStep( game )
 
-				if cfg.DEBUG_MODE: #				NOTE : DEBUG
-					if key == self.windowID:
-						self.displayGame( game )
+					if cfg.DEBUG_MODE: #				NOTE : DEBUG
+						if key == self.windowID:
+							self.displayGame( game )
 
-			elif game.state == ad.ENDING:
-				if cfg.DEBUG_MODE and self.windowID == key:
-					print ("this game no longer exists")
-					print ("please select a valid game (1-8)")
-					self.windowID = 0
-					self.emptyDisplay()
+				elif game.state == ad.ENDING:
+					if cfg.DEBUG_MODE and self.windowID == key:
+						print ("this game no longer exists")
+						print ("please select a valid game (1-8)")
+						self.windowID = 0
+						self.emptyDisplay()
 
-				else: #								send closing info packet from here
-					pass
+					else: #								send closing info packet from here
+						pass
 
-				deleteList.append(key)
+					deleteList.append(key)
 
-		for key in deleteList:
-			self.removeGame( key )
+			for key in deleteList:
+				self.removeGame( key )
 
 
 	def getNextSleepDelay(self):
@@ -138,11 +142,19 @@ class GameManager:
 
 		await asy.sleep(cfg.FRAME_DELAY - self.sleep_loss)
 
-		while self.runGames:
-			#print('Async while running games')
-			await self.tickGames()
+		if  not cfg.DEBUG_MODE:
+			while self.runGames:
+				await self.tickGames()
+				await asy.sleep(self.getNextSleepDelay())
 
-			await asy.sleep(self.getNextSleepDelay())
+		else:
+			pg.init()
+			self.emptyDisplay()
+			addAllGames( self )
+
+			while self.runGames:
+				self.takePlayerInputs()
+				await self.tickGames()
 
 		print('MAINLOOP EXIT !')
 
@@ -334,23 +346,19 @@ async def main():
 
 	gm = GameManager()
 
-	if (cfg.DEBUG_MODE):
+	if  not cfg.DEBUG_MODE:
+		while gm.runGames:
+			await gm.tickGames()
+			await asy.sleep(cfg.FRAME_DELAY)
+
+	else:
 		pg.init()
 		gm.emptyDisplay()
+		addAllGames( gm )
 
-	addAllGames( gm )
-
-	while gm.runGames:
-
-		if cfg.DEBUG_MODE:
+		while gm.runGames:
 			gm.takePlayerInputs()
-
-		await gm.tickGames()
-
-	if cfg.DEBUG_MODE:
-		await asy.sleep(0)
-	else: # 								NOTE : put non pg game ticks here
-		await asy.sleep(cfg.FRAME_DELAY)
+			await gm.tickGames()
 
 
 def addAllGames( gm ): #					NOTE : DEBUG

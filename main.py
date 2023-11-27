@@ -22,16 +22,16 @@ if cfg.DEBUG_MODE:
 
 # MASTER LIST
 # TODO : allow removing players from games via GameManager
-# TODO : detach entirely from pygame when not in debug mode
 # TODO : add game state dicts in gameManager or gameInterface to be return with getInfo
 # TODO : add queues for gameManager to receive/send messages (gameStartInfo, gameEndInfo, playerEvents)
+# TODO : have bot remember where it last saw the ball so that its moveRate and seeRate can be different
 
 # FUNCTION LIST
 # TODO : finish implementing the info accessors in game manager
+# TODO : add a "mode" argument to game.respawnBall() and use it when initializing the ball
 
 # DEBUG LIST
 # TODO : make sure to always put player 1 and 2 in oposite teams
-# TODO : add a "mode" argument to game.respawnBall() and use it when initializing the ball
 # TODO : rework the ball respawn trajectory everywhere
 
 # MINOR LIST
