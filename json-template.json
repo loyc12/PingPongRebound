@@ -7,12 +7,16 @@
 
 { // init info packet (when you join a lobby)
 	"gameID": 1,
-	"width": 2048,
-	"height": 1024,
 	"gameInfo": {
 		"gameState": "starting",
 		"gameType": "pong",
 		"gameMode": "solo"
+	},
+	"sizeInfo": {
+		"width": 2048,
+		"height": 1024,
+		"wRatio": 0.0005,
+		"hRatio": 0.001
 	},
 	"racketCount" : 4,
 	"racketDirs": [

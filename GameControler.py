@@ -1,4 +1,7 @@
-import Addons as ad
+try:
+	import Addons as ad
+except ModuleNotFoundError:
+	import game.PingPongRebound.Addons as ad
 
 # controler class
 class GameControler:

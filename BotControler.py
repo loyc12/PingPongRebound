@@ -1,5 +1,9 @@
-from master import gc
-import Addons as ad
+try:
+	from master import gc
+	import Addons as ad
+except ModuleNotFoundError:
+	import game.PingPongRebound.master.gc as gc
+	import game.PingPongRebound.Addons as ad
 
 # controler class
 class BotControler(gc.GameControler):

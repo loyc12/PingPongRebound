@@ -1,20 +1,36 @@
-from master import cfg
-if cfg.DEBUG_MODE:
-	from master import pg
-	import sys #	to exit properly
-import asyncio as asy
 import time
+import asyncio as asy
 import random as rdm
-import Addons as ad
 
-from Pi import Pi
-from Po import Po
-from Ping import Ping
-from Pong import Pong
-from Pinger import Pinger
-from Ponger import Ponger
-from Pingest import Pingest
-from Pongest import Pongest
+try:
+	from master import cfg
+	if cfg.DEBUG_MODE:
+		from master import pg
+		import sys #	to exit properly
+	import Addons as ad
+
+	from Pi import Pi
+	from Po import Po
+	from Ping import Ping
+	from Pong import Pong
+	from Pinger import Pinger
+	from Ponger import Ponger
+	from Pingest import Pingest
+	from Pongest import Pongest
+
+except ModuleNotFoundError:
+	from game.PingPongRebound.master import cfg
+	import game.PingPongRebound.Addons as ad
+
+	from game.PingPongRebound.Pi import Pi
+	from game.PingPongRebound.Po import Po
+	from game.PingPongRebound.Ping import Ping
+	from game.PingPongRebound.Pong import Pong
+	from game.PingPongRebound.Pinger import Pinger
+	from game.PingPongRebound.Ponger import Ponger
+	from game.PingPongRebound.Pingest import Pingest
+	from game.PingPongRebound.Pongest import Pongest
+
 
 class GameManager:
 
@@ -192,6 +208,7 @@ class GameManager:
 			await self.removeGame( key )
 
 
+#	NOTE : this assumes load is generally small and constant, and aims to keep the mean frame time at cfg.FRAME_DELAY
 	def getNextSleepDelay(self):
 		self.currentTime = time.monotonic()
 		dt = self.currentTime - self.previousTime
@@ -215,8 +232,7 @@ class GameManager:
 		return delay
 
 
-# NOTE : this does not work precisely due to sleep being a bitch
-#
+#	NOTE : this does not work precisely due to sleep being an imprecise bitch
 #	async def SmartSleep(self):
 #		self.currentTime = time.monotonic()
 #		print("frame_time : ", str( self.currentTime - self.debugTime ))
@@ -257,6 +273,21 @@ class GameManager:
 
 
 	# ---------------------------------------------- DEBUG CMDS -------------------------------------------- #
+
+	def displayGame( self, game ): # 					NOTE : DEBUG
+		if game.state == ad.PLAYING:
+			if game.width != self.win.get_width() or game.height != self.win.get_height():
+				self.win = pg.display.set_mode( (game.width, game.height) )
+				pg.display.set_caption( game.name ) #
+
+			game.refreshScreen()
+
+
+	def emptyDisplay( self ): # 						NOTE : DEBUG
+		pg.display.set_caption("Game Manager")
+		self.win = pg.display.set_mode((2048, 1280))
+		self.win.fill( pg.Color('black') )
+
 
 	def takePlayerInputs( self ): # 					NOTE : DEBUG
 		# read local player inputs
@@ -344,22 +375,6 @@ class GameManager:
 						print ( "cannot move a bot's racket" )
 					else:
 						controler.handleKeyInput(k)
-
-
-
-	def displayGame( self, game ): # 					NOTE : DEBUG
-		if game.state == ad.PLAYING:
-			if game.width != self.win.get_width() or game.height != self.win.get_height():
-				self.win = pg.display.set_mode( (game.width, game.height) )
-				pg.display.set_caption( game.name ) #
-
-			game.refreshScreen()
-
-
-	def emptyDisplay( self ): # 						NOTE : DEBUG
-		pg.display.set_caption("Game Manager")
-		self.win = pg.display.set_mode((2048, 1280))
-		self.win.fill( pg.Color('black') )
 
 
 	async def addAllGames( self ): #					NOTE : DEBUG

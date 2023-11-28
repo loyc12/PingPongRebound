@@ -1,13 +1,25 @@
-from master import cfg
-if cfg.DEBUG_MODE:
-	from master import pg
-	import sys #	to exit properly
-from master import go
-from master import gc
-import PlayerControler as pl
-import BotControler as bc
-import Addons as ad
-import time #											NOTE : DEBUG
+import time
+
+try:
+	from master import cfg
+	if cfg.DEBUG_MODE:
+		from master import pg
+		import sys #	to exit properly
+	from master import go
+	from master import gc
+
+	import PlayerControler as pl
+	import BotControler as bc
+	import Addons as ad
+
+except ModuleNotFoundError:
+	from game.PingPongRebound.master import cfg
+	from game.PingPongRebound.master import go
+	from game.PingPongRebound.master import gc
+
+	import game.PingPongRebound.PlayerControler as pl
+	import game.PingPongRebound.BotControler as bc
+	import game.PingPongRebound.Addons as ad
 
 # game class
 class Game:
@@ -20,10 +32,13 @@ class Game:
 
 	width = 1536
 	height = 1024
+	invW = 1.0 / width
+	invH = 1.0 / height
 
-	size_l = 10
 	size_b = 20
 	size_r = 160
+
+	size_l = 10
 	size_font = 768
 
 	speed_b = 10
@@ -237,9 +252,9 @@ class Game:
 		if (self.state == ad.STARTING):
 			self.initBots()
 			self.state = ad.PLAYING
-			print("Starting a game of " + self.name)
+			print( "starting a game of " + self.name )
 		else:
-			print("Game is either running or over")
+			print( "game is either running or over" )
 
 
 	def close(self):
@@ -250,11 +265,11 @@ class Game:
 	def run(self): #									NOTE : DEBUG
 
 		if not cfg.DEBUG_MODE:
-			print("cannot use run() without debug mode")
+			print( "cannot use run() without debug mode" )
 			return
 
 		if self.state == ad.ENDING:
-			print("The game of " + self.name + " is over")
+			print( "The game of " + self.name + " is over" )
 			pg.quit()
 			sys.exit()
 
@@ -485,9 +500,8 @@ class Game:
 		infoDict = {}
 
 		infoDict["gameID"] = self.gameID
-		infoDict["width"] = self.width
-		infoDict["height"] = self.height
 		infoDict["gameInfo"] = self.getGameInfo()
+		infoDict["sizeInfo"] = self.getsizeInfo()
 		infoDict["racketCount"] = self.racketCount
 		infoDict["racketDirs"] = self.getRacketDirs()
 		#infoDict["racketInitPos"] #										NOTE : IMPLEMENT ME
@@ -505,6 +519,18 @@ class Game:
 		gameDict["gameType"] = self.name
 		gameDict["gameMode"] = self.getMode()
 		return ( gameDict )
+
+	#	NOTE : this wll fuck with update pos
+	# @staticmethod
+	def getSizeInfo(self):
+		sizeDict = {}
+
+		sizeDict["width"] = self.width
+		sizeDict["height"] = self.height
+		sizeDict["wRatio"] = self.invW
+		sizeDict["wRatio"] = self.invH
+
+		return ( sizeDict )
 
 
 	def getMode( self ):

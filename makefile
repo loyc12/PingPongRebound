@@ -10,6 +10,7 @@ game:
 	python3 GameInterface.py
 
 
+
 pi:
 	python3 Pi.py
 
@@ -21,6 +22,7 @@ pinger:
 
 pingest:
 	python3 Pingest.py
+
 
 
 po:

@@ -1,8 +1,14 @@
-from master import cfg
-if cfg.DEBUG_MODE:
-	from master import pg
-from master import go
-from master import gi
+try:
+	from master import cfg
+	if cfg.DEBUG_MODE:
+		from master import pg
+	from master import go
+	from master import gi
+
+except ModuleNotFoundError:
+	from game.PingPongRebound.master import cfg
+	from game.PingPongRebound.master import go
+	from game.PingPongRebound.master import gi
 
 class Pi(gi.Game):
 	name = "Pi"

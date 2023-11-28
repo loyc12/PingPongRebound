@@ -1,9 +1,16 @@
-from master import cfg
-if cfg.DEBUG_MODE:
-	from master import pg
-from master import go
-from master import gi
-import Addons as ad
+try:
+	from master import cfg
+	if cfg.DEBUG_MODE:
+		from master import pg
+	from master import go
+	from master import gi
+	import Addons as ad
+
+except ModuleNotFoundError:
+	from game.PingPongRebound.master import cfg
+	from game.PingPongRebound.master import go
+	from game.PingPongRebound.master import gi
+	import game.PingPongRebound.Addons as ad
 
 class Pong(gi.Game):
 	name = "Pong"

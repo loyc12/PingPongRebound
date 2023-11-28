@@ -1,7 +1,11 @@
-from master import cfg
-if cfg.DEBUG_MODE:
-	from master import pg
-import Addons as ad
+try:
+	from master import cfg
+	if cfg.DEBUG_MODE:
+		from master import pg
+	import Addons as ad
+except ModuleNotFoundError:
+	from game.PingPongRebound.master import cfg
+	import game.PingPongRebound.Addons as ad
 
 # ------------------------------------------ GAMEOBJECT CLASS ------------------------------------------ #
 
