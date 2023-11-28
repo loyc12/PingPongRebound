@@ -38,7 +38,9 @@ class GameManager:
 
 	windowID = 0 #							NOTE : DEBUG
 
-	def __init__( self ):
+	def __init__( self, msg_hndlr = None ):
+
+		self.messageHandler = msg_hndlr
 
 		self.gameCount = 0
 		self.maxGameCount = 0

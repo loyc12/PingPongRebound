@@ -1,4 +1,7 @@
-from Keybindings import *
+try:
+	from Keybindings import *
+except ModuleNotFoundError:
+	from game.PingPongRebound.Keybindings import *
 
 # controler modes
 CONTROLER = 0
