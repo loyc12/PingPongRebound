@@ -51,7 +51,8 @@ class Game:
 	factor_rack = 1.10
 	gravity = 0
 
-	last_time = time.time_ns() #						NOTE : DEBUG
+	start_time = 0 #						NOTE : DEBUG
+	last_time = 0 #						NOTE : DEBUG
 
 	last_ponger = 0
 	step_count = 0
@@ -252,6 +253,7 @@ class Game:
 		if (self.state == ad.STARTING):
 			self.initBots()
 			self.state = ad.PLAYING
+			self.start_time = time.time()
 			print( "starting a game of " + self.name )
 		else:
 			print( "game is either running or over" )

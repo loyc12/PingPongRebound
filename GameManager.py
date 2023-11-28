@@ -85,8 +85,8 @@ class GameManager:
 
 			if not self.runGames:
 				self.runGames = True
-
-				#asy.get_event_loop().create_task(self.mainloop()) #					NOTE : does nothing ?
+				if not cfg.DEBUG_MODE:
+					asy.get_event_loop().create_task( self.mainloop() ) #				NOTE : does nothing ?
 
 		return gameID
 

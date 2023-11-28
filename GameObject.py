@@ -1,3 +1,4 @@
+import time #				NOTE : DEBUG
 try:
 	import cfg
 	if cfg.DEBUG_MODE:
@@ -162,16 +163,17 @@ class GameObject:
 
 	# NOTE : IS ONLY FOR BALLS
 	def bounceOnRack(self, other, mode):
+		t = time.time() - self.game.start_time
 		if mode == "x":
-			print("! ping !") # 						NOTE : DEBUG
 			self.fx *= -1
 			self.dx *= self.game.factor_rack
 			self.dy += other.getMvY() * self.fy
+			print("! ping ! ( " + str( "%.3f" % round( t, 2 )) + " )") # 			NOTE : DEBUG
 		elif mode == "y":
-			print("! pong !") # 						NOTE : DEBUG
 			self.fy *= -1
 			self.dy *= self.game.factor_rack
 			self.dx += other.getMvX() * self.fx
+			print("! pong ! ( " + str( "%.3f" % round( t, 2 )) + " )") # 			NOTE : DEBUG
 		self.clampSpeed()
 
 
