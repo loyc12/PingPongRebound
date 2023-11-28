@@ -407,21 +407,21 @@ class GameManager:
 	@staticmethod
 	def getMaxPlayerCount( gameType ):
 		if gameType == "Pi":
-			return Pi.maxPlayerCount
+			return Pi.racketCount
 		elif gameType == "Ping":
-			return Ping.maxPlayerCount
+			return Ping.racketCount
 		elif gameType == "Pinger":
-			return Pinger.maxPlayerCount
+			return Pinger.racketCount
 		elif gameType == "Pingest":
-			return Pingest.maxPlayerCount
+			return Pingest.racketCount
 		elif gameType == "Po":
-			return Po.maxPlayerCount
+			return Po.racketCount
 		elif gameType == "Pong":
-			return Pong.maxPlayerCount
+			return Pong.racketCount
 		elif gameType == "Ponger":
-			return Ponger.maxPlayerCount
+			return Ponger.racketCount
 		elif gameType == "Pongest":
-			return Pongest.maxPlayerCount
+			return Pongest.racketCount
 		else:
 			print ( "Error : GameManager.getMaxPlayerCount() : invalid game type" )
 			return 0
