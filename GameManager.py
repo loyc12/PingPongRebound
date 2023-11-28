@@ -49,7 +49,7 @@ class GameManager:
 		self.lock = asy.Lock()
 		self.previousTime = 0.0
 		self.currentTime = 0.0
-		self.sleep_loss = 0.001 # 			NOTE : will adjust itself over time
+		self.sleep_loss = 0.0 # 			NOTE : will adjust itself over time
 		self.meanDt = cfg.FRAME_DELAY #		NOTE : DEBUG
 
 		self.gameDict = {}
@@ -85,8 +85,8 @@ class GameManager:
 
 			if not self.runGames:
 				self.runGames = True
-				if not cfg.DEBUG_MODE:
-					asy.get_event_loop().create_task( self.mainloop() ) #				NOTE : does nothing ?
+				#if not cfg.DEBUG_MODE:
+					#asy.get_event_loop().create_task( self.mainloop() ) #				NOTE : does nothing ?
 
 		return gameID
 
@@ -226,8 +226,8 @@ class GameManager:
 		delay = ( cfg.FRAME_DELAY - self.sleep_loss ) * cfg.FRAME_FACTOR
 
 		self.meanDt = ( self.meanDt * 0.95 ) + ( dt * 0.05 )
-		print("frame time: {:.5f}   ".format( dt ), "mean time: {:.5f}   ".format( self.meanDt ), "delay time: {:.5f}   ".format( delay ))
-		#print("diversion: {:.5f}   ".format( diversion ), "sleep loss: {:.5f}   ".format( self.sleep_loss ), "correction: {:.5f}   ".format( correction ))
+		#print("frame time: {:.5f} \t".format( dt ), "mean time: {:.5f} \t".format( self.meanDt ), "delay time: {:.5f} \t.format( delay ))
+		print("diversion: {:.5f} \t".format( diversion ), "sleep loss: {:.5f} \t".format( self.sleep_loss ), "correction: {:.5f} \t".format( correction ))
 
 		return delay
 
@@ -255,7 +255,11 @@ class GameManager:
 
 		self.currentTime = time.monotonic()
 
-		await asy.sleep( cfg.FRAME_DELAY - self.sleep_loss )
+		try:
+			await asy.sleep( cfg.FRAME_DELAY )
+		except asy.exceptions.CancelledError as excep:
+			#print( "error : " + str( excep ))
+			print( "wtf...")
 
 		if not cfg.DEBUG_MODE:
 			while self.runGames:
@@ -485,6 +489,7 @@ class GameManager:
 def testAllGames():
 	gm = GameManager()
 	asy.run ( gm.addAllGames() )
+	#if cfg.DEBUG_MODE:
 	asy.run ( gm.mainloop() )
 
 
