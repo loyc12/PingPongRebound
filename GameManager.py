@@ -226,8 +226,8 @@ class GameManager:
 		delay = ( cfg.FRAME_DELAY - self.sleep_loss ) * cfg.FRAME_FACTOR
 
 		self.meanDt = ( self.meanDt * 0.95 ) + ( dt * 0.05 )
-		print("frame time: {:.4f}".format( dt ), "  mean time: {:.4f}".format( self.meanDt ), "  delay time: {:.4f}".format( delay ))
-		#print("diversion: {:.4f}".format( diversion ), "sleep loss: {:.4f}".format( self.sleep_loss ), "correction: {:.4f}".format( correction ))
+		print("frame time: {:.5f}   ".format( dt ), "mean time: {:.5f}   ".format( self.meanDt ), "delay time: {:.5f}   ".format( delay ))
+		#print("diversion: {:.5f}   ".format( diversion ), "sleep loss: {:.5f}   ".format( self.sleep_loss ), "correction: {:.5f}   ".format( correction ))
 
 		return delay
 
