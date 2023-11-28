@@ -217,8 +217,8 @@ class GameManager:
 		self.previousTime = self.currentTime
 		#print('time between frames: ', dt)
 
-		self.meanDt = self.meanDt * 0.95 + dt * 0.05
-		print('mean between frames: ', self.meanDt)
+		#self.meanDt = self.meanDt * 0.95 + dt * 0.05
+		#print('mean between frames: ', self.meanDt)
 
 		diversion = cfg.FRAME_DELAY - dt
 
@@ -226,7 +226,7 @@ class GameManager:
 
 		self.sleep_loss -= correction
 
-		delay = ( cfg.FRAME_DELAY - self.sleep_loss ) * 0.85
+		delay = ( cfg.FRAME_DELAY - self.sleep_loss ) * cfg.FRAME_FACTOR
 
 		#print('next sleep delay   : ', delay)
 		#print("delta time: ", dt, "diversion: ", diversion, "sleep loss: ", self.sleep_loss, "correction: ", correction)

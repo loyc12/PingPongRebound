@@ -45,7 +45,7 @@ class Game:
 	speed_r = 5
 	speed_m_b = 60
 	speed_m_r = 60
-	framerate = cfg.FRAMERATE # 		max fps
+	framerate = cfg.FRAME_RATE # 		max fps
 
 	factor_wall = 0.75
 	factor_rack = 1.10
