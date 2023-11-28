@@ -7,7 +7,6 @@ try:
 	import GameInterface as gi
 
 except ModuleNotFoundError:
-	import game.PingPongRebound.cfg
 	import game.PingPongRebound.GameControler as gc
 	import game.PingPongRebound.GameObject as go
 	import game.PingPongRebound.GameInterface as gi

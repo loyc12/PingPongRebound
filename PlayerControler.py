@@ -1,5 +1,5 @@
 try:
-	from master import cfg
+	import cfg
 	from master import gc
 	import Addons as ad
 except ModuleNotFoundError:

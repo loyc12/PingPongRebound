@@ -1,5 +1,5 @@
 try:
-	from master import cfg
+	import cfg
 	if cfg.DEBUG_MODE:
 		from master import pg
 	import Addons as ad

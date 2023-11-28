@@ -1,7 +1,7 @@
 import time
 
 try:
-	from master import cfg
+	import cfg
 	if cfg.DEBUG_MODE:
 		from master import pg
 		import sys #	to exit properly
@@ -13,7 +13,7 @@ try:
 	import Addons as ad
 
 except ModuleNotFoundError:
-	from game.PingPongRebound.master import cfg
+	import game.PingPongRebound.cfg as cfg
 	from game.PingPongRebound.master import go
 	from game.PingPongRebound.master import gc
 

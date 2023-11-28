@@ -3,7 +3,7 @@ import asyncio as asy
 import random as rdm
 
 try:
-	from master import cfg
+	import cfg
 	if cfg.DEBUG_MODE:
 		from master import pg
 		import sys #	to exit properly
@@ -19,7 +19,7 @@ try:
 	from Pongest import Pongest
 
 except ModuleNotFoundError:
-	from game.PingPongRebound.master import cfg
+	import game.PingPongRebound.cfg as cfg
 	import game.PingPongRebound.Addons as ad
 
 	from game.PingPongRebound.Pi import Pi

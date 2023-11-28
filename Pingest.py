@@ -1,5 +1,5 @@
 try:
-	from master import cfg
+	import cfg
 	if cfg.DEBUG_MODE:
 		from master import pg
 	from master import go
@@ -7,7 +7,7 @@ try:
 	import Addons as ad
 
 except ModuleNotFoundError:
-	from game.PingPongRebound.master import cfg
+	import game.PingPongRebound.cfg as cfg
 	from game.PingPongRebound.master import go
 	from game.PingPongRebound.master import gi
 	import game.PingPongRebound.Addons as ad
