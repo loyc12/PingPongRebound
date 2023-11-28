@@ -4,7 +4,7 @@ try:
 	import Addons as ad
 except ModuleNotFoundError:
 	import game.PingPongRebound.cfg as cfg
-	import game.PingPongRebound.master.gc as gc
+	from game.PingPongRebound.master import gc
 	import game.PingPongRebound.Addons as ad
 
 # controler class
