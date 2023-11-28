@@ -212,13 +212,10 @@ class GameManager:
 
 #	NOTE : this assumes load is generally small and constant, and aims to keep the mean frame time at cfg.FRAME_DELAY
 	def getNextSleepDelay(self):
+		self.previousTime = self.currentTime
 		self.currentTime = time.monotonic()
 		dt = self.currentTime - self.previousTime
-		self.previousTime = self.currentTime
-		#print('time between frames: ', dt)
 
-		#self.meanDt = self.meanDt * 0.95 + dt * 0.05
-		#print('mean between frames: ', self.meanDt)
 
 		diversion = cfg.FRAME_DELAY - dt
 
@@ -228,8 +225,9 @@ class GameManager:
 
 		delay = ( cfg.FRAME_DELAY - self.sleep_loss ) * cfg.FRAME_FACTOR
 
-		#print('next sleep delay   : ', delay)
-		#print("delta time: ", dt, "diversion: ", diversion, "sleep loss: ", self.sleep_loss, "correction: ", correction)
+		self.meanDt = ( self.meanDt * 0.95 ) + ( dt * 0.05 )
+		print("frame time: {:.4f}".format( dt ), "  mean time: {:.4f}".format( self.meanDt ), "  delay time: {:.4f}".format( delay ))
+		#print("diversion: {:.4f}".format( diversion ), "sleep loss: {:.4f}".format( self.sleep_loss ), "correction: {:.4f}".format( correction ))
 
 		return delay
 
@@ -256,6 +254,7 @@ class GameManager:
 		print( ">  STARTING MAINLOOP  <" )
 
 		self.currentTime = time.monotonic()
+
 		await asy.sleep( cfg.FRAME_DELAY - self.sleep_loss )
 
 		if not cfg.DEBUG_MODE:

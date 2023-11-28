@@ -168,12 +168,12 @@ class GameObject:
 			self.fx *= -1
 			self.dx *= self.game.factor_rack
 			self.dy += other.getMvY() * self.fy
-			print("! ping ! ( " + str( "%.3f" % round( t, 2 )) + " )") # 			NOTE : DEBUG
+			print("! ping ! ( " + str( "{:.3f}".format( t )) + " )") # 			NOTE : DEBUG
 		elif mode == "y":
 			self.fy *= -1
 			self.dy *= self.game.factor_rack
 			self.dx += other.getMvX() * self.fx
-			print("! pong ! ( " + str( "%.3f" % round( t, 2 )) + " )") # 			NOTE : DEBUG
+			print("! pong ! ( " + str( "{:.3f}".format( t )) + " )") # 			NOTE : DEBUG
 		self.clampSpeed()
 
 
