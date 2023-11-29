@@ -86,8 +86,8 @@ class GameManager:
 
 			if not self.runGames:
 				self.runGames = True
-				#if not cfg.DEBUG_MODE:
-					#asy.get_event_loop().create_task( self.mainloop() ) #				NOTE : does nothing ?
+				if not cfg.DEBUG_MODE:
+					asy.get_event_loop().create_task( self.mainloop() ) #				NOTE : does nothing ?
 
 		return gameID
 
@@ -248,7 +248,6 @@ class GameManager:
 		self.previousTime = self.currentTime
 		self.currentTime = time.monotonic()
 		dt = self.currentTime - self.previousTime
-
 
 		diversion = cfg.FRAME_DELAY - dt
 
