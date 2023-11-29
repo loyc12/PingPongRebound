@@ -34,13 +34,12 @@ except ModuleNotFoundError:
 
 # MASTER LIST
 # TODO : use different self.____Lock like mutexes to protect dicts and individual games
-# TODO : allow removing players from games via GameManager
 # TODO : add game state dicts in gameManager or gameInterface to be return with getInfo
 # TODO : add queues for gameManager to receive/send messages (gameStartInfo, gameEndInfo, playerEvents)
 # TODO : have bot remember where it last saw the ball so that its moveRate and seeRate can be different
 
 # FUNCTION LIST
-# TODO : finish implementing the info accessors in game manager
+# TODO : finish implementing the info accessors in game manager ( getRacketInitPos() & getBallInitPos() )
 # TODO : add a "mode" argument to game.respawnBall() and use it when initializing the ball
 
 # DEBUG LIST
@@ -54,7 +53,6 @@ except ModuleNotFoundError:
 # TODO : make obstacles type GameObjects in the base class (and use them in pongester)
 
 async def debugTester( Initialiser ):
-
 	if cfg.DEBUG_MODE:
 		pg.init()
 		g = Initialiser(1)

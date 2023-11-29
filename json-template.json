@@ -8,7 +8,6 @@
 { // init info packet (when you join a lobby)
 	"gameID": 1,
 	"gameInfo": {
-		"gameState": "starting",
 		"gameType": "pong",
 		"gameMode": "solo"
 	},
@@ -16,7 +15,9 @@
 		"width": 2048,
 		"height": 1024,
 		"wRatio": 0.0005,
-		"hRatio": 0.001
+		"hRatio": 0.001,
+		"rSize": 160,
+		"bSize": 20
 	},
 	"racketCount" : 4,
 	"racketDirs": [
@@ -25,8 +26,8 @@
 		"x",
 		"y"
 	],
-	"racketInitPos": [
-		"x1", "y1", // stringify scores
+	"racketInitPos": [ // TODO : implement me
+		"x1", "y1",
 		"x2", "y2",
 		"x3", "y3",
 		"x4", "y4"
@@ -35,7 +36,7 @@
 		"x1", "y1"
 	],
 	"teamCount": 2
-	// followed by initial update and player info packets
+	// followed by player info packets
 }
 
 { // player info packet (when players change in lobby)
@@ -81,7 +82,6 @@
 
 { // update info packet (when game ticks)
 	"gameID": 1,
-	//"gameState": "running",
 	"lastPonger": 1,
 	"ballPos": [
 		"x1", "y1"
@@ -102,7 +102,6 @@
 
 { // closing info packet (once game ends)
 	"gameID": 1,
-	//"gameState": "ending",
 	"winingTeam": 1,
 	"scores": [
 		"s1",

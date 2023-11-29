@@ -522,7 +522,8 @@ class Game:
 		gameDict["gameMode"] = self.getMode()
 		return ( gameDict )
 
-	#	NOTE : this wll fuck with update pos
+
+	#	NOTE : this will fuck with update pos
 	# @staticmethod
 	def getSizeInfo(self):
 		sizeDict = {}
@@ -531,6 +532,8 @@ class Game:
 		sizeDict["height"] = self.height
 		sizeDict["wRatio"] = self.invW
 		sizeDict["wRatio"] = self.invH
+		sizeDict["sRacket"] = self.size_r
+		sizeDict["sBall"] = self.size_b
 
 		return ( sizeDict )
 
