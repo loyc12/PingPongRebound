@@ -62,6 +62,7 @@ class GameManager:
 
 	# ---------------------------------------------- GAME CMDS --------------------------------------------- #
 
+
 	async def addGame( self, gameType, gameID):
 		async with self.lock:
 			Initialiser = self.getInitialiser( gameType )
@@ -105,6 +106,7 @@ class GameManager:
 			if len ( self.gameDict ) == 0:
 				self.runGames = False
 
+	# --------------------------------------------------------------
 
 	async def addPlayerToGame( self, playerID, name, gameID ):
 
@@ -143,6 +145,7 @@ class GameManager:
 
 			game.removePlayer( playerID )
 
+	# --------------------------------------------------------------
 
 	async def startGame( self, gameID ):
 		async with self.lock:
@@ -167,6 +170,7 @@ class GameManager:
 
 			game.close()
 
+	# --------------------------------------------------------------
 
 	def runGameStep( self, game ):
 		if game.state == ad.PLAYING:
@@ -208,6 +212,35 @@ class GameManager:
 
 		for key in deleteList:
 			await self.removeGame( key )
+
+	# --------------------------------------------------------------
+
+	async def mainloop(self):
+
+		print( ">  STARTING MAINLOOP  <" )
+
+		self.currentTime = time.monotonic()
+
+		try:
+			await asy.sleep( cfg.FRAME_DELAY )
+		except asy.exceptions.CancelledError as excep:
+			#print( "error : " + str( excep ))
+			print( "wtf...")
+
+		if not cfg.DEBUG_MODE:
+			while self.runGames:
+				await self.tickGames()
+				await asy.sleep( self.getNextSleepDelay() )
+
+		else:
+			self.emptyDisplay()
+
+			while self.runGames:
+				self.takePlayerInputs()
+				await self.tickGames()
+				await asy.sleep( self.getNextSleepDelay() )
+
+		print( ">  EXITED MAINLOOP  <" )
 
 
 #	NOTE : this assumes load is generally small and constant, and aims to keep the mean frame time at cfg.FRAME_DELAY
@@ -251,35 +284,8 @@ class GameManager:
 #		self.previousTime = time.monotonic()
 
 
-	async def mainloop(self):
-
-		print( ">  STARTING MAINLOOP  <" )
-
-		self.currentTime = time.monotonic()
-
-		try:
-			await asy.sleep( cfg.FRAME_DELAY )
-		except asy.exceptions.CancelledError as excep:
-			#print( "error : " + str( excep ))
-			print( "wtf...")
-
-		if not cfg.DEBUG_MODE:
-			while self.runGames:
-				await self.tickGames()
-				await asy.sleep( self.getNextSleepDelay() )
-
-		else:
-			self.emptyDisplay()
-
-			while self.runGames:
-				self.takePlayerInputs()
-				await self.tickGames()
-				await asy.sleep( self.getNextSleepDelay() )
-
-		print( ">  EXITED MAINLOOP  <" )
-
-
 	# ---------------------------------------------- DEBUG CMDS -------------------------------------------- #
+
 
 	def displayGame( self, game ): # 					NOTE : DEBUG
 		if game.state == ad.PLAYING:

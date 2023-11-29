@@ -31,20 +31,21 @@ except ModuleNotFoundError:
 
 
 # MASTER LIST
-# TODO : use different self.____Lock like mutexes to protect dicts and individual games
-# TODO : add game state dicts in gameManager or gameInterface to be return with getInfo
+# TODO : add gameUpdate dict in GI to be edited and return with getInfo
 # TODO : add queues for gameManager to receive/send messages (gameStartInfo, gameEndInfo, playerEvents)
-# TODO : have bot remember where it last saw the ball so that its moveRate and seeRate can be different
 
 # FUNCTION LIST
-# TODO : finish implementing the info accessors in game manager ( getRacketInitPos() & getBallInitPos() )
-# TODO : add a "mode" argument to game.respawnBall() and use it when initializing the ball
+# TODO : have bot remember where it last saw the ball (to allow : one scan per second, N moves per second)
+# TODO : implement static game info accessors in GM
 
 # DEBUG LIST
-# TODO : make sure to always put player 1 and 2 in oposite teams
-# TODO : rework the ball respawn trajectory everywhere
+# TODO : use different self.____Lock like mutexes to protect dicts and individual games
+# TODO : see what's up with asy.sleep() crashing in coroutines when called for the first time
 
 # MINOR LIST
+# TODO : rework the ball respawn trajectory everywhere
+# TODO : make sure to always put player 1 and 2 in oposite teams
+# TODO : add a "mode" argument to game.respawnBall() and use it when initializing the ball
 # TODO : add double-sided gravity to 4 player ping games (so they're actual ping game lol)
 # TODO : add sound effects to collisions (in GameObject class)
 # TODO : make an 'asteroids' game (solo)
