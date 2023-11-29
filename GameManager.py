@@ -217,15 +217,17 @@ class GameManager:
 
 	async def mainloop(self):
 
-		print( ">  STARTING MAINLOOP  <" )
+		print( "> STARTING MAINLOOP <" )
 
 		self.currentTime = time.monotonic()
 
 		try:
-			await asy.sleep( cfg.FRAME_DELAY )
+			await asy.sleep(0)
 		except asy.exceptions.CancelledError as excep:
+			print( "preemtively removed sleep errors..." )
 			#print( "error : " + str( excep ))
-			print( "wtf...")
+
+		await asy.sleep( cfg.FRAME_DELAY * 0.75 )
 
 		if not cfg.DEBUG_MODE:
 			while self.runGames:
@@ -240,7 +242,7 @@ class GameManager:
 				await self.tickGames()
 				await asy.sleep( self.getNextSleepDelay() )
 
-		print( ">  EXITED MAINLOOP  <" )
+		print( "> EXITING MAINLOOP <" )
 
 
 #	NOTE : this assumes load is generally small and constant, and aims to keep the mean frame time at cfg.FRAME_DELAY
@@ -499,8 +501,8 @@ class GameManager:
 def testAllGames():
 	gm = GameManager()
 	asy.run ( gm.addAllGames() )
-	#if cfg.DEBUG_MODE:
-	asy.run ( gm.mainloop() )
+	if cfg.DEBUG_MODE:
+		asy.run ( gm.mainloop() )
 
 
 if __name__ == '__main__':
