@@ -225,9 +225,11 @@ class GameManager:
 
 		delay = ( cfg.FRAME_DELAY - self.sleep_loss ) * cfg.FRAME_FACTOR
 
-		self.meanDt = ( self.meanDt * 0.95 ) + ( dt * 0.05 )
-		#print("frame time: {:.5f} \t".format( dt ), "mean time: {:.5f} \t".format( self.meanDt ), "delay time: {:.5f} \t.format( delay ))
-		print("diversion: {:.5f} \t".format( diversion ), "sleep loss: {:.5f} \t".format( self.sleep_loss ), "correction: {:.5f} \t".format( correction ))
+
+		# NOTE : DEBUG PRINTS
+		self.meanDt = ( dt + ( self.meanDt * cfg.FPS_SMOOTHING )) / ( cfg.FPS_SMOOTHING + 1 )
+		print("frame time: {:.5f} \t".format( dt ), "mean time: {:.5f} \t".format( self.meanDt ), "delay time: {:.5f} \t".format( delay ))
+		#print("diversion: {:.5f} \t".format( diversion ), "sleep loss: {:.5f} \t".format( self.sleep_loss ), "correction: {:.5f} \t".format( correction ))
 
 		return delay
 
@@ -365,7 +367,10 @@ class GameManager:
 							print( "please select a valid game (1-8)" )
 							self.emptyDisplay()
 						else:
+							game = self.gameDict.get(self.windowID)
 							print( "now playing in game #" + str( self.windowID ) )
+							game.delta_time = cfg.FRAME_DELAY
+							game.last_time = time.time()
 							pg.display.set_caption( self.gameDict.get(self.windowID).name )
 						return
 

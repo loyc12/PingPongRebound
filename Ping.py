@@ -16,25 +16,28 @@ class Ping(gi.Game):
 	name = "Ping"
 
 	width = 2048
+	height = 1024
 	gravity = 0.3
 	racketCount = 2
 	factor_rack = 1.0
 	factor_wall = 0.6
 
+	iPosR1 = ( width * (1 / 3), height - gi.Game.size_b, "x" )
+	iPosR2 = ( width * (2 / 3), height - gi.Game.size_b, "x" )
+
+	iPosB1 = ( width * (2 / 4), height * (2 / 3) )
+
+
 	def initRackets(self):
-		self.rackets.append( go.GameObject( 1, self, self.width * (1 / 3), self.height - self.size_b, self.size_r, self.size_b ))
+		self.rackets.append( go.GameObject( 1, self, self.iPosR1[0], self.iPosR1[1], self.size_r, self.size_b ))
 		self.rackets[0].setSpeeds( self.speed_r, 0 )
 
-		self.rackets.append( go.GameObject( 2, self, self.width * (2 / 3), self.height - self.size_b, self.size_r, self.size_b ))
+		self.rackets.append( go.GameObject( 2, self, self.iPosR2[0], self.iPosR2[1], self.size_r, self.size_b ))
 		self.rackets[1].setSpeeds( self.speed_r, 0 )
 
 
-	def initControlers(self):
-		self.addBot("bot 1")
-		self.addBot("bot 2")
-
 	def initBalls(self):
-		self.balls.append( go.GameObject( 1, self, self.width * (2 / 4), self.height * (2 / 3), self.size_b, self.size_b ))
+		self.balls.append( go.GameObject( 1, self, self.iPosB1[0], self.iPosB1[1], self.size_b, self.size_b ))
 		self.balls[0].setSpeeds( self.speed_b * (2 / 3), self.speed_b * 2 )
 		self.balls[0].setDirs( 1, -1 )
 

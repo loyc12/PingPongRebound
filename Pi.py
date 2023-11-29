@@ -22,15 +22,19 @@ class Pi(gi.Game):
 
 	score_mode = gi.ad.HITS
 
+	iPosR1 = ( width * (1 / 2), height - gi.Game.size_b, "x" )
+
+	iPosB1 = ( width * (3 / 8), gi.Game.size_b )
+
 
 	def initBalls(self):
-		self.balls.append( go.GameObject( 1, self, self.width * (3 / 8), self.size_b, self.size_b, self.size_b ))
+		self.balls.append( go.GameObject( 1, self, self.iPosB1[0], self.iPosB1[1], self.size_b, self.size_b ))
 		self.balls[0].setSpeeds( self.speed_b, 0)
 		self.balls[0].setDirs( 1, 1 )
 
 	def respawnBall(self, ball):
 		ball.setDirs( -ball.fx, 1 )
-		ball.setPos( (self.width + ball.getPosX()) / 3, self.size_b )
+		ball.setPos( ( self.width + ball.getPosX() ) / 3, self.size_b )
 		ball.setSpeeds( (ball.dx + self.speed_b) / 3, 0 )
 
 

@@ -19,6 +19,10 @@ class Po(gi.Game):
 
 	score_mode = gi.ad.HITS
 
+	iPosR1 = ( width * (1 / 2), height - gi.Game.size_b, "x" )
+
+	iPosB1 = ( width * (3 / 8), gi.Game.size_b )
+
 
 if __name__ == '__main__': #		NOTE : DEBUG
 

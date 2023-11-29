@@ -51,11 +51,21 @@ class Game:
 	factor_rack = 1.10
 	gravity = 0
 
-	start_time = 0 #						NOTE : DEBUG
+	start_time = 0 #					NOTE : DEBUG
 	last_time = 0 #						NOTE : DEBUG
 
 	last_ponger = 0
 	step_count = 0
+
+	iPosR1 = ( width * (1 / 2), height - size_b, "x" )
+	iPosR2 = None
+	iPosR3 = None
+	iPosR4 = None
+
+	iPosB1 = ( width * (3 / 8), size_b )
+	#iPosB2 = None
+	#iPosB3 = None
+	#iPosB4 = None
 
 	# ------------------------------------------- INITIALIZATION ------------------------------------------- #
 
@@ -69,6 +79,9 @@ class Game:
 		if cfg.DEBUG_MODE:
 			self.font = pg.font.Font(None, self.size_font)
 			self.debug_font = pg.font.Font(None, 32)
+
+			self.last_time = time.time()
+			self.delta_time = cfg.FRAME_DELAY
 
 		self.useAI = True
 		self.winnerID = 0 #				NOTE : this is the scores[] index (to allow teams)
@@ -87,12 +100,12 @@ class Game:
 
 
 	def initRackets(self):
-		self.rackets.append( go.GameObject( 1, self, self.width * (1 / 2), self.height - self.size_b, self.size_r, self.size_b ))
+		self.rackets.append( go.GameObject( 1, self, self.iPosR1[0], self.iPosR1[1], self.size_r, self.size_b ))
 		self.rackets[0].setSpeeds( self.speed_r, 0 )
 
 
 	def initBalls(self):
-		self.balls.append( go.GameObject( 1, self, self.width * (3 / 8), self.size_b, self.size_b, self.size_b ))
+		self.balls.append( go.GameObject( 1, self, self.iPosB1[0], self.iPosB1[1], self.size_b, self.size_b ))
 		self.balls[0].setSpeeds( self.speed_b, self.speed_b )
 		self.balls[0].setDirs( 1, 1 )
 
@@ -122,6 +135,9 @@ class Game:
 		return ( bot )
 
 
+	# def removeBots(self): # NOTE : not needed
+
+
 	def makeBotsPlay(self):
 		if self.useAI and self.playerCount < self.racketCount:
 			for i in range(self.playerCount, self.controlerCount):
@@ -131,6 +147,7 @@ class Game:
 			self.step_count += 1
 			self.step_count %= ad.BOT_FREQUENCY
 
+	# --------------------------------------------------------------
 
 	def addPlayer(self, username, playerID):
 		if self.state != ad.STARTING:
@@ -158,19 +175,26 @@ class Game:
 		print ("player #" + str(playerID) + " not found in this game")
 
 
-	def hasPlayer(self, username):
-		for i in range(len(self.controlers)):
-			if (self.controlers[i].username == username):
-				return ( True )
-		return ( False )
-
-
 	def getPlayerControler(self, username):
 		for i in range(len(self.controlers)):
 			if (self.controlers[i].username == username):
 				return ( self.controlers[i] )
 		return None
 
+
+	def printControlers(self):
+		print( "controler list: " )
+		for i in range(len(self.controlers)):
+			print( "racket #" + str(i + 1) + " : " + self.controlers[i].name)
+
+	# --------------------------------------------------------------
+
+
+	def hasPlayer(self, username):
+		for i in range(len(self.controlers)):
+			if (self.controlers[i].username == username):
+				return ( True )
+		return ( False )
 
 	def isGameFull(self):
 		return ( self.playerCount >= self.racketCount )
@@ -179,22 +203,8 @@ class Game:
 	def isGameEmpty(self):
 		return ( self.playerCount == 0 )
 
-
-	def printControlers(self):
-		print( "controler list: " )
-		for i in range(len(self.controlers)):
-			print( "racket #" + str(i + 1) + " : " + self.controlers[i].name)
-
-
-	def handleUserInputs(self, username, key):
-		for i in range(len(self.controlers)):
-			if (self.controlers[i].username == username):
-				self.controlers[i].handleInputs( key )
-				return
-
-		print ("player " + username + " not found in this game")
-
 	# ---------------------------------------------- INTERFACE --------------------------------------------- #
+
 
 	def makeMove(self, target_id, move):
 		if (target_id <= 0):
@@ -231,8 +241,45 @@ class Game:
 					else:
 						rack.fy += 1
 				else:
-					print("Error: invalid move : " + str(move))
+					print("Error: invalid move : " + str( move ))
 				return
+
+	# --------------------------------------------------------------
+
+	# NOTE : which one to pick
+	def handleUserInputs(self, username, key):
+		for i in range(len(self.controlers)):
+			if (self.controlers[i].username == username):
+				self.controlers[i].handleInputs( key )
+				return
+
+		print( "player " + username + " is not in this game" )
+	def handleUserInputsID(self, playerID, key):
+		for i in range(len(self.controlers)):
+			if (self.controlers[i].username == playerID):
+				self.controlers[i].handleInputs( key )
+				return
+
+		print( "player #" + str( playerID ) + " is not in this game" )
+
+
+	def debugControler(self):
+		for event in pg.event.get():
+			# quiting the game
+			if event.type == pg.QUIT:
+				self.close()
+
+			# handling key presses
+			elif event.type == pg.KEYDOWN:
+				if event.key == pg.K_ESCAPE:
+					self.close()
+
+				elif event.key == ad.RETURN:
+					for i in range(len(self.balls)):
+						self.respawnBall( self.balls[i] )
+
+				else:
+					self.handlePygameInputs( event.key )
 
 
 	def handlePygameInputs(self, key): #		NOTE : DEBUG
@@ -245,7 +292,6 @@ class Game:
 					self.makeMove( rack.id, ad.LEFT )
 				elif key == ad.KD or key == ad.RIGHT:
 					self.makeMove( rack.id, ad.RIGHT )
-
 
 	# ---------------------------------------------- CORE CMDS --------------------------------------------- #
 
@@ -263,8 +309,9 @@ class Game:
 		self.state = ad.ENDING
 		print("closed a game of " + self.name)
 
+	# --------------------------------------------------------------
 
-	def run(self): #									NOTE : DEBUG
+	def run(self): #						NOTE : DEBUG MODE ONLY
 
 		if not cfg.DEBUG_MODE:
 			print( "cannot use run() without debug mode" )
@@ -299,32 +346,14 @@ class Game:
 		if cfg.DEBUG_MODE:
 			self.clock.tick(0)
 			if (display):
-				self.refreshScreen()
+				self.refreshScreen() #		NOTE : DEBUG MODE ONLY
 		else:
 			#self.sendUpdateInfo()
 			pass
 
 
-	def debugControler(self):
-		for event in pg.event.get():
-			# quiting the game
-			if event.type == pg.QUIT:
-				self.close()
-
-			# handling key presses
-			elif event.type == pg.KEYDOWN:
-				if event.key == pg.K_ESCAPE:
-					self.close()
-
-				elif event.key == ad.RETURN:
-					for i in range(len(self.balls)):
-						self.respawnBall( self.balls[i] )
-
-				else:
-					self.handlePygameInputs( event.key )
-
-
 	# ------------------------------------------- GAME MECHANICS ------------------------------------------- #
+
 
 	def moveObjects(self):
 		for i in range(len(self.rackets)):
@@ -365,6 +394,7 @@ class Game:
 		if self.gravity != 0:
 			ball.dy += self.gravity * ball.fy
 
+	# --------------------------------------------------------------
 
 	# bouncing off the rackets
 	def checkRackets(self, ball):
@@ -395,6 +425,7 @@ class Game:
 			self.scorePoint( self.last_ponger, ad.GOALS )
 			self.respawnBall( ball )
 
+	# --------------------------------------------------------------
 
 	def scorePoint(self, controler_id, mode):
 		if controler_id > 0:
@@ -439,13 +470,14 @@ class Game:
 
 
 	# ------------------------------------------- GAME RENDERING ------------------------------------------- #
+ 	#										NOTE : DEBUG MODE ONLY
 
 	def setWindow(self, _win):
 		self.win = _win
 		self.clock = pg.time.Clock()
 
 
-	def refreshScreen(self): #			NOTE : DEBUG
+	def refreshScreen(self):
 
 		self.win.fill( ad.COL_BGR )
 
@@ -459,7 +491,7 @@ class Game:
 		for ball in self.balls: # 		copies the ball's data
 			ball.drawSelf()
 
-		self.drawFps() #				NOTE : DEBUG
+		self.drawFps()
 
 		pg.display.flip() #				drawing the newly prepared frame
 
@@ -475,69 +507,47 @@ class Game:
 			text = self.font.render(f'{score}', True, ad.COL_FNT)
 			self.win.blit( text, text.get_rect( center = ( self.width * (2 / 4), self.height * (2 / 4) )))
 
+	def drawFps(self):
 
-	delta_time = framerate * 2 #		NOTE : DEBUG
-	smoothness = 15 #					NOTE : DEBUG
-
-	def drawFps(self): #				NOTE : DEBUG
-
-		new_time = time.time_ns()
-		self.delta_time *= self.smoothness - 1
-		self.delta_time += new_time - self.last_time
-		self.delta_time /= self.smoothness
+		new_time = time.time()
+		self.delta_time = (( new_time - self.last_time ) + ( self.delta_time * cfg.FPS_SMOOTHING )) / ( cfg.FPS_SMOOTHING + 1)
 		self.last_time = new_time
 
 		#time.sleep(0.02)
 
-		text = self.debug_font.render(f'{int(1000000000 / self.delta_time)}', True, ad.COL_FNT)
-		#text = self.debug_font.render(f'{int(self.clock.get_fps())}', True, ad.COL_FNT)
+		text = self.debug_font.render( "{:.1f}".format( 1 / self.delta_time ), True, ad.COL_FNT )
+		#text = self.debug_font.render( "{:.1f}".format( self.clock.get_fps() ), True, ad.COL_FNT)
 		self.win.blit( text, text.get_rect( center = ( 64, 32 )))
 
 
-	# ----------------------------------------- GAME INFO PACKETS ------------------------------------------ #
+	# -------------------------------------------- GAME PACKETS -------------------------------------------- #
 
 
-	# @staticmethod
+	#@staticmethod
 	def getInitInfo(self):
 		infoDict = {}
 
 		infoDict["gameID"] = self.gameID
 		infoDict["gameInfo"] = self.getGameInfo()
-		infoDict["sizeInfo"] = self.getsizeInfo()
+		infoDict["sizeInfo"] = self.getSizeInfo()
 		infoDict["racketCount"] = self.racketCount
-		infoDict["racketDirs"] = self.getRacketDirs()
-		#infoDict["racketInitPos"] #										NOTE : IMPLEMENT ME
-		infoDict["ballInitPos"] = ( self.width / 2,  self.height / 2 ) #	NOTE : broche a foin
+		infoDict["racketInitPos"] = self.getRacketInitPos() #	NOTE : IMPLEMENT ME
+		infoDict["ballInitPos"] = self.getBallInitPos() #		NOTE : IMPLEMENT ME
 		infoDict["teamCount"] = len( self.scores )
 
-		return ( infoDict )
+		return( infoDict )
 
 
-	# @staticmethod
+	#@staticmethod
 	def getGameInfo(self):
 		gameDict = {}
 
-		#gameDict["gameState"] = self.getState()
 		gameDict["gameType"] = self.name
 		gameDict["gameMode"] = self.getMode()
-		return ( gameDict )
+		return( gameDict )
 
 
-	#	NOTE : this will fuck with update pos
-	# @staticmethod
-	def getSizeInfo(self):
-		sizeDict = {}
-
-		sizeDict["width"] = self.width
-		sizeDict["height"] = self.height
-		sizeDict["wRatio"] = self.invW
-		sizeDict["wRatio"] = self.invH
-		sizeDict["sRacket"] = self.size_r
-		sizeDict["sBall"] = self.size_b
-
-		return ( sizeDict )
-
-
+	# @staticmethod #			NOTE : no a static var... need to get that info from somewhere else
 	def getMode( self ):
 
 		if (self.mode == ad.SOLO):
@@ -554,6 +564,76 @@ class Game:
 			return "unknown"
 
 
+	#@staticmethod
+	def getSizeInfo(self):
+		sizeDict = {}
+
+		sizeDict["width"] = self.width
+		sizeDict["height"] = self.height
+		sizeDict["wRatio"] = self.invW
+		sizeDict["wRatio"] = self.invH
+		sizeDict["sRacket"] = self.size_r
+		sizeDict["sBall"] = self.size_b
+
+		return( sizeDict )
+
+
+	#@staticmethod
+	def getRacketInitPos(self):
+		racksPos = []
+
+		if (self.iPosR1 != None):
+			racksPos.append( self.iPosR1[0] ) # position x
+			racksPos.append( self.iPosR1[1] ) # position y
+			racksPos.append( self.iPosR1[2] ) # direction
+		if (self.iPosR2 != None):
+			racksPos.append( self.iPosR2[0] )
+			racksPos.append( self.iPosR2[1] )
+			racksPos.append( self.iPosR2[2] )
+		if (self.iPosR3 != None):
+			racksPos.append( self.iPosR3[0] )
+			racksPos.append( self.iPosR3[1] )
+			racksPos.append( self.iPosR3[2] )
+		if (self.iPosR4 != None):
+			racksPos.append( self.iPosR4[0] )
+			racksPos.append( self.iPosR4[1] )
+			racksPos.append( self.iPosR4[2] )
+
+		return( racksPos )
+
+
+	#@staticmethod
+	def getBallInitPos(self):
+		ballsPos = []
+
+		if (self.iPosB1 != None):
+			ballsPos.append( self.iPosB1[0] ) # position x
+			ballsPos.append( self.iPosB1[1] ) # position y
+
+		return ( ballsPos )
+
+	# --------------------------------------------------------------
+
+	# @staticmethod #			NOTE : no a static var... need to get that info from somewhere else
+	def getPlayerInfo(self): #										NOTE : IMPLEMENT ME
+		pass
+
+	# --------------------------------------------------------------
+
+	def getUpdateInfo(self):
+		infoDict = {}
+
+		infoDict["gameID"] = self.gameID
+		#infoDict["gameState"] = self.getState()
+		infoDict["racketPos"] = self.getRacketPos()
+		infoDict["ballPos"] = self.getBallPos()
+		infoDict["lastPonger"] = self.last_ponger
+		infoDict["scores"] = self.scores
+
+		return( infoDict )
+
+
+	# NOTE : useless???
 	def getState(self):
 		if (self.state == ad.STARTING):
 			return "starting"
@@ -564,79 +644,43 @@ class Game:
 		else:
 			return "unknown"
 
-
-	# @staticmethod
-	def getRacketDirs(self):
-		dirs = []
-
-		for i in range(len(self.rackets)):
-
-			if self.rackets[i].dx != 0:
-				dirs.append( "x" )
-			elif self.rackets[i].dy != 0:
-				dirs.append( "y" )
-			else:
-				dirs.append( "unknown" )
-
-		return ( dirs )
-
-
-	# @staticmethod
-	def getRacketInitPos(self): #					NOTE : IMPLEMENT ME
-		pass
-
-
-	# @staticmethod
-	def getBallInitPos(self): #						NOTE : IMPLEMENT ME
-		pass
-
-
-	def getPlayerInfo(self): #						NOTE : IMPLEMENT ME
-		pass
-
-	def getUpdateInfo(self):
-		infoDict = {}
-
-		infoDict["gameID"] = self.gameID
-		#infoDict["gameState"] = self.getState()
-		infoDict["lastPonger"] = self.last_ponger
-		infoDict["ballPos"] = self.getBallPos()
-		infoDict["racketPos"] = self.getRacketPos()
-		infoDict["scores"] = self.scores
-
-		return ( infoDict )
-
-
 	def getRacketPos(self):
 		pos = []
 
 		for i in range( len( self.rackets )):
-			pos.append( self.rackets[i].getPos() )
+			pos.append( self.rackets[i].getPosX() )
+			pos.append( self.rackets[i].getPosY() )
 
-		return ( pos )
+		return( pos )
 
 
 	def getBallPos(self):
 		pos = []
 
 		for i in range( len( self.balls )):
-			pos.append( self.balls[i].getPos() )
+			pos.append( self.balls[i].getPosX() )
+			pos.append( self.balls[i].getPosY() )
 
-		return ( pos )
+		return( pos )
 
+	# --------------------------------------------------------------
 
 	def getEndInfo(self):
 		infoDict = {}
 
 		infoDict["gameID"] = self.gameID
-		#infoDict["gameState"] = self.getState()
-		infoDict["winingTeam"] = self.winnerID
+
+		if self.winnerID == 0:
+			infoDict["winingTeam"] = -1
+		else:
+			infoDict["winingTeam"] = self.winnerID
+
 		infoDict["scores"] = self.scores
 
 		return ( infoDict )
 
 
-if __name__ == '__main__': #		NOTE : DEBUG
+if __name__ == '__main__': #		NOTE : DEBUG MODE ONLY
 
 	pg.init()
 	g = Game(1)

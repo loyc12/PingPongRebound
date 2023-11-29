@@ -16,23 +16,25 @@ class Pong(gi.Game):
 	name = "Pong"
 
 	width = 2048
+	height = 1024
 	racketCount = 2
 
+	iPosR1 = ( gi.Game.size_b, height * (1 / 2)			, "y" )
+	iPosR2 = ( width - gi.Game.size_b, height * (1 / 2)	, "y" )
+
+	iPosB1 = ( width * (1 / 4), height * (1 / 2) )
+
+
 	def initRackets(self):
-		self.rackets.append( go.GameObject( 1, self, self.size_b, self.height * (1 / 2), self.size_b, self.size_r ))
+		self.rackets.append( go.GameObject( 1, self, self.iPosR1[0], self.iPosR1[1], self.size_b, self.size_r ))
 		self.rackets[0].setSpeeds( 0, self.speed_r )
 
-		self.rackets.append( go.GameObject( 2, self, self.width - self.size_b, self.height  * (1 / 2), self.size_b, self.size_r ))
+		self.rackets.append( go.GameObject( 2, self, self.iPosR2[0], self.iPosR2[1], self.size_b, self.size_r ))
 		self.rackets[1].setSpeeds( 0, self.speed_r )
 
 
-	def initControlers(self):
-		self.addBot("bot 1")
-		self.addBot("bot 2")
-
-
 	def initBalls(self):
-		self.balls.append( go.GameObject( 1, self, self.width * (1 / 4), self.height * (1 / 2) , self.size_b, self.size_b ))
+		self.balls.append( go.GameObject( 1, self, self.iPosB1[0], self.iPosB1[1] , self.size_b, self.size_b ))
 		self.balls[0].setSpeeds( self.speed_b, self.speed_b )
 		self.balls[0].setDirs( 1, 1 )
 

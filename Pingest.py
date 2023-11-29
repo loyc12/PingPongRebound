@@ -15,14 +15,23 @@ except ModuleNotFoundError:
 class Pingest(gi.Game):
 	name = "Pingest"
 
+	width = 1536
+	height = 1024
 	racketCount = 4
 
+	iPosR1 = ( width * (2 / 7), gi.Game.size_b			, "x" )
+	iPosR2 = ( width * (5 / 7), gi.Game.size_b			, "x" )
+	iPosR3 = ( width * (2 / 7), height - gi.Game.size_b	, "x" )
+	iPosR4 = ( width * (5 / 7), height - gi.Game.size_b	, "x" )
+
+	iPosB1 = ( width * (3 / 4), height * (3 / 4) )
+
 	def initRackets(self):
-		# setting up rackets :             id, game, _x                  , _y                       , _w         , _h
-		self.rackets.append( go.GameObject( 1, self, self.width * (2 / 7), self.size_b		        , self.size_r, self.size_b ))
-		self.rackets.append( go.GameObject( 2, self, self.width * (5 / 7), self.size_b	            , self.size_r, self.size_b ))
-		self.rackets.append( go.GameObject( 3, self, self.width * (2 / 7), self.height - self.size_b, self.size_r, self.size_b ))
-		self.rackets.append( go.GameObject( 4, self, self.width * (5 / 7), self.height - self.size_b, self.size_r, self.size_b ))
+		# setting up rackets :             id, game, _x            , _y            , _w         , _h
+		self.rackets.append( go.GameObject( 1, self, self.iPosR1[0], self.iPosR1[1], self.size_r, self.size_b ))
+		self.rackets.append( go.GameObject( 2, self, self.iPosR2[0], self.iPosR2[1], self.size_r, self.size_b ))
+		self.rackets.append( go.GameObject( 3, self, self.iPosR3[0], self.iPosR3[1], self.size_r, self.size_b ))
+		self.rackets.append( go.GameObject( 4, self, self.iPosR4[0], self.iPosR4[1], self.size_r, self.size_b ))
 
 		self.rackets[0].setSpeeds( self.speed_r, 0 )
 		self.rackets[1].setSpeeds( self.speed_r, 0 )
@@ -30,15 +39,8 @@ class Pingest(gi.Game):
 		self.rackets[3].setSpeeds( self.speed_r, 0 )
 
 
-	def initControlers(self):
-		self.addBot("bot 1")
-		self.addBot("bot 2")
-		self.addBot("bot 3")
-		self.addBot("bot 4")
-
-
 	def initBalls(self):
-		self.balls.append( go.GameObject( 1, self, self.width * (3 / 4), self.height * (3 / 4) , self.size_b, self.size_b ))
+		self.balls.append( go.GameObject( 1, self, self.iPosB1[0], self.iPosB1[1], self.size_b, self.size_b ))
 		self.balls[0].setSpeeds( self.speed_b, (self.speed_b * (2 / 3) ))
 		self.balls[0].setDirs( -1, -1 )
 

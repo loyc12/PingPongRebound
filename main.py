@@ -8,7 +8,6 @@ try:
 	from Pingest import Pingest
 	from Pongest import Pongest
 	from GameInterface import Game
-	from GameManager import main
 
 	import asyncio as asy
 	import cfg
@@ -25,7 +24,6 @@ except ModuleNotFoundError:
 	from game.PingPongRebound.Pingest import Pingest
 	from game.PingPongRebound.Pongest import Pongest
 	from game.PingPongRebound.GameInterface import Game
-	from game.PingPongRebound.GameManager import main
 
 	import asyncio as asy
 	import game.PingPongRebound.cfg as cfg
