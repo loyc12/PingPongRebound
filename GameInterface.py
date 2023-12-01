@@ -10,7 +10,7 @@ try:
 
 	import PlayerControler as pl
 	import BotControler as bc
-	import Addons as ad
+	import defs as ad
 
 except ModuleNotFoundError:
 	import game.PingPongRebound.cfg as cfg
@@ -19,7 +19,7 @@ except ModuleNotFoundError:
 
 	import game.PingPongRebound.PlayerControler as pl
 	import game.PingPongRebound.BotControler as bc
-	import game.PingPongRebound.Addons as ad
+	import game.PingPongRebound.defs as ad
 
 # game class
 class Game:
@@ -340,8 +340,9 @@ class Game:
 			print( str( self.name ) + " is not running" )
 			return
 
-		self.moveObjects()
-		self.makeBotsPlay()
+		if not cfg.DEBUG_MODE or cfg.MOVE_OBJECTS:
+			self.moveObjects()
+			self.makeBotsPlay()
 
 		if cfg.DEBUG_MODE:
 			self.clock.tick(0)
@@ -480,7 +481,6 @@ class Game:
 	def refreshScreen(self):
 
 		self.win.fill( ad.COL_BGR )
-
 		self.drawScores()
 
 		for rack in self.rackets: # 	copies the racket's data
@@ -492,7 +492,6 @@ class Game:
 			ball.drawSelf()
 
 		self.drawFps()
-
 		pg.display.flip() #				drawing the newly prepared frame
 
 
@@ -507,16 +506,14 @@ class Game:
 			text = self.font.render(f'{score}', True, ad.COL_FNT)
 			self.win.blit( text, text.get_rect( center = ( self.width * (2 / 4), self.height * (2 / 4) )))
 
+
 	def drawFps(self):
 
 		new_time = time.time()
 		self.delta_time = (( new_time - self.last_time ) + ( self.delta_time * cfg.FPS_SMOOTHING )) / ( cfg.FPS_SMOOTHING + 1)
 		self.last_time = new_time
 
-		#time.sleep(0.02)
-
 		text = self.debug_font.render( "{:.1f}".format( 1 / self.delta_time ), True, ad.COL_FNT )
-		#text = self.debug_font.render( "{:.1f}".format( self.clock.get_fps() ), True, ad.COL_FNT)
 		self.win.blit( text, text.get_rect( center = ( 64, 32 )))
 
 

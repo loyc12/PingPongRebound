@@ -1,7 +1,7 @@
 try:
-	import Addons as ad
+	import defs as ad
 except ModuleNotFoundError:
-	import game.PingPongRebound.Addons as ad
+	import game.PingPongRebound.defs as ad
 
 # controler class
 class GameControler:

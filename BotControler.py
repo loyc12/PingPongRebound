@@ -1,9 +1,9 @@
 try:
 	from master import gc
-	import Addons as ad
+	import defs as ad
 except ModuleNotFoundError:
 	from game.PingPongRebound.master import gc
-	import game.PingPongRebound.Addons as ad
+	import game.PingPongRebound.defs as ad
 
 # controler class
 class BotControler(gc.GameControler):

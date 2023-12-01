@@ -3,10 +3,10 @@ try:
 	import cfg
 	if cfg.DEBUG_MODE:
 		from master import pg
-	import Addons as ad
+	import defs as ad
 except ModuleNotFoundError:
 	import game.PingPongRebound.cfg as cfg
-	import game.PingPongRebound.Addons as ad
+	import game.PingPongRebound.defs as ad
 
 # ------------------------------------------ GAMEOBJECT CLASS ------------------------------------------ #
 
@@ -168,12 +168,11 @@ class GameObject:
 			self.fx *= -1
 			self.dx *= self.game.factor_rack
 			self.dy += other.getMvY() * self.fy
-			print("! ping ! ( " + str( "{:.3f}".format( t )) + " )") # 			NOTE : DEBUG
 		elif mode == "y":
 			self.fy *= -1
 			self.dy *= self.game.factor_rack
 			self.dx += other.getMvX() * self.fx
-			print("! pong ! ( " + str( "{:.3f}".format( t )) + " )") # 			NOTE : DEBUG
+		print( f"{self.game.gameID} ) {self.game.name}  \t: {'{:.1f}'.format( t )}s" ) # 	NOTE : DEBUG
 		self.clampSpeed()
 
 

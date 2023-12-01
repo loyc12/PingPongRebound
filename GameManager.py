@@ -7,29 +7,13 @@ try:
 	if cfg.DEBUG_MODE:
 		from master import pg
 		import sys #	to exit properly
-	import Addons as ad
-
-	from Pi import Pi
-	from Po import Po
-	from Ping import Ping
-	from Pong import Pong
-	from Pinger import Pinger
-	from Ponger import Ponger
-	from Pingest import Pingest
-	from Pongest import Pongest
+	import defs as ad
+	from games import *
 
 except ModuleNotFoundError:
 	import game.PingPongRebound.cfg as cfg
-	import game.PingPongRebound.Addons as ad
-
-	from game.PingPongRebound.Pi import Pi
-	from game.PingPongRebound.Po import Po
-	from game.PingPongRebound.Ping import Ping
-	from game.PingPongRebound.Pong import Pong
-	from game.PingPongRebound.Pinger import Pinger
-	from game.PingPongRebound.Ponger import Ponger
-	from game.PingPongRebound.Pingest import Pingest
-	from game.PingPongRebound.Pongest import Pongest
+	import game.PingPongRebound.defs as ad
+	from game.PingPongRebound.games import *
 
 
 class GameManager:
@@ -262,7 +246,7 @@ class GameManager:
 
 		# NOTE : DEBUG PRINTS
 		self.meanDt = ( dt + ( self.meanDt * cfg.FPS_SMOOTHING )) / ( cfg.FPS_SMOOTHING + 1 )
-		print("frame time: {:.5f} \t".format( dt ), "mean time: {:.5f} \t".format( self.meanDt ), "delay time: {:.5f} \t".format( delay ))
+		#print("frame time: {:.5f} \t".format( dt ), "mean time: {:.5f} \t".format( self.meanDt ), "delay time: {:.5f} \t".format( delay ))
 		#print("diversion: {:.5f} \t".format( diversion ), "sleep loss: {:.5f} \t".format( self.sleep_loss ), "correction: {:.5f} \t".format( correction ))
 
 		return delay

@@ -1,11 +1,11 @@
 try:
 	import cfg
 	from master import gc
-	import Addons as ad
+	import defs as ad
 except ModuleNotFoundError:
 	import game.PingPongRebound.cfg as cfg
 	from game.PingPongRebound.master import gc
-	import game.PingPongRebound.Addons as ad
+	import game.PingPongRebound.defs as ad
 
 # controler class
 class PlayerControler(gc.GameControler):

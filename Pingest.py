@@ -4,13 +4,13 @@ try:
 		from master import pg
 	from master import go
 	from master import gi
-	import Addons as ad
+	import defs as ad
 
 except ModuleNotFoundError:
 	import game.PingPongRebound.cfg as cfg
 	from game.PingPongRebound.master import go
 	from game.PingPongRebound.master import gi
-	import game.PingPongRebound.Addons as ad
+	import game.PingPongRebound.defs as ad
 
 class Pingest(gi.Game):
 	name = "Pingest"
