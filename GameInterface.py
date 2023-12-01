@@ -311,7 +311,7 @@ class Game:
 
 	# --------------------------------------------------------------
 
-	def run(self): #						NOTE : DEBUG MODE ONLY
+	def run(self): #							NOTE : DEBUG MODE ONLY
 
 		if not cfg.DEBUG_MODE:
 			print( "cannot use run() without debug mode" )
@@ -347,10 +347,12 @@ class Game:
 		if cfg.DEBUG_MODE:
 			self.clock.tick(0)
 			if (display):
-				self.refreshScreen() #		NOTE : DEBUG MODE ONLY
+				self.refreshScreen()
 		else:
-			#self.sendUpdateInfo()
-			pass
+			pass #		NOTE : useless (packet sending is done by game manager now)
+
+		if cfg.PRINT_PACKETS:
+			print( self.getUpdateInfo() ) #		NOTE : DEBUG
 
 
 	# ------------------------------------------- GAME MECHANICS ------------------------------------------- #
@@ -457,6 +459,8 @@ class Game:
 		self.winnerID = teamID
 		self.state = df.ENDING
 		print( f"Team #{ teamID } won the game of { self.name }" )
+		if cfg.PRINT_PACKETS:
+			print( self.getEndInfo() )
 
 
 	def respawnBall(self, ball):
@@ -520,108 +524,10 @@ class Game:
 	# -------------------------------------------- GAME PACKETS -------------------------------------------- #
 
 
-	#@staticmethod
-	def getInitInfo(self):
-		infoDict = {}
-
-		infoDict["gameID"] = self.gameID
-		infoDict["gameInfo"] = self.getGameInfo()
-		infoDict["sizeInfo"] = self.getSizeInfo()
-		infoDict["racketCount"] = self.racketCount
-		infoDict["racketInitPos"] = self.getRacketInitPos() #	NOTE : IMPLEMENT ME
-		infoDict["ballInitPos"] = self.getBallInitPos() #		NOTE : IMPLEMENT ME
-		infoDict["teamCount"] = len( self.scores )
-
-		return( infoDict )
-
-
-	#@staticmethod
-	def getGameInfo(self):
-		gameDict = {}
-
-		gameDict["gameType"] = self.name
-		gameDict["gameMode"] = self.getMode()
-		return( gameDict )
-
-
-	# @staticmethod #			NOTE : no a static var... need to get that info from DB
-	def getMode( self ):
-
-		if (self.mode == df.SOLO):
-			return "solo"
-		elif (self.mode == df.DUAL):
-			return "dual"
-		elif (self.mode == df.FREEPLAY):
-			return "freeplay"
-		elif (self.mode == df.TOURN_RND_1):
-			return "tournament (1)"
-		elif (self.mode == df.TOURN_RND_2):
-			return "tournament (2)"
-		else:
-			return "unknown"
-
-
-	#@staticmethod
-	def getSizeInfo(self):
-		sizeDict = {}
-
-		sizeDict["width"] = self.width
-		sizeDict["height"] = self.height
-		sizeDict["wRatio"] = self.invW
-		sizeDict["wRatio"] = self.invH
-		sizeDict["sRacket"] = self.size_r
-		sizeDict["sBall"] = self.size_b
-
-		return( sizeDict )
-
-
-	#@staticmethod
-	def getRacketInitPos(self):
-		racksPos = []
-
-		if (self.iPosR1 != None):
-			racksPos.append( self.iPosR1[0] ) # position x
-			racksPos.append( self.iPosR1[1] ) # position y
-			racksPos.append( self.iPosR1[2] ) # direction
-		if (self.iPosR2 != None):
-			racksPos.append( self.iPosR2[0] )
-			racksPos.append( self.iPosR2[1] )
-			racksPos.append( self.iPosR2[2] )
-		if (self.iPosR3 != None):
-			racksPos.append( self.iPosR3[0] )
-			racksPos.append( self.iPosR3[1] )
-			racksPos.append( self.iPosR3[2] )
-		if (self.iPosR4 != None):
-			racksPos.append( self.iPosR4[0] )
-			racksPos.append( self.iPosR4[1] )
-			racksPos.append( self.iPosR4[2] )
-
-		return( racksPos )
-
-
-	#@staticmethod
-	def getBallInitPos(self):
-		ballsPos = []
-
-		if (self.iPosB1 != None):
-			ballsPos.append( self.iPosB1[0] ) # position x
-			ballsPos.append( self.iPosB1[1] ) # position y
-
-		return ( ballsPos )
-
-	# --------------------------------------------------------------
-
-	# @staticmethod #			NOTE : no a static var... need to get that info from DB
-	def getPlayerInfo(self):
-		pass
-
-	# --------------------------------------------------------------
-
 	def getUpdateInfo(self):
 		infoDict = {}
 
 		infoDict["gameID"] = self.gameID
-		#infoDict["gameState"] = self.getState()
 		infoDict["racketPos"] = self.getRacketPos()
 		infoDict["ballPos"] = self.getBallPos()
 		infoDict["lastPonger"] = self.last_ponger
@@ -629,17 +535,6 @@ class Game:
 
 		return( infoDict )
 
-
-	# NOTE : useless???
-	def getState(self):
-		if (self.state == df.STARTING):
-			return "starting"
-		elif (self.state == df.PLAYING):
-			return "playing"
-		elif (self.state == df.ENDING):
-			return "ending"
-		else:
-			return "unknown"
 
 	def getRacketPos(self):
 		pos = []
@@ -660,6 +555,33 @@ class Game:
 
 		return( pos )
 
+
+	def getMode( self ): #				NOTE : useless???
+
+		if (self.mode == df.SOLO):
+			return "solo"
+		elif (self.mode == df.DUAL):
+			return "dual"
+		elif (self.mode == df.FREEPLAY):
+			return "freeplay"
+		elif (self.mode == df.TOURN_RND_1):
+			return "tournament (1)"
+		elif (self.mode == df.TOURN_RND_2):
+			return "tournament (2)"
+		else:
+			return "unknown"
+
+
+	def getState(self): #				NOTE : useless???
+		if (self.state == df.STARTING):
+			return "starting"
+		elif (self.state == df.PLAYING):
+			return "playing"
+		elif (self.state == df.ENDING):
+			return "ending"
+		else:
+			return "unknown"
+
 	# --------------------------------------------------------------
 
 	def getEndInfo(self):
@@ -677,7 +599,7 @@ class Game:
 		return ( infoDict )
 
 
-if __name__ == '__main__': #		NOTE : DEBUG MODE ONLY
+if __name__ == '__main__': #			NOTE : DEBUG MODE ONLY
 
 	pg.init()
 	g = Game(1)

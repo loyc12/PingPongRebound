@@ -13,16 +13,13 @@ except ModuleNotFoundError:
 
 
 # MASTER LIST
-# TODO : add gameUpdate dict in GI to be edited and return with getInfo
-# TODO : add queues for gameManager to receive/send messages (gameStartInfo, gameEndInfo, playerEvents)
+
 
 # FUNCTION LIST
 # TODO : have bot remember where it last saw the ball (to allow : one scan per second, N moves per second)
-# TODO : implement static game info accessors in GM
 
 # DEBUG LIST
 # TODO : use different self.____Lock like mutexes to protect dicts and individual games
-# TODO : see what's up with asy.sleep() crashing in coroutines when called for the first time
 
 # MINOR LIST
 # TODO : rework the ball respawn trajectory everywhere

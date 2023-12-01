@@ -35,48 +35,48 @@ class GameObject:
 # ---------------------------------------------- POSITION ---------------------------------------------- #
 
 	def setSize(self, _w, _h):
-		self.sx = _w / 2
-		self.sy = _h / 2
+		self.sx = int( _w / 2 )
+		self.sy = int( _h / 2 )
 
 	def getSize(self):
-		return (self.sx, self.sy)
+		return ( int( self.sx), int( self.sy ) )
 
 
 	def setLeft(self, _x):
-		self.px = (_x + self.sx)
+		self.px = int( _x + self.sx )
 
 	def setRight(self, _x):
-		self.px = (_x - self.sx)
+		self.px = int( _x - self.sx )
 
 	def setTop(self, _y):
-		self.py = (_y + self.sy)
+		self.py = int( _y + self.sy )
 
 	def setBottom(self, _y):
-		self.py = (_y - self.sy)
+		self.py = int( _y - self.sy )
 
 
 	def getLeft(self):
-		return (self.px - self.sx)
+		return int( self.px - self.sx )
 
 	def getRight(self):
-		return (self.px + self.sx)
+		return int( self.px + self.sx )
 
 	def getTop(self):
-		return (self.py - self.sy)
+		return int( self.py - self.sy )
 
 	def getBottom(self):
-		return (self.py + self.sy)
+		return int( self.py + self.sy )
 
 
 	def setPos(self, _x, _y):
-		self.px = _x
-		self.py = _y
+		self.px = int( _x )
+		self.py = int( _y )
 
 	def setPosX(self, _x):
-		self.px = _x
+		self.px = int( _x )
 
 	def setPosY(self, _y):
-		self.py = _y
+		self.py = int( _y )
 
 
 	def getPos(self):
@@ -98,18 +98,18 @@ class GameObject:
 			if abs( self.dx * self.fx ) > max_speed:
 				if self.dx > max_speed:
 					self.dx = max_speed
-				self.px += max_speed * df.getSign(self.fx)
+				self.px += int( max_speed * df.getSign( self.fx ) )
 			else:
-				self.px += self.dx * self.fx
+				self.px += int( self.dx * self.fx )
 
 		# moving on y
 		if self.fy != 0:
 			if abs( self.dy * self.fy ) > max_speed:
 				if self.dy > max_speed:
 					self.dy = max_speed
-				self.py += max_speed * df.getSign(self.fy)
+				self.py += int( max_speed * df.getSign( self.fy ) )
 			else:
-				self.py += self.dy * self.fy
+				self.py += int( self.dy * self.fy )
 
 
 	def clampPos(self):

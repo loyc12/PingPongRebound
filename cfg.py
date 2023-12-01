@@ -1,5 +1,6 @@
 DEBUG_MODE = False
 MOVE_OBJECTS = True
+PRINT_PACKETS = False
 
 
 

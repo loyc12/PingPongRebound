@@ -213,18 +213,20 @@ class GameManager:
 
 		await asy.sleep( cfg.FRAME_DELAY * 0.75 )
 
-		if not cfg.DEBUG_MODE:
-			while self.runGames:
-				await self.tickGames()
-				await asy.sleep( self.getNextSleepDelay() )
-
-		else:
+		if cfg.DEBUG_MODE:
 			self.emptyDisplay()
 
-			while self.runGames:
+		while self.runGames:
+			if cfg.DEBUG_MODE:
 				self.takePlayerInputs()
-				await self.tickGames()
-				await asy.sleep( self.getNextSleepDelay() )
+
+			await self.tickGames()
+
+			#if cfg.PRINT_PACKETS:
+			print ( self.getGameUpdates() )
+
+			await asy.sleep( self.getNextSleepDelay() )
+
 
 		print( "> EXITING MAINLOOP <" )
 
@@ -378,25 +380,22 @@ class GameManager:
 						controler.handleKeyInput(k)
 
 
+	async def addGameDebug( self, gameType, gameID ):
+		await self.startGame( await self.addGame( gameType, gameID ))
+		return gameID + 1
+
+
 	async def addAllGames( self ): #					NOTE : DEBUG
 		gameID = 1
 
-		await self.startGame( await self.addGame( "Pi", gameID ))
-		gameID += 1
-		await self.startGame( await self.addGame( "Po", gameID ))
-		gameID += 1
-		await self.startGame( await self.addGame( "Ping", gameID ))
-		gameID += 1
-		await self.startGame( await self.addGame( "Pong", gameID ))
-		gameID += 1
-		await self.startGame( await self.addGame( "Pinger", gameID ))
-		gameID += 1
-		await self.startGame( await self.addGame( "Ponger", gameID ))
-		gameID += 1
-		await self.startGame( await self.addGame( "Pingest", gameID ))
-		gameID += 1
-		await self.startGame( await self.addGame( "Pongest", gameID ))
-		gameID += 1
+		gameID = await self.addGameDebug( "Pi", gameID )
+		gameID = await self.addGameDebug( "Po", gameID )
+		#gameID = await self.addGameDebug( "Ping", gameID )
+		gameID = await self.addGameDebug( "Pong", gameID )
+		gameID = await self.addGameDebug( "Pinger", gameID )
+		gameID = await self.addGameDebug( "Ponger", gameID )
+		gameID = await self.addGameDebug( "Pingest", gameID )
+		gameID = await self.addGameDebug( "Pongest", gameID )
 
 		print ("select a player (1-8)")
 
@@ -404,61 +403,137 @@ class GameManager:
 	# ---------------------------------------------- INFO CMDS --------------------------------------------- #
 
 	@staticmethod
-	def getMaxPlayerCount( gameType ):
-		if gameType == "Pi":
-			return Pi.racketCount
-		elif gameType == "Ping":
-			return Ping.racketCount
-		elif gameType == "Pinger":
-			return Pinger.racketCount
-		elif gameType == "Pingest":
-			return Pingest.racketCount
-		elif gameType == "Po":
-			return Po.racketCount
-		elif gameType == "Pong":
-			return Pong.racketCount
-		elif gameType == "Ponger":
-			return Ponger.racketCount
-		elif gameType == "Pongest":
-			return Pongest.racketCount
-		else:
-			print ( "Error : GameManager.getMaxPlayerCount() : invalid game type" )
-			return 0
+	def getInitInfo( gameType ): #				INIT INFO GENERATOR
+		gameClass = GameManager.getGameClass( gameType )
+
+		if (gameClass == None):
+			print ( "Error : GameManager.getInitInfo() : invalid game type" )
+			return None
+
+		infoDict = {}
+
+		infoDict["gameID"] = gameClass.gameID
+		infoDict["gameType"] = gameClass.name
+		infoDict["gameMode"] = gameClass.getMode() #			NOTE : useless???
+		infoDict["gameState"] = gameClass.getState() #			NOTE : useless???
+		infoDict["sizeInfo"] = gameClass.getSizeInfo( gameType )
+		infoDict["racketCount"] = gameClass.racketCount
+		infoDict["racketInitPos"] = gameClass.getRacketInitPos( gameType )
+		infoDict["ballInitPos"] = gameClass.getBallInitPos( gameType )
+		infoDict["teamCount"] = len( gameClass.scores )
+
+		return( infoDict )
+
+
+	@staticmethod #	NOTE : not a static var... need to get that info from DB instead
+	def getPlayerInfo(): #						PLAYER INFO GENERATOR
+		pass
+
+
+	def getGameUpdates(self): #					UPDATE INFO GENERATOR
+		updateDict = {}
+
+		for key, game in self.gameDict.items():
+			updateDict[key] = game.getUpdateInfo()
+
+		return updateDict
+
+	# --------------------------------------------------------------
+
+	@staticmethod
+	def getSizeInfo( gameClass ):
+		sizeDict = {}
+
+		sizeDict["width"] = gameClass.width
+		sizeDict["height"] = gameClass.height
+		sizeDict["wRatio"] = gameClass.invW
+		sizeDict["wRatio"] = gameClass.invH
+		sizeDict["sRacket"] = gameClass.size_r
+		sizeDict["sBall"] = gameClass.size_b
+
+		return( sizeDict )
 
 
 	@staticmethod
-	def getClass( gameType ):
-		initializer = GameManager.getInitialiser( gameType )
+	def getRacketInitPos( gameClass ):
+		racksPos = []
 
-		return initializer.__class__
+		if (gameClass.iPosR1 != None):
+			racksPos.append( gameClass.iPosR1[0] ) # position x
+			racksPos.append( gameClass.iPosR1[1] ) # position y
+			racksPos.append( gameClass.iPosR1[2] ) # direction
+		if (gameClass.iPosR2 != None):
+			racksPos.append( gameClass.iPosR2[0] )
+			racksPos.append( gameClass.iPosR2[1] )
+			racksPos.append( gameClass.iPosR2[2] )
+		if (gameClass.iPosR3 != None):
+			racksPos.append( gameClass.iPosR3[0] )
+			racksPos.append( gameClass.iPosR3[1] )
+			racksPos.append( gameClass.iPosR3[2] )
+		if (gameClass.iPosR4 != None):
+			racksPos.append( gameClass.iPosR4[0] )
+			racksPos.append( gameClass.iPosR4[1] )
+			racksPos.append( gameClass.iPosR4[2] )
+
+		return( racksPos )
+
+
+	@staticmethod
+	def getBallInitPos(gameClass):
+		ballsPos = []
+
+		if (gameClass.iPosB1 != None):
+			ballsPos.append( gameClass.iPosB1[0] ) # position x
+			ballsPos.append( gameClass.iPosB1[1] ) # position y
+
+		return ( ballsPos )
+
+
+	# --------------------------------------------- CLASS CMDS --------------------------------------------- #
+
+
+	@staticmethod
+	def getMaxPlayerCount( gameType ):
+		gameClass = GameManager.getClass( gameType )
+
+		if (gameClass != None):
+			return gameClass.racketCount
+
+		print ( "Error : GameManager.getMaxPlayerCount() : invalid game type" )
+		return 0
 
 
 	@staticmethod
 	def getInitialiser( gameType, rdmStart = 4 ):
+		return GameManager.getGameClass( gameType )
+
+	@staticmethod
+	def getGameClass( gameType, rdmStart = 4 ):
 		if gameType == "Pi":
 			return Pi
-		elif gameType == "Ping":
-			return Ping
-		elif gameType == "Pinger":
-			return Pinger
-		elif gameType == "Pingest":
-			return Pingest
 		elif gameType == "Po":
 			return Po
+		elif gameType == "Ping":
+			return Ping
 		elif gameType == "Pong":
 			return Pong
+		elif gameType == "Pinger":
+			return Pinger
 		elif gameType == "Ponger":
 			return Ponger
+		elif gameType == "Pingest":
+			return Pingest
 		elif gameType == "Pongest":
 			return Pongest
 		elif gameType == "Random":
-			return GameManager.getRandomGameType(rdmStart)
-		else:
-			print ( "Error : GameManager.getInitialiser() : invalid game type" )
-			return None
+			return GameManager.getRandomGameClass(rdmStart)
+
+		print ( "Error : GameManager.getGameClass() : invalid game type" )
+		return None
+
 
 	@staticmethod
-	def getRandomGameType(playerCount = 1):
+	def getRandomGameClass(playerCount = 1):
 		if playerCount == 1:
 			start = 0
 		elif playerCount == 2:
@@ -466,33 +541,39 @@ class GameManager:
 		elif playerCount == 4:
 			start = 4
 		else:
-			print( "Error : GameManager.getRandomGameType() : invalid player count" )
+			print( "Error : GameManager.getRandomGameClass() : invalid player count" )
 			return None
 
 		value = rdm.randint(start, GameManager.gameTypeCount - 1 )
 		if value == 0:
 			return "Pi"
-		elif value == 2:
-			return "Ping"
-		elif value == 4:
-			return "Pinger"
-		elif value == 6:
-			return "Pingest"
 		elif value == 1:
 			return "Po"
+		elif value == 2:
+			return "Ping"
 		elif value == 3:
 			return "Pong"
+		elif value == 4:
+			return "Pinger"
 		elif value == 5:
 			return "Ponger"
+		elif value == 6:
+			return "Pingest"
 		elif value == 7:
 			return "Pongest"
 
 
 def testAllGames():
 	gm = GameManager()
+
+	print( gm.getInitInfo( Ping ))
+	print( gm.getInitInfo( Pong ))
+	print( gm.getInitInfo( Pingest ))
+
 	asy.run ( gm.addAllGames() )
 	if cfg.DEBUG_MODE:
 		asy.run ( gm.mainloop() )
+
 
 
 if __name__ == '__main__':

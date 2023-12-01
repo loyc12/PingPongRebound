@@ -8,10 +8,9 @@
 
 { // getInitInfo()
 	"gameID": 1,
-	"gameInfo": {
-		"gameType": "pong",
-		"gameMode": "solo"
-	},
+	"gameType": "pong",
+	"gameMode": "solo", //		NOTE : USELESS ???
+	"gameState": "playing", //	NOTE : USELESS ???
 	"sizeInfo": {
 		"width": 2048,
 		"height": 1024,
