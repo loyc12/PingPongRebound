@@ -4,13 +4,13 @@ try:
 		from master import pg
 	from master import go
 	from master import gi
-	import defs as ad
+	import defs as df
 
 except ModuleNotFoundError:
 	import game.PingPongRebound.cfg as cfg
 	from game.PingPongRebound.master import go
 	from game.PingPongRebound.master import gi
-	import game.PingPongRebound.defs as ad
+	import game.PingPongRebound.defs as df
 
 class Pong(gi.Game):
 	name = "Pong"
@@ -46,22 +46,22 @@ class Pong(gi.Game):
 
 	def handlePygameInputs(self, key): #		NOTE : DEBUG
 		# player 1
-		if (self.controlers[0].mode == gi.gc.ad.PLAYER):
-			if key == ad.KA:
-				self.makeMove( 1, gi.ad.STOP )
-			elif key == ad.KW:
-				self.makeMove( 1, gi.ad.UP )
-			elif key == ad.KS:
-				self.makeMove( 1, gi.ad.DOWN )
+		if (self.controlers[0].mode == gi.gc.df.PLAYER):
+			if key == df.KA:
+				self.makeMove( 1, gi.df.STOP )
+			elif key == df.KW:
+				self.makeMove( 1, gi.df.UP )
+			elif key == df.KS:
+				self.makeMove( 1, gi.df.DOWN )
 
 		# player 2
-		if (self.controlers[1].mode == gi.gc.ad.PLAYER):
-			if key == ad.LEFT:
-				self.makeMove( 2, gi.ad.STOP )
-			elif key == ad.UP:
-				self.makeMove( 2, gi.ad.UP )
-			elif key == ad.DOWN:
-				self.makeMove( 2, gi.ad.DOWN )
+		if (self.controlers[1].mode == gi.gc.df.PLAYER):
+			if key == df.LEFT:
+				self.makeMove( 2, gi.df.STOP )
+			elif key == df.UP:
+				self.makeMove( 2, gi.df.UP )
+			elif key == df.DOWN:
+				self.makeMove( 2, gi.df.DOWN )
 
 
 	# bouncing off the rackets
@@ -74,7 +74,7 @@ class Pong(gi.Game):
 				elif (rack.id == 2):
 					ball.setPosX( rack.getPosX() - self.size_b ) # '-' because the ball is going to the left
 				ball.bounceOnRack( rack, "x" )
-				self.scorePoint( rack.id, gi.ad.HITS )
+				self.scorePoint( rack.id, gi.df.HITS )
 
 
 	# bouncing on the walls
@@ -89,12 +89,12 @@ class Pong(gi.Game):
 			# checking who scored
 			if ball.getLeft() <= 0:
 				if self.last_ponger > 0:
-					self.scorePoint( 2, gi.ad.GOALS )
+					self.scorePoint( 2, gi.df.GOALS )
 				ball.setDirs( -1, -ball.fy )
 				ball.setPos (self.width * (3 / 4), self.height * (1 / 2) )
 			if ball.getRight() >= self.width:
 				if self.last_ponger > 0:
-					self.scorePoint( 1, gi.ad.GOALS )
+					self.scorePoint( 1, gi.df.GOALS )
 				ball.setDirs( 1, -ball.fy )
 				ball.setPos (self.width * (1 / 4), self.height * (1 / 2))
 
@@ -107,14 +107,14 @@ class Pong(gi.Game):
 
 
 	def drawLines(self):
-		pg.draw.line( self.win, ad.COL_FNT, ( 0, 0 ), ( self.width, 0 ), self.size_l * 2 )
-		pg.draw.line( self.win, ad.COL_FNT, ( self.width / 2, 0 ), ( self.width / 2, self.height ), self.size_l )
-		pg.draw.line( self.win, ad.COL_FNT, ( 0, self.height ), ( self.width, self.height ), self.size_l * 2)
+		pg.draw.line( self.win, df.COL_FNT, ( 0, 0 ), ( self.width, 0 ), self.size_l * 2 )
+		pg.draw.line( self.win, df.COL_FNT, ( self.width / 2, 0 ), ( self.width / 2, self.height ), self.size_l )
+		pg.draw.line( self.win, df.COL_FNT, ( 0, self.height ), ( self.width, self.height ), self.size_l * 2)
 
 
 	def drawScores(self):
-		text1 = self.font.render(f'{self.scores[0]}', True, ad.COL_FNT)
-		text2 = self.font.render(f'{self.scores[1]}', True, ad.COL_FNT)
+		text1 = self.font.render(f'{self.scores[0]}', True, df.COL_FNT)
+		text2 = self.font.render(f'{self.scores[1]}', True, df.COL_FNT)
 
 		self.win.blit( text1, text1.get_rect( center = ( self.width * (1 / 4), self.height * (2 / 4) )))
 		self.win.blit( text2, text2.get_rect( center = ( self.width * (3 / 4), self.height * (2 / 4) )))

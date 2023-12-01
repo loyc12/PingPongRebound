@@ -17,7 +17,7 @@ class Po(gi.Game):
 	factor_rack = 1.2
 	factor_wall = 0.9
 
-	score_mode = gi.ad.HITS
+	score_mode = gi.df.HITS
 
 	iPosR1 = ( width * (1 / 2), height - gi.Game.size_b, "x" )
 

@@ -1,11 +1,11 @@
 try:
 	import cfg
 	from master import gc
-	import defs as ad
+	import defs as df
 except ModuleNotFoundError:
 	import game.PingPongRebound.cfg as cfg
 	from game.PingPongRebound.master import gc
-	import game.PingPongRebound.defs as ad
+	import game.PingPongRebound.defs as df
 
 # controler class
 class PlayerControler(gc.GameControler):
@@ -14,23 +14,23 @@ class PlayerControler(gc.GameControler):
 	def __init__(self, _game, _playerName, _playerID):
 		self.game = _game
 		self.name = _playerName
-		self.mode = ad.PLAYER
+		self.mode = df.PLAYER
 		self.playerID = _playerID
 
 
 	# NOTE : temporary (uses pygame keys)
 	def handleKeyInput(self, key):
-		if key == ad.SPACE or key == ad.NZERO:
-			self.playMove( ad.STOP )
-		elif key == ad.KW or key == ad.UP:
-			self.playMove( ad.UP )
-		elif key == ad.KD or key == ad.RIGHT:
-			self.playMove( ad.RIGHT )
-		elif key == ad.KS or key == ad.DOWN:
-			self.playMove( ad.DOWN )
-		elif key == ad.KA or key == ad.LEFT:
-			self.playMove( ad.LEFT )
-		elif (cfg.DEBUG_MODE and key == ad.RETURN): #		NOTE : DEBUG
+		if key == df.SPACE or key == df.NZERO:
+			self.playMove( df.STOP )
+		elif key == df.KW or key == df.UP:
+			self.playMove( df.UP )
+		elif key == df.KD or key == df.RIGHT:
+			self.playMove( df.RIGHT )
+		elif key == df.KS or key == df.DOWN:
+			self.playMove( df.DOWN )
+		elif key == df.KA or key == df.LEFT:
+			self.playMove( df.LEFT )
+		elif (cfg.DEBUG_MODE and key == df.RETURN): #		NOTE : DEBUG
 			for i in range(len(self.game.balls)):
 				self.game.respawnBall( self.game.balls[i] )
 		else:

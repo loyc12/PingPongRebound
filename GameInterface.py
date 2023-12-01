@@ -10,7 +10,7 @@ try:
 
 	import PlayerControler as pl
 	import BotControler as bc
-	import defs as ad
+	import defs as df
 
 except ModuleNotFoundError:
 	import game.PingPongRebound.cfg as cfg
@@ -19,16 +19,16 @@ except ModuleNotFoundError:
 
 	import game.PingPongRebound.PlayerControler as pl
 	import game.PingPongRebound.BotControler as bc
-	import game.PingPongRebound.defs as ad
+	import game.PingPongRebound.defs as df
 
 # game class
 class Game:
 	name = "Game"
-	mode = ad.SOLO
+	mode = df.SOLO
 	racketCount = 1
-	state = ad.STARTING
+	state = df.STARTING
 	hard_break = False
-	score_mode = ad.GOALS
+	score_mode = df.GOALS
 
 	width = 1536
 	height = 1024
@@ -69,7 +69,7 @@ class Game:
 
 	# ------------------------------------------- INITIALIZATION ------------------------------------------- #
 
-	def __init__(self, gameID):
+	def __init__(self, gameID, gameMode = df.SOLO):
 
 		self.gameID = gameID
 
@@ -141,16 +141,16 @@ class Game:
 	def makeBotsPlay(self):
 		if self.useAI and self.playerCount < self.racketCount:
 			for i in range(self.playerCount, self.controlerCount):
-				if (self.controlers[i].mode == gc.ad.BOT):
-					if (( self.step_count + self.controlers[i].frequency_offset ) % ad.BOT_FREQUENCY ) == 0:
+				if (self.controlers[i].mode == gc.df.BOT):
+					if (( self.step_count + self.controlers[i].frequency_offset ) % df.BOT_FREQUENCY ) == 0:
 						self.controlers[i].playMove()
 			self.step_count += 1
-			self.step_count %= ad.BOT_FREQUENCY
+			self.step_count %= df.BOT_FREQUENCY
 
 	# --------------------------------------------------------------
 
 	def addPlayer(self, username, playerID):
-		if self.state != ad.STARTING:
+		if self.state != df.STARTING:
 			print ("cannot add players once the game started")
 		elif (self.isGameFull()):
 			print ("this game is full")
@@ -215,27 +215,27 @@ class Game:
 		for i in range(len(self.rackets)):
 			rack = self.rackets[i]
 			if (rack.id == target_id):
-				if move == ad.NULL:
+				if move == df.NULL:
 					return
-				elif (move == ad.STOP):
+				elif (move == df.STOP):
 					rack.fx = 0
 					rack.fy = 0
-				elif (move == ad.LEFT):
+				elif (move == df.LEFT):
 					if (self.hard_break and rack.fx > 0):
 						rack.fx = 0
 					else:
 						rack.fx -= 1
-				elif (move == ad.UP):
+				elif (move == df.UP):
 					if (self.hard_break and rack.fy > 0):
 						rack.fy = 0
 					else:
 						rack.fy -= 1
-				elif (move == ad.RIGHT):
+				elif (move == df.RIGHT):
 					if (self.hard_break and rack.fx < 0):
 						rack.fx = 0
 					else:
 						rack.fx += 1
-				elif (move == ad.DOWN):
+				elif (move == df.DOWN):
 					if (self.hard_break and rack.fy < 0):
 						rack.fy = 0
 					else:
@@ -274,7 +274,7 @@ class Game:
 				if event.key == pg.K_ESCAPE:
 					self.close()
 
-				elif event.key == ad.RETURN:
+				elif event.key == df.RETURN:
 					for i in range(len(self.balls)):
 						self.respawnBall( self.balls[i] )
 
@@ -284,21 +284,21 @@ class Game:
 
 	def handlePygameInputs(self, key): #		NOTE : DEBUG
 		for i in range(0, self.controlerCount):
-			if (self.controlers[i].mode == gc.ad.PLAYER):
+			if (self.controlers[i].mode == gc.df.PLAYER):
 				rack = self.controlers[i].racket
-				if key == ad.KS or key == ad.DOWN:
-					self.makeMove( rack.id, ad.STOP )
-				elif key == ad.KA or key == ad.LEFT:
-					self.makeMove( rack.id, ad.LEFT )
-				elif key == ad.KD or key == ad.RIGHT:
-					self.makeMove( rack.id, ad.RIGHT )
+				if key == df.KS or key == df.DOWN:
+					self.makeMove( rack.id, df.STOP )
+				elif key == df.KA or key == df.LEFT:
+					self.makeMove( rack.id, df.LEFT )
+				elif key == df.KD or key == df.RIGHT:
+					self.makeMove( rack.id, df.RIGHT )
 
 	# ---------------------------------------------- CORE CMDS --------------------------------------------- #
 
 	def start(self):
-		if (self.state == ad.STARTING):
+		if (self.state == df.STARTING):
 			self.initBots()
-			self.state = ad.PLAYING
+			self.state = df.PLAYING
 			self.start_time = time.time()
 			print( "starting a game of " + self.name )
 		else:
@@ -306,7 +306,7 @@ class Game:
 
 
 	def close(self):
-		self.state = ad.ENDING
+		self.state = df.ENDING
 		print("closed a game of " + self.name)
 
 	# --------------------------------------------------------------
@@ -317,17 +317,17 @@ class Game:
 			print( "cannot use run() without debug mode" )
 			return
 
-		if self.state == ad.ENDING:
+		if self.state == df.ENDING:
 			print( "The game of " + self.name + " is over" )
 			pg.quit()
 			sys.exit()
 
-		if self.state != ad.PLAYING:
+		if self.state != df.PLAYING:
 			print(f"{self.name} is not running")
 			return
 
 		# main game loop
-		while self.state == ad.PLAYING:
+		while self.state == df.PLAYING:
 			self.debugControler()
 			self.step( True )
 			self.clock.tick (self.framerate)
@@ -336,7 +336,7 @@ class Game:
 
 	def step(self, display = True):
 
-		if self.state != ad.PLAYING:
+		if self.state != df.PLAYING:
 			print( str( self.name ) + " is not running" )
 			return
 
@@ -404,7 +404,7 @@ class Game:
 			if ball.isOverlaping( rack ):
 				ball.setPosY( rack.getPosY() - self.size_b ) # '-' because the ball is going above the racket
 				ball.bounceOnRack( rack, "y" )
-				self.scorePoint( rack.id, ad.HITS )
+				self.scorePoint( rack.id, df.HITS )
 
 
 	# bouncing on the walls
@@ -423,22 +423,22 @@ class Game:
 	# scoring a goal
 	def checkGoals(self, ball):
 		if ball.getBottom() >= self.height:
-			self.scorePoint( self.last_ponger, ad.GOALS )
+			self.scorePoint( self.last_ponger, df.GOALS )
 			self.respawnBall( ball )
 
 	# --------------------------------------------------------------
 
 	def scorePoint(self, controler_id, mode):
 		if controler_id > 0:
-			if mode == ad.GOALS: #					if the ball went out of bounds
-				if self.score_mode == ad.GOALS: #		if goals give points
+			if mode == df.GOALS: #					if the ball went out of bounds
+				if self.score_mode == df.GOALS: #		if goals give points
 					self.scores[controler_id - 1] += 1
 				else: # 								if racket hits give points
 					self.scores[controler_id - 1] = 0
 				self.last_ponger = 0
 
-			elif mode == ad.HITS: #					if the ball hit a racket
-				if self.score_mode == ad.HITS: #		if racket hits give points
+			elif mode == df.HITS: #					if the ball hit a racket
+				if self.score_mode == df.HITS: #		if racket hits give points
 					self.scores[controler_id - 1] += 1
 				else: #									if goals give points
 					pass
@@ -449,13 +449,13 @@ class Game:
 		# check if someone won
 		for i in range(len(self.scores)):
 			score = self.scores[i]
-			if score >= ad.WIN_SCORE:
+			if score >= df.WIN_SCORE:
 				self.winGame( i + 1 )
 
 
 	def winGame(self, teamID):
 		self.winnerID = teamID
-		self.state = ad.ENDING
+		self.state = df.ENDING
 		print( f"Team #{ teamID } won the game of { self.name }" )
 
 
@@ -480,7 +480,7 @@ class Game:
 
 	def refreshScreen(self):
 
-		self.win.fill( ad.COL_BGR )
+		self.win.fill( df.COL_BGR )
 		self.drawScores()
 
 		for rack in self.rackets: # 	copies the racket's data
@@ -496,14 +496,14 @@ class Game:
 
 
 	def drawLines(self):
-		pg.draw.line( self.win, ad.COL_FNT, ( 0, 0 ), ( 0 , self.height ), self.size_l * 2 )
-		pg.draw.line( self.win, ad.COL_FNT, ( self.width, 0 ), ( self.width, self.height ), self.size_l * 2 )
-		pg.draw.line( self.win, ad.COL_FNT, ( 0, 0 ), ( self.width, 0 ), self.size_l * 2 )
+		pg.draw.line( self.win, df.COL_FNT, ( 0, 0 ), ( 0 , self.height ), self.size_l * 2 )
+		pg.draw.line( self.win, df.COL_FNT, ( self.width, 0 ), ( self.width, self.height ), self.size_l * 2 )
+		pg.draw.line( self.win, df.COL_FNT, ( 0, 0 ), ( self.width, 0 ), self.size_l * 2 )
 
 
 	def drawScores(self):
 		for score in self.scores: #		copies the racket's data
-			text = self.font.render(f'{score}', True, ad.COL_FNT)
+			text = self.font.render(f'{score}', True, df.COL_FNT)
 			self.win.blit( text, text.get_rect( center = ( self.width * (2 / 4), self.height * (2 / 4) )))
 
 
@@ -513,7 +513,7 @@ class Game:
 		self.delta_time = (( new_time - self.last_time ) + ( self.delta_time * cfg.FPS_SMOOTHING )) / ( cfg.FPS_SMOOTHING + 1)
 		self.last_time = new_time
 
-		text = self.debug_font.render( "{:.1f}".format( 1 / self.delta_time ), True, ad.COL_FNT )
+		text = self.debug_font.render( "{:.1f}".format( 1 / self.delta_time ), True, df.COL_FNT )
 		self.win.blit( text, text.get_rect( center = ( 64, 32 )))
 
 
@@ -544,18 +544,18 @@ class Game:
 		return( gameDict )
 
 
-	# @staticmethod #			NOTE : no a static var... need to get that info from somewhere else
+	# @staticmethod #			NOTE : no a static var... need to get that info from DB
 	def getMode( self ):
 
-		if (self.mode == ad.SOLO):
+		if (self.mode == df.SOLO):
 			return "solo"
-		elif (self.mode == ad.DUAL):
+		elif (self.mode == df.DUAL):
 			return "dual"
-		elif (self.mode == ad.FREEPLAY):
+		elif (self.mode == df.FREEPLAY):
 			return "freeplay"
-		elif (self.mode == ad.TOURN_RND_1):
+		elif (self.mode == df.TOURN_RND_1):
 			return "tournament (1)"
-		elif (self.mode == ad.TOURN_RND_2):
+		elif (self.mode == df.TOURN_RND_2):
 			return "tournament (2)"
 		else:
 			return "unknown"
@@ -611,8 +611,8 @@ class Game:
 
 	# --------------------------------------------------------------
 
-	# @staticmethod #			NOTE : no a static var... need to get that info from somewhere else
-	def getPlayerInfo(self): #										NOTE : IMPLEMENT ME
+	# @staticmethod #			NOTE : no a static var... need to get that info from DB
+	def getPlayerInfo(self):
 		pass
 
 	# --------------------------------------------------------------
@@ -632,11 +632,11 @@ class Game:
 
 	# NOTE : useless???
 	def getState(self):
-		if (self.state == ad.STARTING):
+		if (self.state == df.STARTING):
 			return "starting"
-		elif (self.state == ad.PLAYING):
+		elif (self.state == df.PLAYING):
 			return "playing"
-		elif (self.state == ad.ENDING):
+		elif (self.state == df.ENDING):
 			return "ending"
 		else:
 			return "unknown"

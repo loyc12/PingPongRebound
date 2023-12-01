@@ -4,13 +4,13 @@ try:
 		from master import pg
 	from master import go
 	from master import gi
-	import defs as ad
+	import defs as df
 
 except ModuleNotFoundError:
 	import game.PingPongRebound.cfg as cfg
 	from game.PingPongRebound.master import go
 	from game.PingPongRebound.master import gi
-	import game.PingPongRebound.defs as ad
+	import game.PingPongRebound.defs as df
 
 class Pongest(gi.Game):
 	name = "Pongest"
@@ -62,28 +62,28 @@ class Pongest(gi.Game):
 
 	def handlePygameInputs(self, key): #		NOTE : DEBUG
 		# player 1
-		if (self.controlers[0].mode == gi.gc.ad.PLAYER):
-			if key == ad.KS:
-				self.makeMove( 1, gi.ad.STOP )
-				self.makeMove( 3, gi.ad.STOP )
-			elif key == ad.KA:
-				self.makeMove( 1, gi.ad.LEFT )
-				self.makeMove( 3, gi.ad.LEFT )
-			elif key == ad.KD:
-				self.makeMove( 1, gi.ad.RIGHT )
-				self.makeMove( 3, gi.ad.RIGHT )
+		if (self.controlers[0].mode == gi.gc.df.PLAYER):
+			if key == df.KS:
+				self.makeMove( 1, gi.df.STOP )
+				self.makeMove( 3, gi.df.STOP )
+			elif key == df.KA:
+				self.makeMove( 1, gi.df.LEFT )
+				self.makeMove( 3, gi.df.LEFT )
+			elif key == df.KD:
+				self.makeMove( 1, gi.df.RIGHT )
+				self.makeMove( 3, gi.df.RIGHT )
 
 		# player 2
-		if (self.controlers[1].mode == gi.gc.ad.PLAYER):
-			if key == ad.LEFT:
-				self.makeMove( 2, gi.ad.STOP )
-				self.makeMove( 4, gi.ad.STOP )
-			elif key == ad.UP:
-				self.makeMove( 2, gi.ad.UP )
-				self.makeMove( 4, gi.ad.UP )
-			elif key == ad.DOWN:
-				self.makeMove( 2, gi.ad.DOWN )
-				self.makeMove( 4, gi.ad.DOWN )
+		if (self.controlers[1].mode == gi.gc.df.PLAYER):
+			if key == df.LEFT:
+				self.makeMove( 2, gi.df.STOP )
+				self.makeMove( 4, gi.df.STOP )
+			elif key == df.UP:
+				self.makeMove( 2, gi.df.UP )
+				self.makeMove( 4, gi.df.UP )
+			elif key == df.DOWN:
+				self.makeMove( 2, gi.df.DOWN )
+				self.makeMove( 4, gi.df.DOWN )
 
 
 	# bouncing off the rackets
@@ -106,7 +106,7 @@ class Pongest(gi.Game):
 					ball.setPosX( rack.getPosX() + self.size_b ) # '+' because the ball is going right
 					ball.bounceOnRack( rack, "x" )
 
-				self.scorePoint( rack.id, gi.ad.HITS )
+				self.scorePoint( rack.id, gi.df.HITS )
 
 
 	# bouncing on the walls (walls are absent in Pongester)
@@ -119,7 +119,7 @@ class Pongest(gi.Game):
 		if ball.getTop() <= 0 or ball.getBottom() >= self.height or ball.getLeft() <= 0 or ball.getRight() >= self.width:
 			# increasing score
 			if (self.last_ponger > 0):
-				self.scorePoint( self.last_ponger, gi.ad.GOALS )
+				self.scorePoint( self.last_ponger, gi.df.GOALS )
 
 			# checking how to respawn the ball
 			if self.last_ponger == 1 or ( self.last_ponger == 0 and ball.fx < 0 and ball.fy < 0 ):
@@ -146,15 +146,15 @@ class Pongest(gi.Game):
 
 
 	def drawLines(self):
-		pg.draw.line( self.win, ad.COL_FNT, ( 0, 0 ),  ( self.width, self.height ), self.size_l )
-		pg.draw.line( self.win, ad.COL_FNT, ( 0, self.height), ( self.width, 0 ), self.size_l )
+		pg.draw.line( self.win, df.COL_FNT, ( 0, 0 ),  ( self.width, self.height ), self.size_l )
+		pg.draw.line( self.win, df.COL_FNT, ( 0, self.height), ( self.width, 0 ), self.size_l )
 
 
 	def drawScores(self):
-		text1 = self.font.render(f'{self.scores[0]}', True, ad.COL_FNT)
-		text2 = self.font.render(f'{self.scores[1]}', True, ad.COL_FNT)
-		text3 = self.font.render(f'{self.scores[2]}', True, ad.COL_FNT)
-		text4 = self.font.render(f'{self.scores[3]}', True, ad.COL_FNT)
+		text1 = self.font.render(f'{self.scores[0]}', True, df.COL_FNT)
+		text2 = self.font.render(f'{self.scores[1]}', True, df.COL_FNT)
+		text3 = self.font.render(f'{self.scores[2]}', True, df.COL_FNT)
+		text4 = self.font.render(f'{self.scores[3]}', True, df.COL_FNT)
 
 		self.win.blit( text1, text1.get_rect( center = ( self.width * (1 / 2), self.height * (1 / 5) )))
 		self.win.blit( text2, text2.get_rect( center = ( self.width * (4 / 5), self.height * (1 / 2) )))

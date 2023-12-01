@@ -7,12 +7,12 @@ try:
 	if cfg.DEBUG_MODE:
 		from master import pg
 		import sys #	to exit properly
-	import defs as ad
+	import defs as df
 	from games import *
 
 except ModuleNotFoundError:
 	import game.PingPongRebound.cfg as cfg
-	import game.PingPongRebound.defs as ad
+	import game.PingPongRebound.defs as df
 	from game.PingPongRebound.games import *
 
 
@@ -120,11 +120,11 @@ class GameManager:
 				return
 
 			# NOTE : to know how to handle player leaving
-			#if game.state == ad.STARTING:
+			#if game.state == df.STARTING:
 			#	pass
-			#elif game.state == ad.PLAYING:
+			#elif game.state == df.PLAYING:
 			#	pass
-			#elif game.state == ad.ENDING:
+			#elif game.state == df.ENDING:
 			#	pass
 
 			game.removePlayer( playerID )
@@ -157,7 +157,7 @@ class GameManager:
 	# --------------------------------------------------------------
 
 	def runGameStep( self, game ):
-		if game.state == ad.PLAYING:
+		if game.state == df.PLAYING:
 
 			game.moveObjects()
 			game.makeBotsPlay()
@@ -172,17 +172,17 @@ class GameManager:
 		#async with self.lock: #					NOTE : useless???
 		for key, game in self.gameDict.items():
 
-			if game.state == ad.STARTING:
+			if game.state == df.STARTING:
 				pass #								send player info packet from here
 
-			elif game.state == ad.PLAYING:
+			elif game.state == df.PLAYING:
 				game.step( False )
 
 				if cfg.DEBUG_MODE: #				NOTE : DEBUG
 					if key == self.windowID:
 						self.displayGame( game )
 
-			elif game.state == ad.ENDING:
+			elif game.state == df.ENDING:
 				if cfg.DEBUG_MODE and self.windowID == key:
 					print ( "this game no longer exists" )
 					print ( "please select a valid game (1-8)" )
@@ -273,7 +273,7 @@ class GameManager:
 
 
 	def displayGame( self, game ): # 					NOTE : DEBUG
-		if game.state == ad.PLAYING:
+		if game.state == df.PLAYING:
 			if game.width != self.win.get_width() or game.height != self.win.get_height():
 				self.win = pg.display.set_mode( (game.width, game.height) )
 				pg.display.set_caption( game.name ) #
@@ -305,7 +305,7 @@ class GameManager:
 						sys.exit()
 
 					# respawns the ball
-					elif k == ad.RETURN:
+					elif k == df.RETURN:
 						if self.windowID != 0:
 							if self.gameDict.get(self.windowID) != None:
 								game = self.gameDict.get(self.windowID)
@@ -372,7 +372,7 @@ class GameManager:
 					print( "please select a valid game (1-8)" )
 				else:
 					controler = self.gameDict.get(self.windowID).controlers[0]
-					if controler.mode != ad.PLAYER:
+					if controler.mode != df.PLAYER:
 						print ( "cannot move a bot's racket" )
 					else:
 						controler.handleKeyInput(k)
@@ -427,6 +427,13 @@ class GameManager:
 
 
 	@staticmethod
+	def getClass( gameType ):
+		initializer = GameManager.getInitialiser( gameType )
+
+		return initializer.__class__
+
+
+	@staticmethod
 	def getInitialiser( gameType, rdmStart = 4 ):
 		if gameType == "Pi":
 			return Pi
@@ -449,7 +456,6 @@ class GameManager:
 		else:
 			print ( "Error : GameManager.getInitialiser() : invalid game type" )
 			return None
-
 
 	@staticmethod
 	def getRandomGameType(playerCount = 1):

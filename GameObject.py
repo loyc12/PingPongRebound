@@ -3,10 +3,10 @@ try:
 	import cfg
 	if cfg.DEBUG_MODE:
 		from master import pg
-	import defs as ad
+	import defs as df
 except ModuleNotFoundError:
 	import game.PingPongRebound.cfg as cfg
-	import game.PingPongRebound.defs as ad
+	import game.PingPongRebound.defs as df
 
 # ------------------------------------------ GAMEOBJECT CLASS ------------------------------------------ #
 
@@ -27,7 +27,7 @@ class GameObject:
 	def drawSelf(self): # 														NOTE : DEBUG
 		if (cfg.DEBUG_MODE):
 			self.box.center = (self.px, self.py)
-			pg.draw.rect(self.game.win, ad.COL_OBJ, self.box)
+			pg.draw.rect(self.game.win, df.COL_OBJ, self.box)
 		else:
 			print ("GameObject.drawSelf() is a DEBUG_MODE function")
 
@@ -98,7 +98,7 @@ class GameObject:
 			if abs( self.dx * self.fx ) > max_speed:
 				if self.dx > max_speed:
 					self.dx = max_speed
-				self.px += max_speed * ad.getSign(self.fx)
+				self.px += max_speed * df.getSign(self.fx)
 			else:
 				self.px += self.dx * self.fx
 
@@ -107,7 +107,7 @@ class GameObject:
 			if abs( self.dy * self.fy ) > max_speed:
 				if self.dy > max_speed:
 					self.dy = max_speed
-				self.py += max_speed * ad.getSign(self.fy)
+				self.py += max_speed * df.getSign(self.fy)
 			else:
 				self.py += self.dy * self.fy
 

@@ -1,7 +1,7 @@
 try:
-	import defs as ad
+	import defs as df
 except ModuleNotFoundError:
-	import game.PingPongRebound.defs as ad
+	import game.PingPongRebound.defs as df
 
 # controler class
 class GameControler:
@@ -10,7 +10,7 @@ class GameControler:
 	game = None
 	racket = None
 
-	mode = ad.CONTROLER
+	mode = df.CONTROLER
 
 
 	def __init__(self, _game, _playerName):
@@ -32,9 +32,9 @@ class GameControler:
 	def playMove(self, move):
 		if self.racket == 0:
 			print("Error: no racket selected")
-		elif self.game.state == ad.STARTING:
+		elif self.game.state == df.STARTING:
 			print("The game has not started yet")
-		elif self.game.state == ad.ENDING:
+		elif self.game.state == df.ENDING:
 			print("The game is over")
-		elif move != ad.NULL:
+		elif move != df.NULL:
 			self.game.makeMove( self.racketID, move )

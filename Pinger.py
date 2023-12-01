@@ -4,13 +4,13 @@ try:
 		from master import pg
 	from master import go
 	from master import gi
-	import defs as ad
+	import defs as df
 
 except ModuleNotFoundError:
 	import game.PingPongRebound.cfg as cfg
 	from game.PingPongRebound.master import go
 	from game.PingPongRebound.master import gi
-	import game.PingPongRebound.defs as ad
+	import game.PingPongRebound.defs as df
 
 class Pinger(gi.Game):
 	name = "Pinger"
@@ -52,28 +52,28 @@ class Pinger(gi.Game):
 
 	def handlePygameInputs(self, key): #		NOTE : DEBUG
 		# player 1
-		if (self.controlers[0].mode == gi.gc.ad.PLAYER):
-			if key == ad.KS:
-				self.makeMove( 1, gi.ad.STOP )
-				self.makeMove( 3, gi.ad.STOP )
-			elif key == ad.KA:
-				self.makeMove( 1, gi.ad.LEFT )
-				self.makeMove( 3, gi.ad.LEFT )
-			elif key == ad.KD:
-				self.makeMove( 1, gi.ad.RIGHT )
-				self.makeMove( 3, gi.ad.RIGHT )
+		if (self.controlers[0].mode == gi.gc.df.PLAYER):
+			if key == df.KS:
+				self.makeMove( 1, gi.df.STOP )
+				self.makeMove( 3, gi.df.STOP )
+			elif key == df.KA:
+				self.makeMove( 1, gi.df.LEFT )
+				self.makeMove( 3, gi.df.LEFT )
+			elif key == df.KD:
+				self.makeMove( 1, gi.df.RIGHT )
+				self.makeMove( 3, gi.df.RIGHT )
 
 		# player 2
-		if (self.controlers[1].mode == gi.gc.ad.PLAYER):
-			if key == ad.DOWN:
-				self.makeMove( 2, gi.ad.STOP )
-				self.makeMove( 4, gi.ad.STOP )
-			elif key == ad.LEFT:
-				self.makeMove( 2, gi.ad.LEFT )
-				self.makeMove( 4, gi.ad.LEFT )
-			elif key == ad.RIGHT:
-				self.makeMove( 2, gi.ad.RIGHT )
-				self.makeMove( 4, gi.ad.RIGHT )
+		if (self.controlers[1].mode == gi.gc.df.PLAYER):
+			if key == df.DOWN:
+				self.makeMove( 2, gi.df.STOP )
+				self.makeMove( 4, gi.df.STOP )
+			elif key == df.LEFT:
+				self.makeMove( 2, gi.df.LEFT )
+				self.makeMove( 4, gi.df.LEFT )
+			elif key == df.RIGHT:
+				self.makeMove( 2, gi.df.RIGHT )
+				self.makeMove( 4, gi.df.RIGHT )
 
 
 	def moveRacket(self, rack):
@@ -106,7 +106,7 @@ class Pinger(gi.Game):
 					ball.setPosY( rack.getPosY() - self.size_b ) # '-' because the ball is going over
 
 				ball.bounceOnRack( rack, "y" )
-				self.scorePoint( rack.id, gi.ad.HITS )
+				self.scorePoint( rack.id, gi.df.HITS )
 
 
 	# bouncing on the walls
@@ -123,13 +123,13 @@ class Pinger(gi.Game):
 			# checking who scored
 			if ball.getRight() < self.width / 2:
 				if self.last_ponger > 0:
-					self.scorePoint( 2, gi.ad.GOALS )
+					self.scorePoint( 2, gi.df.GOALS )
 				ball.setDirs( -ball.fy, -1 )
 				ball.setPos ( self.width * (3 / 4), self.height * (3 / 4) )
 
 			if ball.getLeft() > self.width / 2:
 				if self.last_ponger > 0:
-					self.scorePoint( 1, gi.ad.GOALS )
+					self.scorePoint( 1, gi.df.GOALS )
 				ball.setDirs( -ball.fy, 1 )
 				ball.setPos ( self.width * (1 / 4), self.height * (1 / 4) )
 
@@ -141,14 +141,14 @@ class Pinger(gi.Game):
 
 
 	def drawLines(self):
-		pg.draw.line( self.win, ad.COL_FNT, ( 0, 0 ), ( 0, self.height ), self.size_l * 2 )
-		pg.draw.line( self.win, ad.COL_FNT, ( self.width / 2, 0 ), ( self.width / 2, self.height ), self.size_l )
-		pg.draw.line( self.win, ad.COL_FNT, ( self.width, 0 ), ( self.width, self.height ), self.size_l * 2)
+		pg.draw.line( self.win, df.COL_FNT, ( 0, 0 ), ( 0, self.height ), self.size_l * 2 )
+		pg.draw.line( self.win, df.COL_FNT, ( self.width / 2, 0 ), ( self.width / 2, self.height ), self.size_l )
+		pg.draw.line( self.win, df.COL_FNT, ( self.width, 0 ), ( self.width, self.height ), self.size_l * 2)
 
 
 	def drawScores(self):
-		text1 = self.font.render(f'{self.scores[0]}', True, ad.COL_FNT)
-		text2 = self.font.render(f'{self.scores[1]}', True, ad.COL_FNT)
+		text1 = self.font.render(f'{self.scores[0]}', True, df.COL_FNT)
+		text2 = self.font.render(f'{self.scores[1]}', True, df.COL_FNT)
 
 		self.win.blit( text1, text1.get_rect( center = ( self.width * (1 / 4), self.height * (2 / 4) )))
 		self.win.blit( text2, text2.get_rect( center = ( self.width * (3 / 4), self.height * (2 / 4) )))

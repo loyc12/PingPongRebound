@@ -19,15 +19,15 @@ LEFT = 5
 # scores
 GOALS = 0
 HITS = 1
-
-# game stuff
 WIN_SCORE = 8
 
+# game states
 STARTING = 0
 PLAYING = 1
 ENDING = 2
 #PAUSED = 3
 
+# game modes
 SOLO = 0
 DUAL = 1
 FREEPLAY = 2
