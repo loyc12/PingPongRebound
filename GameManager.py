@@ -494,7 +494,7 @@ class GameManager:
 
 	@staticmethod
 	def getMaxPlayerCount( gameType ):
-		gameClass = GameManager.getClass( gameType )
+		gameClass = GameManager.getGameClass( gameType )
 
 		if (gameClass != None):
 			return gameClass.racketCount
