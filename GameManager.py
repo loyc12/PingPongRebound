@@ -2,6 +2,7 @@ import time
 import asyncio as asy
 import random as rdm
 
+# NOTE : two different ways to import (standalone vs in transcendance)
 try:
 	import cfg
 	if cfg.DEBUG_MODE:
@@ -18,9 +19,9 @@ except ModuleNotFoundError:
 
 class GameManager:
 
-	gameTypeCount = 8
-
-	windowID = 0 #							NOTE : DEBUG
+	if cfg.DEBUG_MODE:
+		gameTypeCount = 8
+		windowID = 0
 
 	def __init__( self, msg_hndlr = None ):
 
@@ -71,7 +72,8 @@ class GameManager:
 			if not self.runGames:
 				self.runGames = True
 				if not cfg.DEBUG_MODE:
-					asy.get_event_loop().create_task( self.mainloop() ) #				NOTE : does nothing ?
+					# we do this so the games can run asynchronously with the rest of the server
+					asy.get_event_loop().create_task( self.mainloop() )
 
 		return gameID
 
@@ -156,27 +158,17 @@ class GameManager:
 
 	# --------------------------------------------------------------
 
-	def runGameStep( self, game ):
-		if game.state == df.PLAYING:
-
-			game.moveObjects()
-			game.makeBotsPlay()
-			game.tickTime() #			NOTE : only does stuff in debug mode
-
-		else:
-			print (" this game is not currently running ")
-
-
+	# NOTE : runs a single game step (what to do between to frames)
 	async def tickGames(self):
 		deleteList = []
 		#async with self.lock: #					NOTE : useless???
-		for key, game in self.gameDict.items():
+		for ( key, game ) in self.gameDict.items():
 
 			if game.state == df.STARTING:
-				pass #								send player info packet from here
+				pass
 
 			elif game.state == df.PLAYING:
-				game.step( False )
+				game.step()
 
 				if cfg.DEBUG_MODE: #				NOTE : DEBUG
 					if key == self.windowID:
@@ -190,9 +182,10 @@ class GameManager:
 					self.emptyDisplay()
 
 				else: #								send closing info packet from here
+					#game.close()
 					pass
 
-				deleteList.append(key)
+				deleteList.append( key )
 
 		for key in deleteList:
 			await self.removeGame( key )
@@ -207,10 +200,10 @@ class GameManager:
 
 		try:
 			await asy.sleep(0)
-		except asy.exceptions.CancelledError as excep:
+		except asy.exceptions.CancelledError:
 			print( "preemtively removed sleep errors..." )
-			#print( "error : " + str( excep ))
 
+		# NOTE : to allow time between frames to be cfg.FRAME_DELAY on next update
 		await asy.sleep( cfg.FRAME_DELAY * 0.75 )
 
 		if cfg.DEBUG_MODE:
@@ -222,8 +215,8 @@ class GameManager:
 
 			await self.tickGames()
 
-			#if cfg.PRINT_PACKETS:
-			print ( self.getGameUpdates() )
+			if cfg.PRINT_PACKETS:
+				print ( self.getGameUpdates() )
 
 			await asy.sleep( self.getNextSleepDelay() )
 
@@ -232,6 +225,7 @@ class GameManager:
 
 
 #	NOTE : this assumes load is generally small and constant, and aims to keep the mean frame time at cfg.FRAME_DELAY
+#	NOTE : doing this without correction is too imprecise because of asy.sleep() being a bitch
 	def getNextSleepDelay(self):
 		self.previousTime = self.currentTime
 		self.currentTime = time.monotonic()
@@ -248,27 +242,10 @@ class GameManager:
 
 		# NOTE : DEBUG PRINTS
 		self.meanDt = ( dt + ( self.meanDt * cfg.FPS_SMOOTHING )) / ( cfg.FPS_SMOOTHING + 1 )
-		#print("frame time: {:.5f} \t".format( dt ), "mean time: {:.5f} \t".format( self.meanDt ), "delay time: {:.5f} \t".format( delay ))
+		print("frame time: {:.5f} \t".format( dt ), "mean time: {:.5f} \t".format( self.meanDt ), "delay time: {:.5f} \t".format( delay ))
 		#print("diversion: {:.5f} \t".format( diversion ), "sleep loss: {:.5f} \t".format( self.sleep_loss ), "correction: {:.5f} \t".format( correction ))
 
 		return delay
-
-
-#	NOTE : this does not work precisely due to sleep being an imprecise bitch
-#	async def SmartSleep(self):
-#		self.currentTime = time.monotonic()
-#		print("frame_time : ", str( self.currentTime - self.debugTime ))
-#		self.debugTime = self.currentTime
-#
-#		dt = self.currentTime - self.previousTime #how long processing took
-#
-#		delay = cfg.FRAME_DELAY - dt
-#
-#		if (delay > 0):
-#			await asy.sleep( delay )
-#			#print("delay : " + str( delay ) + "\t : dt : " + str( dt ))
-#
-#		self.previousTime = time.monotonic()
 
 
 	# ---------------------------------------------- DEBUG CMDS -------------------------------------------- #
@@ -416,7 +393,7 @@ class GameManager:
 		infoDict["gameType"] = gameClass.name
 		infoDict["gameMode"] = gameClass.getMode() #			NOTE : useless???
 		infoDict["gameState"] = gameClass.getState() #			NOTE : useless???
-		infoDict["sizeInfo"] = gameClass.getSizeInfo( gameType )
+		infoDict["sizeInfo"] = GameManager.getSizeInfo( gameType )
 		infoDict["racketCount"] = gameClass.racketCount
 		infoDict["racketInitPos"] = gameClass.getRacketInitPos( gameType )
 		infoDict["ballInitPos"] = gameClass.getBallInitPos( gameType )

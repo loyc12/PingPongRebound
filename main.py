@@ -13,7 +13,7 @@ except ModuleNotFoundError:
 
 
 # MASTER LIST
-
+# TODO : add a hasGame() function for GM
 
 # FUNCTION LIST
 # TODO : have bot remember where it last saw the ball (to allow : one scan per second, N moves per second)

@@ -334,7 +334,7 @@ class Game:
 
 
 
-	def step(self, display = True):
+	def step(self, display = False):
 
 		if self.state != df.PLAYING:
 			print( str( self.name ) + " is not running" )

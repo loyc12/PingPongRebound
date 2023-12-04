@@ -1,16 +1,16 @@
 
-{ // join request packet (useless / ignore me (???))
+{ // join request packet			(useless / ignore me (???))
 	"playerName": "llord",
 	"playerID": 25,
 	"gameType": "pong", //	random == doesn't matter (create random one if none are joinable)
-	"gameMode": "solo" //	solo, dual, freeplay, tournament
+	"gameMode": "solo"  //	solo, dual, freeplay, tournament
 }
 
 { // getInitInfo()
 	"gameID": 1,
 	"gameType": "pong",
 	"gameMode": "solo", //		NOTE : USELESS ???
-	"gameState": "playing", //	NOTE : USELESS ???
+	"gameState": "starting", //	NOTE : USELESS ???
 	"sizeInfo": {
 		"width": 2048,
 		"height": 1024,
