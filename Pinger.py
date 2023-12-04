@@ -19,12 +19,15 @@ class Pinger(gi.Game):
 	height = 1024
 	racketCount = 4
 
-	iPosR1 = ( width * (2 / 7), gi.Game.size_b			, "x" )
-	iPosR2 = ( width * (5 / 7), gi.Game.size_b			, "x" )
-	iPosR3 = ( width * (2 / 7), height - gi.Game.size_b	, "x" )
-	iPosR4 = ( width * (5 / 7), height - gi.Game.size_b	, "x" )
+	score_mode = df.GOALS
+	scores = [ 0, 0 ]
 
-	iPosB1 = ( width * (1 / 4), height * (1 / 4) )
+	iPosR1 = ( int( width * (2 / 7) ), int( gi.Game.size_b )			, "x" )
+	iPosR2 = ( int( width * (5 / 7) ), int( gi.Game.size_b )			, "x" )
+	iPosR3 = ( int( width * (2 / 7) ), int( height - gi.Game.size_b )	, "x" )
+	iPosR4 = ( int( width * (5 / 7) ), int( height - gi.Game.size_b )	, "x" )
+
+	iPosB1 = ( int( width * (1 / 4) ), int( height * (1 / 4) ))
 
 	def initRackets(self):
 		# setting up rackets :             id, game, _x            , _y            , _w         , _h
@@ -43,11 +46,6 @@ class Pinger(gi.Game):
 		self.balls.append( go.GameObject( 1, self, self.iPosB1[0], self.iPosB1[1], self.size_b, self.size_b ))
 		self.balls[0].setSpeeds( self.speed_b, self.speed_b * (2 / 3) )
 		self.balls[0].setDirs( 1, 1 )
-
-
-	def initScores(self):
-		self.scores.append( 0 )
-		self.scores.append( 0 )
 
 
 	def handlePygameInputs(self, key): #		NOTE : DEBUG

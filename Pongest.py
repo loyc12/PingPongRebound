@@ -27,12 +27,15 @@ class Pongest(gi.Game):
 	factor_wall = 0.5
 	racketCount = 4
 
-	iPosR1 = ( width * (1 / 2), gi.Game.size_b			, "x" )
-	iPosR2 = ( width - gi.Game.size_b, height * (1 / 2)	, "y" )
-	iPosR3 = ( width * (1 / 2), height - gi.Game.size_b	, "x" )
-	iPosR4 = ( gi.Game.size_b, height * (1 / 2)			, "y" )
+	score_mode = df.GOALS
+	scores = [ 0, 0, 0, 0 ]
 
-	iPosB1 = ( width * (1 / 2), height * (1 / 2) )
+	iPosR1 = ( int( width * (1 / 2) ), int( gi.Game.size_b )			, "x" )
+	iPosR2 = ( int( width - gi.Game.size_b ), int( height * (1 / 2) )	, "y" )
+	iPosR3 = ( int( width * (1 / 2) ), int( height - gi.Game.size_b )	, "x" )
+	iPosR4 = ( int( gi.Game.size_b ), int( height * (1 / 2) )			, "y" )
+
+	iPosB1 = ( int( width * (1 / 2) ), int( height * (1 / 2) ))
 
 	def initRackets(self):
 		# setting up rackets :             id, game, _x            , _y            , _w         , _h

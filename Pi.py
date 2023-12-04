@@ -21,10 +21,11 @@ class Pi(gi.Game):
 	factor_wall = 0.6
 
 	score_mode = gi.df.HITS
+	scores = [ 0 ]
 
-	iPosR1 = ( width * (1 / 2), height - gi.Game.size_b, "x" )
+	iPosR1 = ( int( width * (1 / 2) ), int( height - gi.Game.size_b ), "x" )
 
-	iPosB1 = ( width * (3 / 8), gi.Game.size_b )
+	iPosB1 = ( int( width * (3 / 8) ), int( gi.Game.size_b ))
 
 
 	def initBalls(self):

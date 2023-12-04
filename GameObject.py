@@ -31,6 +31,15 @@ class GameObject:
 		else:
 			print ("GameObject.drawSelf() is a DEBUG_MODE function")
 
+	def getCopy(self):
+
+		copy = GameObject(self.id, self.game, self.px, self.py, self.sx, self.sy)
+		copy.setSpeeds(self.dx, self.dy)
+		copy.setDirs(self.fx, self.fy)
+
+		return copy
+
+
 
 # ---------------------------------------------- POSITION ---------------------------------------------- #
 

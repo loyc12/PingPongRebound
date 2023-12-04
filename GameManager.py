@@ -64,7 +64,7 @@ class GameManager:
 
 			if cfg.DEBUG_MODE:
 				self.gameDict.get( gameID ).setWindow(self.win)
-				self.addPlayerToGame( gameID, "Tester " + str( gameID ), gameID ) #		NOTE : DEBUG
+				#await self.addPlayerToGame( gameID, "Tester " + str( gameID ), gameID ) #		NOTE : DEBUG
 
 				if len( self.gameDict ) > self.maxGameCount:
 					self.maxGameCount = len( self.gameDict )
@@ -96,7 +96,7 @@ class GameManager:
 
 	async def addPlayerToGame( self, playerID, name, gameID ):
 
-		async with self.lock:
+		#async with self.lock:
 			game = self.gameDict.get( gameID )
 
 			if game == None:
@@ -155,6 +155,13 @@ class GameManager:
 				return
 
 			game.close()
+
+
+	async def hasGame( self, gameID ):
+		async with self.lock:
+			if self.gameDict.get( gameID ) != None:
+				return True
+			return False
 
 	# --------------------------------------------------------------
 
@@ -242,7 +249,7 @@ class GameManager:
 
 		# NOTE : DEBUG PRINTS
 		self.meanDt = ( dt + ( self.meanDt * cfg.FPS_SMOOTHING )) / ( cfg.FPS_SMOOTHING + 1 )
-		print("frame time: {:.5f} \t".format( dt ), "mean time: {:.5f} \t".format( self.meanDt ), "delay time: {:.5f} \t".format( delay ))
+		#print("frame time: {:.5f} \t".format( dt ), "mean time: {:.5f} \t".format( self.meanDt ), "delay time: {:.5f} \t".format( delay ))
 		#print("diversion: {:.5f} \t".format( diversion ), "sleep loss: {:.5f} \t".format( self.sleep_loss ), "correction: {:.5f} \t".format( correction ))
 
 		return delay
@@ -389,14 +396,14 @@ class GameManager:
 
 		infoDict = {}
 
-		infoDict["gameID"] = gameClass.gameID
+		#infoDict["gameID"] = gameClass.gameID #				NOTE : not static
 		infoDict["gameType"] = gameClass.name
-		infoDict["gameMode"] = gameClass.getMode() #			NOTE : useless???
-		infoDict["gameState"] = gameClass.getState() #			NOTE : useless???
-		infoDict["sizeInfo"] = GameManager.getSizeInfo( gameType )
+		#infoDict["gameMode"] = gameClass.getMode() #			NOTE : not static
+		#infoDict["gameState"] = gameClass.getState() #			NOTE : not static
+		infoDict["sizeInfo"] = GameManager.getSizeInfo( gameClass )
 		infoDict["racketCount"] = gameClass.racketCount
-		infoDict["racketInitPos"] = gameClass.getRacketInitPos( gameType )
-		infoDict["ballInitPos"] = gameClass.getBallInitPos( gameType )
+		infoDict["racketInitPos"] = GameManager.getRacketInitPos( gameClass )
+		infoDict["ballInitPos"] = GameManager.getBallInitPos( gameClass )
 		infoDict["teamCount"] = len( gameClass.scores )
 
 		return( infoDict )
@@ -543,9 +550,9 @@ class GameManager:
 def testAllGames():
 	gm = GameManager()
 
-	print( gm.getInitInfo( Ping ))
-	print( gm.getInitInfo( Pong ))
-	print( gm.getInitInfo( Pingest ))
+	print( gm.getInitInfo( "Ping" ))
+	print( gm.getInitInfo( "Pong" ))
+	print( gm.getInitInfo( "Pingest" ))
 
 	asy.run ( gm.addAllGames() )
 	if cfg.DEBUG_MODE:

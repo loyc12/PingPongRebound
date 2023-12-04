@@ -28,7 +28,6 @@ class Game:
 	racketCount = 1
 	state = df.STARTING
 	hard_break = False
-	score_mode = df.GOALS
 
 	width = 1536
 	height = 1024
@@ -56,6 +55,9 @@ class Game:
 
 	last_ponger = 0
 	step_count = 0
+
+	score_mode = df.GOALS
+	scores = [ 0 ]
 
 	iPosR1 = ( width * (1 / 2), height - size_b, "x" )
 	iPosR2 = None
@@ -92,11 +94,9 @@ class Game:
 		self.rackets = []
 		self.controlers = []
 		self.balls = []
-		self.scores = []
 
 		self.initRackets()
 		self.initBalls()
-		self.initScores()
 
 
 	def initRackets(self):
@@ -108,11 +108,6 @@ class Game:
 		self.balls.append( go.GameObject( 1, self, self.iPosB1[0], self.iPosB1[1], self.size_b, self.size_b ))
 		self.balls[0].setSpeeds( self.speed_b, self.speed_b )
 		self.balls[0].setDirs( 1, 1 )
-
-
-	def initScores(self):
-		self.scores.append( 0 )
-
 
 	# --------------------------------------------- PLAYER & AI -------------------------------------------- #
 
@@ -135,17 +130,26 @@ class Game:
 		return ( bot )
 
 
-	# def removeBots(self): # NOTE : not needed
+	# def removeBots(self): # NOTE : not needed anymore
 
 
 	def makeBotsPlay(self):
 		if self.useAI and self.playerCount < self.racketCount:
 			for i in range(self.playerCount, self.controlerCount):
 				if (self.controlers[i].mode == gc.df.BOT):
-					if (( self.step_count + self.controlers[i].frequency_offset ) % df.BOT_FREQUENCY ) == 0:
+
+					val = ( self.step_count + self.controlers[i].frequency_offset )
+
+
+					if ( val % df.BOT_SEE_FREQUENCY ) == 0:
+						#print( "bot #" + str(i) + " is seeing  on step #" + str( self.step_count ) )#		NOTE : DEBUG
+						self.controlers[i].seeBall()
+					if ( val % df.BOT_PLAY_FREQUENCY ) == 0:
+						#print( "bot #" + str(i) + " is playing on step #" + str( self.step_count ) )#		NOTE : DEBUG
 						self.controlers[i].playMove()
+
 			self.step_count += 1
-			self.step_count %= df.BOT_FREQUENCY
+			self.step_count %= df.BOT_PLAY_FREQUENCY * df.BOT_SEE_FREQUENCY
 
 	# --------------------------------------------------------------
 

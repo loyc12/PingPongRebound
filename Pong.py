@@ -19,10 +19,13 @@ class Pong(gi.Game):
 	height = 1024
 	racketCount = 2
 
-	iPosR1 = ( gi.Game.size_b, height * (1 / 2)			, "y" )
-	iPosR2 = ( width - gi.Game.size_b, height * (1 / 2)	, "y" )
+	score_mode = df.GOALS
+	scores = [ 0, 0 ]
 
-	iPosB1 = ( width * (1 / 4), height * (1 / 2) )
+	iPosR1 = ( int( gi.Game.size_b ), int( height * (1 / 2) )			, "y" )
+	iPosR2 = ( int( width - gi.Game.size_b ), int( height * (1 / 2) )	, "y" )
+
+	iPosB1 = ( int( width * (1 / 4) ), int( height * (1 / 2) ))
 
 
 	def initRackets(self):
@@ -37,11 +40,6 @@ class Pong(gi.Game):
 		self.balls.append( go.GameObject( 1, self, self.iPosB1[0], self.iPosB1[1] , self.size_b, self.size_b ))
 		self.balls[0].setSpeeds( self.speed_b, self.speed_b )
 		self.balls[0].setDirs( 1, 1 )
-
-
-	def initScores(self):
-		self.scores.append( 0 )
-		self.scores.append( 0 )
 
 
 	def handlePygameInputs(self, key): #		NOTE : DEBUG

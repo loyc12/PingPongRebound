@@ -13,7 +13,6 @@ except ModuleNotFoundError:
 
 
 # MASTER LIST
-# TODO : add a hasGame() function for GM
 
 # FUNCTION LIST
 # TODO : have bot remember where it last saw the ball (to allow : one scan per second, N moves per second)
@@ -22,13 +21,13 @@ except ModuleNotFoundError:
 # TODO : use different self.____Lock like mutexes to protect dicts and individual games
 
 # MINOR LIST
-# TODO : rework the ball respawn trajectory everywhere
 # TODO : make sure to always put player 1 and 2 in oposite teams
+# TODO : rework the ball respawn trajectory everywhere
 # TODO : add a "mode" argument to game.respawnBall() and use it when initializing the ball
 # TODO : add double-sided gravity to 4 player ping games (so they're actual ping game lol)
 # TODO : add sound effects to collisions (in GameObject class)
-# TODO : make an 'asteroids' game (solo)
 # TODO : make obstacles type GameObjects in the base class (and use them in pongester)
+# TODO : make an 'asteroids' game (solo)
 
 async def debugTester( Initialiser ):
 	if cfg.DEBUG_MODE:
@@ -53,7 +52,7 @@ async def debugTester( Initialiser ):
 		print ( g.getEndInfo() )
 
 	else:
-		print ( "Debug mode is off" )
+		print ( "Cannot run game : debug mode is off" )
 
 
 if __name__ == '__main__':
