@@ -25,7 +25,7 @@ class GameManager:
 
 	def __init__( self, msg_hndlr = None ):
 
-		self.messageHandler = msg_hndlr
+		self.messageHandler = msg_hndlr # use me to broadcast game states
 
 		self.gameCount = 0
 		self.maxGameCount = 0
@@ -49,9 +49,9 @@ class GameManager:
 	# ---------------------------------------------- GAME CMDS --------------------------------------------- #
 
 
-	async def addGame( self, gameType, gameID):
+	async def addGame( self, gameType, gameID, connector = None):
 		async with self.dictLock:
-			Initialiser = self.getInitialiser( gameType )
+			Initialiser = self.getInitialiser( gameType, connector )
 
 			if (Initialiser == None):
 				print ("could not add game of type " + gameType)
@@ -397,9 +397,9 @@ class GameManager:
 		infoDict = {}
 
 		#infoDict["gameID"] = gameClass.gameID #				NOTE : not static
-		infoDict["gameType"] = gameClass.name
 		#infoDict["gameMode"] = gameClass.getMode() #			NOTE : not static
 		#infoDict["gameState"] = gameClass.getState() #			NOTE : not static
+		infoDict["gameType"] = gameClass.name
 		infoDict["sizeInfo"] = GameManager.getSizeInfo( gameClass )
 		infoDict["racketCount"] = gameClass.racketCount
 		infoDict["racketInitPos"] = GameManager.getRacketInitPos( gameClass )

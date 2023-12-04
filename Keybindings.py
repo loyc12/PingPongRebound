@@ -25,7 +25,7 @@ if debugKeys:
 	KD = pg.K_d
 	NZERO = pg.K_KP0
 
-else: #				TODO: Change them, these are wrong. Check with javascript event key codes.
+else: #				TODO: Change them to whatever connector.getEvent() outputs
 	# keyboard keys
 	UP =     'up'
 	DOWN =   'dn'

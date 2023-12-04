@@ -72,11 +72,12 @@ class Game:
 
 	# ------------------------------------------- INITIALIZATION ------------------------------------------- #
 
-	def __init__(self, gameID, gameMode = df.SOLO):
+	def __init__(self, gameID, connector = None):
 
 		self.gameID = gameID
+		self.connector = connector
 
-		self.gameLock = asy.Lock()
+		#self.gameLock = asy.Lock() # TODO :implement me
 
 		self.last_ponger = 0
 		self.step_count = 0
@@ -342,6 +343,8 @@ class Game:
 
 
 	def step(self, display = False):
+
+		# TODO : use connector.getEvent() to move rackets
 
 		if self.state != df.PLAYING:
 			print( str( self.name ) + " is not running" )

@@ -13,11 +13,13 @@ except ModuleNotFoundError:
 
 
 # MASTER LIST
+# TODO : have GI call game.connector.getEvent() instead of pygame's event system
+# TODO : use different gameLock whne useful instead of dictLock
 
 # FUNCTION LIST
 
 # DEBUG LIST
-# TODO : use different self.____Lock like mutexes to protect dicts and individual games
+# TODO : recheck the ai predictive function to see why there is slight missajustments
 
 # MINOR LIST
 # TODO : make sure to always put player 1 and 2 in opposite teams
