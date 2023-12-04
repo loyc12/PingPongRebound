@@ -11,6 +11,7 @@ class GameControler:
 	racket = None
 
 	mode = df.CONTROLER
+	racketDir = 'z'
 
 
 	def __init__(self, _game, _playerName):
@@ -27,6 +28,10 @@ class GameControler:
 			elif rack.id == _racketID:
 				self.racket = rack
 				self.racketID = rack.id
+				if rack.dx != 0:
+					self.racketDir = 'x'
+				elif rack.dy != 0:
+					self.racketDir = 'y'
 
 
 	def playMove(self, move):

@@ -42,7 +42,7 @@ HARD = 2
 
 # bot stuff
 BOT_CAN_PLAY = True
-BOT_INSTANT_REACT = False
+BOT_INSTANT_REACT = True #			NOTE : put to me false before pushing
 
 BOT_M_FACTOR = 4
 BOT_PLAY_FREQUENCY = 10

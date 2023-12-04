@@ -93,21 +93,22 @@ class BotControler(gc.GameControler):
 			return
 
 		elif self.difficulty == df.HARD:
-			if self.isCloserThan( self.lastBall, self.kick_distance ) and self.isInFrontOf( self.lastBall ):
-				if self.racket.dx != 0:
-					if self.racket.dx * abs( self.racket.fx ) < self.lastBall.dx:
+			if self.game.racketCount > 1 and self.isCloserThan( self.lastBall, self.kick_distance ) and self.isInFrontOf( self.lastBall ):
+				if self.racketDir == 'x':
+					if self.racket.dx * abs( self.racket.fx ) < self.lastBall.dx and self.lastBall.isLeftOfX(self.racket.px):
+						#if self.lastBall.isLeftOfX(self.racket.px):
 						if self.lastBall.isGoingLeft():
 							self.goLeft( self.max_factor )
 						else:
 							self.goRight( self.max_factor )
 
-				elif self.racket.dy != 0:
-					if self.racket.dy * abs( self.racket.fy ) < self.lastBall.dy:
+				elif self.racketDir == 'y':
+					if self.racket.dy * abs( self.racket.fy ) < self.lastBall.dy and self.lastBall.isAboveY(self.racket.py):
+						#if self.lastBall.isAboveY(self.racket.py):
 						if self.lastBall.isGoingUp():
 							self.goUp( self.max_factor )
 						else:
 							self.goDown( self.max_factor )
-
 			else:
 				self.goToNextGoal( self.max_factor )
 
@@ -247,7 +248,7 @@ class BotControler(gc.GameControler):
 
 	def goTo(self, maxFactor, X, Y):
 
-		if self.racket.dx != 0:
+		if self.racketDir == 'x':
 			if self.racket.isRightOfX( X - self.precision  ):
 				if self.allow_hard_break and self.racket.isGoingRight():
 					self.stopHere()
@@ -261,7 +262,7 @@ class BotControler(gc.GameControler):
 			elif self.allow_hard_break:
 				self.stopHere()
 
-		elif self.racket.dy != 0:
+		elif self.racketDir == 'y':
 			if self.racket.isBelowY( Y - self.precision ):
 				if self.allow_hard_break and self.racket.isGoingDown():
 					self.stopHere()
@@ -286,35 +287,35 @@ class BotControler(gc.GameControler):
 
 	def isOnSameSideOf(self, gameObj):
 
-		if self.racket.dx != 0:
+		if self.game.name == "Pi" or self.game.name == "Po" or self.game.name == "Ping":
+			return True
+
+		if self.racketDir == 'x':
 			if (self.game.height / 2 > self.racket.getPosY()) == (self.game.height / 2 > gameObj.getPosY()):
 				return True
 
-		if self.racket.dy != 0:
+		if self.racketDir == 'y':
 			if (self.game.width / 2 > self.racket.getPosX()) == (self.game.width / 2 > gameObj.getPosX()):
 				return True
-
-		if self.game.name == "Game" or self.game.name == "Ping" or self.game.name == "Pongester":
-			return True
 
 		return False
 
 
 	def isCloserThan(self, gameObj, distance):
-		if self.racket.dx != 0:
+		if self.racketDir == 'x':
 			if abs( self.racket.getPosY() - gameObj.getPosY() ) <= distance:
 				return True
-		elif self.racket.dy != 0:
+		elif self.racketDir == 'y':
 			if abs( self.racket.getPosX() - gameObj.getPosX() ) <= distance:
 				return True
 		return False
 
 
 	def isInFrontOf(self, gameObj):
-		if self.racket.dx != 0:
+		if self.racketDir == 'x':
 			if not gameObj.isLeftOf( self.racket ) and not gameObj.isRightOf( self.racket ):
 				return True
-		elif self.racket.dy != 0:
+		elif self.racketDir == 'y':
 			if not gameObj.isAbove( self.racket ) and not gameObj.isBelow( self.racket ):
 				return True
 		return False

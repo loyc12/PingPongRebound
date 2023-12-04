@@ -15,13 +15,12 @@ except ModuleNotFoundError:
 # MASTER LIST
 
 # FUNCTION LIST
-# TODO : have bot remember where it last saw the ball (to allow : one scan per second, N moves per second)
 
 # DEBUG LIST
 # TODO : use different self.____Lock like mutexes to protect dicts and individual games
 
 # MINOR LIST
-# TODO : make sure to always put player 1 and 2 in oposite teams
+# TODO : make sure to always put player 1 and 2 in opposite teams
 # TODO : rework the ball respawn trajectory everywhere
 # TODO : add a "mode" argument to game.respawnBall() and use it when initializing the ball
 # TODO : add double-sided gravity to 4 player ping games (so they're actual ping game lol)

@@ -31,7 +31,8 @@ class GameManager:
 		self.maxGameCount = 0
 		self.runGames = False
 
-		self.lock = asy.Lock()
+		self.dictLock = asy.Lock()
+		self.tickLock = asy.Lock()
 		self.previousTime = 0.0
 		self.currentTime = 0.0
 		self.sleep_loss = 0.0 # 			NOTE : will adjust itself over time
@@ -49,7 +50,7 @@ class GameManager:
 
 
 	async def addGame( self, gameType, gameID):
-		async with self.lock:
+		async with self.dictLock:
 			Initialiser = self.getInitialiser( gameType )
 
 			if (Initialiser == None):
@@ -64,7 +65,7 @@ class GameManager:
 
 			if cfg.DEBUG_MODE:
 				self.gameDict.get( gameID ).setWindow(self.win)
-				#await self.addPlayerToGame( gameID, "Tester " + str( gameID ), gameID ) #		NOTE : DEBUG
+				#self.gameDict.get( gameID ).addPlayer( "debug", 1 )
 
 				if len( self.gameDict ) > self.maxGameCount:
 					self.maxGameCount = len( self.gameDict )
@@ -79,7 +80,7 @@ class GameManager:
 
 
 	async def removeGame( self, gameID ):
-		async with self.lock: #						NOTE : not needed, makes shit crash
+		async with self.dictLock: #						NOTE : not needed, makes shit crash
 			game = self.gameDict.get( gameID )
 
 			if game == None:
@@ -95,8 +96,7 @@ class GameManager:
 	# --------------------------------------------------------------
 
 	async def addPlayerToGame( self, playerID, name, gameID ):
-
-		#async with self.lock:
+		#async with self.dictLock:
 			game = self.gameDict.get( gameID )
 
 			if game == None:
@@ -104,11 +104,11 @@ class GameManager:
 				print ("could not add player #" + str( playerID ) + " to game #" + str( gameID ))
 				return
 
-			self.gameDict.get( gameID ).addPlayer( name, playerID )
+			game.addPlayer( name, playerID )
 
 
 	async def removePlayerFromGame( self, playerID, gameID ):
-		async with self.lock:
+		async with self.dictLock:
 			game = self.gameDict.get( gameID )
 
 			if game == None:
@@ -134,7 +134,7 @@ class GameManager:
 	# --------------------------------------------------------------
 
 	async def startGame( self, gameID ):
-		async with self.lock:
+		async with self.dictLock:
 			game = self.gameDict.get( gameID )
 
 			if game == None:
@@ -146,7 +146,7 @@ class GameManager:
 
 
 	async def closeGame( self, gameID ):
-		async with self.lock:
+		async with self.dictLock:
 			game = self.gameDict.get( gameID )
 
 			if game == None:
@@ -158,7 +158,7 @@ class GameManager:
 
 
 	async def hasGame( self, gameID ):
-		async with self.lock:
+		async with self.dictLock:
 			if self.gameDict.get( gameID ) != None:
 				return True
 			return False
@@ -168,34 +168,34 @@ class GameManager:
 	# NOTE : runs a single game step (what to do between to frames)
 	async def tickGames(self):
 		deleteList = []
-		#async with self.lock: #					NOTE : useless???
-		for ( key, game ) in self.gameDict.items():
+		async with self.tickLock:
+			for ( key, game ) in self.gameDict.items():
 
-			if game.state == df.STARTING:
-				pass
-
-			elif game.state == df.PLAYING:
-				game.step()
-
-				if cfg.DEBUG_MODE: #				NOTE : DEBUG
-					if key == self.windowID:
-						self.displayGame( game )
-
-			elif game.state == df.ENDING:
-				if cfg.DEBUG_MODE and self.windowID == key:
-					print ( "this game no longer exists" )
-					print ( "please select a valid game (1-8)" )
-					self.windowID = 0
-					self.emptyDisplay()
-
-				else: #								send closing info packet from here
-					#game.close()
+				if game.state == df.STARTING:
 					pass
 
-				deleteList.append( key )
+				elif game.state == df.PLAYING:
+					game.step()
 
-		for key in deleteList:
-			await self.removeGame( key )
+					if cfg.DEBUG_MODE:
+						if key == self.windowID:
+							self.displayGame( game )
+
+				elif game.state == df.ENDING:
+					if cfg.DEBUG_MODE and self.windowID == key:
+						print ( "this game no longer exists" )
+						print ( "please select a valid game (1-8)" )
+						self.windowID = 0
+						self.emptyDisplay()
+
+					else: #					send closing info packet from here ?
+						#game.close()
+						pass
+
+					deleteList.append( key )
+
+			for key in deleteList:
+				await self.removeGame( key )
 
 	# --------------------------------------------------------------
 

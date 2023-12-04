@@ -1,4 +1,5 @@
 import time
+import asyncio as asy
 
 try:
 	import cfg
@@ -74,6 +75,8 @@ class Game:
 	def __init__(self, gameID, gameMode = df.SOLO):
 
 		self.gameID = gameID
+
+		self.gameLock = asy.Lock()
 
 		self.last_ponger = 0
 		self.step_count = 0
