@@ -19,6 +19,7 @@ LEFT = 5
 # scores
 GOALS = 0
 HITS = 1
+
 WIN_SCORE = 8
 
 # game states

@@ -88,8 +88,11 @@ class BotControler(gc.GameControler):
 			return
 
 		elif self.difficulty == df.HARD:
-			if self.game.racketCount > 1 and self.isCloserThan( self.lastBall, df.BOT_KICK_DISTANCE ) and self.isInFrontOf( self.lastBall ):
-				if self.racketDir == 'x':
+			if self.isCloserThan( self.lastBall, df.BOT_KICK_DISTANCE ) and self.isInFrontOf( self.lastBall ):
+				if self.game.racketCount == 1 or self.game.name == "Ping":
+					self.goToCenter( self.max_factor )
+
+				elif self.racketDir == 'x':
 					if self.racket.dx * abs( self.racket.fx ) < self.lastBall.dx: # and self.lastBall.isLeftOfX(self.racket.px):
 						#if self.lastBall.isLeftOfX(self.racket.px):
 						if self.lastBall.isGoingLeft():

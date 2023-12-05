@@ -189,7 +189,7 @@ class GameManager:
 						self.emptyDisplay()
 
 					else: #					send closing info packet from here ?
-						#game.close()
+						game.close()
 						pass
 
 					deleteList.append( key )
@@ -374,7 +374,7 @@ class GameManager:
 
 		gameID = await self.addGameDebug( "Pi", gameID )
 		gameID = await self.addGameDebug( "Po", gameID )
-		#gameID = await self.addGameDebug( "Ping", gameID )
+		gameID = await self.addGameDebug( "Ping", gameID )
 		gameID = await self.addGameDebug( "Pong", gameID )
 		gameID = await self.addGameDebug( "Pinger", gameID )
 		gameID = await self.addGameDebug( "Ponger", gameID )
