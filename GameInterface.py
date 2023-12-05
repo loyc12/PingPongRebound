@@ -262,9 +262,9 @@ class Game:
 #		- ...
 
 #		class Event {
-#			sender_id; // 	playerID (0 for server)
+#			sender_id; // 	playerID (0 for server commands)
 #			type; // 		event type (see above)
-#			code; // 		key code (when key related)
+#			key; // 		event code (key when keyboard related)
 #		}
 
 	def getNextEvent(self):
@@ -282,11 +282,13 @@ class Game:
 				if cfg.DEBUG_MODE:
 					self.close()
 				else:
-					pass # TODO : implement me ( is it needed ? )
+					if event.sender_id == 0:
+						self.close() #			NOTE : is it needed ?
 
 			# starting the game
 			#elif event.type == df.START:
-			#	pass # TODO : implement me ( is it needed ? )
+			#	if event.sender_id == 0:
+			#		pass #						TODO : implement me ( is it needed ? )
 
 			# handling key presses
 			elif event.type == df.KEYPRESS:
