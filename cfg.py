@@ -1,10 +1,10 @@
 DEBUG_MODE = True
 MOVE_OBJECTS = True
+
 PRINT_PACKETS = False
 PRINT_COLLISIONS = False
 PRINT_FRAMES = True
-
-
+PRINT_GAME_DEBUG = True
 
 FRAME_RATE = 60 # 					number of frames per second
 FRAME_DELAY = 1.0 / FRAME_RATE # 	time taken for each frame

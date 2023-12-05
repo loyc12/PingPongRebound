@@ -115,7 +115,7 @@ class Game:
 
 	def initBots(self):
 		while self.controlerCount < self.racketCount:
-			self.addBot("bot #" + str(self.racketCount - self.controlerCount))
+			self.addBot("B" + str(self.controlerCount + 1))
 
 
 	def addBot(self, botname):
@@ -532,7 +532,10 @@ class Game:
 		for ball in self.balls: # 		copies the ball's data
 			ball.drawSelf()
 
-		self.drawFps()
+		if (cfg.PRINT_GAME_DEBUG):
+			self.drawFps()
+			self.drawNames()
+
 		pg.display.flip() #				drawing the newly prepared frame
 
 
@@ -556,6 +559,13 @@ class Game:
 
 		text = self.debug_font.render( "{:.1f}".format( 1 / self.delta_time ), True, df.COL_FNT )
 		self.win.blit( text, text.get_rect( center = ( 64, 32 )))
+
+
+	def drawNames(self):
+		for i in range( len( self.controlers )):
+			racket = self.controlers[i].racket
+			text = self.debug_font.render( self.controlers[i].name, True, df.COL_FNT )
+			self.win.blit( text, text.get_rect( center = racket.box.center ))
 
 
 	# -------------------------------------------- GAME PACKETS -------------------------------------------- #
