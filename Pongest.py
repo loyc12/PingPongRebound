@@ -119,7 +119,7 @@ class Pongest(gi.Game):
 
 	# scoring a goal
 	def checkGoals(self, ball):
-		if ball.getTop() <= 0 or ball.getBottom() >= self.height or ball.getLeft() <= 0 or ball.getRight() >= self.width:
+		if ball.getTop() < 0 or ball.getBottom() > self.height or ball.getLeft() < 0 or ball.getRight() > self.width:
 			# increasing score
 			if (self.last_ponger > 0):
 				self.scorePoint( self.last_ponger, gi.df.GOALS )

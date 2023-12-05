@@ -110,13 +110,13 @@ class Pinger(gi.Game):
 	# bouncing on the walls
 	def checkWalls(self, ball):
 		# bouncing off the sides
-		if ball.getLeft() <= 0 or ball.getRight() >= self.width:
+		if ball.getLeft() < 0 or ball.getRight() > self.width:
 			ball.bounceOnWall( "x" )
 
 
 	# scoring a goal
 	def checkGoals(self, ball):
-		if ball.getTop() <= 0 or ball.getBottom() >= self.height:
+		if ball.getTop() < 0 or ball.getBottom() > self.height:
 
 			# checking who scored
 			if ball.getRight() < self.width / 2:

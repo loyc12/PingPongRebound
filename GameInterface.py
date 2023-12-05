@@ -420,13 +420,13 @@ class Game:
 
 		ball.clampSpeed()
 		ball.updatePos(self.speed_m_b)
-		ball.clampPos()
 
 
 		self.checkRackets( ball )
 		self.checkWalls( ball )
 		self.checkGoals( ball )
 
+		ball.clampPos()
 		ball.clampSpeed()
 
 
@@ -448,20 +448,20 @@ class Game:
 
 	# bouncing on the walls
 	def checkWalls(self, ball):
-		if ball.getLeft() <= 0 or ball.getRight() >= self.width or ball.getTop() <= 0:
+		if ball.getLeft() < 0 or ball.getRight() > self.width or ball.getTop() < 0:
 
 			# bouncing off the sides
-			if ball.getLeft() <= 0 or ball.getRight() >= self.width:
+			if ball.getLeft() < 0 or ball.getRight() > self.width:
 				ball.bounceOnWall( "x" )
 
 			# bouncing off the top (no bounce factor)
-			if ball.getTop() <= 0:
+			if ball.getTop() < 0:
 				ball.bounceOnWall( "y" )
 
 
 	# scoring a goal
 	def checkGoals(self, ball):
-		if ball.getBottom() >= self.height:
+		if ball.getBottom() > self.height:
 			self.scorePoint( self.last_ponger, df.GOALS )
 			self.respawnBall( ball )
 

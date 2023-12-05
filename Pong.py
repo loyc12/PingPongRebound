@@ -83,14 +83,14 @@ class Pong(gi.Game):
 
 	# scoring a goal
 	def checkGoals(self, ball):
-		if ball.getLeft() <= 0 or ball.getRight() >= self.width:
+		if ball.getLeft() < 0 or ball.getRight() > self.width:
 			# checking who scored
-			if ball.getLeft() <= 0:
+			if ball.getLeft() < 0:
 				if self.last_ponger > 0:
 					self.scorePoint( 2, gi.df.GOALS )
 				ball.setDirs( -1, -ball.fy )
 				ball.setPos (self.width * (3 / 4), self.height * (1 / 2) )
-			if ball.getRight() >= self.width:
+			if ball.getRight() > self.width:
 				if self.last_ponger > 0:
 					self.scorePoint( 1, gi.df.GOALS )
 				ball.setDirs( 1, -ball.fy )

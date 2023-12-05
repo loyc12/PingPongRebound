@@ -18,6 +18,7 @@ except ModuleNotFoundError:
 # FUNCTION LIST
 
 # DEBUG LIST
+# TODO : fix ball getting stuck in upper eft corner of
 # TODO : recheck the ai predictive function to seeis slight missalignments are fixable
 
 # MINOR LIST

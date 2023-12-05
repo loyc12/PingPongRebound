@@ -105,22 +105,22 @@ class Ponger(gi.Game):
 	# bouncing on the walls
 	def checkWalls(self, ball):
 		# bouncing off the sides
-		if ball.getLeft() <= 0 or ball.getRight() >= self.width:
+		if ball.getLeft() < 0 or ball.getRight() > self.width:
 			ball.bounceOnWall( "x" )
 
 
 	# scoring a goal
 	def checkGoals(self, ball):
-		if ball.getTop() <= 0 or ball.getBottom() >= self.height:
+		if ball.getTop() < 0 or ball.getBottom() > self.height:
 
 			# checking who scored
-			if ball.getTop() <= 0:
+			if ball.getTop() < 0:
 				if self.last_ponger > 0:
 					self.scorePoint( 2, gi.df.GOALS )
 				ball.setDirs( -1, -1 )
 				ball.setPos ( self.width * (1 / 2), self.height * (3 / 4) )
 
-			elif ball.getBottom() >= self.height:
+			elif ball.getBottom() > self.height:
 				if self.last_ponger > 0:
 					self.scorePoint( 1, gi.df.GOALS )
 				ball.setDirs( 1, 1 )

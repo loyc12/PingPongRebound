@@ -184,7 +184,8 @@ class GameObject:
 			self.dy *= self.game.factor_rack
 			self.dx += other.getMvX() * self.fx
 
-		print( f"{self.game.gameID} )   {self.game.name}  \t: {'{:.1f}'.format( t )}s" ) # 	NOTE : DEBUG
+		if cfg.PRINT_COLLISIONS:
+			print( f"{self.game.gameID} )   {self.game.name}  \t: {'{:.1f}'.format( t )}s" ) # 	NOTE : DEBUG
 		self.clampSpeed()
 
 

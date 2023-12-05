@@ -19,7 +19,7 @@ class Ping(gi.Game):
 	height = 1024
 	gravity = 0.333
 	racketCount = 2
-	factor_rack = 0.98
+	factor_rack = 0.95
 	factor_wall = 0.6
 
 	score_mode = df.GOALS
@@ -87,7 +87,7 @@ class Ping(gi.Game):
 
 	# scoring a goal
 	def checkGoals(self, ball):
-		if ball.getBottom() >= self.height:
+		if ball.getBottom() > self.height:
 
 			# checking who scored
 			if ball.getRight() < self.width / 2:
