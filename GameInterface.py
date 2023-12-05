@@ -254,71 +254,66 @@ class Game:
 
 	# --------------------------------------------------------------
 
-#	Possible client event_type values :
-#	- start_game
-#	- keypress
-#	- keyrelease
-#	- ...
-#	- end_game
+#	Possible event types :
+#		- "start_game"
+#		- "end_game"
+#		- "key_press"
+#		- "key_release"
+#		- ...
 
-#	class ClientEvent {
-#		key_name;
-#		key_code;
-#		user_id;
-#	}
+#		class Event {
+#			sender_id; // 	playerID (0 for server)
+#			type; // 		event type (see above)
+#			code; // 		key code (when key related)
+#		}
+
+	def getNextEvent(self):
+		if cfg.DEBUG_MODE:
+			return pg.event.get()
+		else:
+			self.connector.getEvent()
 
 
 	def eventControler(self):
-		for event in self.connector.getEvent():
-
-			# starting the game
-			if event.type == "start_game":
-				pass # TODO : implement me
+		for event in self.getNextEvent():
 
 			# quiting the game
-			if event.type == "end_game":
-				pass # TODO : implement me
+			if event.type == df.CLOSE:
+				if cfg.DEBUG_MODE:
+					self.close()
+				else:
+					pass # TODO : implement me ( is it needed ? )
+
+			# starting the game
+			#elif event.type == df.START:
+			#	pass # TODO : implement me ( is it needed ? )
 
 			# handling key presses
-			elif event.type == "keypress":
-				self.handleUserIDInputs( event.user_id, event.key_code )
+			elif event.type == df.KEYPRESS:
+				if not cfg.DEBUG_MODE:
+					self.handleUserInputs( event.sender_id, event.code )
+
+				else: #							NOTE : FOR DEBUG MODE ONLY
+					# quiting the game(s)
+					if event.key == df.ESCAPE:
+						self.close()
+
+					# respawning the ball(s)
+					elif event.key == df.RETURN:
+						for i in range(len(self.balls)):
+							self.respawnBall( self.balls[i] )
+
+					else:
+						self.handlePygameInputs( event.key )
 
 
-	# NOTE : which one to pick
-	def handleUsernameInputs(self, username, key):
-		for i in range(len(self.controlers)):
-			if (self.controlers[i].username == username):
-				self.controlers[i].handleInputs( key )
-				return
-		print( "player " + username + " is not in this game" )
-
-	def handleUserIDInputs(self, playerID, key):
-		for i in range(len(self.controlers)):
+	def handleUserInputs(self, playerID, key):
+		for i in range( len( self.controlers )):
 			if (self.controlers[i].playerID == playerID):
 				self.controlers[i].handleInputs( key )
 				return
 
 		print( "player #" + str( playerID ) + " is not in this game" )
-
-	# --------------------------------------------------------------
-
-	def debugControler(self):
-		for event in pg.event.get():
-			# quiting the game
-			if event.type == pg.QUIT:
-				self.close()
-
-			# handling key presses
-			elif event.type == pg.KEYDOWN:
-				if event.key == pg.K_ESCAPE:
-					self.close()
-
-				elif event.key == df.RETURN:
-					for i in range(len(self.balls)):
-						self.respawnBall( self.balls[i] )
-
-				else:
-					self.handlePygameInputs( event.key )
 
 
 	def handlePygameInputs(self, key): #		NOTE : DEBUG
@@ -368,7 +363,7 @@ class Game:
 
 		# main game loop
 		while self.state == df.PLAYING:
-			self.debugControler()
+			self.eventControler()
 			self.step( True )
 			self.clock.tick (self.framerate)
 

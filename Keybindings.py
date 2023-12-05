@@ -25,6 +25,11 @@ if debugKeys:
 	KD = pg.K_d
 	NZERO = pg.K_KP0
 
+	START = pg.K_p
+	CLOSE = pg.QUIT
+	KEYPRESS = pg.KEYDOWN
+	ESCAPE = pg.K_ESCAPE
+
 else: #				TODO: Change them to whatever connector.getEvent() outputs
 	# keyboard keys
 	UP =     'up'
@@ -40,3 +45,8 @@ else: #				TODO: Change them to whatever connector.getEvent() outputs
 	KA = 'a'
 	KD = 'd'
 	NZERO = '0'
+
+	START = 'start_game'
+	CLOSE = "end_game"
+	KEYPRESS = "key_press"
+	ESCAPE = None

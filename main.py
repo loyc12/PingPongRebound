@@ -35,8 +35,6 @@ async def debugTester( Initialiser ):
 		pg.init()
 		g = Initialiser(1)
 
-		print ( g.getInitInfo() )
-
 		g.setWindow(pg.display.set_mode((g.width, g.height)))
 		pg.display.set_caption(g.name)
 
@@ -46,15 +44,11 @@ async def debugTester( Initialiser ):
 		g.start()
 		g.printControlers()
 
-		print ( g.getUpdateInfo() )
-
 		g.run()
-
-		print ( g.getEndInfo() )
 
 	else:
 		print ( "Cannot run game : debug mode is off" )
 
 
 if __name__ == '__main__':
-	asy.run(debugTester( Pong ))
+	asy.run( debugTester( Pong ))
