@@ -254,22 +254,53 @@ class Game:
 
 	# --------------------------------------------------------------
 
+#	Possible client event_type values :
+#	- start_game
+#	- keypress
+#	- keyrelease
+#	- ...
+#	- end_game
+
+#	class ClientEvent {
+#		key_name;
+#		key_code;
+#		user_id;
+#	}
+
+
+	def eventControler(self):
+		for event in self.connector.getEvent():
+
+			# starting the game
+			if event.type == "start_game":
+				pass # TODO : implement me
+
+			# quiting the game
+			if event.type == "end_game":
+				pass # TODO : implement me
+
+			# handling key presses
+			elif event.type == "keypress":
+				self.handleUserIDInputs( event.user_id, event.key_code )
+
+
 	# NOTE : which one to pick
-	def handleUserInputs(self, username, key):
+	def handleUsernameInputs(self, username, key):
 		for i in range(len(self.controlers)):
 			if (self.controlers[i].username == username):
 				self.controlers[i].handleInputs( key )
 				return
-
 		print( "player " + username + " is not in this game" )
-	def handleUserInputsID(self, playerID, key):
+
+	def handleUserIDInputs(self, playerID, key):
 		for i in range(len(self.controlers)):
-			if (self.controlers[i].username == playerID):
+			if (self.controlers[i].playerID == playerID):
 				self.controlers[i].handleInputs( key )
 				return
 
 		print( "player #" + str( playerID ) + " is not in this game" )
 
+	# --------------------------------------------------------------
 
 	def debugControler(self):
 		for event in pg.event.get():
@@ -300,6 +331,7 @@ class Game:
 					self.makeMove( rack.id, df.LEFT )
 				elif key == df.KD or key == df.RIGHT:
 					self.makeMove( rack.id, df.RIGHT )
+
 
 	# ---------------------------------------------- CORE CMDS --------------------------------------------- #
 

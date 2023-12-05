@@ -14,8 +14,8 @@ class PlayerControler(gc.GameControler):
 	def __init__(self, _game, _playerName, _playerID):
 		self.game = _game
 		self.name = _playerName
-		self.mode = df.PLAYER
 		self.playerID = _playerID
+		self.mode = df.PLAYER
 
 
 	# NOTE : temporary (uses pygame keys)

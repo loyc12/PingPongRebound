@@ -24,10 +24,11 @@ class BotControler(gc.GameControler):
 	frequency_offset = 0;
 	step = 0
 
-	def __init__(self, _game, _playerName):
+	def __init__(self, _game, _botName):
 		self.game = _game
-		self.name = _playerName
+		self.name = _botName
 		self.mode = df.BOT
+
 		self.defaultX = _game.width / 2
 		self.defaultY = _game.height / 2
 

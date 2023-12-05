@@ -6,18 +6,16 @@ except ModuleNotFoundError:
 # controler class
 class GameControler:
 	name = "unnamed"
-	# gameType = "normal" # "tournament"
 	game = None
 	racket = None
-
-	mode = df.CONTROLER
 	racketDir = 'z'
 
+	playerID = 0
+	racketID = 0
+	mode = df.CONTROLER
 
-	def __init__(self, _game, _playerName):
+	def __init__(self, _game):
 		self.game = _game
-		self.name = _playerName
-		self.racketID = 0
 
 
 	def setRacket(self, _racketID):
