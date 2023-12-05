@@ -18,8 +18,6 @@ except ModuleNotFoundError:
 # FUNCTION LIST
 
 # DEBUG LIST
-# TODO : fix ball getting stuck in upper eft corner of
-# TODO : recheck the ai predictive function to seeis slight missalignments are fixable
 
 # MINOR LIST
 # TODO : make sure to always put player 1 and 2 in opposite teams
