@@ -262,9 +262,9 @@ class Game:
 #		- ...
 
 #		class Event {
-#			sender_id; // 	playerID (0 for server commands)
-#			type; // 		event type (see above)
-#			key; // 		event code (key when keyboard related)
+#			id; // 		playerID (0 for server commands)
+#			type; // 	event type (see above)
+#			key; // 	event code (key when keyboard related)
 #		}
 
 	def getNextEvent(self):
