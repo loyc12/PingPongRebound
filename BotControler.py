@@ -12,13 +12,7 @@ class BotControler(gc.GameControler):
 	go_to_default_pos = True
 
 	difficulty = df.HARD
-	play_frequency = df.BOT_PLAY_FREQUENCY
-	see_frequency = df.BOT_SEE_FREQUENCY
-	max_factor = df.BOT_M_FACTOR
-
-	max_search_dept = df.BOT_DEPTH
-	precision = df.BOT_PRECISION
-	kick_distance = df.BOT_KICK_DISTANCE
+	max_factor = df.BOT_M_FACTOR # (max speed factor (how many times dx or dy can the racket go at)
 
 	goal = df.NULL
 	frequency_offset = 0;
@@ -36,7 +30,7 @@ class BotControler(gc.GameControler):
 
 		if self.difficulty == df.EASY:
 			self.allow_hard_break = False
-			self.play_frequency *= 2
+			df.BOT_PLAY_FREQUENCY *= 2
 			self.max_factor -= 1
 
 
@@ -94,9 +88,9 @@ class BotControler(gc.GameControler):
 			return
 
 		elif self.difficulty == df.HARD:
-			if self.game.racketCount > 1 and self.isCloserThan( self.lastBall, self.kick_distance ) and self.isInFrontOf( self.lastBall ):
+			if self.game.racketCount > 1 and self.isCloserThan( self.lastBall, df.BOT_KICK_DISTANCE ) and self.isInFrontOf( self.lastBall ):
 				if self.racketDir == 'x':
-					if self.racket.dx * abs( self.racket.fx ) < self.lastBall.dx and self.lastBall.isLeftOfX(self.racket.px):
+					if self.racket.dx * abs( self.racket.fx ) < self.lastBall.dx: # and self.lastBall.isLeftOfX(self.racket.px):
 						#if self.lastBall.isLeftOfX(self.racket.px):
 						if self.lastBall.isGoingLeft():
 							self.goLeft( self.max_factor )
@@ -104,7 +98,7 @@ class BotControler(gc.GameControler):
 							self.goRight( self.max_factor )
 
 				elif self.racketDir == 'y':
-					if self.racket.dy * abs( self.racket.fy ) < self.lastBall.dy and self.lastBall.isAboveY(self.racket.py):
+					if self.racket.dy * abs( self.racket.fy ) < self.lastBall.dy: # and self.lastBall.isAboveY(self.racket.py):
 						#if self.lastBall.isAboveY(self.racket.py):
 						if self.lastBall.isGoingUp():
 							self.goUp( self.max_factor )
@@ -250,12 +244,12 @@ class BotControler(gc.GameControler):
 	def goTo(self, maxFactor, X, Y):
 
 		if self.racketDir == 'x':
-			if self.racket.isRightOfX( X - self.precision  ):
+			if self.racket.isRightOfX( X - df.BOT_PRECISION  ):
 				if self.allow_hard_break and self.racket.isGoingRight():
 					self.stopHere()
 				else:
 					self.goLeft( maxFactor )
-			elif self.racket.isLeftOfX( X + self.precision  ):
+			elif self.racket.isLeftOfX( X + df.BOT_PRECISION  ):
 				if self.allow_hard_break and self.racket.isGoingLeft():
 					self.stopHere()
 				else:
@@ -264,12 +258,12 @@ class BotControler(gc.GameControler):
 				self.stopHere()
 
 		elif self.racketDir == 'y':
-			if self.racket.isBelowY( Y - self.precision ):
+			if self.racket.isBelowY( Y - df.BOT_PRECISION ):
 				if self.allow_hard_break and self.racket.isGoingDown():
 					self.stopHere()
 				else:
 					self.goUp( maxFactor )
-			elif self.racket.isAboveY( Y + self.precision  ):
+			elif self.racket.isAboveY( Y + df.BOT_PRECISION  ):
 				if self.allow_hard_break and self.racket.isGoingUp():
 					self.stopHere()
 				else:
@@ -349,23 +343,31 @@ class BotControler(gc.GameControler):
 		dept = 0
 
 		# loops over all the "bounce points" of the ball's trajectory (untill max_search_dept is reached)
-		while dept <= self.max_search_dept:
+		while dept <= df.BOT_SEARCH_DEPTH:
 			dept += 1
 
 			# have the ball do one step
-			dy += self.game.gravity * fy # NOTE : assumes normal gravity
+			dy += self.game.gravity * fy #			NOTE : assumes normal gravity
+
 			X += dx * fx
+			X = int( X )
+
 			Y += dy * fy
+			Y = int( Y )
 
 			while df.isInZone( X, Y, border, self.game ):
 				if ( dx * fx == 0 ) and ( dy * fy == 0 ):
 					break;
-				dy += self.game.gravity * fy # NOTE : assumes normal gravity
+				dy += self.game.gravity * fy #		NOTE : assumes normal gravity
+
 				X += dx * fx
+				X = int( X )
+
 				Y += dy * fy
+				Y = int( Y )
 
 			if self.isInOwnGoal( X, Y, border ):
-				return (X, Y)
+				return( int( X ) , int ( Y ))
 
 			# make ball bounce on edges
 			if X <= border or X >= ( self.game.width - border ):
@@ -376,7 +378,7 @@ class BotControler(gc.GameControler):
 				dy *= self.game.factor_wall
 
 
-		return (X, Y)
+		return( int( X ) , int ( Y ))
 
 
 

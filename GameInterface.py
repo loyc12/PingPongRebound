@@ -32,8 +32,6 @@ class Game:
 
 	width = 1536
 	height = 1024
-	invW = 1.0 / width
-	invH = 1.0 / height
 
 	size_b = 20
 	size_r = 160

@@ -106,18 +106,21 @@ class GameObject:
 			if abs( self.dx * self.fx ) > max_speed:
 				if self.dx > max_speed:
 					self.dx = max_speed
-				self.px += int( max_speed * df.getSign( self.fx ) )
+				self.px += max_speed * df.getSign( self.fx )
 			else:
-				self.px += int( self.dx * self.fx )
+				self.px += self.dx * self.fx
 
 		# moving on y
 		if self.fy != 0:
 			if abs( self.dy * self.fy ) > max_speed:
 				if self.dy > max_speed:
 					self.dy = max_speed
-				self.py += int( max_speed * df.getSign( self.fy ) )
+				self.py += max_speed * df.getSign( self.fy )
 			else:
-				self.py += int( self.dy * self.fy )
+				self.py += self.dy * self.fy
+
+		self.px = int( self.px )
+		self.py = int( self.py )
 
 
 	def clampPos(self):
@@ -180,7 +183,8 @@ class GameObject:
 			self.fy *= -1
 			self.dy *= self.game.factor_rack
 			self.dx += other.getMvX() * self.fx
-		print( f"{self.game.gameID} ) {self.game.name}  \t: {'{:.1f}'.format( t )}s" ) # 	NOTE : DEBUG
+
+		print( f"{self.game.gameID} )   {self.game.name}  \t: {'{:.1f}'.format( t )}s" ) # 	NOTE : DEBUG
 		self.clampSpeed()
 
 

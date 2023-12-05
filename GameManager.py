@@ -428,10 +428,11 @@ class GameManager:
 	def getSizeInfo( gameClass ):
 		sizeDict = {}
 
+		print( gameClass.width, gameClass.height )
 		sizeDict["width"] = gameClass.width
 		sizeDict["height"] = gameClass.height
-		sizeDict["wRatio"] = gameClass.invW
-		sizeDict["wRatio"] = gameClass.invH
+		sizeDict["wRatio"] = 1 / gameClass.width
+		sizeDict["hRatio"] = 1 / gameClass.height
 		sizeDict["sRacket"] = gameClass.size_r
 		sizeDict["sBall"] = gameClass.size_b
 
@@ -557,7 +558,6 @@ def testAllGames():
 	asy.run ( gm.addAllGames() )
 	if cfg.DEBUG_MODE:
 		asy.run ( gm.mainloop() )
-
 
 
 if __name__ == '__main__':

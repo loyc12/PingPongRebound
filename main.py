@@ -13,19 +13,16 @@ except ModuleNotFoundError:
 
 
 # MASTER LIST
-# TODO : have GI call game.connector.getEvent() instead of pygame's event system
-# TODO : use different gameLock whne useful instead of dictLock
+# TODO : use different gameLock when useful instead of dictLock (is it useful at all ?)
 
 # FUNCTION LIST
 
 # DEBUG LIST
-# TODO : recheck the ai predictive function to see why there is slight missajustments
+# TODO : recheck the ai predictive function to seeis slight missalignments are fixable
 
 # MINOR LIST
 # TODO : make sure to always put player 1 and 2 in opposite teams
 # TODO : rework the ball respawn trajectory everywhere
-# TODO : add a "mode" argument to game.respawnBall() and use it when initializing the ball
-# TODO : add double-sided gravity to 4 player ping games (so they're actual ping game lol)
 # TODO : add sound effects to collisions (in GameObject class)
 # TODO : make obstacles type GameObjects in the base class (and use them in pongester)
 # TODO : make an 'asteroids' game (solo)
@@ -38,11 +35,9 @@ async def debugTester( Initialiser ):
 		g.setWindow(pg.display.set_mode((g.width, g.height)))
 		pg.display.set_caption(g.name)
 
-		g.printControlers()
 		g.addPlayer( "Player 1", 1 )
-		g.printControlers()
+
 		g.start()
-		g.printControlers()
 
 		g.run()
 
