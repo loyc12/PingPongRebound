@@ -281,18 +281,20 @@ class Game:
 				if cfg.DEBUG_MODE:
 					self.close()
 				else:
-					if event.sender_id == 0:
+					if event.id == 0: # if sender decided to close shit
+						self.close()
+					else: # if a user  quit mid game NOTE : mark down who quit
 						self.close() #			NOTE : is it needed ?
 
 			# starting the game
-			#elif event.type == df.START:
-			#	if event.sender_id == 0:
-			#		pass #						TODO : implement me ( is it needed ? )
+			elif event.type == df.START:
+				if event.id == 0:
+					self.start()
 
 			# handling key presses
 			elif event.type == df.KEYPRESS:
 				if not cfg.DEBUG_MODE:
-					self.handleUserInputs( event.sender_id, event.code )
+					self.handleUserInputs( event.id, event.code )
 
 				else: #							NOTE : FOR DEBUG MODE ONLY
 					# quiting the game(s)
@@ -343,6 +345,7 @@ class Game:
 
 	def close(self):
 		self.state = df.ENDING
+
 		print("closed a game of " + self.name)
 
 	# --------------------------------------------------------------
@@ -371,8 +374,6 @@ class Game:
 
 
 	def step(self, display = False):
-
-		# TODO : use connector.getEvent() to move rackets
 
 		if self.state != df.PLAYING:
 			print( str( self.name ) + " is not running" )
@@ -500,6 +501,8 @@ class Game:
 
 		if cfg.PRINT_PACKETS:
 			print( self.getEndInfo() )
+
+		self.close()
 
 
 	def respawnBall(self, ball):

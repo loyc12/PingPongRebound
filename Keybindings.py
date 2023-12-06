@@ -16,7 +16,6 @@ if debugKeys:
 	LEFT = pg.K_LEFT
 	RIGHT = pg.K_RIGHT
 	SPACE = pg.K_SPACE
-	RETURN = pg.K_RETURN
 
 	# keypad keys
 	KW = pg.K_w
@@ -29,6 +28,7 @@ if debugKeys:
 	CLOSE = pg.QUIT
 	KEYPRESS = pg.KEYDOWN
 	ESCAPE = pg.K_ESCAPE
+	RETURN = pg.K_RETURN
 
 else: #				TODO: Change them to whatever connector.getEvent() outputs
 	# keyboard keys
@@ -37,7 +37,6 @@ else: #				TODO: Change them to whatever connector.getEvent() outputs
 	LEFT =   'lf'
 	RIGHT =  'rt'
 	SPACE =  ' '
-	RETURN = '\r'
 
 	# keypad keys
 	KW = 'w'
@@ -47,6 +46,7 @@ else: #				TODO: Change them to whatever connector.getEvent() outputs
 	NZERO = '0'
 
 	START = 'start_game'
-	CLOSE = "end_game"
-	KEYPRESS = "key_press"
+	CLOSE = 'end_game'
+	KEYPRESS = 'key_press'
 	ESCAPE = None
+	RETURN = None

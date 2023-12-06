@@ -13,12 +13,14 @@ except ModuleNotFoundError:
 
 
 # MASTER LIST
-# TODO : add a broadcast function to GM to send updates with
 # TODO : review bot bounce calculations
 # TODO : rework the ball respawn trajectory everywhere
 # TODO : see if adding a rule for bounce randomess coud help avoid bots getting stuck
+# TODO : send team info and player info somewhere at the end
 
 # FUNCTION LIST
+# TODO : add a broadcast() function to GM to send updates with
+# TODO : add an endGame() function to GM to properly close a game ?
 
 # DEBUG LIST
 

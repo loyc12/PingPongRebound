@@ -88,13 +88,19 @@ class GameManager:
 				return
 
 			async with game.gameLock:
-				game.close()
 
-			async with self.dictLock: #					NOTE : not needed, makes shit crash
+				if game.state != df.ENDING:
+					game.close()
+
+				if game.connector != None:
+					pass #					TODO : send end game packet through connector
+					# self.connector.sendEndState( game.getEndInfo() )
+
+			async with self.dictLock:
 				self.gameDict.pop( gameID )
 
-			if len( self.gameDict ) == 0:
-				self.runGames = False
+				if len( self.gameDict ) == 0:
+					self.runGames = False
 
 	# --------------------------------------------------------------
 
@@ -123,14 +129,6 @@ class GameManager:
 				print ("player #" + str( playerID ) + " is absent from game #" + str( gameID ))
 				print ("could not remove player #" + str( playerID ) + " from game #" + str( gameID ))
 				return
-
-			# NOTE : to know how to handle player leaving
-			#if game.state == df.STARTING:
-			#	pass
-			#elif game.state == df.PLAYING:
-			#	pass
-			#elif game.state == df.ENDING:
-			#	pass
 
 			game.removePlayer( playerID )
 
@@ -175,6 +173,9 @@ class GameManager:
 			#async with self.dictLock:
 				for ( key, game ) in self.gameDict.items():
 					async with game.gameLock:
+
+						if not cfg.DEBUG_MODE:
+							game.eventControler()
 
 						if game.state == df.STARTING:
 							pass
