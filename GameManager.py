@@ -227,7 +227,7 @@ class GameManager:
 
 			await self.tickGames()
 
-			if cfg.PRINT_PACKETS:
+			if cfg.PRINT_PACKETS and not cfg.DEBUG_MODE:
 				print ( self.getGameUpdates() )
 
 

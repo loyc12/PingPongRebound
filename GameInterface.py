@@ -178,7 +178,7 @@ class Game:
 				self.controlers.pop(i)
 				self.playerCount -= 1
 				self.controlerCount -= 1
-				#return ( racketID )
+
 		print ("player #" + str(playerID) + " not found in this game")
 
 
@@ -389,7 +389,7 @@ class Game:
 		else:
 			pass #		NOTE : useless (packet sending is done by game manager now)
 
-		if cfg.PRINT_PACKETS:
+		if cfg.DEBUG_MODE and cfg.PRINT_PACKETS:
 			print( self.getUpdateInfo() ) #		NOTE : DEBUG
 
 
@@ -497,6 +497,7 @@ class Game:
 		self.winnerID = teamID
 		self.state = df.ENDING
 		print( f"Team #{ teamID } won the game of { self.name }" )
+
 		if cfg.PRINT_PACKETS:
 			print( self.getEndInfo() )
 
@@ -533,7 +534,7 @@ class Game:
 		for ball in self.balls: # 		copies the ball's data
 			ball.drawSelf()
 
-		if (cfg.PRINT_GAME_DEBUG):
+		if cfg.PRINT_GAME_DEBUG:
 			self.drawFps()
 			self.drawNames()
 

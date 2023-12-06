@@ -16,6 +16,7 @@ except ModuleNotFoundError:
 # TODO : add a broadcast function to GM to send updates with
 # TODO : review bot bounce calculations
 # TODO : rework the ball respawn trajectory everywhere
+# TODO : see if adding a rule for bounce randomess coud help avoid bots getting stuck
 
 # FUNCTION LIST
 
