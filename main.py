@@ -13,6 +13,7 @@ except ModuleNotFoundError:
 
 
 # MASTER LIST
+# TODO : add a broadcast function to GM to send updates with
 # TODO : review bot bounce calculations
 # TODO : rework the ball respawn trajectory everywhere
 

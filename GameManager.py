@@ -25,7 +25,7 @@ class GameManager:
 
 	def __init__( self, msg_hndlr = None ):
 
-		self.messageHandler = msg_hndlr # use me to broadcast game states
+		self.messageHandler = msg_hndlr #	use me to broadcast game states
 
 		self.gameCount = 0
 		self.maxGameCount = 0
