@@ -43,7 +43,7 @@ HARD = 2
 
 # bot stuff
 BOT_CAN_PLAY = True
-BOT_INSTANT_REACT = True #		NOTE : put me to false before pushing
+BOT_INSTANT_REACT = True #	NOTE : put me to false before pushing
 BOT_HARD_BREAK = True
 
 BOT_M_FACTOR = 5 #			how many times dx or dy can the racket go at

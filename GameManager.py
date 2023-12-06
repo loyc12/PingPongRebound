@@ -231,6 +231,9 @@ class GameManager:
 			if cfg.PRINT_PACKETS and not cfg.DEBUG_MODE:
 				print ( self.getGameUpdates() )
 
+			if self.messageHandler != None:
+				await self.messageHandler.async_send_all_updates( self.getGameUpdates(), True )
+
 
 			await asy.sleep( self.getNextSleepDelay() )
 
