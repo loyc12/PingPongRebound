@@ -39,8 +39,8 @@ class Game:
 	size_l = 10
 	size_font = 768
 
-	speed_b = 10
-	speed_r = 5
+	speed_b = 12
+	speed_r = 6
 	speed_m_b = 60
 	speed_m_r = 60
 	framerate = cfg.FRAME_RATE # 		max fps
@@ -75,14 +75,15 @@ class Game:
 		self.gameID = gameID
 		self.connector = connector
 
-		#self.gameLock = asy.Lock() # TODO :implement me
+		self.gameLock = asy.Lock()
 
 		self.last_ponger = 0
 		self.step_count = 0
 
 		if cfg.DEBUG_MODE:
 			self.font = pg.font.Font(None, self.size_font)
-			self.debug_font = pg.font.Font(None, 32)
+			self.debug_font = pg.font.Font(None, 42)
+			self.racket_font = pg.font.Font(None, 21)
 
 			self.last_time = time.time()
 			self.delta_time = cfg.FRAME_DELAY
@@ -558,13 +559,14 @@ class Game:
 		self.last_time = new_time
 
 		text = self.debug_font.render( "{:.1f}".format( 1 / self.delta_time ), True, df.COL_FNT )
-		self.win.blit( text, text.get_rect( center = ( 64, 32 )))
+		self.win.blit( text, text.get_rect( center = ( 82, 41 )))
 
 
 	def drawNames(self):
 		for i in range( len( self.controlers )):
 			racket = self.controlers[i].racket
-			text = self.debug_font.render( self.controlers[i].name, True, df.COL_FNT )
+
+			text = self.racket_font.render( self.controlers[i].name, True, df.COL_FNT )
 			self.win.blit( text, text.get_rect( center = racket.box.center ))
 
 

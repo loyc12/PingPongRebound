@@ -19,7 +19,7 @@ class Ping(gi.Game):
 	height = 1024
 	gravity = 0.333
 	racketCount = 2
-	factor_rack = 0.95
+	factor_rack = 0.9
 	factor_wall = 0.6
 
 	score_mode = df.GOALS

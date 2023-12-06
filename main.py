@@ -13,20 +13,20 @@ except ModuleNotFoundError:
 
 
 # MASTER LIST
-# TODO : use different gameLock when useful instead of dictLock (is it useful at all ?)
+# TODO : review bot bounce calculations
+# TODO : rework the ball respawn trajectory everywhere
 
 # FUNCTION LIST
 
 # DEBUG LIST
 
 # MINOR LIST
-# TODO : make sure to always put player 1 and 2 in opposite teams
-# TODO : rework the ball respawn trajectory everywhere
-# TODO : add sound effects to collisions (in GameObject class)
 # TODO : make obstacles type GameObjects in the base class (and use them in pongester)
+# TODO : add sound effects to collisions (in GameObject class)
 # TODO : make an 'asteroids' game (solo)
 
 async def debugTester( Initialiser ):
+
 	if cfg.DEBUG_MODE:
 		pg.init()
 		g = Initialiser(1)

@@ -7,9 +7,6 @@
 }
 
 { // getInitInfo()
-	//"gameID": 1, //				NOTE : not static so can't be send from class only
-	//"gameMode": "solo", //		...
-	//"gameState": "starting", //	...
 	"gameType": "pong",
 	"sizeInfo": {
 		"width": 2048,
@@ -75,7 +72,6 @@
 
 { // getUpdateInfo()
 	"gameID": 1,
-	//"gameState": "playing",
 	"racketPos": [
 		"x1", "y1",
 		"x2", "y2",

@@ -50,72 +50,73 @@ class GameManager:
 
 
 	async def addGame( self, gameType, gameID, connector = None):
+		Initialiser = self.getInitialiser( gameType, connector )
+
+		if( Initialiser == None ):
+			print ("could not add game of type " + gameType)
+			return 0
+
+		if( self.gameDict.get( gameID ) != None):
+			print ("game #" + str( gameID ) + " already exists")
+			return 0
+
 		async with self.dictLock:
-			Initialiser = self.getInitialiser( gameType, connector )
-
-			if (Initialiser == None):
-				print ("could not add game of type " + gameType)
-				return 0
-
-			if (self.gameDict.get( gameID ) != None):
-				print ("game #" + str( gameID ) + " already exists")
-				return 0
 
 			self.gameDict[ gameID ] = Initialiser( gameID )
 
-			if cfg.DEBUG_MODE:
-				self.gameDict.get( gameID ).setWindow(self.win)
-				#self.gameDict.get( gameID ).addPlayer( "debug", 1 )
+			if( cfg.DEBUG_MODE ):
+				self.gameDict.get( gameID ).setWindow( self.win )
 
-				if len( self.gameDict ) > self.maxGameCount:
+				if( len( self.gameDict ) > self.maxGameCount ):
 					self.maxGameCount = len( self.gameDict )
 
 			if not self.runGames:
 				self.runGames = True
+
 				if not cfg.DEBUG_MODE:
 					# we do this so the games can run asynchronously with the rest of the server
 					asy.get_event_loop().create_task( self.mainloop() )
 
-		return gameID
-
 
 	async def removeGame( self, gameID ):
-		async with self.dictLock: #						NOTE : not needed, makes shit crash
 			game = self.gameDict.get( gameID )
 
 			if game == None:
 				print ("game #" + str( gameID ) + " does not exist")
 				return
 
-			game.close()
-			self.gameDict.pop(gameID)
+			async with game.gameLock:
+				game.close()
 
-			if len ( self.gameDict ) == 0:
+			async with self.dictLock: #					NOTE : not needed, makes shit crash
+				self.gameDict.pop( gameID )
+
+			if len( self.gameDict ) == 0:
 				self.runGames = False
 
 	# --------------------------------------------------------------
 
 	async def addPlayerToGame( self, playerID, name, gameID ):
-		#async with self.dictLock:
-			game = self.gameDict.get( gameID )
+		game = self.gameDict.get( gameID )
 
-			if game == None:
-				print ("game #" + str( gameID ) + " does not exist")
-				print ("could not add player #" + str( playerID ) + " to game #" + str( gameID ))
-				return
+		if game == None:
+			print ("game #" + str( gameID ) + " does not exist")
+			print ("could not add player #" + str( playerID ) + " to game #" + str( gameID ))
+			return
 
+		async with game.gameLock:
 			game.addPlayer( name, playerID )
 
 
 	async def removePlayerFromGame( self, playerID, gameID ):
-		async with self.dictLock:
-			game = self.gameDict.get( gameID )
+		game = self.gameDict.get( gameID )
 
-			if game == None:
-				print ("game #" + str( gameID ) + " does not exist")
-				print ("could not remove player #" + str( playerID ) + " from game #" + str( gameID ))
-				return
+		if game == None:
+			print ("game #" + str( gameID ) + " does not exist")
+			print ("could not remove player #" + str( playerID ) + " from game #" + str( gameID ))
+			return
 
+		async with game.gameLock:
 			if not game.hasPlayer( playerID ):
 				print ("player #" + str( playerID ) + " is absent from game #" + str( gameID ))
 				print ("could not remove player #" + str( playerID ) + " from game #" + str( gameID ))
@@ -134,68 +135,72 @@ class GameManager:
 	# --------------------------------------------------------------
 
 	async def startGame( self, gameID ):
-		async with self.dictLock:
-			game = self.gameDict.get( gameID )
+		game = self.gameDict.get( gameID )
 
-			if game == None:
-				print ("game #" + str( gameID ) + " does not exist")
-				print ("could not start game #" + str( gameID ))
-				return
+		if game == None:
+			print ("game #" + str( gameID ) + " does not exist")
+			print ("could not start game #" + str( gameID ))
+			return
 
+		async with game.gameLock:
 			game.start()
 
 
 	async def closeGame( self, gameID ):
-		async with self.dictLock:
-			game = self.gameDict.get( gameID )
+		game = self.gameDict.get( gameID )
 
-			if game == None:
-				print ("game #" + str( gameID ) + " does not exist")
-				print ("could not close close #" + str( gameID ))
-				return
+		if game == None:
+			print ("game #" + str( gameID ) + " does not exist")
+			print ("could not close close #" + str( gameID ))
+			return
 
+		async with game.gameLock:
 			game.close()
 
 
 	async def hasGame( self, gameID ):
-		async with self.dictLock:
-			if self.gameDict.get( gameID ) != None:
-				return True
-			return False
+		if self.gameDict.get( gameID ) != None:
+			return True
+		return False
 
 	# --------------------------------------------------------------
 
 	# NOTE : runs a single game step (what to do between to frames)
 	async def tickGames(self):
 		deleteList = []
+
 		async with self.tickLock:
-			for ( key, game ) in self.gameDict.items():
+			#async with self.dictLock:
+				for ( key, game ) in self.gameDict.items():
+					async with game.gameLock:
 
-				if game.state == df.STARTING:
-					pass
+						if game.state == df.STARTING:
+							game.state = df.PLAYING #	NOTE : TEMP DEBUG
+							pass
 
-				elif game.state == df.PLAYING:
-					game.step()
+						elif game.state == df.PLAYING:
+							game.step()
 
-					if cfg.DEBUG_MODE:
-						if key == self.windowID:
-							self.displayGame( game )
+							if cfg.DEBUG_MODE:
+								if key == self.windowID:
+									self.displayGame( game )
 
-				elif game.state == df.ENDING:
-					if cfg.DEBUG_MODE and self.windowID == key:
-						print ( "this game no longer exists" )
-						print ( "please select a valid game (1-8)" )
-						self.windowID = 0
-						self.emptyDisplay()
+						elif game.state == df.ENDING:
+							if cfg.DEBUG_MODE and self.windowID == key:
 
-					else: #					send closing info packet from here ?
-						game.close()
-						pass
+								print ( "this game no longer exists" )
+								print ( "please select a valid game (1-8)" )
 
-					deleteList.append( key )
+								self.windowID = 0
+								self.emptyDisplay()
 
-			for key in deleteList:
-				await self.removeGame( key )
+							else: #					send closing info packet from here ?
+								pass
+
+							deleteList.append( key )
+
+		for key in deleteList:
+			await self.removeGame( key )
 
 	# --------------------------------------------------------------
 
@@ -225,8 +230,8 @@ class GameManager:
 			if cfg.PRINT_PACKETS:
 				print ( self.getGameUpdates() )
 
-			await asy.sleep( self.getNextSleepDelay() )
 
+			await asy.sleep( self.getNextSleepDelay() )
 
 		print( "> EXITING MAINLOOP <" )
 
@@ -364,7 +369,8 @@ class GameManager:
 
 
 	async def addGameDebug( self, gameType, gameID ):
-		await self.startGame( await self.addGame( gameType, gameID ))
+		await self.addGame( gameType, gameID )
+		await self.startGame( gameID )
 		return gameID + 1
 
 
@@ -395,9 +401,6 @@ class GameManager:
 
 		infoDict = {}
 
-		#infoDict["gameID"] = gameClass.gameID #				NOTE : not static
-		#infoDict["gameMode"] = gameClass.getMode() #			NOTE : not static
-		#infoDict["gameState"] = gameClass.getState() #			NOTE : not static
 		infoDict["gameType"] = gameClass.name
 		infoDict["sizeInfo"] = GameManager.getSizeInfo( gameClass )
 		infoDict["racketCount"] = gameClass.racketCount
@@ -550,9 +553,9 @@ class GameManager:
 def testAllGames():
 	gm = GameManager()
 
-	print( gm.getInitInfo( "Ping" ))
-	print( gm.getInitInfo( "Pong" ))
-	print( gm.getInitInfo( "Pingest" ))
+	#print( gm.getInitInfo( "Ping" ))
+	#print( gm.getInitInfo( "Pong" ))
+	#print( gm.getInitInfo( "Pingest" ))
 
 	asy.run ( gm.addAllGames() )
 	if cfg.DEBUG_MODE:

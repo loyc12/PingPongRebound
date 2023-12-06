@@ -8,7 +8,7 @@ except ModuleNotFoundError:
 # controler class
 class BotControler(gc.GameControler):
 
-	allow_hard_break = True
+	allow_hard_break = df.BOT_HARD_BREAK
 	go_to_default_pos = True
 
 	difficulty = df.HARD
@@ -88,25 +88,29 @@ class BotControler(gc.GameControler):
 			return
 
 		elif self.difficulty == df.HARD:
-			if self.isCloserThan( self.lastBall, df.BOT_KICK_DISTANCE ) and self.isInFrontOf( self.lastBall ):
-				if self.game.racketCount == 1 or self.game.name == "Ping":
+			if self.game.racketCount > 1 and self.isInFrontOf( self.lastBall ) and self.isCloserThan( self.lastBall, df.BOT_KICK_DISTANCE ):
+				if self.game.name == "Ping":
 					self.goToCenter( self.max_factor )
 
 				elif self.racketDir == 'x':
 					if self.racket.dx * abs( self.racket.fx ) < self.lastBall.dx: # and self.lastBall.isLeftOfX(self.racket.px):
 						#if self.lastBall.isLeftOfX(self.racket.px):
 						if self.lastBall.isGoingLeft():
-							self.goLeft( self.max_factor )
+							if self.racket.fx > -df.BOT_KICK_FACTOR:
+								self.goLeft( self.max_factor )
 						else:
-							self.goRight( self.max_factor )
+							if self.racket.fx < df.BOT_KICK_FACTOR:
+								self.goRight( self.max_factor )
 
 				elif self.racketDir == 'y':
 					if self.racket.dy * abs( self.racket.fy ) < self.lastBall.dy: # and self.lastBall.isAboveY(self.racket.py):
 						#if self.lastBall.isAboveY(self.racket.py):
 						if self.lastBall.isGoingUp():
-							self.goUp( self.max_factor )
+							if self.racket.fy > -df.BOT_KICK_FACTOR:
+								self.goUp( self.max_factor )
 						else:
-							self.goDown( self.max_factor )
+							if self.racket.fy < df.BOT_KICK_FACTOR:
+								self.goDown( self.max_factor )
 			else:
 				self.goToNextGoal( self.max_factor )
 
@@ -345,6 +349,11 @@ class BotControler(gc.GameControler):
 
 		dept = 0
 
+		if self.game.name == "Pongest":
+			factor = self.game.factor_rack
+		else:
+			factor = self.game.factor_wall
+
 		# loops over all the "bounce points" of the ball's trajectory (untill max_search_dept is reached)
 		while dept <= df.BOT_SEARCH_DEPTH:
 			dept += 1
@@ -375,10 +384,10 @@ class BotControler(gc.GameControler):
 			# make ball bounce on edges
 			if X <= border or X >= ( self.game.width - border ):
 				fx *= -1
-				dx *= self.game.factor_wall
+				dx *= factor
 			if Y <= border or Y >= ( self.game.height - border ):
 				fy *= -1
-				dy *= self.game.factor_wall
+				dy *= factor
 
 
 		return( int( X ) , int ( Y ))

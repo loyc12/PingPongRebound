@@ -18,8 +18,9 @@ class Pongest(gi.Game):
 	width = 1280
 	height = 1280
 
-	speed_b = 6.6667
-	speed_m_b = 20
+	speed_r = 5
+	speed_b = 6
+	speed_m_b = 24
 	size_font = 512
 	size_l = 14
 

@@ -44,14 +44,16 @@ HARD = 2
 # bot stuff
 BOT_CAN_PLAY = True
 BOT_INSTANT_REACT = True #		NOTE : put me to false before pushing
+BOT_HARD_BREAK = True
 
-BOT_M_FACTOR = 4 #			how many times dx or dy can the racket go at
-BOT_PRECISION = 60 #		max = rSize / 2 : buffer zones one each side of the racket the AI tries to avoid hitting the ball with
+BOT_M_FACTOR = 5 #			how many times dx or dy can the racket go at
+BOT_PRECISION = 50 #		max = rSize / 2 : buffer zones one each side of the racket the AI tries to avoid hitting the ball with
 BOT_SEARCH_DEPTH = 5 #		how many bounces ahead does the AI look
 
 BOT_PLAY_FREQUENCY = 10
 BOT_SEE_FREQUENCY = 60
 BOT_KICK_DISTANCE = 160
+BOT_KICK_FACTOR = 2
 
 # DEBUG
 if cfg.DEBUG_MODE:
