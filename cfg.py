@@ -1,4 +1,4 @@
-DEBUG_MODE = False
+DEBUG_MODE = True
 PRINT_GAME_DEBUG = True
 
 PRINT_PACKETS = True

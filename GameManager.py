@@ -77,6 +77,8 @@ class GameManager:
 					# we do this so the games can run asynchronously with the rest of the server
 					asy.get_event_loop().create_task( self.mainloop() )
 
+		return gameID
+
 
 	async def removeGame( self, gameID ):
 			game = self.gameDict.get( gameID )
@@ -175,7 +177,6 @@ class GameManager:
 					async with game.gameLock:
 
 						if game.state == df.STARTING:
-							game.state = df.PLAYING #	NOTE : TEMP DEBUG
 							pass
 
 						elif game.state == df.PLAYING:
