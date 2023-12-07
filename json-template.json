@@ -17,15 +17,15 @@
 		"bSize": 20
 	},
 	"racketCount" : 4,
-	"racketInitPos": [ 
+	"racketInitPos": [
 		"x1", "y1", "d1", // aka : x, y, long side direction( 'x' or 'y' )
 		"x2", "y2", "d2",
 		"x3", "y3", "d3",
 		"x4", "y4", "d4"
-	 ],
-	"ballInitPos": [ 
+	],
+	"ballInitPos": [
 		"x1", "y1"
-	 ],
+	],
 	"teamCount": 2
 	// followed by player info packets
 }
@@ -34,59 +34,59 @@
 	"gameID": 1,
 	"playerInfo": // login and racket id
 	{
-		"llord": [ 
+		"llord": [
 			{
 				"isBot": false,
 				"playerID": 25,
 				"racketID": 1,
 				"teamID": 1
 			}
-		 ],
-		"vjean": [ 
+		],
+		"vjean": [
 			{
 				"isBot": false,
 				"playerID": 16,
 				"racketID": 2,
 				"teamID": 1
 			}
-		 ],
-		"ghebert": [ 
+		],
+		"ghebert": [
 			{
 				"isBot": false,
 				"playerID": 36,
 				"racketID": 3,
 				"teamID": 2
 			}
-		 ],
-		"bot_1": [ 
+		],
+		"bot_1": [
 			{
 				"isBot": true,
 				"playerID": 4,
 				"racketID": 4,
 				"teamID": 2
 			}
-		 ]
+		]
 	}
 }
 
 { // getUpdateInfo()
 	"gameID": 1,
-	"racketPos": [ 
+	"racketPos": [
 		"x1", "y1",
 		"x2", "y2",
 		"x3", "y3",
 		"x4", "y4"
-	 ],
-	"ballPos": [ 
+	],
+	"ballPos": [
 		"x1", "y1"
-	 ],
+	],
 	"lastPonger": 1,
-	"scores": [ 
+	"scores": [
 		"s1",
 		"s2",
 		"s3",
 		"s4"
-	 ]
+	]
 }
 
 { // getEndInfo()
@@ -94,10 +94,10 @@
 	"endState": "win", // win, quit, crash
 	"winingTeam": 1,
 	"quitter": 2, //		playerID
-	"scores": [ 
+	"scores": [
 		"s1",
 		"s2",
 		"s3",
 		"s4"
-	 ]
+	]
 }

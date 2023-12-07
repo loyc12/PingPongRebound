@@ -225,7 +225,7 @@ class GameManager:
 
 		while self.runGames:
 			if cfg.DEBUG_MODE:
-				self.takePlayerInputs()
+				self.takePygameInputs()
 
 			await self.tickGames()
 
@@ -282,83 +282,81 @@ class GameManager:
 		self.win.fill( pg.Color( 'black' ))
 
 
-	def takePlayerInputs( self ): # 					NOTE : DEBUG
+	def takePygameInputs( self ): # 					NOTE : DEBUG
 		# read local player inputs
 		for event in pg.event.get():
 
 			if event.type == pg.KEYDOWN:
 				k = event.key
+				initialID = self.windowID
 
-				if cfg.DEBUG_MODE:
-					initialID = self.windowID
+				# closes the game
+				if k == pg.K_ESCAPE:
+					for game in self.gameDict.values():
+						game.close()
+					self.runGames = False
+					sys.exit()
 
-					# closes the game
-					if k == pg.K_ESCAPE:
-						for game in self.gameDict.values():
-							game.close()
-						self.runGames = False
-						sys.exit()
-
-					# respawns the ball
-					elif k == df.RETURN:
-						if self.windowID != 0:
-							if self.gameDict.get( self.windowID )!= None:
-								game = self.gameDict.get( self.windowID )
-								game.respawnAllBalls()
-								print( "respawning the ball( s )" )
-							else:
-								print( "coud not respawn the ball( s )" )
-						else:
-							print( "please select a valid game( 1-8 )" )
-						return
-
-					# rotate game to view
-					elif k == pg.K_q or k == pg.K_e:
-						if k == pg.K_e:
-							self.windowID += 1
-						else:
-							self.windowID -= 1
-
-						if self.windowID <= 0:
-							self.windowID = self.maxGameCount
-						elif self.windowID > self.maxGameCount:
-							self.windowID = 1
-
-					# select game to view
-					elif k == pg.K_0:
-						self.windowID = 0
-					elif k == pg.K_1:
-						self.windowID = 1
-					elif k == pg.K_2:
-						self.windowID = 2
-					elif k == pg.K_3:
-						self.windowID = 3
-					elif k == pg.K_4:
-						self.windowID = 4
-					elif k == pg.K_5:
-						self.windowID = 5
-					elif k == pg.K_6:
-						self.windowID = 6
-					elif k == pg.K_7:
-						self.windowID = 7
-					elif k == pg.K_8:
-						self.windowID = 8
-					elif k == pg.K_9:
-						self.windowID = 9
-
-					# checks if viewed game changed
-					if initialID != self.windowID:
-						if self.gameDict.get( self.windowID ) == None:
-							print( "could not switch to game #" + str( self.windowID ))
-							print( "please select a valid game( 1-8 )" )
-							self.emptyDisplay()
-						else:
+				# respawns the ball
+				elif k == df.RETURN:
+					if self.windowID != 0:
+						if self.gameDict.get( self.windowID )!= None:
 							game = self.gameDict.get( self.windowID )
-							print( "now playing in game #" + str( self.windowID ))
-							game.delta_time = cfg.FRAME_DELAY
-							game.last_time = time.time()
-							pg.display.set_caption( self.gameDict.get( self.windowID ).name )
-						return
+							game.respawnAllBalls()
+							print( "respawning the ball( s )" )
+						else:
+							print( "coud not respawn the ball( s )" )
+					else:
+						print( "please select a valid game( 1-8 )" )
+					return
+
+				# rotate game to view
+				elif k == pg.K_q or k == pg.K_e:
+					if k == pg.K_e:
+						self.windowID += 1
+					else:
+						self.windowID -= 1
+
+					if self.windowID <= 0:
+						self.windowID = self.maxGameCount
+					elif self.windowID > self.maxGameCount:
+						self.windowID = 1
+
+				# select game to view
+				elif k == pg.K_0:
+					self.windowID = 0
+				elif k == pg.K_1:
+					self.windowID = 1
+				elif k == pg.K_2:
+					self.windowID = 2
+				elif k == pg.K_3:
+					self.windowID = 3
+				elif k == pg.K_4:
+					self.windowID = 4
+				elif k == pg.K_5:
+					self.windowID = 5
+				elif k == pg.K_6:
+					self.windowID = 6
+				elif k == pg.K_7:
+					self.windowID = 7
+				elif k == pg.K_8:
+					self.windowID = 8
+				elif k == pg.K_9:
+					self.windowID = 9
+
+				# checks if viewed game changed
+				if initialID != self.windowID:
+					if self.gameDict.get( self.windowID ) == None:
+						print( "could not switch to game #" + str( self.windowID ))
+						print( "please select a valid game( 1-8 )" )
+						self.emptyDisplay()
+					else:
+						game = self.gameDict.get( self.windowID )
+						print( "now playing in game #" + str( self.windowID ))
+						game.delta_time = cfg.FRAME_DELAY
+						game.last_time = time.time()
+						pg.display.set_caption( self.gameDict.get( self.windowID ).name )
+					return
 
 				# handling movement keys presses
 				if self.gameDict.get( self.windowID ) == None:
@@ -375,6 +373,7 @@ class GameManager:
 
 	async def addGameDebug( self, gameType, gameID ):
 		await self.addGame( gameType, gameID )
+		await self.addPlayerToGame( 1, "Tester", gameID )
 		await self.startGame( gameID )
 		return gameID + 1
 
