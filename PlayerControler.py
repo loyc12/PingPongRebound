@@ -8,18 +8,18 @@ except ModuleNotFoundError:
 	import game.PingPongRebound.defs as df
 
 # controler class
-class PlayerControler(gc.GameControler):
+class PlayerControler( gc.GameControler ):
 
 
-	def __init__(self, _game, _playerName, _playerID):
+	def __init__( self, _game, _playerName, _playerID ):
 		self.game = _game
 		self.name = _playerName
 		self.playerID = _playerID
 		self.mode = df.PLAYER
 
 
-	# NOTE : temporary (uses pygame keys)
-	def handleKeyInput(self, key):
+	# NOTE : temporary( uses pygame keys )
+	def handleKeyInput( self, key ):
 		if key == df.SPACE or key == df.NZERO:
 			self.playMove( df.STOP )
 		elif key == df.KW or key == df.UP:
@@ -30,8 +30,8 @@ class PlayerControler(gc.GameControler):
 			self.playMove( df.DOWN )
 		elif key == df.KA or key == df.LEFT:
 			self.playMove( df.LEFT )
-		elif (cfg.DEBUG_MODE and key == df.RETURN): #		NOTE : DEBUG
-			for i in range(len(self.game.balls)):
-				self.game.respawnBall( self.game.balls[i] )
+		elif( cfg.DEBUG_MODE and key == df.RETURN ): #		NOTE : DEBUG
+			for i in range( len( self.game.balls )):
+				self.game.respawnBall( self.game.balls[ i ] )
 		else:
-			print("Error: invalid move")
+			print( "Error: invalid move" )

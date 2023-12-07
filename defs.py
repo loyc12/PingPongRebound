@@ -58,18 +58,18 @@ BOT_KICK_FACTOR = 2
 # DEBUG
 if cfg.DEBUG_MODE:
 	WIN_SIZE = 1280
-	COL_BGR = pg.Color('black')
-	COL_FNT = pg.Color('grey25')
-	COL_OBJ = pg.Color('white')
+	COL_BGR = pg.Color( 'black' )
+	COL_FNT = pg.Color( 'grey25' )
+	COL_OBJ = pg.Color( 'white' )
 
-def getSign(value):
+def getSign( value ):
 	if value < 0:
 		return -1
 	if value > 0:
 		return 1
 	return 0
 
-def isInZone(x, y, border, game):
+def isInZone( x, y, border, game ):
 	if x < border or x > ( game.width - border ):
 		return False
 	if y < border or y > ( game.height - border ):

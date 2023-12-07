@@ -2,7 +2,7 @@ import time
 import asyncio as asy
 import random as rdm
 
-# NOTE : two different ways to import (standalone vs in transcendance)
+# NOTE : two different ways to import( standalone vs in transcendance )
 try:
 	import cfg
 	if cfg.DEBUG_MODE:
@@ -42,29 +42,29 @@ class GameManager:
 
 		if cfg.DEBUG_MODE:
 			pg.init()
-			self.win = pg.display.set_mode((2048, 1280))
-			pg.display.set_caption("Game Manager")
+			self.win = pg.display.set_mode(( 2048, 1280 ))
+			pg.display.set_caption( "Game Manager" )
 
 
 	# ---------------------------------------------- GAME CMDS --------------------------------------------- #
 
 
-	async def addGame( self, gameType, gameID, connector = None):
+	async def addGame( self, gameType, gameID, connector = None ):
 		Initialiser = self.getInitialiser( gameType, connector )
 
 		if( Initialiser == None ):
-			print ("could not add game of type " + gameType)
+			print( "could not add game of type " + gameType )
 			return 0
 
-		if( self.gameDict.get( gameID ) != None):
-			print ("game #" + str( gameID ) + " already exists")
+		if( self.gameDict.get( gameID )!= None ):
+			print( "game #" + str( gameID ) + " already exists" )
 			return 0
 
 		async with self.dictLock:
 
 			self.gameDict[ gameID ] = Initialiser( gameID )
 
-			if( cfg.DEBUG_MODE ):
+			if cfg.DEBUG_MODE :
 				self.gameDict.get( gameID ).setWindow( self.win )
 
 				if( len( self.gameDict ) > self.maxGameCount ):
@@ -84,12 +84,12 @@ class GameManager:
 			game = self.gameDict.get( gameID )
 
 			if game == None:
-				print ("game #" + str( gameID ) + " does not exist")
+				print( "game #" + str( gameID ) + " does not exist" )
 				return
 
 			async with game.gameLock:
 
-				if game.state != df.ENDING:
+				if( game.state != df.ENDING ):
 					game.close()
 
 				if game.connector != None:
@@ -108,8 +108,8 @@ class GameManager:
 		game = self.gameDict.get( gameID )
 
 		if game == None:
-			print ("game #" + str( gameID ) + " does not exist")
-			print ("could not add player #" + str( playerID ) + " to game #" + str( gameID ))
+			print( "game #" + str( gameID ) + " does not exist" )
+			print( "could not add player #" + str( playerID ) + " to game #" + str( gameID ))
 			return
 
 		async with game.gameLock:
@@ -120,14 +120,14 @@ class GameManager:
 		game = self.gameDict.get( gameID )
 
 		if game == None:
-			print ("game #" + str( gameID ) + " does not exist")
-			print ("could not remove player #" + str( playerID ) + " from game #" + str( gameID ))
+			print( "game #" + str( gameID ) + " does not exist" )
+			print( "could not remove player #" + str( playerID ) + " from game #" + str( gameID ))
 			return
 
 		async with game.gameLock:
 			if not game.hasPlayer( playerID ):
-				print ("player #" + str( playerID ) + " is absent from game #" + str( gameID ))
-				print ("could not remove player #" + str( playerID ) + " from game #" + str( gameID ))
+				print( "player #" + str( playerID ) + " is absent from game #" + str( gameID ))
+				print( "could not remove player #" + str( playerID ) + " from game #" + str( gameID ))
 				return
 
 			game.removePlayer( playerID )
@@ -138,8 +138,8 @@ class GameManager:
 		game = self.gameDict.get( gameID )
 
 		if game == None:
-			print ("game #" + str( gameID ) + " does not exist")
-			print ("could not start game #" + str( gameID ))
+			print( "game #" + str( gameID ) + " does not exist" )
+			print( "could not start game #" + str( gameID ))
 			return
 
 		async with game.gameLock:
@@ -150,8 +150,8 @@ class GameManager:
 		game = self.gameDict.get( gameID )
 
 		if game == None:
-			print ("game #" + str( gameID ) + " does not exist")
-			print ("could not close close #" + str( gameID ))
+			print( "game #" + str( gameID ) + " does not exist" )
+			print( "could not close close #" + str( gameID ))
 			return
 
 		async with game.gameLock:
@@ -159,22 +159,22 @@ class GameManager:
 
 
 	async def hasGame( self, gameID ):
-		if self.gameDict.get( gameID ) != None:
+		if self.gameDict.get( gameID )!= None:
 			return True
 		return False
 
 	# --------------------------------------------------------------
 
-	# NOTE : runs a single game step (what to do between to frames)
-	async def tickGames(self):
+	# NOTE : runs a single game step( what to do between to frames )
+	async def tickGames( self ):
 		deleteList = []
 
 		async with self.tickLock:
 			#async with self.dictLock:
-				for ( key, game ) in self.gameDict.items():
+				for( key, game )in self.gameDict.items():
 					async with game.gameLock:
 
-						if not cfg.DEBUG_MODE:
+						if game.connector != None and not cfg.DEBUG_MODE:
 							game.eventControler()
 
 						if game.state == df.STARTING:
@@ -190,8 +190,8 @@ class GameManager:
 						elif game.state == df.ENDING:
 							if cfg.DEBUG_MODE and self.windowID == key:
 
-								print ( "this game no longer exists" )
-								print ( "please select a valid game (1-8)" )
+								print( "this game no longer exists" )
+								print( "please select a valid game( 1-8 )" )
 
 								self.windowID = 0
 								self.emptyDisplay()
@@ -206,14 +206,14 @@ class GameManager:
 
 	# --------------------------------------------------------------
 
-	async def mainloop(self):
+	async def mainloop( self ):
 
 		print( "> STARTING MAINLOOP <" )
 
 		self.currentTime = time.monotonic()
 
 		try:
-			await asy.sleep(0)
+			await asy.sleep( 0 )
 		except asy.exceptions.CancelledError:
 			print( "preemtively removed sleep errors..." )
 
@@ -230,7 +230,7 @@ class GameManager:
 			await self.tickGames()
 
 			if cfg.PRINT_PACKETS and not cfg.DEBUG_MODE:
-				print ( self.getGameUpdates() )
+				print( self.getGameUpdates() )
 
 			if self.messageHandler != None:
 				await self.messageHandler.async_send_all_updates( self.getGameUpdates(), True )
@@ -242,15 +242,15 @@ class GameManager:
 
 
 #	NOTE : this assumes load is generally small and constant, and aims to keep the mean frame time at cfg.FRAME_DELAY
-#	NOTE : doing this without correction is too imprecise because of asy.sleep() being a bitch
-	def getNextSleepDelay(self):
+#	NOTE : doing this without correction is too imprecise because of asy.sleep()being a bitch
+	def getNextSleepDelay( self ):
 		self.previousTime = self.currentTime
 		self.currentTime = time.monotonic()
 		dt = self.currentTime - self.previousTime
 
 		diversion = cfg.FRAME_DELAY - dt
 
-		correction = ( self.sleep_loss + diversion) * 0.1
+		correction = ( self.sleep_loss + diversion ) * 0.1
 
 		self.sleep_loss -= correction
 
@@ -258,8 +258,8 @@ class GameManager:
 
 		if cfg.PRINT_FRAMES: #			NOTE : DEBUG PRINTS
 			self.meanDt = ( dt + ( self.meanDt * cfg.FPS_SMOOTHING )) / ( cfg.FPS_SMOOTHING + 1 )
-			print("frame time: {:.5f} \t".format( dt ), "mean time: {:.5f} \t".format( self.meanDt ), "sleep time: {:.5f} \t".format( delay ))
-			#print("diversion: {:.5f} \t".format( diversion ), "sleep loss: {:.5f} \t".format( self.sleep_loss ), "correction: {:.5f} \t".format( correction ))
+			print( "frame time: {:.5f} \t".format( dt ), "mean time: {:.5f} \t".format( self.meanDt ), "sleep time: {:.5f} \t".format( delay ))
+			#print( "diversion: {:.5f} \t".format( diversion ), "sleep loss: {:.5f} \t".format( self.sleep_loss ), "correction: {:.5f} \t".format( correction ))
 
 		return delay
 
@@ -269,17 +269,17 @@ class GameManager:
 
 	def displayGame( self, game ): # 					NOTE : DEBUG
 		if game.state == df.PLAYING:
-			if game.width != self.win.get_width() or game.height != self.win.get_height():
-				self.win = pg.display.set_mode( (game.width, game.height) )
-				pg.display.set_caption( game.name ) #
+			if game.width != self.win.get_width()or game.height != self.win.get_height():
+				self.win = pg.display.set_mode(( game.width, game.height ))
+				pg.display.set_caption( game.name )#
 
 			game.refreshScreen()
 
 
 	def emptyDisplay( self ): # 						NOTE : DEBUG
-		pg.display.set_caption("Game Manager")
-		self.win = pg.display.set_mode((2048, 1280))
-		self.win.fill( pg.Color('black') )
+		pg.display.set_caption( "Game Manager" )
+		self.win = pg.display.set_mode(( 2048, 1280 ))
+		self.win.fill( pg.Color( 'black' ))
 
 
 	def takePlayerInputs( self ): # 					NOTE : DEBUG
@@ -302,14 +302,14 @@ class GameManager:
 					# respawns the ball
 					elif k == df.RETURN:
 						if self.windowID != 0:
-							if self.gameDict.get(self.windowID) != None:
-								game = self.gameDict.get(self.windowID)
+							if self.gameDict.get( self.windowID )!= None:
+								game = self.gameDict.get( self.windowID )
 								game.respawnAllBalls()
-								print ( "respawning the ball(s)" )
+								print( "respawning the ball( s )" )
 							else:
-								print ( "coud not respawn the ball(s)" )
+								print( "coud not respawn the ball( s )" )
 						else:
-							print ( "please select a valid game (1-8)" )
+							print( "please select a valid game( 1-8 )" )
 						return
 
 					# rotate game to view
@@ -348,29 +348,29 @@ class GameManager:
 
 					# checks if viewed game changed
 					if initialID != self.windowID:
-						if self.gameDict.get(self.windowID) == None:
-							print( "could not switch to game #" + str( self.windowID ) )
-							print( "please select a valid game (1-8)" )
+						if self.gameDict.get( self.windowID ) == None:
+							print( "could not switch to game #" + str( self.windowID ))
+							print( "please select a valid game( 1-8 )" )
 							self.emptyDisplay()
 						else:
-							game = self.gameDict.get(self.windowID)
-							print( "now playing in game #" + str( self.windowID ) )
+							game = self.gameDict.get( self.windowID )
+							print( "now playing in game #" + str( self.windowID ))
 							game.delta_time = cfg.FRAME_DELAY
 							game.last_time = time.time()
-							pg.display.set_caption( self.gameDict.get(self.windowID).name )
+							pg.display.set_caption( self.gameDict.get( self.windowID ).name )
 						return
 
 				# handling movement keys presses
-				if self.gameDict.get(self.windowID) == None:
+				if self.gameDict.get( self.windowID ) == None:
 					if self.windowID != 0:
 						print( "game #" + str( self.windowID ) + " no longer exists" )
-					print( "please select a valid game (1-8)" )
+					print( "please select a valid game( 1-8 )" )
 				else:
-					controler = self.gameDict.get(self.windowID).controlers[0]
+					controler = self.gameDict.get( self.windowID ).controlers[ 0 ]
 					if controler.mode != df.PLAYER:
-						print ( "cannot move a bot's racket" )
+						print( "cannot move a bot's racket" )
 					else:
-						controler.handleKeyInput(k)
+						controler.handleKeyInput( k )
 
 
 	async def addGameDebug( self, gameType, gameID ):
@@ -391,7 +391,7 @@ class GameManager:
 		gameID = await self.addGameDebug( "Pingest", gameID )
 		gameID = await self.addGameDebug( "Pongest", gameID )
 
-		print ("select a player (1-8)")
+		print( "select a player( 1-8 )" )
 
 
 	# ---------------------------------------------- INFO CMDS --------------------------------------------- #
@@ -400,18 +400,18 @@ class GameManager:
 	def getInitInfo( gameType ): #				INIT INFO GENERATOR
 		gameClass = GameManager.getGameClass( gameType )
 
-		if (gameClass == None):
-			print ( "Error : GameManager.getInitInfo() : invalid game type" )
+		if( gameClass == None ):
+			print( "Error : GameManager.getInitInfo(): invalid game type" )
 			return None
 
 		infoDict = {}
 
-		infoDict["gameType"] = gameClass.name
-		infoDict["sizeInfo"] = GameManager.getSizeInfo( gameClass )
-		infoDict["racketCount"] = gameClass.racketCount
-		infoDict["racketInitPos"] = GameManager.getRacketInitPos( gameClass )
-		infoDict["ballInitPos"] = GameManager.getBallInitPos( gameClass )
-		infoDict["teamCount"] = len( gameClass.scores )
+		infoDict[ "gameType" ] = gameClass.name
+		infoDict[ "sizeInfo" ] = GameManager.getSizeInfo( gameClass )
+		infoDict[ "racketCount" ] = gameClass.racketCount
+		infoDict[ "racketInitPos" ] = GameManager.getRacketInitPos( gameClass )
+		infoDict[ "ballInitPos" ] = GameManager.getBallInitPos( gameClass )
+		infoDict[ "teamCount" ] = len( gameClass.scores )
 
 		return( infoDict )
 
@@ -421,11 +421,11 @@ class GameManager:
 		pass
 
 
-	def getGameUpdates(self): #					UPDATE INFO GENERATOR
+	def getGameUpdates( self ): #					UPDATE INFO GENERATOR
 		updateDict = {}
 
 		for key, game in self.gameDict.items():
-			updateDict[key] = game.getUpdateInfo()
+			updateDict[ key ] = game.getUpdateInfo()
 
 		return updateDict
 
@@ -436,12 +436,12 @@ class GameManager:
 		sizeDict = {}
 
 		print( gameClass.width, gameClass.height )
-		sizeDict["width"] = gameClass.width
-		sizeDict["height"] = gameClass.height
-		sizeDict["wRatio"] = 1 / gameClass.width
-		sizeDict["hRatio"] = 1 / gameClass.height
-		sizeDict["sRacket"] = gameClass.size_r
-		sizeDict["sBall"] = gameClass.size_b
+		sizeDict[ "width" ] = gameClass.width
+		sizeDict[ "height" ] = gameClass.height
+		sizeDict[ "wRatio" ] = 1 / gameClass.width
+		sizeDict[ "hRatio" ] = 1 / gameClass.height
+		sizeDict[ "sRacket" ] = gameClass.size_r
+		sizeDict[ "sBall" ] = gameClass.size_b
 
 		return( sizeDict )
 
@@ -450,35 +450,35 @@ class GameManager:
 	def getRacketInitPos( gameClass ):
 		racksPos = []
 
-		if (gameClass.iPosR1 != None):
-			racksPos.append( gameClass.iPosR1[0] ) # position x
-			racksPos.append( gameClass.iPosR1[1] ) # position y
-			racksPos.append( gameClass.iPosR1[2] ) # direction
-		if (gameClass.iPosR2 != None):
-			racksPos.append( gameClass.iPosR2[0] )
-			racksPos.append( gameClass.iPosR2[1] )
-			racksPos.append( gameClass.iPosR2[2] )
-		if (gameClass.iPosR3 != None):
-			racksPos.append( gameClass.iPosR3[0] )
-			racksPos.append( gameClass.iPosR3[1] )
-			racksPos.append( gameClass.iPosR3[2] )
-		if (gameClass.iPosR4 != None):
-			racksPos.append( gameClass.iPosR4[0] )
-			racksPos.append( gameClass.iPosR4[1] )
-			racksPos.append( gameClass.iPosR4[2] )
+		if( gameClass.iPosR1 != None ):
+			racksPos.append( gameClass.iPosR1[ 0 ] )# position x
+			racksPos.append( gameClass.iPosR1[ 1 ] )# position y
+			racksPos.append( gameClass.iPosR1[ 2 ] )# direction
+		if( gameClass.iPosR2 != None ):
+			racksPos.append( gameClass.iPosR2[ 0 ] )
+			racksPos.append( gameClass.iPosR2[ 1 ] )
+			racksPos.append( gameClass.iPosR2[ 2 ] )
+		if( gameClass.iPosR3 != None ):
+			racksPos.append( gameClass.iPosR3[ 0 ] )
+			racksPos.append( gameClass.iPosR3[ 1 ] )
+			racksPos.append( gameClass.iPosR3[ 2 ] )
+		if( gameClass.iPosR4 != None ):
+			racksPos.append( gameClass.iPosR4[ 0 ] )
+			racksPos.append( gameClass.iPosR4[ 1 ] )
+			racksPos.append( gameClass.iPosR4[ 2 ] )
 
 		return( racksPos )
 
 
 	@staticmethod
-	def getBallInitPos(gameClass):
+	def getBallInitPos( gameClass ):
 		ballsPos = []
 
-		if (gameClass.iPosB1 != None):
-			ballsPos.append( gameClass.iPosB1[0] ) # position x
-			ballsPos.append( gameClass.iPosB1[1] ) # position y
+		if( gameClass.iPosB1 != None ):
+			ballsPos.append( gameClass.iPosB1[ 0 ] )# position x
+			ballsPos.append( gameClass.iPosB1[ 1 ] )# position y
 
-		return ( ballsPos )
+		return( ballsPos )
 
 
 	# --------------------------------------------- CLASS CMDS --------------------------------------------- #
@@ -488,10 +488,10 @@ class GameManager:
 	def getMaxPlayerCount( gameType ):
 		gameClass = GameManager.getGameClass( gameType )
 
-		if (gameClass != None):
+		if( gameClass != None ):
 			return gameClass.racketCount
 
-		print ( "Error : GameManager.getMaxPlayerCount() : invalid game type" )
+		print( "Error : GameManager.getMaxPlayerCount(): invalid game type" )
 		return 0
 
 
@@ -518,14 +518,14 @@ class GameManager:
 		elif gameType == "Pongest":
 			return Pongest
 		elif gameType == "Random":
-			return GameManager.getRandomGameClass(rdmStart)
+			return GameManager.getRandomGameClass( rdmStart )
 
-		print ( "Error : GameManager.getGameClass() : invalid game type" )
+		print( "Error : GameManager.getGameClass(): invalid game type" )
 		return None
 
 
 	@staticmethod
-	def getRandomGameClass(playerCount = 1):
+	def getRandomGameClass( playerCount = 1 ):
 		if playerCount == 1:
 			start = 0
 		elif playerCount == 2:
@@ -533,10 +533,10 @@ class GameManager:
 		elif playerCount == 4:
 			start = 4
 		else:
-			print( "Error : GameManager.getRandomGameClass() : invalid player count" )
+			print( "Error : GameManager.getRandomGameClass(): invalid player count" )
 			return None
 
-		value = rdm.randint(start, GameManager.gameTypeCount - 1 )
+		value = rdm.randint( start, GameManager.gameTypeCount - 1 )
 		if value == 0:
 			return "Pi"
 		elif value == 1:
@@ -562,9 +562,9 @@ def testAllGames():
 	#print( gm.getInitInfo( "Pong" ))
 	#print( gm.getInitInfo( "Pingest" ))
 
-	asy.run ( gm.addAllGames() )
+	asy.run( gm.addAllGames() )
 	if cfg.DEBUG_MODE:
-		asy.run ( gm.mainloop() )
+		asy.run( gm.mainloop() )
 
 
 if __name__ == '__main__':

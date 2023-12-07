@@ -30,7 +30,7 @@ if debugKeys:
 	ESCAPE = pg.K_ESCAPE
 	RETURN = pg.K_RETURN
 
-else: #				TODO: Change them to whatever connector.getEvent() outputs
+else: #				TODO: Change them to whatever connector.getEvent()outputs
 	# keyboard keys
 	UP =     'up'
 	DOWN =   'dn'
