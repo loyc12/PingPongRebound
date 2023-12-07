@@ -91,9 +91,11 @@
 
 { // getEndInfo()
 	"gameID": 1,
+	"gameType": "pong",
+	"gameMode": "solo",
 	"endState": "win", // win, quit, crash
-	"winingTeam": 1,
 	"quitter": 2, //		playerID
+	"winingTeam": 1,
 	"scores": [
 		"s1",
 		"s2",

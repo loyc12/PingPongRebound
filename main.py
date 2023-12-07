@@ -13,13 +13,12 @@ except ModuleNotFoundError:
 
 
 # MASTER LIST
-# TODO : send team info and player info somewhere at the end
+# TODO : send team info-player info to clients at the start and end
 # TODO : see if adding a rule for bounce randomess coud help avoid bots getting stuck
 # TODO : review bot bounce calculations
 # TODO : rework the ball respawn trajectory everywhere
 
 # FUNCTION LIST
-# TODO : add a broadcast()function to GM to send updates with
 
 # DEBUG LIST
 
@@ -37,7 +36,8 @@ async def debugTester( Initialiser ):
 		g.setWindow( pg.display.set_mode(( g.width, g.height )))
 		pg.display.set_caption( g.name )
 
-		g.addPlayer( "Player 1", 1 )
+		if cfg.ADD_DEBUG_PLAYER:
+			g.addPlayer( "Player 1", 1 )
 
 		g.start()
 

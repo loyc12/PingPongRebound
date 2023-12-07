@@ -224,8 +224,9 @@ class GameManager:
 			self.emptyDisplay()
 
 		while self.runGames:
+
 			if cfg.DEBUG_MODE:
-				self.takePygameInputs()
+				self.managePygameInputs()
 
 			await self.tickGames()
 
@@ -282,7 +283,7 @@ class GameManager:
 		self.win.fill( pg.Color( 'black' ))
 
 
-	def takePygameInputs( self ): # 					NOTE : DEBUG
+	def managePygameInputs( self ): # 					NOTE : DEBUG
 		# read local player inputs
 		for event in pg.event.get():
 
@@ -373,8 +374,12 @@ class GameManager:
 
 	async def addGameDebug( self, gameType, gameID ):
 		await self.addGame( gameType, gameID )
-		await self.addPlayerToGame( 1, "Tester", gameID )
+
+		if cfg.ADD_DEBUG_PLAYER:
+			await self.addPlayerToGame( 1, "DBG", gameID )
+
 		await self.startGame( gameID )
+
 		return gameID + 1
 
 

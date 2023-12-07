@@ -89,7 +89,8 @@ class Game:
 			self.delta_time = cfg.FRAME_DELAY
 
 		self.useAI = True
-		self.winnerID = 0 #				NOTE : this is the scores[] index( to allow teams )
+		self.winnerID = 0 #				NOTE : this is a scores[] index( teamID )
+		self.quitterID = 0 #			NOTE : this is a playerID
 
 		self.playerCount = 0
 		self.controlerCount = 0
@@ -171,7 +172,7 @@ class Game:
 		return( player )
 
 
-	def removePlayer( self, playerID ): #						NOTE : do we close empty games here( ? )
+	def removePlayer( self, playerID ):
 		for i in range( len( self.controlers )):
 			if( self.controlers[ i ].playerID == playerID ):
 				racketID = self.controlers[ i ].racketID
@@ -214,17 +215,21 @@ class Game:
 
 
 	def makeMove( self, target_id, move ):
-		if( target_id <= 0 ):
+		if target_id <= 0 :
 			print( "Error: no target selected" )
 			return
-		if move < 0:
+
+		if move <= df.NULL:
+			if move < df.NULL:
+				print( "Error: invalid move : " + str( move ))
 			return
+
 		for i in range( len( self.rackets )):
 			rack = self.rackets[ i ]
+
 			if( rack.id == target_id ):
-				if move == df.NULL:
-					return
-				elif( move == df.STOP ):
+
+				if( move == df.STOP ):
 					rack.fx = 0
 					rack.fy = 0
 				elif( move == df.LEFT ):
@@ -269,6 +274,7 @@ class Game:
 	def getNextEvent( self ):
 		if cfg.DEBUG_MODE:
 			return pg.event.get()
+
 		elif( self.connector != None ):
 			self.connector.getEvent()
 
@@ -276,47 +282,54 @@ class Game:
 	def eventControler( self ):
 		for event in self.getNextEvent():
 
-			# quiting the game
-			if event.type == df.CLOSE:
-				if cfg.DEBUG_MODE:
-					self.close()
-				else:
-					if event.id == 0: # if sender decided to close shit
-						self.close()
-					else: # if a user  quit mid game NOTE : mark down who quit
-						self.close()#			NOTE : is it needed ?
-
 			# starting the game
-			elif event.type == df.START:
+			if event.type == df.START:
 				if event.id == 0:
 					self.start()
 
+			# closing the game
+			elif event.type == df.CLOSE:
+				if cfg.DEBUG_MODE:
+					self.close()
+				else:
+					if event.id != 0: #					NOTE : if the event is not from the server
+						self.quitterID = event.id #		NOTE : add the quitter's id to the end packet
+					self.close()
+
 			# handling key presses
 			elif event.type == df.KEYPRESS:
-				if not cfg.DEBUG_MODE:
-					self.handleUserInputs( event.id, event.code )
 
-				else: #							NOTE : FOR DEBUG MODE ONLY
+				if cfg.DEBUG_MODE: #				NOTE : FOR DEBUG MODE ONLY
+
 					# quiting the game( s )
 					if event.key == df.ESCAPE:
 						self.close()
+						continue
 
 					# respawning the ball( s )
 					elif event.key == df.RETURN:
 						for i in range( len( self.balls )):
 							self.respawnBall( self.balls[ i ] )
+						continue
 
-					else:
-						self.handlePygameInputs( event.key )
+				# passing the key to the player controler
+				self.handleUserInputs( event.id, event.key )
 
 
 	def handleUserInputs( self, playerID, key ):
-		for i in range( len( self.controlers )):
-			if( self.controlers[ i ].playerID == playerID ):
-				self.controlers[ i ].handleInputs( key )
-				return
+		if self.mode == df.DUAL:
+			if key == df.UP or key == df.RIGHT or key == df.DOWN or key == df.LEFT or key == df.NZEROW:
+				self.controlers[ 1 ].handleInputs( key )
+			else:
+				self.controlers[ 0 ].handleInputs( key )
 
-		print( "player #" + str( playerID ) + " is not in this game" )
+		else:
+			for i in range( len( self.controlers )):
+				if( self.controlers[ i ].playerID == playerID ):
+					self.controlers[ i ].handleInputs( key )
+					return
+
+			print( "player #" + str( playerID ) + " is not in this game" )
 
 
 	def handlePygameInputs( self, key ): #		NOTE : DEBUG
@@ -609,7 +622,7 @@ class Game:
 		return( pos )
 
 
-	def getMode( self ): #				NOTE : useless???
+	def getMode( self ):
 
 		if( self.mode == df.SOLO ):
 			return "solo"
@@ -618,14 +631,14 @@ class Game:
 		elif( self.mode == df.FREEPLAY ):
 			return "freeplay"
 		elif( self.mode == df.TOURN_RND_1 ):
-			return "tournament( 1 )"
+			return "tournament:1"
 		elif( self.mode == df.TOURN_RND_2 ):
-			return "tournament( 2 )"
+			return "tournament:2"
 		else:
 			return "unknown"
 
 
-	def getState( self ): #				NOTE : useless???
+	def getState( self ):
 		if( self.state == df.STARTING ):
 			return "starting"
 		elif( self.state == df.PLAYING ):
@@ -641,6 +654,10 @@ class Game:
 		infoDict = {}
 
 		infoDict[ "gameID" ] = self.gameID
+		infoDict[ "gameType" ] = self.name
+		infoDict[ "gameMode" ] = self.getMode()
+		infoDict[ "endState" ] = "quit" #		NOTE : PLACEHOLDER
+		infoDict[ "quitter" ] = self.quitterID
 
 		if self.winnerID == 0:
 			infoDict[ "winingTeam" ] = -1
