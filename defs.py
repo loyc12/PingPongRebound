@@ -28,6 +28,11 @@ PLAYING = 1
 ENDING = 2
 #PAUSED = 3
 
+# end states
+END_WIN = "win"
+END_QUIT = "quit"
+END_CRASH = "crash"
+
 # game modes
 SOLO = 0
 DUAL = 1

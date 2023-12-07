@@ -656,14 +656,20 @@ class Game:
 		infoDict[ "gameID" ] = self.gameID
 		infoDict[ "gameType" ] = self.name
 		infoDict[ "gameMode" ] = self.getMode()
-		infoDict[ "endState" ] = "quit" #		NOTE : PLACEHOLDER
-		infoDict[ "quitter" ] = self.quitterID
 
-		if self.winnerID == 0:
-			infoDict[ "winingTeam" ] = -1
+		if self.quitterID != 0:
+			infoDict[ "endState" ] = df.END_QUIT
+		#elif self.winnerID == 0:
+		#	infoDict[ "endState" ] = df.END_CRASH
 		else:
-			infoDict[ "winingTeam" ] = self.winnerID
+			infoDict[ "endState" ] = df.END_WIN
 
+		if self.winerID != 0:
+			infoDict[ "winingTeam" ] = self.winnerID
+		else:
+			infoDict[ "winingTeam" ] = -1
+
+		infoDict[ "quitter" ] = self.quitterID
 		infoDict[ "scores" ] = self.scores
 
 		return( infoDict )

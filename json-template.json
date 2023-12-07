@@ -94,8 +94,8 @@
 	"gameType": "pong",
 	"gameMode": "solo",
 	"endState": "win", // win, quit, crash
-	"quitter": 2, //		playerID
-	"winingTeam": 1,
+	"winingTeam": 1, //	teamID
+	"quitter": 2, //	playerID
 	"scores": [
 		"s1",
 		"s2",
