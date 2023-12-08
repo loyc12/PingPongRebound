@@ -13,12 +13,12 @@ except ModuleNotFoundError:
 
 
 # MASTER LIST
-# TODO : send team info-player info to clients at the start and end
 # TODO : see if adding a rule for bounce randomess coud help avoid bots getting stuck
 # TODO : review bot bounce calculations
 # TODO : rework the ball respawn trajectory everywhere
 
 # FUNCTION LIST
+# TODO : send team info-player info to clients at the start and end ( getPlayerInfo() )
 
 # DEBUG LIST
 

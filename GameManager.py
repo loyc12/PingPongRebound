@@ -23,6 +23,10 @@ class GameManager:
 		gameTypeCount = 8
 		windowID = 0
 
+
+	# ------------------------------------------- INITIALIZATION ------------------------------------------- #
+
+
 	def __init__( self, msg_hndlr = None ):
 
 		self.messageHandler = msg_hndlr #	use me to broadcast game states
@@ -104,36 +108,6 @@ class GameManager:
 
 	# --------------------------------------------------------------
 
-	async def addPlayerToGame( self, playerID, name, gameID ):
-		game = self.gameDict.get( gameID )
-
-		if game == None:
-			print( "game #" + str( gameID ) + " does not exist" )
-			print( "could not add player #" + str( playerID ) + " to game #" + str( gameID ))
-			return
-
-		async with game.gameLock:
-			game.addPlayer( name, playerID )
-
-
-	async def removePlayerFromGame( self, playerID, gameID ):
-		game = self.gameDict.get( gameID )
-
-		if game == None:
-			print( "game #" + str( gameID ) + " does not exist" )
-			print( "could not remove player #" + str( playerID ) + " from game #" + str( gameID ))
-			return
-
-		async with game.gameLock:
-			if not game.hasPlayer( playerID ):
-				print( "player #" + str( playerID ) + " is absent from game #" + str( gameID ))
-				print( "could not remove player #" + str( playerID ) + " from game #" + str( gameID ))
-				return
-
-			game.removePlayer( playerID )
-
-	# --------------------------------------------------------------
-
 	async def startGame( self, gameID ):
 		game = self.gameDict.get( gameID )
 
@@ -162,6 +136,78 @@ class GameManager:
 		if self.gameDict.get( gameID )!= None:
 			return True
 		return False
+
+
+	# -------------------------------------------- PLAYER CMDS --------------------------------------------- #
+
+
+	async def addPlayerToGame( self, playerID, name, gameID ):
+		game = self.gameDict.get( gameID )
+
+		if game == None:
+			print( "game #" + str( gameID ) + " does not exist" )
+			print( "could not add player #" + str( playerID ) + " to game #" + str( gameID ))
+			return
+
+		async with game.gameLock:
+			game.addPlayer( name, playerID )
+
+
+	async def removePlayerFromGame( self, playerID, gameID ):
+		game = self.gameDict.get( gameID )
+
+		if game == None:
+			print( "game #" + str( gameID ) + " does not exist" )
+			print( "could not remove player #" + str( playerID ) + " from game #" + str( gameID ))
+			return
+
+		async with game.gameLock:
+			if not game.hasPlayer( playerID ):
+				print( "player #" + str( playerID ) + " is absent from game #" + str( gameID ))
+				print( "could not remove player #" + str( playerID ) + " from game #" + str( gameID ))
+				return
+
+			game.removePlayer( playerID )
+
+
+
+	# -------------------------------------------- CORE CMDS --------------------------------------------- #
+
+
+	async def mainloop( self ):
+
+		print( "> STARTING MAINLOOP <" )
+
+		self.currentTime = time.monotonic()
+
+		try:
+			await asy.sleep( 0 )
+		except asy.exceptions.CancelledError:
+			print( "preemtively removed sleep errors..." )
+
+		# NOTE : to allow time between frames to be cfg.FRAME_DELAY on next update
+		await asy.sleep( cfg.FRAME_DELAY * 0.75 )
+
+		if cfg.DEBUG_MODE:
+			self.emptyDisplay()
+
+		while self.runGames:
+
+			if cfg.DEBUG_MODE:
+				self.managePygameInputs()
+
+			await self.tickGames()
+
+			if cfg.PRINT_PACKETS and not cfg.DEBUG_MODE:
+				print( self.getGameUpdates() )
+
+			if self.messageHandler != None:
+				await self.messageHandler.async_send_all_updates( self.getGameUpdates(), True )
+
+
+			await asy.sleep( self.getNextSleepDelay() )
+
+		print( "> EXITING MAINLOOP <" )
 
 	# --------------------------------------------------------------
 
@@ -206,44 +252,8 @@ class GameManager:
 
 	# --------------------------------------------------------------
 
-	async def mainloop( self ):
-
-		print( "> STARTING MAINLOOP <" )
-
-		self.currentTime = time.monotonic()
-
-		try:
-			await asy.sleep( 0 )
-		except asy.exceptions.CancelledError:
-			print( "preemtively removed sleep errors..." )
-
-		# NOTE : to allow time between frames to be cfg.FRAME_DELAY on next update
-		await asy.sleep( cfg.FRAME_DELAY * 0.75 )
-
-		if cfg.DEBUG_MODE:
-			self.emptyDisplay()
-
-		while self.runGames:
-
-			if cfg.DEBUG_MODE:
-				self.managePygameInputs()
-
-			await self.tickGames()
-
-			if cfg.PRINT_PACKETS and not cfg.DEBUG_MODE:
-				print( self.getGameUpdates() )
-
-			if self.messageHandler != None:
-				await self.messageHandler.async_send_all_updates( self.getGameUpdates(), True )
-
-
-			await asy.sleep( self.getNextSleepDelay() )
-
-		print( "> EXITING MAINLOOP <" )
-
-
 #	NOTE : this assumes load is generally small and constant, and aims to keep the mean frame time at cfg.FRAME_DELAY
-#	NOTE : doing this without correction is too imprecise because of asy.sleep()being a bitch
+#	NOTE : doing this without correction is too imprecise because of asy.sleep() being a bitch
 	def getNextSleepDelay( self ):
 		self.previousTime = self.currentTime
 		self.currentTime = time.monotonic()
@@ -266,21 +276,6 @@ class GameManager:
 
 
 	# ---------------------------------------------- DEBUG CMDS -------------------------------------------- #
-
-
-	def displayGame( self, game ): # 					NOTE : DEBUG
-		if game.state == df.PLAYING:
-			if game.width != self.win.get_width()or game.height != self.win.get_height():
-				self.win = pg.display.set_mode(( game.width, game.height ))
-				pg.display.set_caption( game.name )#
-
-			game.refreshScreen()
-
-
-	def emptyDisplay( self ): # 						NOTE : DEBUG
-		pg.display.set_caption( "Game Manager" )
-		self.win = pg.display.set_mode(( 2048, 1280 ))
-		self.win.fill( pg.Color( 'black' ))
 
 
 	def managePygameInputs( self ): # 					NOTE : DEBUG
@@ -371,6 +366,7 @@ class GameManager:
 					else:
 						controler.handleKeyInput( k )
 
+# --------------------------------------------------------------
 
 	async def addGameDebug( self, gameType, gameID ):
 		await self.addGame( gameType, gameID )
@@ -398,7 +394,23 @@ class GameManager:
 		print( "select a player( 1-8 )" )
 
 
+	def displayGame( self, game ): # 					NOTE : DEBUG
+		if game.state == df.PLAYING:
+			if game.width != self.win.get_width()or game.height != self.win.get_height():
+				self.win = pg.display.set_mode(( game.width, game.height ))
+				pg.display.set_caption( game.name )#
+
+			game.refreshScreen()
+
+
+	def emptyDisplay( self ): # 						NOTE : DEBUG
+		pg.display.set_caption( "Game Manager" )
+		self.win = pg.display.set_mode(( 2048, 1280 ))
+		self.win.fill( pg.Color( 'black' ))
+
+
 	# ---------------------------------------------- INFO CMDS --------------------------------------------- #
+
 
 	@staticmethod
 	def getInitInfo( gameType ): #				INIT INFO GENERATOR
@@ -420,9 +432,8 @@ class GameManager:
 		return( infoDict )
 
 
-	@staticmethod #	NOTE : not a static var... need to get that info from DB instead
-	def getPlayerInfo(): #						PLAYER INFO GENERATOR
-		pass
+	def getPlayerInfo(): #							PLAYER INFO GENERATOR
+		pass #										TODO : IMPLEMENT ME
 
 
 	def getGameUpdates( self ): #					UPDATE INFO GENERATOR
@@ -557,6 +568,9 @@ class GameManager:
 			return "Pingest"
 		elif value == 7:
 			return "Pongest"
+
+
+	# --------------------------------------------- CLASS END ---------------------------------------------- #
 
 
 def testAllGames():

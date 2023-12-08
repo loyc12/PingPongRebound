@@ -60,7 +60,7 @@ BOT_SEE_FREQUENCY = 60
 BOT_KICK_DISTANCE = 160
 BOT_KICK_FACTOR = 2
 
-# DEBUG
+# pygame (debug) stuff
 if cfg.DEBUG_MODE:
 	WIN_SIZE = 1280
 	COL_BGR = pg.Color( 'black' )

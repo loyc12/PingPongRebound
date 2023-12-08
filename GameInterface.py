@@ -675,6 +675,9 @@ class Game:
 		return( infoDict )
 
 
+	# --------------------------------------------- CLASS END ---------------------------------------------- #
+
+
 if __name__ == '__main__': #			NOTE : DEBUG MODE ONLY
 
 	pg.init()
