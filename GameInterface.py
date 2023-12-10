@@ -299,7 +299,7 @@ class Game:
 			# handling key presses
 			elif event.type == df.KEYPRESS:
 
-				if cfg.DEBUG_MODE: #				NOTE : FOR DEBUG MODE ONLY
+				if cfg.DEBUG_MODE: #					NOTE : FOR DEBUG MODE ONLY
 
 					# quiting the game( s )
 					if event.key == df.ESCAPE:
@@ -312,8 +312,11 @@ class Game:
 							self.respawnBall( self.balls[ i ] )
 						continue
 
-				# passing the key to the player controler
-				self.handleUserInputs( event.id, event.key )
+					# passing the key to the player controler
+					self.handlePygameInputs( event.key ) #			 	NOTE : DEBUG, should all be pass to handleUserImputs
+				else:
+					# passing the key to the player controler
+					self.handleUserInputs( event.id, event.key ) #		NOTE : does not handle player id properly (thinks its racket id)
 
 
 	def handleUserInputs( self, playerID, key ):
