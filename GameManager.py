@@ -348,16 +348,17 @@ class GameManager:
 
 				# checks if viewed game changed
 				if initialID != self.windowID:
-					if self.gameDict.get( self.windowID ) == None:
+					game = self.gameDict.get( self.windowID )
+
+					if game == None:
 						print( "could not switch to game #" + str( self.windowID ))
 						print( "please select a valid game( 1-8 )" )
 						self.emptyDisplay()
 					else:
-						game = self.gameDict.get( self.windowID )
-						print( "now playing in game #" + str( self.windowID ))
+						print( f"{ self.windowID} )  { game.name }  \t: switched game viewed ")
 						game.delta_time = cfg.FRAME_DELAY
 						game.last_time = time.time()
-						pg.display.set_caption( self.gameDict.get( self.windowID ).name )
+						pg.display.set_caption( game.name )
 					return
 
 				# handling movement keys presses
