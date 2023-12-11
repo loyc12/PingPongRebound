@@ -20,7 +20,7 @@ LEFT = 5
 GOALS = 0
 HITS = 1
 
-WIN_SCORE = 4
+WIN_SCORE = 8
 
 # game states
 STARTING = 0
