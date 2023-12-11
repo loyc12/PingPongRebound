@@ -102,6 +102,9 @@ class Game:
 		self.initRackets()
 		self.initBalls()
 
+		if (cfg.PRINT_STATES):
+			print( f"{self.gameID} )  {self.name}  \t: game has been created" )# 		NOTE : DEBUG
+
 
 	def initRackets( self ):
 		self.rackets.append( go.GameObject( 1, self, self.iPosR1[ 0 ], self.iPosR1[ 1 ], self.size_r, self.size_b ))
@@ -352,15 +355,16 @@ class Game:
 			self.initBots()
 			self.state = df.PLAYING
 			self.start_time = time.time()
-			print( "starting a game of " + self.name )
+			if (cfg.PRINT_STATES):
+				print( f"{self.gameID} )  {self.name}  \t: game has been started" )# 		NOTE : DEBUG
 		else:
 			print( "game is either running or over" )
 
 
 	def close( self ):
 		self.state = df.ENDING
-
-		print( "closed a game of " + self.name )
+		if (cfg.PRINT_STATES):
+			print( f"{self.gameID} )  {self.name}  \t: game has been closed" )# 			NOTE : DEBUG
 
 	# --------------------------------------------------------------
 
@@ -511,7 +515,9 @@ class Game:
 	def winGame( self, teamID ):
 		self.winnerID = teamID
 		self.state = df.ENDING
-		print( f"Team #{ teamID } won the game of { self.name }" )
+
+		if (cfg.PRINT_STATES):
+			print( f"{self.gameID} )  {self.name}  \t: game has been won by team #{ teamID }" )# 		NOTE : DEBUG
 
 		if cfg.PRINT_PACKETS:
 			print( self.getEndInfo() )

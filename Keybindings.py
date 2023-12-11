@@ -32,10 +32,10 @@ if debugKeys:
 
 else: #				TODO: Change them to whatever connector.getEvent()outputs
 	# keyboard keys
-	UP		= 'up'
-	DOWN	= 'dn'
-	LEFT	= 'lf'
-	RIGHT	= 'rt'
+	KUP		= 'up'
+	KDOWN	= 'dn'
+	KLEFT	= 'lf'
+	KRIGHT	= 'rt'
 	SPACE	= ' '
 
 	# keypad keys
