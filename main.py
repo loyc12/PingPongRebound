@@ -18,7 +18,6 @@ except ModuleNotFoundError:
 # TODO : rework the ball respawn trajectory everywhere
 
 # FUNCTION LIST
-# TODO : implement getPlayerInfo()
 
 # DEBUG LIST
 
