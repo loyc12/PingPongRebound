@@ -8,7 +8,7 @@ PRINT_FRAMES = True
 
 MOVE_OBJECTS = True
 
-FRAME_RATE = 60 # 					number of frames per second (normally 60)
+FRAME_RATE = 30 # 					number of frames per second (normally 60)
 FRAME_DELAY = 1.0 / FRAME_RATE # 	time taken for each frame
 FPS_SMOOTHING = FRAME_RATE / 2 #	how many frame do we average over for FPS displaying
 

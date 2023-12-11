@@ -1,9 +1,8 @@
 
-{ // join request packet( not in gameManager )
-	"gameMode": "solo", //	solo, dual, freeplay, tournament
+{ // join request format (?) ( not handled by gameManager )
 	"gameType": "pong", //	random == doesn't matter( create random one if none are joinable )
-	"withAI": true,
-	"eventID": true
+	"gameMode": "solo", //	solo, dual, freeplay, tournament
+	"withAI": true
 }
 
 { // getInitInfo()
@@ -11,28 +10,39 @@
 	"sizeInfo": {
 		"width": 2048,
 		"height": 1024,
-		"wRatio": 0.0005,
-		"hRatio": 0.001,
 		"rSize": 160,
 		"bSize": 20
 	},
 	"racketCount" : 4,
-	"racketInitPos": [
-		"x1", "y1", "d1", // aka : x, y, long side direction( 'x' or 'y' )
-		"x2", "y2", "d2",
-		"x3", "y3", "d3",
-		"x4", "y4", "d4"
+	"teamCount": 2,
+	"orientations": [
+		"d1",
+		"d2",
+		"d3",
+		"d4"
 	],
-	"ballInitPos": [
-		"x1", "y1"
-	],
-	"teamCount": 2
-	// followed by player info packets
+	"update": {
+		"racketPos": [
+			"x1", "y1",
+			"x2", "y2",
+			"x3", "y3",
+			"x4", "y4"
+		],
+		"ballPos": [
+			"x1", "y1"
+		],
+		"lastPonger": 0,
+		"scores": [
+			"s1",
+			"s2",
+			"s3",
+			"s4"
+		]
+	}
 }
 
 { // getPlayerInfo()( not in gameManager )
-	"gameID": 1,
-	"playerInfo": // login and racket id
+	"playerInfo":
 	{
 		"llord": [
 			{
@@ -70,7 +80,6 @@
 }
 
 { // getUpdateInfo()
-	"gameID": 1,
 	"racketPos": [
 		"x1", "y1",
 		"x2", "y2",
@@ -90,12 +99,11 @@
 }
 
 { // getEndInfo()
-	"gameID": 1,
-	"gameType": "pong",
-	"gameMode": "solo",
-	"endState": "win", // win, quit, crash
-	"winingTeam": 1, //	teamID
-	"quitter": 2, //	playerID
+	"gameType": "pong", //	random == doesn't matter( create random one if none are joinable )
+	"gameMode": "solo", //	solo, dual, freeplay, tournament
+	"endState": "win", //	win, quit, crash
+	"winingTeam": 1, //		teamID
+	"quitter": 2, //		playerID
 	"scores": [
 		"s1",
 		"s2",

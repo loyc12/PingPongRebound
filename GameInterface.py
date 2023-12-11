@@ -649,10 +649,19 @@ class Game:
 
 	# --------------------------------------------------------------
 
+	def getPlayerInfo( self ):
+		playerDict = {}
+
+		for i in range( len( self.controlers )):
+			ctrlr = self.controlers[ i ]
+
+		return( playerDict )
+
+	# --------------------------------------------------------------
+
 	def getEndInfo( self ):
 		infoDict = {}
 
-		infoDict[ "gameID" ] = self.gameID
 		infoDict[ "gameType" ] = self.name
 		infoDict[ "gameMode" ] = self.getMode()
 

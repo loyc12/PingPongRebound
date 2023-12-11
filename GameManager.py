@@ -448,10 +448,6 @@ class GameManager:
 		# return( infoDict )
 
 
-	def getPlayerInfo(): #							PLAYER INFO GENERATOR
-		pass #										TODO : IMPLEMENT ME
-
-
 	def getGameUpdates( self ): #					UPDATE INFO GENERATOR
 		return { key: game.getUpdateInfo() for key, game in self.gameDict.items() }
 
