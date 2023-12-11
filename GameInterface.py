@@ -276,7 +276,7 @@ class Game:
 			return pg.event.get()
 
 		elif( self.connector != None ):
-			self.connector.getEvent()
+			return self.connector.getEvents()
 
 
 	def eventControler( self ):

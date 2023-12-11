@@ -235,11 +235,8 @@ class GameManager:
 
 						elif game.state == df.ENDING:
 							if cfg.DEBUG_MODE and self.windowID == key:
-
 								print( "this game no longer exists" )
 								print( "please select a valid game( 1-8 )" )
-
-								self.windowID = 0
 								self.emptyDisplay()
 
 							else: #					send closing info packet from here ?
@@ -306,17 +303,25 @@ class GameManager:
 						print( "please select a valid game( 1-8 )" )
 					return
 
-				# rotate game to view
+				# find the next game to view
 				elif k == pg.K_q or k == pg.K_e:
-					if k == pg.K_e:
-						self.windowID += 1
-					else:
-						self.windowID -= 1
+					i = 0
+					# NOTE : this loops over the games until it finds one that can be displayed
+					while i <= self.maxGameCount:
 
-					if self.windowID <= 0:
-						self.windowID = self.maxGameCount
-					elif self.windowID > self.maxGameCount:
-						self.windowID = 1
+						i += 1
+						if k == pg.K_e: #			NOTE : to go forward
+							self.windowID += 1
+						else: #						NOTE : to go backward
+							self.windowID -= 1
+
+						if self.windowID > self.maxGameCount:
+							self.windowID = 1
+						elif self.windowID < 0:
+							self.windowID = self.maxGameCount
+
+						if self.gameDict.get( self.windowID ) != None:
+							i += self.maxGameCount #	NOTE : to break out of the loop
 
 				# select game to view
 				elif k == pg.K_0:
