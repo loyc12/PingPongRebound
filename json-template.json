@@ -42,38 +42,30 @@
 }
 
 { // getPlayerInfo()( not in gameManager )
-	"llord": [
-		{
-			"isBot": false,
-			"playerID": 25,
-			"racketID": 1,
-			"teamID": 1
-		}
-	],
-	"vjean": [
-		{
-			"isBot": false,
-			"playerID": 16,
-			"racketID": 2,
-			"teamID": 1
-		}
-	],
-	"ghebert": [
-		{
-			"isBot": false,
-			"playerID": 36,
-			"racketID": 3,
-			"teamID": 2
-		}
-	],
-	"bot_1": [
-		{
-			"isBot": true,
-			"playerID": 4,
-			"racketID": 4,
-			"teamID": 2
-		}
-	]
+	"1": {
+		"isBot": false,
+		"name": "llord",
+		"playerID": 25,
+		"teamID": 1
+	},
+	"2": {
+		"isBot": false,
+		"name": "vjean",
+		"playerID": 16,
+		"teamID": 1
+	},
+	"3": {
+		"isBot": false,
+		"name": "ghebert",
+		"playerID": 36,
+		"teamID": 2
+	},
+	"4": {
+		"isBot": true,
+		"name": "bot_1",
+		"playerID": 4,
+		"teamID": 2
+	}
 }
 
 { // getUpdateInfo()

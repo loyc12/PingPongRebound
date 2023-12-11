@@ -313,24 +313,23 @@ class Game:
 							self.respawnBall( self.balls[ i ] )
 						continue
 
-					# passing the key to the player controler
+				# passing the key to the player controler
 					self.handlePygameInputs( event.key ) #			 	NOTE : DEBUG, should all be pass to handleUserImputs
 				else:
-					# passing the key to the player controler
 					self.handleUserInputs( event.id, event.key ) #		NOTE : does not handle player id properly (thinks its racket id)
 
 
 	def handleUserInputs( self, playerID, key ):
 		if self.mode == df.DUAL:
 			if key == df.UP or key == df.RIGHT or key == df.DOWN or key == df.LEFT or key == df.NZEROW:
-				self.controlers[ 1 ].handleInputs( key )
+				self.controlers[ 1 ].handleKeyInputs( key )
 			else:
-				self.controlers[ 0 ].handleInputs( key )
+				self.controlers[ 0 ].handleKeyInputs( key )
 
 		else:
 			for i in range( len( self.controlers )):
 				if( self.controlers[ i ].playerID == playerID ):
-					self.controlers[ i ].handleInputs( key )
+					self.controlers[ i ].handleKeyInputs( key )
 					return
 
 			print( "player #" + str( playerID ) + " is not in this game" )

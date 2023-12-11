@@ -18,7 +18,7 @@ except ModuleNotFoundError:
 # TODO : rework the ball respawn trajectory everywhere
 
 # FUNCTION LIST
-# TODO : send team info-player info to clients at the start and end ( getPlayerInfo() )
+# TODO : implement getPlayerInfo()
 
 # DEBUG LIST
 

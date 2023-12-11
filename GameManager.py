@@ -221,7 +221,7 @@ class GameManager:
 					async with game.gameLock:
 
 						if game.connector != None and not cfg.DEBUG_MODE:
-							game.eventControler()
+							await game.eventControler()
 
 						if game.state == df.STARTING:
 							pass
