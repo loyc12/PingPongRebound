@@ -209,8 +209,6 @@ class GameObject:
 			else:
 				self.fx = -1
 
-			print ( f"unstuck x in game #{self.game.gameID}" )
-
 		elif mode == "y" and self.dy  < 1:
 			self.dy = 1
 
@@ -218,8 +216,6 @@ class GameObject:
 				self.fy = 1
 			else:
 				self.fy = -1
-
-			print ( f"unstuck y in game #{self.game.gameID}" )
 
 
 # ---------------------------------------------- MOVEMENT ---------------------------------------------- #
