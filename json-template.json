@@ -100,5 +100,5 @@
 		"s3",
 		"s4"
 	],
-	"playerInfo": playerInfo{}
+	"playerInfo": getPlayerInfo{}
 }

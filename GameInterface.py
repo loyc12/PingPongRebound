@@ -25,7 +25,7 @@ except ModuleNotFoundError:
 # game class
 class Game:
 	name = "Game"
-	mode = df.SOLO
+	mode = df.DUAL
 	racketCount = 1
 	state = df.STARTING
 	hard_break = False
@@ -70,7 +70,7 @@ class Game:
 
 	# ------------------------------------------- INITIALIZATION ------------------------------------------- #
 
-	def __init__( self, gameID, connector = None ):
+	def __init__( self, gameID, connector = None ): # NOTE : take in gametype
 
 		self.gameID = gameID
 		self.connector = connector

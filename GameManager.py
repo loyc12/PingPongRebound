@@ -152,6 +152,8 @@ class GameManager:
 
 		async with game.gameLock:
 			game.addPlayer( name, playerID )
+			if game.type == cfg.DUAL:
+				game.addPlayer( "guest", 0 )
 
 
 	async def removePlayerFromGame( self, playerID, gameID ):
