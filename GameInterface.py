@@ -322,7 +322,7 @@ class Game:
 
 	def handleUserInput( self, playerID, key ):
 		if self.mode == df.DUAL:
-			if key == df.KUP or key == df.KRIGHT or key == df.KDOWN or key == df.KLEFT or key == df.NZEROW: # check which player played
+			if key == df.KUP or key == df.KRIGHT or key == df.KDOWN or key == df.KLEFT or key == df.NZERO: # check which player played
 				self.controlers[ 1 ].handleKeyInput( key )
 			else:
 				self.controlers[ 0 ].handleKeyInput( key )
@@ -338,7 +338,7 @@ class Game:
 
 	def handlePygameInput( self, key ): #				NOTE : DEBUG
 		if self.mode == df.DUAL:
-			if key == df.KUP or key == df.KRIGHT or key == df.KDOWN or key == df.KLEFT or key == df.NZEROW:
+			if key == df.KUP or key == df.KRIGHT or key == df.KDOWN or key == df.KLEFT or key == df.NZERO:
 				self.controlers[ 1 ].handleKeyInput( key )
 			else:
 				self.controlers[ 0 ].handleKeyInput( key )
