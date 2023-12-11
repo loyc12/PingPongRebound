@@ -281,7 +281,6 @@ class Game:
 
 	async def eventControler( self ):
 		for event in await self.getNextEvents():
-			print('GameController popped event : ', event)
 
 			# starting the game
 			if event.type == df.START:
@@ -290,18 +289,19 @@ class Game:
 
 			# closing the game
 			elif event.type == df.CLOSE:
-				if cfg.DEBUG_MODE:
-					self.close()
-				else:
+				if not cfg.DEBUG_MODE:
 					if event.id != 0: #					NOTE : if the event is not from the server
 						self.quitterID = event.id #		NOTE : add the quitter's id to the end packet
-					self.close()
+
+				self.close()
 
 			# handling key presses
 			elif event.type == df.KEYPRESS:
 
-				if cfg.DEBUG_MODE: #					NOTE : FOR DEBUG MODE ONLY
+				if not cfg.DEBUG_MODE:
+					self.handleUserInput( event.id, event.key )
 
+				else:
 					# quiting the game( s )
 					if event.key == df.ESCAPE:
 						self.close()
@@ -313,15 +313,13 @@ class Game:
 							self.respawnBall( self.balls[ i ] )
 						continue
 
-				# passing the key to the player controler
-					self.handlePygameInputs( event.key ) #			 	NOTE : DEBUG, should all be pass to handleUserImputs
-				else:
-					self.handleUserInputs( event.id, event.key ) #		NOTE : does not handle player id properly (thinks its racket id)
+					# passing the key to the player controler
+					self.handlePygameInput( event.key )
 
 
-	def handleUserInputs( self, playerID, key ):
+	def handleUserInput( self, playerID, key ):
 		if self.mode == df.DUAL:
-			if key == df.UP or key == df.RIGHT or key == df.DOWN or key == df.LEFT or key == df.NZEROW:
+			if key == df.KUP or key == df.KRIGHT or key == df.KDOWN or key == df.KLEFT or key == df.NZEROW: # check which player played
 				self.controlers[ 1 ].handleKeyInput( key )
 			else:
 				self.controlers[ 0 ].handleKeyInput( key )
@@ -335,16 +333,16 @@ class Game:
 			print( "player #" + str( playerID ) + " is not in this game" )
 
 
-	def handlePygameInputs( self, key ): #				NOTE : DEBUG
-		for i in range( 0, self.controlerCount ):
-			if self.controlers[ i ].mode == gc.df.PLAYER:
-				rack = self.controlers[ i ].racket
-				if key == df.KS or key == df.DOWN:
-					self.makeMove( rack.id, df.STOP )
-				elif key == df.KA or key == df.LEFT:
-					self.makeMove( rack.id, df.LEFT )
-				elif key == df.KD or key == df.RIGHT:
-					self.makeMove( rack.id, df.RIGHT )
+	def handlePygameInput( self, key ): #				NOTE : DEBUG
+		if self.mode == df.DUAL:
+			if key == df.KUP or key == df.KRIGHT or key == df.KDOWN or key == df.KLEFT or key == df.NZEROW:
+				self.controlers[ 1 ].handleKeyInput( key )
+			else:
+				self.controlers[ 0 ].handleKeyInput( key )
+		else:
+			for i in range( 0, self.controlerCount ):
+				if self.controlers[ i ].mode == gc.df.PLAYER:
+					self.controlers[ i ].handleKeyInput( key )
 
 
 	# ---------------------------------------------- CORE CMDS --------------------------------------------- #

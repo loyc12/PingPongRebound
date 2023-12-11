@@ -11,10 +11,10 @@ except ModuleNotFoundError:
 
 if debugKeys:
 	# keyboard keys
-	UP		= pg.K_UP
-	DOWN 	= pg.K_DOWN
-	LEFT	= pg.K_LEFT
-	RIGHT	= pg.K_RIGHT
+	KUP		= pg.K_UP
+	KDOWN 	= pg.K_DOWN
+	KLEFT	= pg.K_LEFT
+	KRIGHT	= pg.K_RIGHT
 	SPACE	= pg.K_SPACE
 
 	# keypad keys

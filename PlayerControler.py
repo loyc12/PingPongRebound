@@ -22,13 +22,13 @@ class PlayerControler( gc.GameControler ):
 	def handleKeyInput( self, key ):
 		if key == df.SPACE or key == df.NZERO:
 			self.playMove( df.STOP )
-		elif key == df.KW or key == df.UP:
+		elif key == df.KW or key == df.KUP:
 			self.playMove( df.UP )
-		elif key == df.KD or key == df.RIGHT:
+		elif key == df.KD or key == df.KRIGHT:
 			self.playMove( df.RIGHT )
-		elif key == df.KS or key == df.DOWN:
+		elif key == df.KS or key == df.KDOWN:
 			self.playMove( df.DOWN )
-		elif key == df.KA or key == df.LEFT:
+		elif key == df.KA or key == df.KLEFT:
 			self.playMove( df.LEFT )
 		elif( cfg.DEBUG_MODE and key == df.RETURN ): #		NOTE : DEBUG
 			for i in range( len( self.game.balls )):

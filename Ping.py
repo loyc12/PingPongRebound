@@ -45,25 +45,25 @@ class Ping( gi.Game ):
 		self.balls[ 0 ].setDirs( 1, -1 )
 
 
-	def handlePygameInputs( self, key ): #		NOTE : DEBUG
+	def handlePygameInput( self, key ): #		NOTE : DEBUG
 
 		# player 1
 		if( self.controlers[ 0 ].mode == gi.gc.df.PLAYER ):
 			if key == df.KS:
-				self.makeMove( 1, gi.df.STOP )
+				self.makeMove( 1, df.STOP )
 			elif key == df.KA:
-				self.makeMove( 1, gi.df.LEFT )
+				self.makeMove( 1, df.LEFT )
 			elif key == df.KD:
-				self.makeMove( 1, gi.df.RIGHT )
+				self.makeMove( 1, df.RIGHT )
 
 		# player 2
 		if( self.controlers[ 1 ].mode == gi.gc.df.PLAYER ):
 			if key == df.DOWN:
-				self.makeMove( 2, gi.df.STOP )
+				self.makeMove( 2, df.STOP )
 			elif key == df.LEFT:
-				self.makeMove( 2, gi.df.LEFT )
+				self.makeMove( 2, df.LEFT )
 			elif key == df.RIGHT:
-				self.makeMove( 2, gi.df.RIGHT )
+				self.makeMove( 2, df.RIGHT )
 
 
 	def moveRacket( self, rack ):
@@ -92,12 +92,12 @@ class Ping( gi.Game ):
 			# checking who scored
 			if ball.getRight() < self.width / 2:
 				if self.last_ponger > 0:
-					self.scorePoint( 2, gi.df.GOALS )
+					self.scorePoint( 2, df.GOALS )
 				ball.setDirs( -1, -1 )
 
 			if ball.getLeft() > self.width / 2:
 				if self.last_ponger > 0:
-					self.scorePoint( 1, gi.df.GOALS )
+					self.scorePoint( 1, df.GOALS )
 				ball.setDirs( 1, -1 )
 
 			self.respawnBall( ball )

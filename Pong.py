@@ -42,24 +42,24 @@ class Pong( gi.Game ):
 		self.balls[ 0 ].setDirs( 1, 1 )
 
 
-	def handlePygameInputs( self, key ): #		NOTE : DEBUG
+	def handlePygameInput( self, key ): #		NOTE : DEBUG
 		# player 1
 		if( self.controlers[ 0 ].mode == gi.gc.df.PLAYER ):
 			if key == df.KA:
-				self.makeMove( 1, gi.df.STOP )
+				self.makeMove( 1, df.STOP )
 			elif key == df.KW:
-				self.makeMove( 1, gi.df.UP )
+				self.makeMove( 1, df.UP )
 			elif key == df.KS:
-				self.makeMove( 1, gi.df.DOWN )
+				self.makeMove( 1, df.DOWN )
 
 		# player 2
 		if( self.controlers[ 1 ].mode == gi.gc.df.PLAYER ):
-			if key == df.LEFT:
-				self.makeMove( 2, gi.df.STOP )
-			elif key == df.UP:
-				self.makeMove( 2, gi.df.UP )
-			elif key == df.DOWN:
-				self.makeMove( 2, gi.df.DOWN )
+			if key == df.KLEFT:
+				self.makeMove( 2, df.STOP )
+			elif key == df.KUP:
+				self.makeMove( 2, df.UP )
+			elif key == df.KDOWN:
+				self.makeMove( 2, df.DOWN )
 
 
 	# bouncing off the rackets
@@ -72,7 +72,7 @@ class Pong( gi.Game ):
 				elif( rack.id == 2 ):
 					ball.setPosX( rack.getPosX() - self.size_b )# '-' because the ball is going to the left
 				ball.bounceOnRack( rack, "x" )
-				self.scorePoint( rack.id, gi.df.HITS )
+				self.scorePoint( rack.id, df.HITS )
 
 
 	# bouncing on the walls
@@ -87,12 +87,12 @@ class Pong( gi.Game ):
 			# checking who scored
 			if ball.getLeft() < 0:
 				if self.last_ponger > 0:
-					self.scorePoint( 2, gi.df.GOALS )
+					self.scorePoint( 2, df.GOALS )
 				ball.setDirs( -1, -ball.fy )
 				ball.setPos( self.width * ( 3 / 4 ), self.height * ( 1 / 2 ))
 			if ball.getRight() > self.width:
 				if self.last_ponger > 0:
-					self.scorePoint( 1, gi.df.GOALS )
+					self.scorePoint( 1, df.GOALS )
 				ball.setDirs( 1, -ball.fy )
 				ball.setPos( self.width * ( 1 / 4 ), self.height * ( 1 / 2 ))
 

@@ -64,30 +64,30 @@ class Pongest( gi.Game ):
 		self.scores.append( 0 )
 
 
-	def handlePygameInputs( self, key ): #		NOTE : DEBUG
+	def handlePygameInput( self, key ): #		NOTE : DEBUG
 		# player 1
 		if( self.controlers[ 0 ].mode == gi.gc.df.PLAYER ):
 			if key == df.KS:
-				self.makeMove( 1, gi.df.STOP )
-				self.makeMove( 3, gi.df.STOP )
+				self.makeMove( 1, df.STOP )
+				self.makeMove( 3, df.STOP )
 			elif key == df.KA:
-				self.makeMove( 1, gi.df.LEFT )
-				self.makeMove( 3, gi.df.LEFT )
+				self.makeMove( 1, df.LEFT )
+				self.makeMove( 3, df.LEFT )
 			elif key == df.KD:
-				self.makeMove( 1, gi.df.RIGHT )
-				self.makeMove( 3, gi.df.RIGHT )
+				self.makeMove( 1, df.RIGHT )
+				self.makeMove( 3, df.RIGHT )
 
 		# player 2
 		if( self.controlers[ 1 ].mode == gi.gc.df.PLAYER ):
-			if key == df.LEFT:
-				self.makeMove( 2, gi.df.STOP )
-				self.makeMove( 4, gi.df.STOP )
-			elif key == df.UP:
-				self.makeMove( 2, gi.df.UP )
-				self.makeMove( 4, gi.df.UP )
-			elif key == df.DOWN:
-				self.makeMove( 2, gi.df.DOWN )
-				self.makeMove( 4, gi.df.DOWN )
+			if key == df.KLEFT:
+				self.makeMove( 2, df.STOP )
+				self.makeMove( 4, df.STOP )
+			elif key == df.KUP:
+				self.makeMove( 2, df.UP )
+				self.makeMove( 4, df.UP )
+			elif key == df.KDOWN:
+				self.makeMove( 2, df.DOWN )
+				self.makeMove( 4, df.DOWN )
 
 
 	# bouncing off the rackets
@@ -110,7 +110,7 @@ class Pongest( gi.Game ):
 					ball.setPosX( rack.getPosX() + self.size_b )# '+' because the ball is going right
 					ball.bounceOnRack( rack, "x" )
 
-				self.scorePoint( rack.id, gi.df.HITS )
+				self.scorePoint( rack.id, df.HITS )
 
 
 	# bouncing on the walls( walls are absent in Pongester )
@@ -123,7 +123,7 @@ class Pongest( gi.Game ):
 		if ball.getTop() < 0 or ball.getBottom() > self.height or ball.getLeft() < 0 or ball.getRight() > self.width:
 			# increasing score
 			if( self.last_ponger > 0 ):
-				self.scorePoint( self.last_ponger, gi.df.GOALS )
+				self.scorePoint( self.last_ponger, df.GOALS )
 
 			# checking how to respawn the ball
 			if self.last_ponger == 1 or( self.last_ponger == 0 and ball.fx < 0 and ball.fy < 0 ):
