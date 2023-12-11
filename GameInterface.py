@@ -281,6 +281,7 @@ class Game:
 
 	async def eventControler( self ):
 		for event in await self.getNextEvents():
+			print('GameController popped event : ', event)
 
 			# starting the game
 			if event.type == df.START:
