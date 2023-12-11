@@ -152,7 +152,7 @@ class GameManager:
 
 		async with game.gameLock:
 			game.addPlayer( name, playerID )
-			if game.mode == cfg.DUAL:
+			if game.mode == df.DUAL:
 				game.addPlayer( "guest", 0 )
 
 
