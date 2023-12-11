@@ -322,14 +322,14 @@ class Game:
 	def handleUserInputs( self, playerID, key ):
 		if self.mode == df.DUAL:
 			if key == df.UP or key == df.RIGHT or key == df.DOWN or key == df.LEFT or key == df.NZEROW:
-				self.controlers[ 1 ].handleKeyInputs( key )
+				self.controlers[ 1 ].handleKeyInput( key )
 			else:
-				self.controlers[ 0 ].handleKeyInputs( key )
+				self.controlers[ 0 ].handleKeyInput( key )
 
 		else:
 			for i in range( len( self.controlers )):
 				if( self.controlers[ i ].playerID == playerID ):
-					self.controlers[ i ].handleKeyInputs( key )
+					self.controlers[ i ].handleKeyInput( key )
 					return
 
 			print( "player #" + str( playerID ) + " is not in this game" )
