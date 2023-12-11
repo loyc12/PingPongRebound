@@ -88,6 +88,7 @@
 }
 
 { // getEndInfo()
+	"gameConnector": 1,
 	"gameType": "pong", //	random == doesn't matter( create random one if none are joinable )
 	"gameMode": "solo", //	solo, dual, freeplay, tournament
 	"endState": "win", //	win, quit, crash
@@ -98,5 +99,6 @@
 		"s2",
 		"s3",
 		"s4"
-	]
+	],
+	"playerInfo": playerInfo{}
 }

@@ -366,6 +366,7 @@ class Game:
 
 	def close( self ):
 		self.state = df.ENDING
+
 		if (cfg.PRINT_STATES):
 			print( f"{self.gameID} )  {self.name}  \t: game has been closed" )# 			NOTE : DEBUG
 
@@ -517,7 +518,7 @@ class Game:
 
 	def winGame( self, teamID ):
 		self.winnerID = teamID
-		self.state = df.ENDING
+		self.close()
 
 		if (cfg.PRINT_STATES):
 			print( f"{self.gameID} )  {self.name}  \t: game has been won by team #{ teamID }" )# 		NOTE : DEBUG
@@ -525,7 +526,6 @@ class Game:
 		if cfg.PRINT_PACKETS:
 			print( self.getEndInfo() )
 
-		self.close()
 
 
 	def respawnBall( self, ball ):
@@ -636,10 +636,8 @@ class Game:
 			return "dual"
 		elif( self.mode == df.FREEPLAY ):
 			return "freeplay"
-		elif( self.mode == df.TOURN_RND_1 ):
-			return "tournament:1"
-		elif( self.mode == df.TOURN_RND_2 ):
-			return "tournament:2"
+		elif( self.mode == df.TOURNAMENT ):
+			return "tournament"
 		else:
 			return "unknown"
 
@@ -669,15 +667,17 @@ class Game:
 	def getEndInfo( self ):
 		infoDict = {}
 
+		infoDict[ "gameConnector" ] = self.connector
+
 		infoDict[ "gameType" ] = self.name
 		infoDict[ "gameMode" ] = self.getMode()
 
 		if self.quitterID != 0:
 			infoDict[ "endState" ] = df.END_QUIT
-		#elif self.winnerID == 0:
-		#	infoDict[ "endState" ] = df.END_CRASH
-		else:
+		elif self.winerID != 0:
 			infoDict[ "endState" ] = df.END_WIN
+		#else self.winnerID == 0:
+		#	infoDict[ "endState" ] = df.END_CRASH
 
 		if self.winerID != 0:
 			infoDict[ "winingTeam" ] = self.winnerID
@@ -686,6 +686,8 @@ class Game:
 
 		infoDict[ "quitter" ] = self.quitterID
 		infoDict[ "scores" ] = self.scores
+
+		infoDict[ "playerInfo" ] = self.getPlayerInfo()
 
 		return( infoDict )
 

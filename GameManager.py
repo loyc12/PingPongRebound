@@ -27,9 +27,9 @@ class GameManager:
 	# ------------------------------------------- INITIALIZATION ------------------------------------------- #
 
 
-	def __init__( self, msg_hndlr = None ):
+	def __init__( self, _gg = None ):
 
-		self.messageHandler = msg_hndlr #	use me to broadcast game states
+		self.gameGateway = _gg #			NOTE : use me to broadcast game states
 
 		self.gameCount = 0
 		self.maxGameCount = 0
@@ -96,9 +96,10 @@ class GameManager:
 				if( game.state != df.ENDING ):
 					game.close()
 
+	# NOTE : ian check icitte pour le closing
+
 				if game.connector != None:
-					pass #					TODO : send end game packet through connector
-					# self.connector.sendEndState( game.getEndInfo() )
+					await self.gameGateway.manage_end_game( game.getEndInfo() )
 
 			async with self.dictLock:
 				self.gameDict.pop( gameID )
@@ -201,8 +202,8 @@ class GameManager:
 			if cfg.PRINT_PACKETS and not cfg.DEBUG_MODE:
 				print( self.getGameUpdates() )
 
-			if self.messageHandler != None:
-				await self.messageHandler.async_send_all_updates( self.getGameUpdates(), True )
+			if self.gameGateway != None:
+				await self.gameGateway.async_send_all_updates( self.getGameUpdates(), True )
 
 
 			await asy.sleep( self.getNextSleepDelay() )
@@ -438,6 +439,7 @@ class GameManager:
 				'scores': [ 0 for _ in range( gameClass.racketCount )]
 			}
 		}
+
 
 	def getPlayerInfo( self, gameID ):
 		game = self.gameDict.get( gameID )

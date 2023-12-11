@@ -37,9 +37,7 @@ END_CRASH = "crash"
 SOLO = 0
 DUAL = 1
 FREEPLAY = 2
-TOURN_RND_1 = 3
-TOURN_RND_2 = 4
-#TOURN_RND_3 = 5
+TOURNAMENT = 3
 
 # bot difficulty
 EASY = 0
