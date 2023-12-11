@@ -357,6 +357,9 @@ class Game:
 			self.start_time = time.time()
 			if (cfg.PRINT_STATES):
 				print( f"{self.gameID} )  {self.name}  \t: game has been started" )# 		NOTE : DEBUG
+			if cfg.PRINT_PACKETS:
+				print( self.getPlayerInfo() )# 												NOTE : DEBUG
+
 		else:
 			print( "game is either running or over" )
 
@@ -657,7 +660,7 @@ class Game:
 		playerDict = {}
 
 		for i in range( len( self.controlers )):
-			ctrlr = self.controlers[ i ]
+			playerDict[ str( i + 1 )] = self.controlers[ i ].getInfo()
 
 		return( playerDict )
 

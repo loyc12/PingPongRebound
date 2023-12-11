@@ -403,7 +403,7 @@ class GameManager:
 		if game.state == df.PLAYING:
 			if game.width != self.win.get_width()or game.height != self.win.get_height():
 				self.win = pg.display.set_mode(( game.width, game.height ))
-				pg.display.set_caption( game.name )#
+				pg.display.set_caption( game.name )
 
 			game.refreshScreen()
 
@@ -438,14 +438,16 @@ class GameManager:
 				'scores': [ 0 for _ in range( gameClass.racketCount )]
 			}
 		}
-		# infoDict = {}
-		# infoDict[ "gameType" ] = gameClass.name
-		# infoDict[ "sizeInfo" ] = GameManager.getSizeInfo( gameClass )
-		# infoDict[ "racketCount" ] = gameClass.racketCount
-		# infoDict[ "racketInitPos" ] = GameManager.getRacketInitPos( gameClass )
-		# infoDict[ "ballInitPos" ] = GameManager.getBallInitPos( gameClass )
-		# infoDict[ "teamCount" ] = len( gameClass.scores )
-		# return( infoDict )
+
+	def getPlayerInfo( self, gameID ):
+		game = self.gameDict.get( gameID )
+
+		if game == None:
+			print( "game #" + str( gameID ) + " does not exist" )
+			print( "could not get player info from from game #" + str( gameID ))
+			return
+
+		return( game.getPlayerInfo() )
 
 
 	def getGameUpdates( self ): #					UPDATE INFO GENERATOR
@@ -466,13 +468,6 @@ class GameManager:
 			"sRacket": gameClass.size_r,
 			"sBall": gameClass.size_b
 		}
-
-		# sizeDict = {}
-		# sizeDict[ "width" ] = gameClass.width
-		# sizeDict[ "height" ] = gameClass.height
-		# sizeDict[ "sRacket" ] = gameClass.size_r
-		# sizeDict[ "sBall" ] = gameClass.size_b
-		# return( sizeDict )
 
 
 	@staticmethod

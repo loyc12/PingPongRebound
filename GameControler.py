@@ -41,3 +41,18 @@ class GameControler:
 			print( "The game is over" )
 		elif move != df.NULL:
 			self.game.makeMove( self.racketID, move )
+
+
+	def getInfo( self ):
+		if (self.mode == df.PLAYER):
+			isBot = False
+		else:
+			isBot = True
+
+		return {
+			"isBot": isBot,
+			"name": self.name,
+			"playerID": self.playerID,
+			"teamID": self.racketID
+		}
+

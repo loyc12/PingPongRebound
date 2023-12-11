@@ -41,7 +41,7 @@
 	}
 }
 
-{ // getPlayerInfo()( not in gameManager )
+{ // getPlayerInfo()
 	"1": {
 		"isBot": false,
 		"name": "llord",
