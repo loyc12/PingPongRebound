@@ -16,3 +16,5 @@ if DEBUG_MODE:
 	FRAME_FACTOR = 0.60 #			multiplier to asy.sleep()'s time( to avoid oversleeping )
 else:
 	FRAME_FACTOR = 0.90
+
+#yolo wtf
