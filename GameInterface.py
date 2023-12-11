@@ -40,7 +40,7 @@ class Game:
 	size_font = 768
 
 	speed_b = 12
-	speed_r = 6
+	speed_r = 8
 	speed_m_b = 60
 	speed_m_r = 60
 	framerate = cfg.FRAME_RATE # 		max fps

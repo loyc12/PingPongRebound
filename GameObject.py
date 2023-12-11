@@ -162,15 +162,19 @@ class GameObject:
 
 	# NOTE : IS ONLY FOR BALLS
 	def bounceOnWall( self, mode ):
-		if mode == "x":
+		if mode == "stop":
+			self.stopDirs()
+		elif mode == "x":
 			self.fx *= -1
 			self.dx *= self.game.factor_wall
 		elif mode == "y":
 			self.fy *= -1
 			self.dy *= self.game.factor_wall
-		elif mode == "stop":
-			self.stopDirs()
+
 		self.clampSpeed()
+		if df.BOT_NO_STUCK:
+			self.makeUnstuck( mode )
+
 
 	# NOTE : IS ONLY FOR BALLS
 	def bounceOnRack( self, other, mode ):
@@ -186,7 +190,36 @@ class GameObject:
 
 		if cfg.PRINT_COLLISIONS:
 			print( f"{self.game.gameID} )  {self.game.name}  \t: {'{:.1f}'.format( t )}s" )# 	NOTE : DEBUG
+
 		self.clampSpeed()
+		if df.BOT_NO_STUCK:
+			self.makeUnstuck( mode )
+
+
+
+	def makeUnstuck( self, mode ):
+		if mode == "stop":
+			return
+
+		elif mode == "x" and self.dx < 1:
+			self.dx = 1
+
+			if self.px < self.game.width / 2:
+				self.fx = 1
+			else:
+				self.fx = -1
+
+			print ( f"unstuck x in game #{self.game.gameID}" )
+
+		elif mode == "y" and self.dy  < 1:
+			self.dy = 1
+
+			if self.py < self.game.height / 2:
+				self.fy = 1
+			else:
+				self.fy = -1
+
+			print ( f"unstuck y in game #{self.game.gameID}" )
 
 
 # ---------------------------------------------- MOVEMENT ---------------------------------------------- #
