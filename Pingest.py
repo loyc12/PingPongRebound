@@ -30,7 +30,7 @@ class Pingest( gi.Game ):
 	iPosB1 = ( int( width * ( 3 / 4 )), int( height * ( 3 / 4 )))
 
 	def initRackets( self ):
-		# setting up rackets :             id, game, _x            , _y            , _w         , _h
+		# setting up rackets :             id, game, _x              , _y              , _w         , _h
 		self.rackets.append( go.GameObject( 1, self, self.iPosR1[ 0 ], self.iPosR1[ 1 ], self.size_r, self.size_b ))
 		self.rackets.append( go.GameObject( 2, self, self.iPosR2[ 0 ], self.iPosR2[ 1 ], self.size_r, self.size_b ))
 		self.rackets.append( go.GameObject( 3, self, self.iPosR3[ 0 ], self.iPosR3[ 1 ], self.size_r, self.size_b ))
