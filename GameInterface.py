@@ -271,7 +271,7 @@ class Game:
 #			key; // 	event code( key when keyboard related )
 #		}
 
-	def getNextEvent( self ):
+	def getNextEvents( self ):
 		if cfg.DEBUG_MODE:
 			return pg.event.get()
 
@@ -279,8 +279,8 @@ class Game:
 			return self.connector.getEvents()
 
 
-	def eventControler( self ):
-		for event in self.getNextEvent():
+	async def eventControler( self ):
+		for event in await self.getNextEvents():
 
 			# starting the game
 			if event.type == df.START:
@@ -335,7 +335,7 @@ class Game:
 			print( "player #" + str( playerID ) + " is not in this game" )
 
 
-	def handlePygameInputs( self, key ): #		NOTE : DEBUG
+	def handlePygameInputs( self, key ): #				NOTE : DEBUG
 		for i in range( 0, self.controlerCount ):
 			if self.controlers[ i ].mode == gc.df.PLAYER:
 				rack = self.controlers[ i ].racket
@@ -594,35 +594,31 @@ class Game:
 
 
 	def getUpdateInfo( self ):
-		infoDict = {}
-
-		infoDict[ "gameID" ] = self.gameID
-		infoDict[ "racketPos" ] = self.getRacketPos()
-		infoDict[ "ballPos" ] = self.getBallPos()
-		infoDict[ "lastPonger" ] = self.last_ponger
-		infoDict[ "scores" ] = self.scores
-
-		return( infoDict )
+		return {
+			"racketPos": self.getRacketPos(),
+			"ballPos": self.getBallPos(),
+			"lastPonger": self.last_ponger,
+			"scores": self.scores
+		}
 
 
 	def getRacketPos( self ):
-		pos = []
+		return [ coord for rack in self.rackets for coord in ( rack.getPosX(), rack.getPosY() )]
 
-		for i in range( len( self.rackets )):
-			pos.append( self.rackets[ i ].getPosX() )
-			pos.append( self.rackets[ i ].getPosY() )
-
-		return( pos )
-
+		# pos = []
+		# for i in range( len( self.rackets )):
+		# 	pos.append( self.rackets[ i ].getPosX() )
+		# 	pos.append( self.rackets[ i ].getPosY() )
+		# return( pos )
 
 	def getBallPos( self ):
-		pos = []
+		return [ coord for ball in self.balls for coord in ( ball.getPosX(), ball.getPosY() )]
 
-		for i in range( len( self.balls )):
-			pos.append( self.balls[ i ].getPosX() )
-			pos.append( self.balls[ i ].getPosY() )
-
-		return( pos )
+		# pos = []
+		# for i in range( len( self.balls )):
+		# 	pos.append( self.balls[ i ].getPosX() )
+		# 	pos.append( self.balls[ i ].getPosY() )
+		# return( pos )
 
 
 	def getMode( self ):

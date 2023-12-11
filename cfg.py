@@ -1,14 +1,14 @@
-DEBUG_MODE = True
+DEBUG_MODE = False
 PRINT_GAME_DEBUG = True
 ADD_DEBUG_PLAYER = False
 
 PRINT_PACKETS = False
-PRINT_COLLISIONS = True
-PRINT_FRAMES = False
+PRINT_COLLISIONS = False
+PRINT_FRAMES = True
 
 MOVE_OBJECTS = True
 
-FRAME_RATE = 60 # 					number of frames per second
+FRAME_RATE = 60 # 					number of frames per second (normally 60)
 FRAME_DELAY = 1.0 / FRAME_RATE # 	time taken for each frame
 FPS_SMOOTHING = FRAME_RATE / 2 #	how many frame do we average over for FPS displaying
 
