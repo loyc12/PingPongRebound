@@ -18,7 +18,6 @@ class PlayerControler( gc.GameControler ):
 		self.mode = df.PLAYER
 
 
-	# NOTE : temporary( uses pygame keys )
 	def handleKeyInput( self, key ):
 		if key == df.SPACE or key == df.NZERO:
 			self.playMove( df.STOP )

@@ -42,24 +42,24 @@ class Pong( gi.Game ):
 		self.balls[ 0 ].setDirs( 1, 1 )
 
 
-	def handlePygameInput( self, key ): #		NOTE : DEBUG
-		# player 1
-		if( self.controlers[ 0 ].mode == gi.gc.df.PLAYER ):
-			if key == df.KA:
-				self.makeMove( 1, df.STOP )
-			elif key == df.KW:
-				self.makeMove( 1, df.UP )
-			elif key == df.KS:
-				self.makeMove( 1, df.DOWN )
+	# def handlePygameInput( self, key ): #		NOTE : DEBUG
+	# 	# player 1
+	# 	if( self.controlers[ 0 ].mode == df.PLAYER ):
+	# 		if key == df.KA:
+	# 			self.makeMove( 1, df.STOP )
+	# 		elif key == df.KW:
+	# 			self.makeMove( 1, df.UP )
+	# 		elif key == df.KS:
+	# 			self.makeMove( 1, df.DOWN )
 
-		# player 2
-		if( self.controlers[ 1 ].mode == gi.gc.df.PLAYER ):
-			if key == df.KLEFT:
-				self.makeMove( 2, df.STOP )
-			elif key == df.KUP:
-				self.makeMove( 2, df.UP )
-			elif key == df.KDOWN:
-				self.makeMove( 2, df.DOWN )
+	# 	# player 2
+	# 	if( self.controlers[ 1 ].mode == df.PLAYER ):
+	# 		if key == df.KLEFT:
+	# 			self.makeMove( 2, df.STOP )
+	# 		elif key == df.KUP:
+	# 			self.makeMove( 2, df.UP )
+	# 		elif key == df.KDOWN:
+	# 			self.makeMove( 2, df.DOWN )
 
 
 	# bouncing off the rackets

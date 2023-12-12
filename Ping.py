@@ -45,25 +45,26 @@ class Ping( gi.Game ):
 		self.balls[ 0 ].setDirs( 1, -1 )
 
 
-	def handlePygameInput( self, key ): #		NOTE : DEBUG
+	# def handlePygameInput( self, key ): #		NOTE : DEBUG
 
-		# player 1
-		if( self.controlers[ 0 ].mode == gi.gc.df.PLAYER ):
-			if key == df.KS:
-				self.makeMove( 1, df.STOP )
-			elif key == df.KA:
-				self.makeMove( 1, df.LEFT )
-			elif key == df.KD:
-				self.makeMove( 1, df.RIGHT )
+	# 	print( "here" )
+	# 	# player 1
+	# 	if( self.controlers[ 0 ].mode == df.PLAYER ):
+	# 		if key == df.KS:
+	# 			self.makeMove( 1, df.STOP )
+	# 		elif key == df.KA:
+	# 			self.makeMove( 1, df.LEFT )
+	# 		elif key == df.KD:
+	# 			self.makeMove( 1, df.RIGHT )
 
-		# player 2
-		if( self.controlers[ 1 ].mode == gi.gc.df.PLAYER ):
-			if key == df.DOWN:
-				self.makeMove( 2, df.STOP )
-			elif key == df.LEFT:
-				self.makeMove( 2, df.LEFT )
-			elif key == df.RIGHT:
-				self.makeMove( 2, df.RIGHT )
+	# 	# player 2
+	# 	if( self.controlers[ 1 ].mode == df.PLAYER ):
+	# 		if key == df.DOWN:
+	# 			self.makeMove( 2, df.STOP )
+	# 		elif key == df.LEFT:
+	# 			self.makeMove( 2, df.LEFT )
+	# 		elif key == df.RIGHT:
+	# 			self.makeMove( 2, df.RIGHT )
 
 
 	def moveRacket( self, rack ):

@@ -53,7 +53,7 @@ class GameManager:
 	# ---------------------------------------------- GAME CMDS --------------------------------------------- #
 
 
-	async def addGame( self, gameType, gameID, gameMode, connector = None ):
+	async def addGame( self, gameType, gameID, gameMode = df.SOLO, connector = None ):
 		Initialiser = self.getInitialiser( gameType, connector )
 
 		if( Initialiser == None ):
@@ -386,7 +386,7 @@ class GameManager:
 
 	async def addAllGames( self ): #					NOTE : DEBUG
 		gameID = 1
-		gameMode = df.SOLO
+		gameMode = df.DUAL
 
 		gameID = await self.addGameDebug( "Pi", gameID, df.SOLO )
 		gameID = await self.addGameDebug( "Po", gameID, df.SOLO  )
