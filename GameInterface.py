@@ -25,7 +25,7 @@ except ModuleNotFoundError:
 # game class
 class Game:
 	name = "Game"
-	mode = df.DUAL
+	mode = df.SOLO
 	racketCount = 1
 	state = df.STARTING
 	hard_break = False
