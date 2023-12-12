@@ -33,6 +33,9 @@ class BotControler( gc.GameControler ):
 			df.BOT_PLAY_FREQUENCY *= 2
 			self.max_factor -= 1
 
+	def handleKeyInput( self, key ):
+		print( "Error: cannot give key inputs to a bot" )
+
 
 	def setFrequencyOffset( self, racketCount ):
 		self.frequency_offset = int(( float( self.racketID ) / racketCount ) * df.BOT_PLAY_FREQUENCY )
