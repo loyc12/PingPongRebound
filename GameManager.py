@@ -152,8 +152,8 @@ class GameManager:
 
 		async with game.gameLock:
 			game.addPlayer( name, playerID )
-			if game.mode == df.DUAL:
-				game.addPlayer( "guest", 0 )
+			#if game.mode == df.DUAL and game.racketCount > 1:
+				#game.addPlayer( "guest", 0 )
 
 
 	async def removePlayerFromGame( self, playerID, gameID ):
@@ -382,6 +382,7 @@ class GameManager:
 
 		if cfg.ADD_DEBUG_PLAYER:
 			await self.addPlayerToGame( 1, "DBG", gameID )
+			#await self.addPlayerToGame( 0, "GST", gameID )
 
 		await self.startGame( gameID )
 
