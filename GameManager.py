@@ -53,7 +53,7 @@ class GameManager:
 	# ---------------------------------------------- GAME CMDS --------------------------------------------- #
 
 
-	async def addGame( self, gameType, gameID, connector = None ):
+	async def addGame( self, gameType, gameID, gameMode, connector = None ):
 		Initialiser = self.getInitialiser( gameType, connector )
 
 		if( Initialiser == None ):
@@ -66,7 +66,7 @@ class GameManager:
 
 		async with self.dictLock:
 
-			self.gameDict[ gameID ] = Initialiser( gameID, connector )
+			self.gameDict[ gameID ] = Initialiser( gameID, gameMode, connector )
 
 			if cfg.DEBUG_MODE :
 				self.gameDict.get( gameID ).setWindow( self.win )
@@ -152,8 +152,8 @@ class GameManager:
 
 		async with game.gameLock:
 			game.addPlayer( name, playerID )
-			#if game.mode == df.DUAL and game.racketCount > 1:
-				#game.addPlayer( "guest", 0 )
+			if game.mode == df.DUAL and game.racketCount > 1:
+				game.addPlayer( "guest", 0 )
 
 
 	async def removePlayerFromGame( self, playerID, gameID ):
@@ -369,20 +369,15 @@ class GameManager:
 						print( "game #" + str( self.windowID ) + " no longer exists" )
 					print( "please select a valid game( 1-8 )" )
 				else:
-					controler = self.gameDict.get( self.windowID ).controlers[ 0 ]
-					if controler.mode != df.PLAYER:
-						print( "cannot move a bot's racket" )
-					else:
-						controler.handleKeyInput( k )
+					self.gameDict.get( self.windowID ).handlePygameInput( k )
 
 # --------------------------------------------------------------
 
-	async def addGameDebug( self, gameType, gameID ):
-		await self.addGame( gameType, gameID )
+	async def addGameDebug( self, gameType, gameID, gameMode ):
+		await self.addGame( gameType, gameID, gameMode )
 
 		if cfg.ADD_DEBUG_PLAYER:
 			await self.addPlayerToGame( 1, "DBG", gameID )
-			#await self.addPlayerToGame( 0, "GST", gameID )
 
 		await self.startGame( gameID )
 
@@ -391,15 +386,16 @@ class GameManager:
 
 	async def addAllGames( self ): #					NOTE : DEBUG
 		gameID = 1
+		gameMode = df.SOLO
 
-		gameID = await self.addGameDebug( "Pi", gameID )
-		gameID = await self.addGameDebug( "Po", gameID )
-		gameID = await self.addGameDebug( "Ping", gameID )
-		gameID = await self.addGameDebug( "Pong", gameID )
-		gameID = await self.addGameDebug( "Pinger", gameID )
-		gameID = await self.addGameDebug( "Ponger", gameID )
-		gameID = await self.addGameDebug( "Pingest", gameID )
-		gameID = await self.addGameDebug( "Pongest", gameID )
+		gameID = await self.addGameDebug( "Pi", gameID, df.SOLO )
+		gameID = await self.addGameDebug( "Po", gameID, df.SOLO  )
+		gameID = await self.addGameDebug( "Ping", gameID, gameMode )
+		gameID = await self.addGameDebug( "Pong", gameID, gameMode )
+		gameID = await self.addGameDebug( "Pinger", gameID, gameMode )
+		gameID = await self.addGameDebug( "Ponger", gameID, gameMode )
+		gameID = await self.addGameDebug( "Pingest", gameID, gameMode )
+		gameID = await self.addGameDebug( "Pongest", gameID, gameMode )
 
 		print( "select a player( 1-8 )" )
 
