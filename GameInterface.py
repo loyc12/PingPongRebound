@@ -25,7 +25,6 @@ except ModuleNotFoundError:
 # game class
 class Game:
 	name = "Game"
-	mode = df.SOLO
 	racketCount = 1
 	state = df.STARTING
 	hard_break = False
@@ -70,10 +69,16 @@ class Game:
 
 	# ------------------------------------------- INITIALIZATION ------------------------------------------- #
 
-	def __init__( self, gameID, connector = None ): # NOTE : take in gametype
+	def __init__( self, _gameID, _gameMode = df.SOLO, connector = None ): # NOTE : take in gametype
 
-		self.gameID = gameID
+		self.gameID = _gameID
 		self.connector = connector
+
+		if cfg.FORCE_MODE:
+			print ( "WARNING: game mode has been forced to " + str( df.FORCE_MODE_TO ))
+			self.mode = df.FORCE_MODE_TO
+		else:
+			self.mode = _gameMode
 
 		self.gameLock = asy.Lock()
 
@@ -143,7 +148,7 @@ class Game:
 	def makeBotsPlay( self ):
 		if self.useAI and self.playerCount < self.racketCount:
 			for i in range( self.playerCount, self.controlerCount ):
-				if( self.controlers[ i ].mode == gc.df.BOT ):
+				if( self.controlers[ i ].mode == df.BOT ):
 
 					val = ( self.step_count + self.controlers[ i ].frequency_offset )
 
@@ -321,7 +326,7 @@ class Game:
 
 
 	def handleUserInput( self, playerID, key ):
-		if self.mode == df.DUAL:
+		if self.mode == df.DUAL and self.racketCount > 1:
 			if key == df.KUP or key == df.KRIGHT or key == df.KDOWN or key == df.KLEFT or key == df.NZERO: # check which player played
 				self.controlers[ 1 ].handleKeyInput( key )
 			else:
@@ -337,14 +342,14 @@ class Game:
 
 
 	def handlePygameInput( self, key ): #				NOTE : DEBUG
-		if self.mode == df.DUAL:
+		if self.mode == df.DUAL and self.racketCount > 1:
 			if key == df.KUP or key == df.KRIGHT or key == df.KDOWN or key == df.KLEFT or key == df.NZERO:
 				self.controlers[ 1 ].handleKeyInput( key )
 			else:
 				self.controlers[ 0 ].handleKeyInput( key )
 		else:
 			for i in range( 0, self.controlerCount ):
-				if self.controlers[ i ].mode == gc.df.PLAYER:
+				if self.controlers[ i ].mode == df.PLAYER:
 					self.controlers[ i ].handleKeyInput( key )
 
 

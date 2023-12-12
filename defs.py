@@ -38,6 +38,7 @@ SOLO = 0
 DUAL = 1
 FREEPLAY = 2
 TOURNAMENT = 3
+FORCE_MODE_TO = DUAL # NOTE : only used if FORCE_MODE is set to True in cfg.py
 
 # bot difficulty
 EASY = 0

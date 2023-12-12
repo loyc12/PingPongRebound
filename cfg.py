@@ -11,6 +11,7 @@ PRINT_STATES = True
 
 # GAMERULES STUFF
 MOVE_OBJECTS = True
+FORCE_MODE = False
 
 # UPDATED TIME STUFF
 FRAME_RATE = 60 # 					number of frames per second (normally 60)
