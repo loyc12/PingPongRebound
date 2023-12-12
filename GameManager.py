@@ -386,7 +386,7 @@ class GameManager:
 
 	async def addAllGames( self ): #					NOTE : DEBUG
 		gameID = 1
-		gameMode = df.DUAL
+		gameMode = df.SOLO
 
 		gameID = await self.addGameDebug( "Pi", gameID, df.SOLO )
 		gameID = await self.addGameDebug( "Po", gameID, df.SOLO  )

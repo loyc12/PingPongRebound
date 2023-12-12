@@ -72,8 +72,13 @@ class Game:
 	def __init__( self, _gameID, _gameMode = df.SOLO, connector = None ): # NOTE : take in gametype
 
 		self.gameID = _gameID
-		self.mode = _gameMode
 		self.connector = connector
+
+		if cfg.FORCE_MODE:
+			print ( "WARNING: game mode has been forced to " + str( df.FORCE_MODE_TO ))
+			self.mode = df.FORCE_MODE_TO
+		else:
+			self.mode = _gameMode
 
 		self.gameLock = asy.Lock()
 
@@ -321,7 +326,7 @@ class Game:
 
 
 	def handleUserInput( self, playerID, key ):
-		if self.mode == df.DUAL:
+		if self.mode == df.DUAL and self.racketCount > 1:
 			if key == df.KUP or key == df.KRIGHT or key == df.KDOWN or key == df.KLEFT or key == df.NZERO: # check which player played
 				self.controlers[ 1 ].handleKeyInput( key )
 			else:
@@ -337,7 +342,7 @@ class Game:
 
 
 	def handlePygameInput( self, key ): #				NOTE : DEBUG
-		if self.mode == df.DUAL:
+		if self.mode == df.DUAL and self.racketCount > 1:
 			if key == df.KUP or key == df.KRIGHT or key == df.KDOWN or key == df.KLEFT or key == df.NZERO:
 				self.controlers[ 1 ].handleKeyInput( key )
 			else:
