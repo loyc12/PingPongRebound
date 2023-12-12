@@ -326,9 +326,6 @@ class Game:
 
 
 	def handleUserInput( self, playerID, key ):
-
-		print( "here" ) #			NOTE : DEBUG ONLY
-
 		if self.mode == df.DUAL and self.racketCount > 1:
 			if key == df.KUP or key == df.KRIGHT or key == df.KDOWN or key == df.KLEFT or key == df.NZERO: # check which player played
 				self.controlers[ 1 ].handleKeyInput( key )
