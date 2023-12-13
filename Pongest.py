@@ -64,32 +64,6 @@ class Pongest( gi.Game ):
 		self.scores.append( 0 )
 
 
-	# def handlePygameInput( self, key ): #		NOTE : DEBUG
-	# 	# player 1
-	# 	if( self.controlers[ 0 ].mode == df.PLAYER ):
-	# 		if key == df.KS:
-	# 			self.makeMove( 1, df.STOP )
-	# 			self.makeMove( 3, df.STOP )
-	# 		elif key == df.KA:
-	# 			self.makeMove( 1, df.LEFT )
-	# 			self.makeMove( 3, df.LEFT )
-	# 		elif key == df.KD:
-	# 			self.makeMove( 1, df.RIGHT )
-	# 			self.makeMove( 3, df.RIGHT )
-
-	# 	# player 2
-	# 	if( self.controlers[ 1 ].mode == df.PLAYER ):
-	# 		if key == df.KLEFT:
-	# 			self.makeMove( 2, df.STOP )
-	# 			self.makeMove( 4, df.STOP )
-	# 		elif key == df.KUP:
-	# 			self.makeMove( 2, df.UP )
-	# 			self.makeMove( 4, df.UP )
-	# 		elif key == df.KDOWN:
-	# 			self.makeMove( 2, df.DOWN )
-	# 			self.makeMove( 4, df.DOWN )
-
-
 	# bouncing off the rackets
 	def checkRackets( self, ball ):
 		for rack in self.rackets: #		copies the racket's data

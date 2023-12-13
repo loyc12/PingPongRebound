@@ -41,30 +41,8 @@ class Ping( gi.Game ):
 
 	def initBalls( self ):
 		self.balls.append( go.GameObject( 1, self, self.iPosB1[ 0 ], self.iPosB1[ 1 ], self.size_b, self.size_b ))
-		self.balls[ 0 ].setSpeeds( self.speed_b * ( 2 / 3 ), self.speed_b * 2 )
+		self.balls[ 0 ].setSpeeds( self.speed_b * ( 2 / 3 ), self.speed_b * ( 3 / 2 ) )
 		self.balls[ 0 ].setDirs( 1, -1 )
-
-
-	# def handlePygameInput( self, key ): #		NOTE : DEBUG
-
-	# 	print( "here" )
-	# 	# player 1
-	# 	if( self.controlers[ 0 ].mode == df.PLAYER ):
-	# 		if key == df.KS:
-	# 			self.makeMove( 1, df.STOP )
-	# 		elif key == df.KA:
-	# 			self.makeMove( 1, df.LEFT )
-	# 		elif key == df.KD:
-	# 			self.makeMove( 1, df.RIGHT )
-
-	# 	# player 2
-	# 	if( self.controlers[ 1 ].mode == df.PLAYER ):
-	# 		if key == df.DOWN:
-	# 			self.makeMove( 2, df.STOP )
-	# 		elif key == df.LEFT:
-	# 			self.makeMove( 2, df.LEFT )
-	# 		elif key == df.RIGHT:
-	# 			self.makeMove( 2, df.RIGHT )
 
 
 	def moveRacket( self, rack ):
@@ -105,7 +83,7 @@ class Ping( gi.Game ):
 
 	def respawnBall( self, ball ):
 		ball.setPos( self.width * ( 1 / 2 ), self.height * ( 2 / 3 ))
-		ball.setSpeeds(( ball.dx + self.speed_b ) / 3, self.speed_b * 2 )
+		ball.setSpeeds(( ball.dx + self.speed_b ) / 3, self.speed_b  * ( 3 / 2 ) )
 
 
 	def drawLines( self ):

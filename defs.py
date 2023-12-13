@@ -17,37 +17,37 @@ DOWN = 4
 LEFT = 5
 
 # scores
-GOALS = 0
-HITS = 1
+GOALS = 1
+HITS = 2
 
 WIN_SCORE = 8
 
 # game states
-STARTING = 0
-PLAYING = 1
-ENDING = 2
-#PAUSED = 3
+STARTING = 1
+PLAYING = 2
+ENDING = 3
+#PAUSED = 4
 
 # end states
 END_WIN = "win"
 END_QUIT = "quit"
-END_CRASH = "crash"
+END_ABORT = "crash"
 
 # game modes
-SOLO = 0
-DUAL = 1
-FREEPLAY = 2
-TOURNAMENT = 3
-FORCE_MODE_TO = DUAL # NOTE : only used if FORCE_MODE is set to True in cfg.py
+SOLO = 1
+DUAL = 2
+FREEPLAY = 3
+TOURNAMENT = 4
+FORCE_MODE_TO = DUAL #		NOTE : only used if FORCE_MODE is set to True in cfg.py
 
 # bot difficulty
-EASY = 0
-MEDIUM = 1
-HARD = 2
+EASY = 1
+MEDIUM = 2
+HARD = 3
 
 # bot stuff
 BOT_CAN_PLAY = True
-BOT_INSTANT_REACT = False #	NOTE : put me to false before pushing
+BOT_INSTANT_REACT = False #	TODO : put me to false before pushing
 BOT_HARD_BREAK = True
 BOT_NO_STUCK = True
 

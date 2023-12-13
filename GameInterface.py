@@ -679,12 +679,12 @@ class Game:
 
 		if self.quitterID != 0:
 			infoDict[ "endState" ] = df.END_QUIT
-		elif self.winerID != 0:
+		elif self.winnerID != 0:
 			infoDict[ "endState" ] = df.END_WIN
-		#else self.winnerID == 0:
-		#	infoDict[ "endState" ] = df.END_CRASH
+		else:
+			infoDict[ "endState" ] = df.END_ABORT
 
-		if self.winerID != 0:
+		if self.winnerID != 0:
 			infoDict[ "winingTeam" ] = self.winnerID
 		else:
 			infoDict[ "winingTeam" ] = -1
