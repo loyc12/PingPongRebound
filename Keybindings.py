@@ -24,13 +24,14 @@ if debugKeys:
 	KD		= pg.K_d
 	NZERO	= pg.K_KP0
 
+	# event types
 	START		= pg.K_p
 	CLOSE		= pg.QUIT
 	KEYPRESS	= pg.KEYDOWN
 	ESCAPE		= pg.K_ESCAPE
 	RETURN		= pg.K_RETURN
 
-else: #				TODO: Change them to whatever connector.getEvent()outputs
+else:
 	# keyboard keys
 	KUP		= 'up'
 	KDOWN	= 'dn'
@@ -45,6 +46,7 @@ else: #				TODO: Change them to whatever connector.getEvent()outputs
 	KD		= 'd'
 	NZERO	= '0'
 
+	# event types
 	START		= 'start_game'
 	CLOSE		= 'end_game'
 	KEYPRESS	= 'key_press'

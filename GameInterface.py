@@ -270,13 +270,11 @@ class Game:
 #		- "start_game"
 #		- "end_game"
 #		- "key_press"
-#		- "key_release"
-#		- ...
 
 #		class Event {
-#			id; // 		playerID( 0 for server commands )
-#			type; // 	event type( see above )
-#			key; // 	event code( key when keyboard related )
+#			id; // 		playerID	( 0 for server commands )
+#			type; // 	event type	( see above )
+#			key; // 	event code	( key when keyboard related )
 #		}
 
 	async def getNextEvents( self ):

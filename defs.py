@@ -26,12 +26,11 @@ WIN_SCORE = 8
 STARTING = 1
 PLAYING = 2
 ENDING = 3
-#PAUSED = 4
 
 # end states
 END_WIN = "win"
 END_QUIT = "quit"
-END_ABORT = "crash"
+END_ABORT = "abort"
 
 # game modes
 SOLO = 1
