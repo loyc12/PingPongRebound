@@ -18,11 +18,11 @@ class Pongest( gi.Game ):
 	width = 1280
 	height = 1280
 
+	size_font = 512
+
 	speed_r = 5
 	speed_b = 6
 	speed_m_b = 24
-	size_font = 512
-	size_l = 14
 
 	factor_rack = 1.05
 	factor_wall = 0.5
@@ -37,6 +37,16 @@ class Pongest( gi.Game ):
 	iPosR4 = ( int( gi.Game.size_b ), int( height * ( 1 / 2 ))			, "y" )
 
 	iPosB1 = ( int( width * ( 1 / 2 )), int( height * ( 1 / 2 )))
+
+	iPosS1 = ( int( width * ( 1 / 2 )), int( height * ( 1 / 5 )))
+	iPosS2 = ( int( width * ( 4 / 5 )), int( height * ( 1 / 2 )))
+	iPosS3 = ( int( width * ( 1 / 2 )), int( height * ( 4 / 5 )))
+	iPosS4 = ( int( width * ( 1 / 5 )), int( height * ( 1 / 2 )))
+
+	lines = [
+	[( 0, 0 ), ( 1, 1 ), 1.4],
+	[( 0, 1 ), ( 1, 0 ), 1.4]]
+
 
 	def initRackets( self ):
 		# setting up rackets :             id, game, _x              , _y            , _w           , _h
@@ -123,18 +133,13 @@ class Pongest( gi.Game ):
 		ball.setPos( self.width * ( 1 / 2 ), self.height * ( 1 / 2 ))
 
 
-	def drawLines( self ):
-		pg.draw.line( self.win, df.COL_FNT, ( 0, 0 ), ( self.width, self.height ), self.size_l )
-		pg.draw.line( self.win, df.COL_FNT, ( 0, self.height ), ( self.width, 0 ), self.size_l )
-
-
 	def drawScores( self ):
 		text1 = self.font.render( f'{self.scores[ 0 ]}', True, df.COL_FNT )
 		text2 = self.font.render( f'{self.scores[ 1 ]}', True, df.COL_FNT )
 		text3 = self.font.render( f'{self.scores[ 2 ]}', True, df.COL_FNT )
 		text4 = self.font.render( f'{self.scores[ 3 ]}', True, df.COL_FNT )
 
-		self.win.blit( text1, text1.get_rect( center = ( self.width * ( 1 / 2 ), self.height * ( 1 / 5 ))))
-		self.win.blit( text2, text2.get_rect( center = ( self.width * ( 4 / 5 ), self.height * ( 1 / 2 ))))
-		self.win.blit( text3, text3.get_rect( center = ( self.width * ( 1 / 2 ), self.height * ( 4 / 5 ))))
-		self.win.blit( text4, text4.get_rect( center = ( self.width * ( 1 / 5 ), self.height * ( 1 / 2 ))))
+		self.win.blit( text1, text1.get_rect( center = self.iPosS1 ))
+		self.win.blit( text2, text2.get_rect( center = self.iPosS2 ))
+		self.win.blit( text3, text3.get_rect( center = self.iPosS3 ))
+		self.win.blit( text4, text4.get_rect( center = self.iPosS4 ))

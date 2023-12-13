@@ -18,18 +18,29 @@ class Ponger( gi.Game ):
 	width = 1536
 	height = 1024
 
+	size_font = 768
+
 	gravity = 0
 	racketCount = 4
 
 	score_mode = df.GOALS
 	scores = [ 0, 0 ]
 
-	iPosR1 = ( int( width * ( 2 / 7 )), int( 3 * gi.Game.size_b	 )			, "x" )
+	iPosR1 = ( int( width * ( 2 / 7 )), int( 3 * gi.Game.size_b	 )				, "x" )
 	iPosR2 = ( int( width * ( 2 / 7 )), int( height - ( 3 * gi.Game.size_b ))	, "x" )
-	iPosR3 = ( int( width * ( 5 / 7 )), int( gi.Game.size_b	 )				, "x" )
-	iPosR4 = ( int( width * ( 5 / 7 )), int( height - gi.Game.size_b	 )		, "x" )
+	iPosR3 = ( int( width * ( 5 / 7 )), int( gi.Game.size_b	 )					, "x" )
+	iPosR4 = ( int( width * ( 5 / 7 )), int( height - gi.Game.size_b )			, "x" )
 
 	iPosB1 = ( int( width * ( 1 / 2 )), int( height * ( 1 / 4 )))
+
+	iPosS1 = ( int( width * ( 1 / 2 )), int( height * ( 1 / 4 )))
+	iPosS2 = ( int( width * ( 1 / 2 )), int( height * ( 3 / 4 )))
+
+	lines = [
+	[( 0, 0 ), ( 0 , 1 ), 2],
+	[( 0, 0.5 ), ( 1, 0.5 ), 1],
+	[( 1, 0 ), ( 1, 1 ), 2]]
+
 
 	def initRackets( self ):
 		# setting up rackets :             id, game, _x              , _y              , _w         , _h
@@ -108,15 +119,9 @@ class Ponger( gi.Game ):
 		ball.setSpeeds(( self.speed_b + ball.dx ) * ( 1 / 3 ), self.speed_b )
 
 
-	def drawLines( self ):
-		pg.draw.line( self.win, df.COL_FNT, ( 0, 0 ), ( 0 , self.height ), self.size_l * 2 )
-		pg.draw.line( self.win, df.COL_FNT, ( 0, self.height / 2 ), ( self.width, self.height / 2 ), self.size_l )
-		pg.draw.line( self.win, df.COL_FNT, ( self.width, 0 ), ( self.width, self.height ), self.size_l * 2 )
-
-
 	def drawScores( self ):
 		text1 = self.font.render( f'{self.scores[ 0 ]}', True, df.COL_FNT )
 		text2 = self.font.render( f'{self.scores[ 1 ]}', True, df.COL_FNT )
 
-		self.win.blit( text1, text1.get_rect( center = ( self.width * ( 2 / 4 ), self.height * ( 1 / 4 ))))
-		self.win.blit( text2, text2.get_rect( center = ( self.width * ( 2 / 4 ), self.height * ( 3 / 4 ))))
+		self.win.blit( text1, text1.get_rect( center = self.iPosS1 ))
+		self.win.blit( text2, text2.get_rect( center = self.iPosS2 ))

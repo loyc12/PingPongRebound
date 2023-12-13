@@ -14,6 +14,8 @@ class Po( gi.Game ):
 	width = 1280
 	height = 1280
 
+	size_font = 768
+
 	factor_rack = 1.2
 	factor_wall = 0.9
 
@@ -23,3 +25,6 @@ class Po( gi.Game ):
 	iPosR1 = ( int( width * ( 1 / 2 )), int( height - gi.Game.size_b ), "x" )
 
 	iPosB1 = ( int( width * ( 3 / 8 )), int( gi.Game.size_b ))
+
+	iPosS1 = ( width * ( 1 / 2 ), height * ( 1 / 2 ))
+

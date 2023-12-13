@@ -17,6 +17,9 @@ class Pinger( gi.Game ):
 
 	width = 1536
 	height = 1024
+
+	size_font = 768
+
 	racketCount = 4
 
 	score_mode = df.GOALS
@@ -28,6 +31,16 @@ class Pinger( gi.Game ):
 	iPosR4 = ( int( width * ( 5 / 7 )), int( height - gi.Game.size_b )	, "x" )
 
 	iPosB1 = ( int( width * ( 1 / 4 )), int( height * ( 1 / 4 )))
+
+	iPosS1 = ( int( width * ( 1 / 4 )), int( height * ( 1 / 2 )))
+	iPosS2 = ( int( width * ( 3 / 4 )), int( height * ( 1 / 2 )))
+
+
+	lines = [
+	[( 0, 0 ), ( 0, 1 ), 2],
+	[( 0.5, 0 ), ( 0.5, 1 ), 1],
+	[( 1, 0 ), ( 1, 1 ), 2]]
+
 
 	def initRackets( self ):
 		# setting up rackets :             id, game, _x              , _y              , _w         , _h
@@ -112,15 +125,9 @@ class Pinger( gi.Game ):
 		ball.setSpeeds(( self.speed_b + ball.dx ) * ( 1 / 2 ), self.speed_b * ( 2 / 3 ))
 
 
-	def drawLines( self ):
-		pg.draw.line( self.win, df.COL_FNT, ( 0, 0 ), ( 0, self.height ), self.size_l * 2 )
-		pg.draw.line( self.win, df.COL_FNT, ( self.width / 2, 0 ), ( self.width / 2, self.height ), self.size_l )
-		pg.draw.line( self.win, df.COL_FNT, ( self.width, 0 ), ( self.width, self.height ), self.size_l * 2 )
-
-
 	def drawScores( self ):
 		text1 = self.font.render( f'{self.scores[ 0 ]}', True, df.COL_FNT )
 		text2 = self.font.render( f'{self.scores[ 1 ]}', True, df.COL_FNT )
 
-		self.win.blit( text1, text1.get_rect( center = ( self.width * ( 1 / 4 ), self.height * ( 2 / 4 ))))
-		self.win.blit( text2, text2.get_rect( center = ( self.width * ( 3 / 4 ), self.height * ( 2 / 4 ))))
+		self.win.blit( text1, text1.get_rect( center = self.iPosS1 ))
+		self.win.blit( text2, text2.get_rect( center = self.iPosS2 ))

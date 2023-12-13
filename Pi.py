@@ -27,6 +27,8 @@ class Pi( gi.Game ):
 
 	iPosB1 = ( int( width * ( 3 / 8 )), int( gi.Game.size_b ))
 
+	iPosS1 = ( width * ( 1 / 2 ), height * ( 1 / 2 ))
+
 
 	def initBalls( self ):
 		self.balls.append( go.GameObject( 1, self, self.iPosB1[ 0 ], self.iPosB1[ 1 ], self.size_b, self.size_b ))

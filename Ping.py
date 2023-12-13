@@ -17,6 +17,9 @@ class Ping( gi.Game ):
 
 	width = 2048
 	height = 1024
+
+	size_font = 768
+
 	gravity = 0.333
 	racketCount = 2
 	factor_rack = 0.9
@@ -29,6 +32,15 @@ class Ping( gi.Game ):
 	iPosR2 = ( int( width * ( 2 / 3 )), int( height - gi.Game.size_b ), "x" )
 
 	iPosB1 = ( int( width * ( 2 / 4 )), int( height * ( 2 / 3 )))
+
+	iPosS1 = ( int( width * ( 1 / 4 )), int( height * ( 1 / 2 )))
+	iPosS2 = ( int( width * ( 3 / 4 )), int( height * ( 1 / 2 )))
+
+	lines = [
+	[( 0.5, 0 ), ( 0.5, 1 ), 1],
+	[( 0, 0 ), ( 0, 1 ), 2],
+	[( 1, 0 ), ( 1, 1 ), 2],
+	[( 0, 0 ), ( 1, 0 ), 2]]
 
 
 	def initRackets( self ):
@@ -81,23 +93,15 @@ class Ping( gi.Game ):
 
 			self.respawnBall( ball )
 
+
 	def respawnBall( self, ball ):
 		ball.setPos( self.width * ( 1 / 2 ), self.height * ( 2 / 3 ))
 		ball.setSpeeds(( ball.dx + self.speed_b ) / 3, self.speed_b  * ( 3 / 2 ) )
-
-
-	def drawLines( self ):
-		pg.draw.line( self.win, df.COL_FNT, ( self.width / 2, 0 ), ( self.width / 2, self.height ), self.size_l )
-
-		pg.draw.line( self.win, df.COL_FNT, ( 0, 0 ), ( 0 , self.height ), self.size_l * 2 )
-		pg.draw.line( self.win, df.COL_FNT, ( self.width, 0 ), ( self.width, self.height ), self.size_l * 2 )
-		pg.draw.line( self.win, df.COL_FNT, ( 0, 0 ), ( self.width, 0 ), self.size_l * 2 )
-
 
 
 	def drawScores( self ):
 		text1 = self.font.render( f'{self.scores[ 0 ]}', True, df.COL_FNT )
 		text2 = self.font.render( f'{self.scores[ 1 ]}', True, df.COL_FNT )
 
-		self.win.blit( text1, text1.get_rect( center = ( self.width * ( 1 / 4 ), self.height * ( 2 / 4 ))))
-		self.win.blit( text2, text2.get_rect( center = ( self.width * ( 3 / 4 ), self.height * ( 2 / 4 ))))
+		self.win.blit( text1, text1.get_rect( center = self.iPosS1 ))
+		self.win.blit( text2, text2.get_rect( center = self.iPosS2 ))

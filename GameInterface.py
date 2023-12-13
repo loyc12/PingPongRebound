@@ -67,6 +67,17 @@ class Game:
 	#iPosB3 = None
 	#iPosB4 = None
 
+	iPosS1 = ( width * ( 1 / 2 ), height * ( 1 / 2 ))
+	#iPosS2 = None
+	#iPosS3 = None
+	#iPosS4 = None
+
+	lines = [
+	[( 0, 0 ), ( 0, 1 ), 2],
+	[( 1, 0 ), ( 1, 1 ), 2],
+	[( 0, 0 ), ( 1, 0 ), 2]]
+
+
 	# ------------------------------------------- INITIALIZATION ------------------------------------------- #
 
 	def __init__( self, _gameID, _gameMode = df.SOLO, connector = None ): # NOTE : take in gametype
@@ -566,15 +577,17 @@ class Game:
 
 
 	def drawLines( self ):
-		pg.draw.line( self.win, df.COL_FNT, ( 0, 0 ), ( 0 , self.height ), self.size_l * 2 )
-		pg.draw.line( self.win, df.COL_FNT, ( self.width, 0 ), ( self.width, self.height ), self.size_l * 2 )
-		pg.draw.line( self.win, df.COL_FNT, ( 0, 0 ), ( self.width, 0 ), self.size_l * 2 )
+		for line in self.lines:
+			start = ( int( self.width * line[ 0 ][ 0 ]), int( self.height * line[ 0 ][ 1 ]))
+			end = ( int( self.width * line[ 1 ][ 0 ]), int( self.height * line[ 1 ][ 1 ]))
+
+			pg.draw.line( self.win, df.COL_FNT, start, end, int( self.size_l * line[ 2 ]))
 
 
 	def drawScores( self ):
-		for score in self.scores: #		copies the racket's data
-			text = self.font.render( f'{score}', True, df.COL_FNT )
-			self.win.blit( text, text.get_rect( center = ( self.width * ( 2 / 4 ), self.height * ( 2 / 4 ))))
+		text = self.font.render( f'{ self.scores[ 0 ]}', True, df.COL_FNT )
+
+		self.win.blit( text, text.get_rect( center = self.iPosS1 ))
 
 
 	def drawFps( self ):
