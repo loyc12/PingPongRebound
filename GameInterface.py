@@ -279,7 +279,7 @@ class Game:
 #			key; // 	event code( key when keyboard related )
 #		}
 
-	async def getNextEvents( self ):
+	def getNextEvents( self ):
 		if cfg.DEBUG_MODE:
 			return pg.event.get()
 
