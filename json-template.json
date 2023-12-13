@@ -15,8 +15,21 @@
 	},
 	"racketCount" : 4,
 	"teamCount": 2,
+	"scoreSize": "size",
+	"scorePos": [
+		"x1", "y1",
+		"x2", "y2",
+		"x3", "y3",
+		"x4", "y4"
+	],
+	"lines": [
+		"x1", "y1", "t1", // t = thickness (1, 1.4, 2)
+		"x2", "y2", "t2",
+		"x3", "y3", "t3",
+		"x4", "y4" "t4"
+	],
 	"orientations": [
-		"d1",
+		"d1",			// 'x' or 'y
 		"d2",
 		"d3",
 		"d4"

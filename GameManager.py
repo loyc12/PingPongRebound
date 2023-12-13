@@ -431,6 +431,9 @@ class GameManager:
 			'gameType': gameClass.name,
 			'sizeInfo': GameManager.getSizeInfo( gameClass ),
 			'racketCount': gameClass.racketCount,
+			'scorePos': GameManager.getScorePos( gameClass ),
+			'lines': gameClass.lines,
+			'scoreSize': gameClass.size_font,
 			'orientations': [ initRacketsPos[( i * 3 ) + 2 ] for i in range( gameClass.racketCount )],
 			'update': {
 				'racketPos': [ coord for coord in initRacketsPos if not isinstance( coord, str )],
@@ -505,6 +508,17 @@ class GameManager:
 			ballsPos.append( gameClass.iPosB1[ 1 ] )# position y
 
 		return( ballsPos )
+
+
+	@staticmethod
+	def getScorePos( gameClass ):
+		scoresPos = []
+
+		if( gameClass.iPosS1 != None ):
+			scoresPos.append( gameClass.iPosS1[ 0 ] )
+			scoresPos.append( gameClass.iPosS1[ 1 ] )
+
+		return( scoresPos )
 
 
 	# --------------------------------------------- CLASS CMDS --------------------------------------------- #
