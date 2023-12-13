@@ -110,19 +110,19 @@ class Pongest( gi.Game ):
 				self.scorePoint( self.last_ponger, df.GOALS )
 
 			# checking how to respawn the ball
-			if self.last_ponger == 1 or( self.last_ponger == 0 and ball.fx < 0 and ball.fy < 0 ):
+			if self.last_ponger == 1 or ( self.last_ponger == 0 and ball.fx < 0 and ball.fy < 0 ):
 				ball.setDirs( -ball.fx, -1 )
 				ball.setSpeeds( self.speed_b * ( 1 / 3 ), self.speed_b )
 
-			elif self.last_ponger == 2 or( self.last_ponger == 0 and ball.fx > 0 and ball.fy < 0 ):
+			elif self.last_ponger == 2 or ( self.last_ponger == 0 and ball.fx > 0 and ball.fy < 0 ):
 				ball.setDirs( 1, -ball.fy )
 				ball.setSpeeds( self.speed_b, self.speed_b * ( 1 / 3 ))
 
-			elif self.last_ponger == 3 or( self.last_ponger == 0 and ball.fx > 0 and ball.fy > 0 ):
+			elif self.last_ponger == 3 or ( self.last_ponger == 0 and ball.fx > 0 and ball.fy > 0 ):
 				ball.setDirs( -ball.fx, 1 )
 				ball.setSpeeds( self.speed_b * ( 1 / 3 ), self.speed_b )
 
-			elif self.last_ponger == 4 or( self.last_ponger == 0 and ball.fx < 0 and ball.fy > 0 ):
+			elif self.last_ponger == 4 or ( self.last_ponger == 0 and ball.fx < 0 and ball.fy > 0 ):
 				ball.setDirs( -1, -ball.fy )
 				ball.setSpeeds( self.speed_b, self.speed_b * ( 1 / 3 ))
 

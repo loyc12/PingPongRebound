@@ -155,8 +155,8 @@ class GameObject:
 # ---------------------------------------------- COLLISION --------------------------------------------- #
 
 	def isOverlaping( self, other ):
-		if self.getRight() >= other.getLeft()and self.getLeft() <= other.getRight():
-			if self.getBottom() >= other.getTop()and self.getTop() <= other.getBottom():
+		if self.getRight() >= other.getLeft() and self.getLeft() <= other.getRight():
+			if self.getBottom() >= other.getTop() and self.getTop() <= other.getBottom():
 				return True
 		return False
 

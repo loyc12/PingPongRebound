@@ -409,7 +409,7 @@ class GameManager:
 
 	def displayGame( self, game ): # 					NOTE : DEBUG
 		if game.state == df.PLAYING:
-			if game.width != self.win.get_width()or game.height != self.win.get_height():
+			if game.width != self.win.get_width() or game.height != self.win.get_height():
 				self.win = pg.display.set_mode(( game.width, game.height ))
 				pg.display.set_caption( game.name )
 

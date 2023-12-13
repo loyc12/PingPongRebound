@@ -26,10 +26,7 @@ class BotControler( gc.GameControler ):
 		self.defaultX = _game.width / 2
 		self.defaultY = _game.height / 2
 
-		if df.BOT_INSTANT_REACT:
-			self.border = self.game.size_b * ( 2 / 3 )
-		else:
-			self.border = self.game.size_b * ( 1 / 2 )
+		self.border = self.game.size_b * ( 1 / 2 )
 
 		self.seeBall()
 
@@ -82,7 +79,8 @@ class BotControler( gc.GameControler ):
 	def playAutoMove( self ):
 		if not df.BOT_CAN_PLAY:
 			return
-		elif df.BOT_INSTANT_REACT:
+
+		elif df.BOT_INSTANT_REACT or self.isNear( self.lastBall ): #	NOTE : if the ball is near, the bot will react instantly
 			self.seeBall()
 
 		if self.difficulty == df.EASY:
@@ -101,6 +99,7 @@ class BotControler( gc.GameControler ):
 			else:
 				self.goToNextGoal( self.max_factor )
 
+
 	def canKickBall( self ):
 		if self.game.racketCount < 2:
 			return False
@@ -110,12 +109,13 @@ class BotControler( gc.GameControler ):
 			return False
 		return True
 
+
 	def kickBall( self ):
 		if self.game.name == "Ping" or self.game.name == "Pinger":
 			self.goToCenter( df.BOT_KICK_FACTOR )
 
-		elif not df.BOT_INSTANT_REACT and df.BOT_SEE_FREQUENCY > 2 * df.BOT_PLAY_FREQUENCY:
-			self.goTo( self.lastBall.dx, self.lastBall.dy, 1)
+		#elif not df.BOT_INSTANT_REACT and df.BOT_SEE_FREQUENCY > 2 * df.BOT_PLAY_FREQUENCY:
+			#self.goTo( self.lastBall.dx, self.lastBall.dy, 1)
 
 		elif self.racketDir == 'x':
 			if self.racket.dx * abs( self.racket.fx ) < self.lastBall.dx: # and self.lastBall.isLeftOfX( self.racket.px ):
@@ -338,10 +338,16 @@ class BotControler( gc.GameControler ):
 
 	def isInFrontOf( self, gameObj ):
 		if self.racketDir == 'x':
-			if not gameObj.isLeftOf( self.racket )and not gameObj.isRightOf( self.racket ):
+			if not gameObj.isLeftOf( self.racket ) and not gameObj.isRightOf( self.racket ):
 				return True
 		elif self.racketDir == 'y':
-			if not gameObj.isAbove( self.racket )and not gameObj.isBelow( self.racket ):
+			if not gameObj.isAbove( self.racket ) and not gameObj.isBelow( self.racket ):
+				return True
+		return False
+
+	def isNear( self, gameObj ):
+		if abs( self.racket.getPosY() - gameObj.getPosY() ) <= self.game.size_r * 2:
+			if abs( self.racket.getPosX() - gameObj.getPosX() ) <= self.game.size_r * 2:
 				return True
 		return False
 

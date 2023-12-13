@@ -13,6 +13,7 @@ except ModuleNotFoundError:
 
 
 # MASTER LIST
+# TODO : rework ball speed in general
 # TODO : rework the ball respawn trajectory everywhere
 
 # FUNCTION LIST

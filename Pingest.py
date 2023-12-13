@@ -72,10 +72,10 @@ class Pingest( gi.Game ):
 			rack.bounceOnWall( "stop" )
 
 		# prevent racket from crossing the middle line
-		if( rack.id == 1 or rack.id == 3 )and rack.getRight() > self.width / 2:
+		if( rack.id == 1 or rack.id == 3 ) and rack.getRight() > self.width / 2:
 			rack.bounceOnWall( "stop" )
 			rack.setPosX(( self.width - self.size_r ) / 2 )
-		elif( rack.id == 2 or rack.id == 4 )and rack.getLeft() < self.width / 2:
+		elif( rack.id == 2 or rack.id == 4 ) and rack.getLeft() < self.width / 2:
 			rack.bounceOnWall( "stop" )
 			rack.setPosX(( self.width + self.size_r ) / 2 )
 

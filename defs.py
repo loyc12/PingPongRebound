@@ -55,7 +55,7 @@ BOT_PRECISION = 30 #		max = rSize / 2 : buffer zones one each side of the racket
 BOT_SEARCH_DEPTH = 5 #		how many bounces ahead does the AI look
 
 BOT_PLAY_FREQUENCY = 15
-BOT_SEE_FREQUENCY = 30 #	NOTE : breaks the kicking system		TODO : put me to 60 before pushing
+BOT_SEE_FREQUENCY = 30 #	TODO : put me to 60 before pushing
 BOT_KICK_DISTANCE = 160
 BOT_KICK_FACTOR = 2
 
