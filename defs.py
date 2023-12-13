@@ -51,11 +51,11 @@ BOT_HARD_BREAK = True
 BOT_NO_STUCK = True
 
 BOT_M_FACTOR = 4 #			how many times dx or dy can the racket go at
-BOT_PRECISION = 40 #		max = rSize / 2 : buffer zones one each side of the racket the AI tries to avoid hitting the ball with
+BOT_PRECISION = 30 #		max = rSize / 2 : buffer zones one each side of the racket the AI tries to avoid hitting the ball with
 BOT_SEARCH_DEPTH = 5 #		how many bounces ahead does the AI look
 
 BOT_PLAY_FREQUENCY = 15
-BOT_SEE_FREQUENCY = 60 #	NOTE : breaks the kicking system
+BOT_SEE_FREQUENCY = 30 #	NOTE : breaks the kicking system		TODO : put me to 60 before pushing
 BOT_KICK_DISTANCE = 160
 BOT_KICK_FACTOR = 2
 
@@ -73,9 +73,9 @@ def getSign( value ):
 		return 1
 	return 0
 
-def isInZone( x, y, border, game ):
-	if x < border or x > ( game.width - border ):
+def isInZone( px, py, x1, y1, x2, y2 ):
+	if px <= x1 or x2 <= px:
 		return False
-	if y < border or y > ( game.height - border ):
+	if py <= y1 or y2 <= py:
 		return False
 	return True

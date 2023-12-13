@@ -26,6 +26,11 @@ class BotControler( gc.GameControler ):
 		self.defaultX = _game.width / 2
 		self.defaultY = _game.height / 2
 
+		if df.BOT_INSTANT_REACT:
+			self.border = self.game.size_b * ( 2 / 3 )
+		else:
+			self.border = self.game.size_b * ( 1 / 2 )
+
 		self.seeBall()
 
 		if self.difficulty == df.EASY:
@@ -91,31 +96,46 @@ class BotControler( gc.GameControler ):
 			return
 
 		elif self.difficulty == df.HARD:
-			if self.game.racketCount > 1 and self.isInFrontOf( self.lastBall )and self.isCloserThan( self.lastBall, df.BOT_KICK_DISTANCE ):
-				if self.game.name == "Ping":
-					self.goToCenter( self.max_factor )
-
-				elif self.racketDir == 'x':
-					if self.racket.dx * abs( self.racket.fx ) < self.lastBall.dx: # and self.lastBall.isLeftOfX( self.racket.px ):
-						#if self.lastBall.isLeftOfX( self.racket.px ):
-						if self.lastBall.isGoingLeft():
-							if self.racket.fx > -df.BOT_KICK_FACTOR:
-								self.goLeft( self.max_factor )
-						else:
-							if self.racket.fx < df.BOT_KICK_FACTOR:
-								self.goRight( self.max_factor )
-
-				elif self.racketDir == 'y':
-					if self.racket.dy * abs( self.racket.fy ) < self.lastBall.dy: # and self.lastBall.isAboveY( self.racket.py ):
-						#if self.lastBall.isAboveY( self.racket.py ):
-						if self.lastBall.isGoingUp():
-							if self.racket.fy > -df.BOT_KICK_FACTOR:
-								self.goUp( self.max_factor )
-						else:
-							if self.racket.fy < df.BOT_KICK_FACTOR:
-								self.goDown( self.max_factor )
+			if self.canKickBall():
+				self.kickBall()
 			else:
 				self.goToNextGoal( self.max_factor )
+
+	def canKickBall( self ):
+		if self.game.racketCount < 2:
+			return False
+		if not self.isInFrontOf( self.lastBall ):
+			return False
+		if not self.isCloserThan( self.lastBall, df.BOT_KICK_DISTANCE ):
+			return False
+		return True
+
+	def kickBall( self ):
+		if self.game.name == "Ping" or self.game.name == "Pinger":
+			self.goToCenter( df.BOT_KICK_FACTOR )
+
+		elif not df.BOT_INSTANT_REACT and df.BOT_SEE_FREQUENCY > 2 * df.BOT_PLAY_FREQUENCY:
+			self.goTo( self.lastBall.dx, self.lastBall.dy, 1)
+
+		elif self.racketDir == 'x':
+			if self.racket.dx * abs( self.racket.fx ) < self.lastBall.dx: # and self.lastBall.isLeftOfX( self.racket.px ):
+				#if self.lastBall.isLeftOfX( self.racket.px ):
+				if self.lastBall.isGoingLeft():
+					if self.racket.fx > -df.BOT_KICK_FACTOR:
+						self.goLeft( self.max_factor )
+				else:
+					if self.racket.fx < df.BOT_KICK_FACTOR:
+						self.goRight( self.max_factor )
+
+		elif self.racketDir == 'y':
+			if self.racket.dy * abs( self.racket.fy ) < self.lastBall.dy: # and self.lastBall.isAboveY( self.racket.py ):
+				#if self.lastBall.isAboveY( self.racket.py ):
+				if self.lastBall.isGoingUp():
+					if self.racket.fy > -df.BOT_KICK_FACTOR:
+						self.goUp( self.max_factor )
+				else:
+					if self.racket.fy < df.BOT_KICK_FACTOR:
+						self.goDown( self.max_factor )
 
 
 	def stopHere( self ):
@@ -348,21 +368,21 @@ class BotControler( gc.GameControler ):
 		fx = self.lastBall.fx
 		fy = self.lastBall.fy
 
-		border = self.game.size_b * ( 2 / 3 )
+		g = self.game
+
+
+		if g.name == "Pongest":
+			factor = g.factor_rack
+		else:
+			factor = g.factor_wall
 
 		dept = 0
-
-		if self.game.name == "Pongest":
-			factor = self.game.factor_rack
-		else:
-			factor = self.game.factor_wall
-
 		# loops over all the "bounce points" of the ball's trajectory( untill max_search_dept is reached )
 		while dept <= df.BOT_SEARCH_DEPTH:
 			dept += 1
 
 			# have the ball do one step
-			dy += self.game.gravity * fy #			NOTE : assumes normal gravity
+			dy += g.gravity * fy #			NOTE : assumes normal gravity
 
 			X += dx * fx
 			X = int( X )
@@ -370,10 +390,10 @@ class BotControler( gc.GameControler ):
 			Y += dy * fy
 			Y = int( Y )
 
-			while df.isInZone( X, Y, border, self.game ):
-				if( dx * fx == 0 )and( dy * fy == 0 ):
+			while df.isInZone( X, Y, self.border, self.border, g.width - self.border, g.height - self.border  ):
+				if( dx * fx == 0 ) and ( dy * fy == 0 ):
 					break;
-				dy += self.game.gravity * fy #		NOTE : assumes normal gravity
+				dy += g.gravity * fy #		NOTE : assumes normal gravity
 
 				X += dx * fx
 				X = int( X )
@@ -381,14 +401,14 @@ class BotControler( gc.GameControler ):
 				Y += dy * fy
 				Y = int( Y )
 
-			if self.isInOwnGoal( X, Y, border ):
+			if self.isInOwnGoal( X, Y, self.border ):
 				return( int( X ), int( Y ))
 
 			# make ball bounce on edges
-			if X <= border or X >= ( self.game.width - border ):
+			if X <= self.border or X >= ( g.width - self.border ):
 				fx *= -1
 				dx *= factor
-			if Y <= border or Y >= ( self.game.height - border ):
+			if Y <= self.border or Y >= ( g.height - self.border ):
 				fy *= -1
 				dy *= factor
 

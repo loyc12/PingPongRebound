@@ -13,15 +13,13 @@ except ModuleNotFoundError:
 
 
 # MASTER LIST
+# TODO : rework the ball respawn trajectory everywhere
 
 # FUNCTION LIST
 
 # DEBUG LIST
 
 # MINOR LIST
-# TODO : see if game is better when AI thinks ball will bounce exactly on wall (not in front)
-# TODO : rework the ball respawn trajectory everywhere
-# TODO : review bot bounce calculations
 # TODO : make obstacles type GameObjects in the base class( and use them in pongester )
 # TODO : add sound effects to collisions( in GameObject class )
 # TODO : make an 'asteroids' game( solo )
