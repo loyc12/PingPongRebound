@@ -84,6 +84,7 @@ class GameManager:
 		return gameID
 
 
+
 	async def removeGame( self, gameID ):
 			game = self.gameDict.get( gameID )
 
@@ -97,6 +98,9 @@ class GameManager:
 					game.close()
 
 				# NOTE : ian check icitte pour le closing
+
+				if not cfg.DEBUG_MODE and cfg.PRINT_PACKETS:
+					print( game.getEndInfo() )
 
 				if game.connector != None:
 					await self.gameGateway.manage_end_game( game.getEndInfo() )
@@ -201,7 +205,7 @@ class GameManager:
 
 			await self.tickGames()
 
-			if cfg.PRINT_PACKETS and not cfg.DEBUG_MODE:
+			if not cfg.DEBUG_MODE and cfg.PRINT_PACKETS:
 				print( self.getGameUpdates() )
 
 			if self.gameGateway != None:
@@ -379,6 +383,9 @@ class GameManager:
 		if cfg.ADD_DEBUG_PLAYER:
 			await self.addPlayerToGame( 1, "DBG", gameID )
 
+		if cfg.PRINT_PACKETS:
+			print( self.getInitInfo( gameType ))
+
 		await self.startGame( gameID )
 
 		return gameID + 1
@@ -397,7 +404,7 @@ class GameManager:
 		gameID = await self.addGameDebug( "Pingest", gameID, gameMode )
 		gameID = await self.addGameDebug( "Pongest", gameID, gameMode )
 
-		print( "select a player( 1-8 )" )
+		print( "select a player ( 1 to 8  or  q & e )" )
 
 
 	def displayGame( self, game ): # 					NOTE : DEBUG
@@ -432,8 +439,8 @@ class GameManager:
 			'sizeInfo': GameManager.getSizeInfo( gameClass ),
 			'racketCount': gameClass.racketCount,
 			'scorePos': GameManager.getScorePos( gameClass ),
-			'lines': gameClass.lines,
 			'scoreSize': gameClass.size_font,
+			'lines': GameManager.getLines( gameClass ),
 			'orientations': [ initRacketsPos[( i * 3 ) + 2 ] for i in range( gameClass.racketCount )],
 			'update': {
 				'racketPos': [ coord for coord in initRacketsPos if not isinstance( coord, str )],
@@ -517,8 +524,31 @@ class GameManager:
 		if( gameClass.iPosS1 != None ):
 			scoresPos.append( gameClass.iPosS1[ 0 ] )
 			scoresPos.append( gameClass.iPosS1[ 1 ] )
+		if( gameClass.iPosS2 != None ):
+			scoresPos.append( gameClass.iPosS2[ 0 ] )
+			scoresPos.append( gameClass.iPosS2[ 1 ] )
+		if( gameClass.iPosS3 != None ):
+			scoresPos.append( gameClass.iPosS3[ 0 ] )
+			scoresPos.append( gameClass.iPosS3[ 1 ] )
+		if( gameClass.iPosS4 != None ):
+			scoresPos.append( gameClass.iPosS4[ 0 ] )
+			scoresPos.append( gameClass.iPosS4[ 1 ] )
 
 		return( scoresPos )
+
+
+	@staticmethod
+	def getLines( gameClass ):
+		lines = []
+
+		for line in gameClass.lines:
+			lines.append( gameClass.width  * line[ 0 ][ 0 ] ) # xa
+			lines.append( gameClass.height * line[ 0 ][ 1 ] ) # ya
+			lines.append( gameClass.width  * line[ 1 ][ 0 ] ) # xb
+			lines.append( gameClass.height * line[ 1 ][ 1 ] ) # yb
+			lines.append( gameClass.size_l * line[ 2 ] ) # 		thickness
+
+		return( lines )
 
 
 	# --------------------------------------------- CLASS CMDS --------------------------------------------- #

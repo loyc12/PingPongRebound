@@ -63,14 +63,14 @@ class Game:
 	iPosR4 = None
 
 	iPosB1 = ( width * ( 3 / 8 ), size_b )
-	#iPosB2 = None
-	#iPosB3 = None
-	#iPosB4 = None
+	iPosB2 = None
+	iPosB3 = None
+	iPosB4 = None
 
 	iPosS1 = ( width * ( 1 / 2 ), height * ( 1 / 2 ))
-	#iPosS2 = None
-	#iPosS3 = None
-	#iPosS4 = None
+	iPosS2 = None
+	iPosS3 = None
+	iPosS4 = None
 
 	lines = [
 	[( 0, 0 ), ( 0, 1 ), 2],
@@ -529,10 +529,10 @@ class Game:
 		self.winnerID = teamID
 		self.close()
 
-		if (cfg.PRINT_STATES):
+		if cfg.PRINT_STATES:
 			print( f"{self.gameID} )  {self.name}  \t: game has been won by team #{ teamID }" )# 		NOTE : DEBUG
 
-		if cfg.PRINT_PACKETS:
+		if cfg.DEBUG_MODE and cfg.PRINT_PACKETS:
 			print( self.getEndInfo() )
 
 

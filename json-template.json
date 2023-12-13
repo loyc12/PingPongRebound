@@ -15,18 +15,16 @@
 	},
 	"racketCount" : 4,
 	"teamCount": 2,
-	"scoreSize": "size",
+	"scoreSize": "size", // proportional to the screen height
 	"scorePos": [
-		"x1", "y1",
+		"x1", "y1", // center point of the number
 		"x2", "y2",
 		"x3", "y3",
 		"x4", "y4"
 	],
 	"lines": [
-		"x1", "y1", "t1", // t = thickness (1, 1.4, 2)
-		"x2", "y2", "t2",
-		"x3", "y3", "t3",
-		"x4", "y4" "t4"
+		"xa", "ya", "xb", "yb", "t", // t = thickness (1, 1.4, 2)
+		"xa", "ya", "xb", "yb", "t"	 // ...
 	],
 	"orientations": [
 		"d1",			// 'x' or 'y

@@ -51,7 +51,7 @@ BOT_HARD_BREAK = True
 BOT_NO_STUCK = True
 
 BOT_M_FACTOR = 4 #			how many times dx or dy can the racket go at
-BOT_PRECISION = 50 #		max = rSize / 2 : buffer zones one each side of the racket the AI tries to avoid hitting the ball with
+BOT_PRECISION = 40 #		max = rSize / 2 : buffer zones one each side of the racket the AI tries to avoid hitting the ball with
 BOT_SEARCH_DEPTH = 5 #		how many bounces ahead does the AI look
 
 BOT_PLAY_FREQUENCY = 15
