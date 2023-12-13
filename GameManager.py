@@ -96,7 +96,7 @@ class GameManager:
 				if( game.state != df.ENDING ):
 					game.close()
 
-	# NOTE : ian check icitte pour le closing
+				# NOTE : ian check icitte pour le closing
 
 				if game.connector != None:
 					await self.gameGateway.manage_end_game( game.getEndInfo() )
