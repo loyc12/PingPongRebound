@@ -40,14 +40,14 @@ async def debugTester( Initialiser ):
 
 		g.start()
 
-		g.run()
+		await g.run()
 
 	else:
 		print( "Cannot run game : debug mode is off" )
 
 
 if __name__ == '__main__':
-	asy.run( debugTester( Pong ))
+	asy.run( debugTester( Ping ))
 
 
 

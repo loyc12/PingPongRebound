@@ -133,18 +133,3 @@ class Pingest( gi.Game ):
 		self.win.blit( text2, text2.get_rect( center = ( self.width * ( 3 / 4 ), self.height * ( 1 / 4 ))))
 		self.win.blit( text3, text3.get_rect( center = ( self.width * ( 1 / 4 ), self.height * ( 3 / 4 ))))
 		self.win.blit( text4, text4.get_rect( center = ( self.width * ( 3 / 4 ), self.height * ( 3 / 4 ))))
-
-
-if __name__ == '__main__': #		NOTE : DEBUG
-
-	pg.init()
-	g = Pingest( 1 )
-
-	if cfg.DEBUG_MODE:
-		g.setWindow( pg.display.set_mode(( Pingest.width, Pingest.height )))
-		pg.display.set_caption( g.name )
-
-	#g.addPlayer( "Player 1", 1 )
-
-	g.start()
-	g.run()

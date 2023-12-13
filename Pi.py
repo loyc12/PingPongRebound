@@ -37,19 +37,3 @@ class Pi( gi.Game ):
 		ball.setDirs( -ball.fx, 1 )
 		ball.setPos(( self.width + ball.getPosX() ) / 3, self.size_b )
 		ball.setSpeeds(( ball.dx + self.speed_b ) / 3, 0 )
-
-
-if __name__ == '__main__': #		NOTE : DEBUG
-
-	pg.init()
-	g = Pi( 1 )
-
-	if cfg.DEBUG_MODE:
-		g.setWindow( pg.display.set_mode(( Pi.width, Pi.height )))
-		pg.display.set_caption( g.name )
-
-
-	#g.addPlayer( "Player 1", 1 )
-
-	g.start()
-	g.run()

@@ -138,18 +138,3 @@ class Pongest( gi.Game ):
 		self.win.blit( text2, text2.get_rect( center = ( self.width * ( 4 / 5 ), self.height * ( 1 / 2 ))))
 		self.win.blit( text3, text3.get_rect( center = ( self.width * ( 1 / 2 ), self.height * ( 4 / 5 ))))
 		self.win.blit( text4, text4.get_rect( center = ( self.width * ( 1 / 5 ), self.height * ( 1 / 2 ))))
-
-
-if __name__ == '__main__': #		NOTE : DEBUG
-
-	pg.init()
-	g = Pongest( 1 )
-
-	if cfg.DEBUG_MODE:
-		g.setWindow( pg.display.set_mode(( Pongest.width, Pongest.height )))
-		pg.display.set_caption( g.name )
-
-	#g.addPlayer( "Player 1", 1 )
-
-	g.start()
-	g.run()

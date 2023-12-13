@@ -288,7 +288,7 @@ class Game:
 
 
 	async def eventControler( self ):
-		for event in await self.getNextEvents():
+		for event in self.getNextEvents():
 
 			# starting the game
 			if event.type == df.START:
@@ -377,16 +377,11 @@ class Game:
 
 	# --------------------------------------------------------------
 
-	def run( self ): #							NOTE : DEBUG MODE ONLY
+	async def run( self ):
 
 		if not cfg.DEBUG_MODE:
 			print( "cannot use run()without debug mode" )
 			return
-
-		if self.state == df.ENDING:
-			print( "The game of " + self.name + " is over" )
-			pg.quit()
-			sys.exit()
 
 		if self.state != df.PLAYING:
 			print( f"{ self.name } is not running" )
@@ -394,7 +389,7 @@ class Game:
 
 		# main game loop
 		while self.state == df.PLAYING:
-			self.eventControler()
+			await self.eventControler()
 			self.step( True )
 			self.clock.tick( self.framerate )
 

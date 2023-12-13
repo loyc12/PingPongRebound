@@ -23,18 +23,3 @@ class Po( gi.Game ):
 	iPosR1 = ( int( width * ( 1 / 2 )), int( height - gi.Game.size_b ), "x" )
 
 	iPosB1 = ( int( width * ( 3 / 8 )), int( gi.Game.size_b ))
-
-
-if __name__ == '__main__': #		NOTE : DEBUG
-
-	pg.init()
-	g = Po( 1 )
-
-	if cfg.DEBUG_MODE:
-		g.setWindow( pg.display.set_mode(( Po.width, Po.height )))
-		pg.display.set_caption( g.name )
-
-	#g.addPlayer( "Player 1", 1 )
-
-	g.start()
-	g.run()
