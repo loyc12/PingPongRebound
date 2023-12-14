@@ -8,7 +8,9 @@ except ModuleNotFoundError:
 	import game.PingPongRebound.cfg as cfg
 	import game.PingPongRebound.defs as df
 
+
 # ------------------------------------------ GAMEOBJECT CLASS ------------------------------------------ #
+
 
 # object class
 class GameObject:
@@ -24,12 +26,14 @@ class GameObject:
 		if( cfg.DEBUG_MODE ):
 			self.box = pg.Rect( _game.width / 2, _game.height / 2, _w, _h )# 	NOTE : DEBUG
 
+
 	def drawSelf( self ): # 														NOTE : DEBUG
 		if( cfg.DEBUG_MODE ):
 			self.box.center = ( self.px, self.py )
 			pg.draw.rect( self.game.win, df.COL_OBJ, self.box )
 		else:
 			print( "GameObject.drawSelf()is a DEBUG_MODE function" )
+
 
 	def getCopy( self ):
 
@@ -41,6 +45,7 @@ class GameObject:
 
 
 # ---------------------------------------------- POSITION ---------------------------------------------- #
+
 
 	def setSize( self, _w, _h ):
 		self.sx = int( _w / 2 )
@@ -141,6 +146,7 @@ class GameObject:
 			return False
 		return True
 
+
 	def isOnScreenX( self ):
 		if self.getLeft() < 0 or self.getRight() > self.game.width:
 			return False
@@ -154,13 +160,14 @@ class GameObject:
 
 # ---------------------------------------------- COLLISION --------------------------------------------- #
 
+
 	def isOverlaping( self, other ):
 		if self.getRight() >= other.getLeft() and self.getLeft() <= other.getRight():
 			if self.getBottom() >= other.getTop() and self.getTop() <= other.getBottom():
 				return True
 		return False
 
-	# NOTE : IS ONLY FOR BALLS
+
 	def bounceOnWall( self, mode ):
 		if mode == "stop":
 			self.stopDirs()
@@ -189,12 +196,11 @@ class GameObject:
 			self.dx += other.getMvX() * self.fx
 
 		if cfg.PRINT_COLLISIONS:
-			print( f"{self.game.gameID} )  {self.game.name}  \t: {'{:.1f}'.format( t )}s" )# 	NOTE : DEBUG
+			print( f"{self.game.gameID} )  {self.game.name}  \t: racket bounce at {'{:.1f}'.format( t )}s" )# 	NOTE : DEBUG
 
 		self.clampSpeed()
 		if df.BOT_NO_STUCK:
 			self.makeUnstuck( mode )
-
 
 
 	def makeUnstuck( self, mode ):
@@ -209,7 +215,9 @@ class GameObject:
 			else:
 				self.fx = -1
 
-		elif mode == "y" and self.dy  < 1:
+			print( "unstuck x" )
+
+		elif mode == "y" and self.dy < 1:
 			self.dy = 1
 
 			if self.py < self.game.height / 2:
@@ -217,8 +225,11 @@ class GameObject:
 			else:
 				self.fy = -1
 
+			print( "unstuck y" )
+
 
 # ---------------------------------------------- MOVEMENT ---------------------------------------------- #
+
 
 	def setSpeeds( self, _dx, _dy ):
 		self.dx = _dx
@@ -227,6 +238,7 @@ class GameObject:
 
 	def getSpeeds( self ):
 		return( self.dx, self.dy )
+
 
 	def setDirs( self, _fx, _fy ):
 		self.fx = _fx
@@ -253,6 +265,7 @@ class GameObject:
 	def stopDirs( self ):
 		self.fx = 0
 		self.fy = 0
+
 
 	def clampSpeed( self ):
 		# make sure dy and dx are positive

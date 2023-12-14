@@ -38,7 +38,7 @@ class Game:
 	size_l = 10
 	size_font = 768
 
-	speed_b = 12
+	speed_b = 8
 	speed_r = 8
 	speed_m_b = 60
 	speed_m_r = 60
@@ -534,7 +534,6 @@ class Game:
 
 		if cfg.DEBUG_MODE and cfg.PRINT_PACKETS:
 			print( self.getEndInfo() )
-
 
 
 	def respawnBall( self, ball ):

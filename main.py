@@ -11,14 +11,15 @@ except ModuleNotFoundError:
 	import game.PingPongRebound.cfg as cfg
 
 
-
 # MASTER LIST
-# TODO : rework ball speed in general
+# TODO : rework ball speed in general (Pi and Po done)
 # TODO : rework the ball respawn trajectory everywhere
+# TODO : have max speed be a gameObject var instead of an argument
 
 # FUNCTION LIST
 
 # DEBUG LIST
+# TODO : fix the anti-stuck ball mecanic in game-Object (no worky)
 
 # MINOR LIST
 # TODO : make obstacles type GameObjects in the base class( and use them in pongester )
@@ -46,7 +47,7 @@ async def debugTester( Initialiser ):
 
 
 if __name__ == '__main__':
-	asy.run( debugTester( Ping ))
+	asy.run( debugTester( Po ))
 
 
 

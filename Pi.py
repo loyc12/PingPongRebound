@@ -10,6 +10,7 @@ except ModuleNotFoundError:
 	from game.PingPongRebound.master import go
 	from game.PingPongRebound.master import gi
 
+
 class Pi( gi.Game ):
 	name = "Pi"
 
@@ -17,7 +18,7 @@ class Pi( gi.Game ):
 	height = 1280
 
 	gravity = 0.3
-	factor_rack = 0.95
+	factor_rack = 0.90
 	factor_wall = 0.6
 
 	score_mode = gi.df.HITS
