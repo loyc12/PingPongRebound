@@ -117,6 +117,7 @@ class Game:
 
 		self.initRackets()
 		self.initBalls()
+		self.initScores()
 
 		if (cfg.PRINT_STATES):
 			print( f"{self.gameID} )  {self.name}  \t: game has been created" )# 		NOTE : DEBUG
@@ -132,7 +133,14 @@ class Game:
 		self.balls[ 0 ].setSpeeds( self.speed_b, self.speed_b )
 		self.balls[ 0 ].setDirs( 1, 1 )
 
+
+	def initScores( self ):
+		for i in range( self.racketCount ):
+			self.scores.append( 0 )
+
+
 	# --------------------------------------------- PLAYER & AI -------------------------------------------- #
+
 
 	def initBots( self ):
 		while self.controlerCount < self.racketCount:
