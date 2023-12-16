@@ -135,7 +135,7 @@ class Game:
 
 
 	def initScores( self ):
-		for i in range( self.racketCount ):
+		for _ in range( self.racketCount ):
 			self.scores.append( 0 )
 
 
