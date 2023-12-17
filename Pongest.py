@@ -124,7 +124,8 @@ class Pongest( gi.Game ):
 				ball.setSpeeds( self.speed_b, self.speed_b * ( 1 / 3 ))
 
 			self.respawnBall( ball )
-			# self.connector.update_scores( self.scores )
+			if self.connector != None:
+				self.connector.update_scores( self.scores )
 
 
 	def respawnBall( self, ball ):
