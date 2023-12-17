@@ -111,16 +111,13 @@ class Pinger( gi.Game ):
 			if ball.getRight() < self.width / 2:
 				if self.last_ponger > 0:
 					self.scorePoint( 2, df.GOALS )
-				#ball.setDirs( -1, 1 )
-				#ball.setPos( self.width * ( 1 / 2 ), self.height * ( 3 / 4 ))
 
 			if ball.getLeft() > self.width / 2:
 				if self.last_ponger > 0:
 					self.scorePoint( 1, df.GOALS )
-				#ball.setDirs( 1, 1 )
-				#ball.setPos( self.width * ( 1 / 2 ), self.height * ( 1 / 4 ))
 
 			self.respawnBall( ball )
+			# self.connector.update_scores( self.scores )
 
 
 	def respawnBall( self, ball ):

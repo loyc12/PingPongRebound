@@ -116,6 +116,7 @@ class Pingest( gi.Game ):
 				ball.setDirs( -ball.fx, -ball.fy )
 
 			self.respawnBall( ball )
+			# self.connector.update_scores( self.scores )
 
 
 

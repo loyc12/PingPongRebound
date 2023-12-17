@@ -88,6 +88,7 @@ class Pong( gi.Game ):
 				ball.setPos( self.width * ( 1 / 4 ), self.height * ( 1 / 2 ))
 
 			self.respawnBall( ball )
+			# self.connector.update_scores( self.scores )
 
 
 	def respawnBall( self, ball ):

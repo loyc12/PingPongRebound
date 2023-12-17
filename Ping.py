@@ -92,6 +92,7 @@ class Ping( gi.Game ):
 				ball.setDirs( 1, -1 )
 
 			self.respawnBall( ball )
+			# self.connector.update_scores( self.scores )
 
 
 	def respawnBall( self, ball ):
