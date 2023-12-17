@@ -111,7 +111,7 @@ class BotControler( gc.GameControler ):
 
 
 	def kickBall( self ):
-		if self.game.name == "Ping" or self.game.name == "Pinger":
+		if self.game.name == "Ping":
 			self.goToCenter( df.BOT_KICK_FACTOR )
 
 		#elif not df.BOT_INSTANT_REACT and df.BOT_SEE_FREQUENCY > 2 * df.BOT_PLAY_FREQUENCY:
@@ -346,8 +346,8 @@ class BotControler( gc.GameControler ):
 		return False
 
 	def isNear( self, gameObj ):
-		if abs( self.racket.getPosY() - gameObj.getPosY() ) <= self.game.size_r * 2:
-			if abs( self.racket.getPosX() - gameObj.getPosX() ) <= self.game.size_r * 2:
+		if abs( self.racket.getPosY() - gameObj.getPosY() ) <= df.BOT_KICK_DISTANCE * 2:
+			if abs( self.racket.getPosX() - gameObj.getPosX() ) <= df.BOT_KICK_DISTANCE * 2:
 				return True
 		return False
 

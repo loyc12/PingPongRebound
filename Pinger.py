@@ -20,6 +20,8 @@ class Pinger( gi.Game ):
 
 	size_font = 768
 
+	factor_rack = 1.05
+
 	racketCount = 4
 
 	score_mode = df.GOALS
@@ -57,7 +59,7 @@ class Pinger( gi.Game ):
 
 	def initBalls( self ):
 		self.balls.append( go.GameObject( 1, self, self.iPosB1[ 0 ], self.iPosB1[ 1 ], self.size_b, self.size_b ))
-		self.balls[ 0 ].setSpeeds( self.speed_b, self.speed_b * ( 2 / 3 ))
+		self.balls[ 0 ].setSpeeds( self.speed_b * ( 2 / 3 ), self.speed_b )
 		self.balls[ 0 ].setDirs( 1, 1 )
 
 
@@ -122,7 +124,7 @@ class Pinger( gi.Game ):
 
 
 	def respawnBall( self, ball ):
-		ball.setSpeeds(( self.speed_b + ball.dx ) * ( 1 / 2 ), self.speed_b * ( 2 / 3 ))
+		ball.setSpeeds(( self.speed_b + ball.dx ) * ( 1 / 3 ), self.speed_b )
 
 		if( ball.getPosX() < self.width / 2 ):
 			ball.setDirs( -1, ball.fy )
@@ -130,11 +132,11 @@ class Pinger( gi.Game ):
 			ball.setDirs( 1, ball.fy )
 
 		if( ball.getPosY() < self.height / 2 ):
-			ball.setPos( self.width * ( 1 / 2 ), self.height * ( 1 / 4 ))
 			ball.setDirs( ball.fx, 1 )
+			ball.setPos( self.width * ( 1 / 2 ), self.height * ( 1 / 4 ))
 		else:
-			ball.setPos( self.width * ( 1 / 2 ), self.height * ( 3 / 4 ))
 			ball.setDirs( ball.fx, -1 )
+			ball.setPos( self.width * ( 1 / 2 ), self.height * ( 3 / 4 ))
 
 
 	def drawScores( self ):

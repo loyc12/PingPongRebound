@@ -20,6 +20,8 @@ class Pingest( gi.Game ):
 
 	size_font = 768
 
+	factor_rack = 1.05
+
 	racketCount = 4
 
 	score_mode = df.GOALS
@@ -30,7 +32,7 @@ class Pingest( gi.Game ):
 	iPosR3 = ( int( width * ( 2 / 7 )), int( height - gi.Game.size_b )	, "x" )
 	iPosR4 = ( int( width * ( 5 / 7 )), int( height - gi.Game.size_b )	, "x" )
 
-	iPosB1 = ( int( width * ( 3 / 4 )), int( height * ( 3 / 4 )))
+	iPosB1 = ( int( width * ( 1 / 2 )), int( height * ( 3 / 4 )))
 
 	iPosS1 = ( int( width * ( 1 / 4 )), int( height * ( 1 / 4 )))
 	iPosS2 = ( int( width * ( 3 / 4 )), int( height * ( 1 / 4 )))
@@ -59,7 +61,7 @@ class Pingest( gi.Game ):
 
 	def initBalls( self ):
 		self.balls.append( go.GameObject( 1, self, self.iPosB1[ 0 ], self.iPosB1[ 1 ], self.size_b, self.size_b ))
-		self.balls[ 0 ].setSpeeds( self.speed_b, ( self.speed_b * ( 2 / 3 )))
+		self.balls[ 0 ].setSpeeds( self.speed_b * ( 2 / 3 ), self.speed_b )
 		self.balls[ 0 ].setDirs( -1, -1 )
 
 
@@ -110,23 +112,27 @@ class Pingest( gi.Game ):
 			# checking who scored
 			if( self.last_ponger > 0 ):
 				self.scorePoint( self.last_ponger, df.GOALS )
-				if self.last_ponger == 1:
-					ball.setDirs( -1, -1 )
-				elif self.last_ponger == 2:
-					ball.setDirs( 1, -1 )
-				elif self.last_ponger == 3:
-					ball.setDirs( -1, 1 )
-				elif self.last_ponger == 4:
-					ball.setDirs( 1, 1 )
 			else:
 				ball.setDirs( -ball.fx, -ball.fy )
 
 			self.respawnBall( ball )
 
 
+
 	def respawnBall( self, ball ):
-		ball.setPos( self.width / 2, self.height / 2 )
-		ball.setSpeeds(( self.speed_b + ball.dx ) / 2, ( self.speed_b + ball.dy ) / 3 )
+		ball.setSpeeds(( self.speed_b + ball.dx ) * ( 1 / 3 ), self.speed_b)
+
+		if( ball.getPosX() < self.width / 2 ):
+			ball.setDirs( -1, ball.fy )
+		else:
+			ball.setDirs( 1, ball.fy )
+
+		if( ball.getPosY() < self.height / 2 ):
+			ball.setDirs( ball.fx, -1 )
+			ball.setPos( self.width * ( 1 / 2 ), self.height * ( 3 / 4 ))
+		else:
+			ball.setDirs( ball.fx, 1 )
+			ball.setPos( self.width * ( 1 / 2 ), self.height * ( 1 / 4 ))
 
 
 	def drawScores( self ):
