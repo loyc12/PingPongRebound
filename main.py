@@ -12,15 +12,14 @@ except ModuleNotFoundError:
 
 
 # MASTER LIST
-# TODO : rework ball speed in general (Pi and Po done)
-# TODO : rework the ball respawn trajectory everywhere
+# TODO : rework ball speed and dir in pongest
+# TODO : have scorePoint() function call connector.updateScores()
 # TODO : have max speed be a gameObject var instead of an argument
 # TODO : have respawn trajectories be stored in an array in game interface
 
 # FUNCTION LIST
 
 # DEBUG LIST
-# TODO : fix the anti-stuck ball mecanic in game-Object (no worky)
 
 # MINOR LIST
 # TODO : make obstacles type GameObjects in the base class( and use them in pongester )
@@ -48,7 +47,7 @@ async def debugTester( Initialiser ):
 
 
 if __name__ == '__main__':
-	asy.run( debugTester( Po ))
+	asy.run( debugTester( Pi ))
 
 
 

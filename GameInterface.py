@@ -546,7 +546,7 @@ class Game:
 
 
 	def respawnBall( self, ball ):
-		ball.setDirs( -ball.fx, 1 )
+		ball.setDirs( ball.fx, 1 )
 		ball.setPosY( self.size_b )
 		ball.setSpeeds( self.speed_b, self.speed_b )
 
