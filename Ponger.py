@@ -16,9 +16,11 @@ class Ponger( gi.Game ):
 	name = "Ponger"
 
 	width = 1536
-	height = 1024
+	height = 1280
 
 	size_font = 768
+
+	factor_rack = 1.05
 
 	gravity = 0
 	racketCount = 4
@@ -102,13 +104,13 @@ class Ponger( gi.Game ):
 			if ball.getTop() < 0:
 				if self.last_ponger > 0:
 					self.scorePoint( 2, df.GOALS )
-				ball.setDirs( -1, -1 )
+				ball.setDirs( -ball.fx, -1 )
 				ball.setPos( self.width * ( 1 / 2 ), self.height * ( 3 / 4 ))
 
 			elif ball.getBottom() > self.height:
 				if self.last_ponger > 0:
 					self.scorePoint( 1, df.GOALS )
-				ball.setDirs( 1, 1 )
+				ball.setDirs( -ball.fx, 1 )
 				ball.setPos( self.width * ( 1 / 2 ), self.height * ( 1 / 4 ))
 
 			self.respawnBall( ball )

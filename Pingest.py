@@ -16,7 +16,7 @@ class Pingest( gi.Game ):
 	name = "Pingest"
 
 	width = 1536
-	height = 1024
+	height = 1280
 
 	size_font = 768
 
