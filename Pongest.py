@@ -20,9 +20,7 @@ class Pongest( gi.Game ):
 
 	size_font = 512
 
-	speed_r = 5
-	speed_b = 6
-	speed_m_b = 24
+	speed_m_b = 20
 
 	factor_rack = 1.05
 	factor_wall = 0.5

@@ -18,7 +18,7 @@ class Pi( gi.Game ):
 	height = 1280
 
 	gravity = 0.3
-	factor_rack = 0.90
+	factor_rack = 0.9
 	factor_wall = 0.6
 
 	score_mode = gi.df.HITS
