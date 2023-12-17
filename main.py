@@ -15,6 +15,7 @@ except ModuleNotFoundError:
 # TODO : rework ball speed in general (Pi and Po done)
 # TODO : rework the ball respawn trajectory everywhere
 # TODO : have max speed be a gameObject var instead of an argument
+# TODO : have respawn trajectories be stored in an array in game interface
 
 # FUNCTION LIST
 
@@ -47,7 +48,7 @@ async def debugTester( Initialiser ):
 
 
 if __name__ == '__main__':
-	asy.run( debugTester( Po ))
+	asy.run( debugTester( Pong ))
 
 
 

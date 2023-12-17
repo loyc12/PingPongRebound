@@ -42,7 +42,6 @@ class Game:
 	speed_r = 8
 	speed_m_b = 60
 	speed_m_r = 60
-	framerate = cfg.FRAME_RATE # 		max fps
 
 	factor_wall = 0.75
 	factor_rack = 1.10
@@ -55,7 +54,6 @@ class Game:
 	step_count = 0
 
 	score_mode = df.GOALS
-	scores = [ 0 ]
 
 	iPosR1 = ( width * ( 1 / 2 ), height - size_b, "x" )
 	iPosR2 = None
@@ -72,6 +70,8 @@ class Game:
 	iPosS3 = None
 	iPosS4 = None
 
+	scores = [ 0, 0, 0, 0 ] #	NOTE : these are team scores. add more if end up having more than 4 teams
+
 	lines = [
 	[( 0, 0 ), ( 0, 1 ), 2],
 	[( 1, 0 ), ( 1, 1 ), 2],
@@ -79,6 +79,7 @@ class Game:
 
 
 	# ------------------------------------------- INITIALIZATION ------------------------------------------- #
+
 
 	def __init__( self, _gameID, _gameMode = df.SOLO, connector = None ): # NOTE : take in gametype
 
@@ -408,7 +409,7 @@ class Game:
 		while self.state == df.PLAYING:
 			await self.eventControler()
 			self.step( True )
-			self.clock.tick( self.framerate )
+			self.clock.tick( cfg.FRAME_RATE )
 
 
 

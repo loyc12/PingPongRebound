@@ -49,7 +49,7 @@ class Pong( gi.Game ):
 
 	def initBalls( self ):
 		self.balls.append( go.GameObject( 1, self, self.iPosB1[ 0 ], self.iPosB1[ 1 ] , self.size_b, self.size_b ))
-		self.balls[ 0 ].setSpeeds( self.speed_b, self.speed_b )
+		self.balls[ 0 ].setSpeeds( self.speed_b * ( 3 / 2 ), self.speed_b )
 		self.balls[ 0 ].setDirs( 1, 1 )
 
 
@@ -79,12 +79,12 @@ class Pong( gi.Game ):
 			if ball.getLeft() < 0:
 				if self.last_ponger > 0:
 					self.scorePoint( 2, df.GOALS )
-				ball.setDirs( -1, -ball.fy )
+				ball.setDirs( -1, ball.fy )
 				ball.setPos( self.width * ( 3 / 4 ), self.height * ( 1 / 2 ))
 			if ball.getRight() > self.width:
 				if self.last_ponger > 0:
 					self.scorePoint( 1, df.GOALS )
-				ball.setDirs( 1, -ball.fy )
+				ball.setDirs( 1, ball.fy )
 				ball.setPos( self.width * ( 1 / 4 ), self.height * ( 1 / 2 ))
 
 			self.respawnBall( ball )
@@ -92,7 +92,7 @@ class Pong( gi.Game ):
 
 	def respawnBall( self, ball ):
 		ball.setPosY( self.height * ( 1 / 2 ))
-		ball.setSpeeds( self.speed_b, ball.dy )
+		ball.setSpeeds( self.speed_b * ( 3 / 2 ), ( ball.dy + self.speed_b ) / 2 )
 
 
 	def drawScores( self ):

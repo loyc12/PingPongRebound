@@ -31,7 +31,7 @@ class Ping( gi.Game ):
 	iPosR1 = ( int( width * ( 1 / 3 )), int( height - gi.Game.size_b ), "x" )
 	iPosR2 = ( int( width * ( 2 / 3 )), int( height - gi.Game.size_b ), "x" )
 
-	iPosB1 = ( int( width * ( 2 / 4 )), int( height * ( 2 / 3 )))
+	iPosB1 = ( int( width * ( 1 / 2 )), int( height * ( 1 / 3 )))
 
 	iPosS1 = ( int( width * ( 1 / 4 )), int( height * ( 1 / 2 )))
 	iPosS2 = ( int( width * ( 3 / 4 )), int( height * ( 1 / 2 )))
@@ -95,7 +95,7 @@ class Ping( gi.Game ):
 
 
 	def respawnBall( self, ball ):
-		ball.setPos( self.width * ( 1 / 2 ), self.height * ( 2 / 3 ))
+		ball.setPos( self.width * ( 1 / 2 ), self.height * ( 1 / 3 ))
 		ball.setSpeeds(( ball.dx + self.speed_b ) / 3, self.speed_b  * ( 3 / 2 ) )
 
 
