@@ -207,7 +207,7 @@ class GameObject:
 		if mode == "stop":
 			return
 
-		elif mode == "x" and self.dx < 1:
+		elif mode == "y" and self.dx < 1:
 			self.dx = 1
 
 			if self.px < self.game.width / 2:
@@ -215,17 +215,13 @@ class GameObject:
 			else:
 				self.fx = -1
 
-			print( "unstuck x" )
-
-		elif mode == "y" and self.dy < 1:
+		elif mode == "x" and self.dy < 1:
 			self.dy = 1
 
 			if self.py < self.game.height / 2:
 				self.fy = 1
 			else:
 				self.fy = -1
-
-			print( "unstuck y" )
 
 
 # ---------------------------------------------- MOVEMENT ---------------------------------------------- #
