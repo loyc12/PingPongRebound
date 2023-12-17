@@ -41,8 +41,8 @@ class Pongest( gi.Game ):
 	iPosS4 = ( int( width * ( 1 / 5 )), int( height * ( 1 / 2 )))
 
 	lines = [
-	[( 0, 0 ), ( 1, 1 ), 1.4],
-	[( 0, 1 ), ( 1, 0 ), 1.4]]
+	[( 0, 0 ), ( 1, 1 ), 1.4 ],
+	[( 0, 1 ), ( 1, 0 ), 1.4 ]]
 
 
 	def initRackets( self ):

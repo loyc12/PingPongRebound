@@ -70,12 +70,12 @@ class Game:
 	iPosS3 = None
 	iPosS4 = None
 
-	scores = [ 0, 0, 0, 0 ] #	NOTE : these are team scores. add more if end up having more than 4 teams
+	scores = [ 0 ] #	NOTE : these are team scores. add more if end up having more than 4 teams
 
 	lines = [
-	[( 0, 0 ), ( 0, 1 ), 2],
-	[( 1, 0 ), ( 1, 1 ), 2],
-	[( 0, 0 ), ( 1, 0 ), 2]]
+	[( 0, 0 ), ( 0, 1 ), 2 ],
+	[( 1, 0 ), ( 1, 1 ), 2 ],
+	[( 0, 0 ), ( 1, 0 ), 2 ]]
 
 
 	# ------------------------------------------- INITIALIZATION ------------------------------------------- #
@@ -118,7 +118,7 @@ class Game:
 
 		self.initRackets()
 		self.initBalls()
-		self.initScores()
+		#self.initScores()
 
 		if (cfg.PRINT_STATES):
 			print( f"{self.gameID} )  {self.name}  \t: game has been created" )# 		NOTE : DEBUG
@@ -136,8 +136,9 @@ class Game:
 
 
 	def initScores( self ):
-		for _ in range( self.racketCount ):
-			self.scores.append( 0 )
+		pass
+		#for _ in range( self.racketCount ):
+			#self.scores.append( 0 )
 
 
 	# --------------------------------------------- PLAYER & AI -------------------------------------------- #
