@@ -30,7 +30,7 @@ class Pinger( gi.Game ):
 	iPosR3 = ( int( width * ( 2 / 7 )), int( height - gi.Game.size_b )	, "x" )
 	iPosR4 = ( int( width * ( 5 / 7 )), int( height - gi.Game.size_b )	, "x" )
 
-	iPosB1 = ( int( width * ( 1 / 4 )), int( height * ( 1 / 4 )))
+	iPosB1 = ( int( width * ( 1 / 2 )), int( height * ( 1 / 4 )))
 
 	iPosS1 = ( int( width * ( 1 / 4 )), int( height * ( 1 / 2 )))
 	iPosS2 = ( int( width * ( 3 / 4 )), int( height * ( 1 / 2 )))
@@ -109,20 +109,32 @@ class Pinger( gi.Game ):
 			if ball.getRight() < self.width / 2:
 				if self.last_ponger > 0:
 					self.scorePoint( 2, df.GOALS )
-				ball.setDirs( -ball.fy, -1 )
-				ball.setPos( self.width * ( 3 / 4 ), self.height * ( 3 / 4 ))
+				#ball.setDirs( -1, 1 )
+				#ball.setPos( self.width * ( 1 / 2 ), self.height * ( 3 / 4 ))
 
 			if ball.getLeft() > self.width / 2:
 				if self.last_ponger > 0:
 					self.scorePoint( 1, df.GOALS )
-				ball.setDirs( -ball.fy, 1 )
-				ball.setPos( self.width * ( 1 / 4 ), self.height * ( 1 / 4 ))
+				#ball.setDirs( 1, 1 )
+				#ball.setPos( self.width * ( 1 / 2 ), self.height * ( 1 / 4 ))
 
 			self.respawnBall( ball )
 
 
 	def respawnBall( self, ball ):
 		ball.setSpeeds(( self.speed_b + ball.dx ) * ( 1 / 2 ), self.speed_b * ( 2 / 3 ))
+
+		if( ball.getPosX() < self.width / 2 ):
+			ball.setDirs( -1, ball.fy )
+		else:
+			ball.setDirs( 1, ball.fy )
+
+		if( ball.getPosY() < self.height / 2 ):
+			ball.setPos( self.width * ( 1 / 2 ), self.height * ( 1 / 4 ))
+			ball.setDirs( ball.fx, 1 )
+		else:
+			ball.setPos( self.width * ( 1 / 2 ), self.height * ( 3 / 4 ))
+			ball.setDirs( ball.fx, -1 )
 
 
 	def drawScores( self ):

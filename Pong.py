@@ -92,7 +92,7 @@ class Pong( gi.Game ):
 
 	def respawnBall( self, ball ):
 		ball.setPosY( self.height * ( 1 / 2 ))
-		ball.setSpeeds( self.speed_b * ( 3 / 2 ), ( ball.dy + self.speed_b ) / 2 )
+		ball.setSpeeds( self.speed_b * ( 3 / 2 ), ( ball.dy + self.speed_b ) * ( 1 / 2 ))
 
 
 	def drawScores( self ):
