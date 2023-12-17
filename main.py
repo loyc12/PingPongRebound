@@ -13,7 +13,6 @@ except ModuleNotFoundError:
 
 # MASTER LIST
 # TODO : rework ball respawn in pongest
-# TODO : have scorePoint() function call connector.updateScores()
 # TODO : have max speed be a gameObject var instead of an argument
 # TODO : have respawn trajectories be stored in an array in game interface
 
