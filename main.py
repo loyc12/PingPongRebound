@@ -12,7 +12,6 @@ except ModuleNotFoundError:
 
 
 # MASTER LIST
-# TODO : have max speed be a gameObject var instead of an argument
 # TODO : rework ball respawn in pongest
 # TODO : have respawn trajectories be stored in an array in game interface
 
@@ -21,6 +20,7 @@ except ModuleNotFoundError:
 # DEBUG LIST
 
 # MINOR LIST
+# TODO : swap racket 2 and 3 in pingest (breaks client side for now)
 # TODO : make obstacles type GameObjects in the base class( and use them in pongester )
 # TODO : add sound effects to collisions( in GameObject class )
 # TODO : make an 'asteroids' game( solo )
