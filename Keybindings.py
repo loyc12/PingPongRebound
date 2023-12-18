@@ -7,6 +7,7 @@ try:
 
 except ModuleNotFoundError:
 	import game.PingPongRebound.cfg as cfg
+	cfg.DEBUG_MODE = False
 
 
 if debugKeys:
