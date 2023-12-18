@@ -28,7 +28,7 @@ class Pi( gi.Game ):
 
 	iPosB1 = ( int( width * ( 3 / 8 )), int( gi.Game.size_b ))
 
-	iPosS1 = ( width * ( 1 / 2 ), height * ( 1 / 2 ))
+	iPosS1 = ( int( width * ( 1 / 2 )), int( height * ( 1 / 2 )))
 
 
 	def initBalls( self ):

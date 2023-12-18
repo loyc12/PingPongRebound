@@ -15,6 +15,9 @@ except ModuleNotFoundError:
 # object class
 class GameObject:
 
+	( dx, fx, px, sx ) = ( 0, 0, 0, 0 )
+	( dy, fy, py, sy ) = ( 0, 0, 0, 0 )
+
 	def __init__( self, _id, _game, _x, _y, _w, _h, _maxSpeed = 160 ): #_type = df.OBJ_BASE ):
 		self.game = _game
 		self.id = _id

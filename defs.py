@@ -61,10 +61,10 @@ BOT_KICK_FACTOR = 2
 BOT_SEARCH_DEPTH = 5 #		how many bounces ahead does the AI look
 
 BOT_PLAY_FREQUENCY = 15
-BOT_SEE_FREQUENCY = 30 #	TODO : put me to 60 before pushing
-
-BOT_PRECISION = 30 #		max = rSize / 2 : buffer zones one each side of the racket the AI tries to avoid hitting the ball with
-BOT_KICK_DISTANCE = 150
+BOT_SEE_FREQUENCY = 60 #	TODO : put me to 60 before pushing
+BOT_PRECISION = 60 #		max = rSize / 2 (80) : how far from the center of the racket will the AI tolerate to hit with
+BOT_KICK_DIST = 160
+BOT_REACT_DIST = 320
 
 # pygame (debug) stuff
 if cfg.DEBUG_MODE:

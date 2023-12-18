@@ -56,17 +56,17 @@ class Game:
 
 	score_mode = df.GOALS
 
-	iPosR1 = ( width * ( 1 / 2 ), height - size_b, "x" )
+	iPosR1 = ( int( width * ( 1 / 2 )), int( height - size_b), "x" )
 	iPosR2 = None
 	iPosR3 = None
 	iPosR4 = None
 
-	iPosB1 = ( width * ( 3 / 8 ), size_b )
+	iPosB1 = ( int( width * ( 3 / 8 )), size_b )
 	iPosB2 = None
 	iPosB3 = None
 	iPosB4 = None
 
-	iPosS1 = ( width * ( 1 / 2 ), height * ( 1 / 2 ))
+	iPosS1 = ( int( width * ( 1 / 2 )), int( height * ( 1 / 2 )))
 	iPosS2 = None
 	iPosS3 = None
 	iPosS4 = None

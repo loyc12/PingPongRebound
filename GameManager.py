@@ -542,11 +542,11 @@ class GameManager:
 		lines = []
 
 		for line in gameClass.lines:
-			lines.append( gameClass.width  * line[ 0 ][ 0 ] ) # xa
-			lines.append( gameClass.height * line[ 0 ][ 1 ] ) # ya
-			lines.append( gameClass.width  * line[ 1 ][ 0 ] ) # xb
-			lines.append( gameClass.height * line[ 1 ][ 1 ] ) # yb
-			lines.append( gameClass.size_l * line[ 2 ] ) # 		thickness
+			lines.append( int( gameClass.width  * line[ 0 ][ 0 ])) # xa
+			lines.append( int( gameClass.height * line[ 0 ][ 1 ])) # ya
+			lines.append( int( gameClass.width  * line[ 1 ][ 0 ])) # xb
+			lines.append( int( gameClass.height * line[ 1 ][ 1 ])) # yb
+			lines.append( int( gameClass.size_l * line[ 2 ])) # 		thickness
 
 		return( lines )
 

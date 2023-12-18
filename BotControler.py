@@ -105,7 +105,7 @@ class BotControler( gc.GameControler ):
 			return False
 		if not self.isInFrontOf( self.lastBall ):
 			return False
-		if not self.isCloserThan( self.lastBall, df.BOT_KICK_DISTANCE ):
+		if not self.isCloserThan( self.lastBall, df.BOT_KICK_DIST ):
 			return False
 		return True
 
@@ -274,30 +274,38 @@ class BotControler( gc.GameControler ):
 	def goTo( self, maxFactor, X, Y ):
 
 		if self.racketDir == 'x':
-			if self.racket.isRightOfX( X - df.BOT_PRECISION  ):
+			tolerance = ( self.racket.sx - df.BOT_PRECISION )
+
+			if self.racket.isRightOfX( X - tolerance):
 				if self.allow_hard_break and self.racket.isGoingRight():
 					self.stopHere()
 				else:
 					self.goLeft( maxFactor )
-			elif self.racket.isLeftOfX( X + df.BOT_PRECISION  ):
+
+			elif self.racket.isLeftOfX( X + tolerance ):
 				if self.allow_hard_break and self.racket.isGoingLeft():
 					self.stopHere()
 				else:
 					self.goRight( maxFactor )
+
 			elif self.allow_hard_break:
 				self.stopHere()
 
 		elif self.racketDir == 'y':
-			if self.racket.isBelowY( Y - df.BOT_PRECISION ):
+			tolerance = ( self.racket.sy - df.BOT_PRECISION )
+
+			if self.racket.isBelowY( Y - tolerance ):
 				if self.allow_hard_break and self.racket.isGoingDown():
 					self.stopHere()
 				else:
 					self.goUp( maxFactor )
-			elif self.racket.isAboveY( Y + df.BOT_PRECISION  ):
+
+			elif self.racket.isAboveY( Y + tolerance ):
 				if self.allow_hard_break and self.racket.isGoingUp():
 					self.stopHere()
 				else:
 					self.goDown( maxFactor )
+
 			elif self.allow_hard_break:
 				self.stopHere()
 
@@ -346,21 +354,21 @@ class BotControler( gc.GameControler ):
 		return False
 
 	def isNear( self, gameObj ):
-		if abs( self.racket.getPosY() - gameObj.getPosY() ) <= df.BOT_KICK_DISTANCE * 2:
-			if abs( self.racket.getPosX() - gameObj.getPosX() ) <= df.BOT_KICK_DISTANCE * 2:
+		if abs( self.racket.getPosY() - gameObj.getPosY() ) <= df.BOT_REACT_DIST * 2:
+			if abs( self.racket.getPosX() - gameObj.getPosX() ) <= df.BOT_REACT_DIST * 2:
 				return True
 		return False
 
 
-	def isInOwnGoal( self, X, Y, border ):
+	def isInOwnGoal( self, X, Y ):
 
-		if self.goal == df.LEFT and X <= border:
+		if self.goal == df.LEFT and X < self.racket.px:
 			return True
-		if self.goal == df.RIGHT and X >= ( self.game.width - border ):
+		if self.goal == df.RIGHT and X > self.racket.px:
 			return True
-		if self.goal == df.UP and Y <= border:
+		if self.goal == df.UP and Y < self.racket.py:
 			return True
-		if self.goal == df.DOWN and Y >= ( self.game.height - border ):
+		if self.goal == df.DOWN and Y > self.racket.py:
 			return True
 
 		return False
@@ -396,13 +404,13 @@ class BotControler( gc.GameControler ):
 				dy += g.gravity * df.getSign( fy ) #					NOTE : assumes normal gravity (gy)
 				( X, Y ) = self.calculateStep( X, Y, dx, dy, fx, fy)
 
+				# returns where to be to block the next potential goal
+				if self.isInOwnGoal( X, Y ):
+					return( int( X ), int( Y ))
+
 				# breaks if the ball is on screen edge
 				if not df.isInZone( X, Y, self.border, self.border, g.width - self.border, g.height - self.border ):
 					break
-
-			# returns where to be to block the next potential goal
-			if self.isInOwnGoal( X, Y, self.border ):
-				return( int( X ), int( Y ))
 
 			# bounces the ball on horizontal ( __ ) edges if need be
 			if X <= self.border or X >= ( g.width - self.border ):
