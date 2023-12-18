@@ -184,13 +184,13 @@ class GameObject:
 		if mode == "x":
 			self.fx *= -1
 			self.dx *= self.game.factor_rack
-			self.dy += other.getMvY() * self.fy
+			self.dy = int( self.dy + ( other.getMvY() * df.KICK_FACTOR * df.getSign( self.fy )))
 
 		# horizontal surface bounces ( -- )
 		elif mode == "y":
 			self.fy *= -1
 			self.dy *= self.game.factor_rack
-			self.dx += other.getMvX() * self.fx
+			self.dx = int( self.dx + ( other.getMvX() * df.KICK_FACTOR * df.getSign( self.fx )))
 
 		if cfg.PRINT_COLLISIONS:
 			print( f"{self.game.gameID} )  {self.game.name}  \t: racket bounce at {'{:.1f}'.format( t )}s" )# 	NOTE : DEBUG

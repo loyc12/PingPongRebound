@@ -597,7 +597,7 @@ class Game:
 		for ball in self.balls: # 		copies the ball's data
 			ball.drawSelf()
 
-		if cfg.PRINT_GAME_DEBUG:
+		if cfg.PRINT_DEBUG_INFO:
 			self.drawFps()
 			self.drawNames()
 
