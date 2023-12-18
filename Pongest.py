@@ -41,16 +41,16 @@ class Pongest( gi.Game ):
 	iPosS4 = ( int( width * ( 1 / 5 )), int( height * ( 1 / 2 )))
 
 	lines = [
-	[( 0, 0 ), ( 1, 1 ), 1.4],
-	[( 0, 1 ), ( 1, 0 ), 1.4]]
+	[( 0, 0 ), ( 1, 1 ), 1.4 ],
+	[( 0, 1 ), ( 1, 0 ), 1.4 ]]
 
 
 	def initRackets( self ):
-		# setting up rackets :             id, game, _x              , _y            , _w           , _h
-		self.rackets.append( go.GameObject( 1, self, self.iPosR1[ 0 ], self.iPosR1[ 1 ], self.size_r, self.size_b ))
-		self.rackets.append( go.GameObject( 2, self, self.iPosR2[ 0 ], self.iPosR2[ 1 ], self.size_b, self.size_r ))
-		self.rackets.append( go.GameObject( 3, self, self.iPosR3[ 0 ], self.iPosR3[ 1 ], self.size_r, self.size_b ))
-		self.rackets.append( go.GameObject( 4, self, self.iPosR4[ 0 ], self.iPosR4[ 1 ], self.size_b, self.size_r ))
+		# setting up rackets :             id, game, _x              , _y              , _w         , _h         , _maxSpeed
+		self.rackets.append( go.GameObject( 1, self, self.iPosR1[ 0 ], self.iPosR1[ 1 ], self.size_r, self.size_b, self.speed_m_r ))
+		self.rackets.append( go.GameObject( 2, self, self.iPosR2[ 0 ], self.iPosR2[ 1 ], self.size_b, self.size_r, self.speed_m_r ))
+		self.rackets.append( go.GameObject( 3, self, self.iPosR3[ 0 ], self.iPosR3[ 1 ], self.size_r, self.size_b, self.speed_m_r ))
+		self.rackets.append( go.GameObject( 4, self, self.iPosR4[ 0 ], self.iPosR4[ 1 ], self.size_b, self.size_r, self.speed_m_r ))
 
 		self.rackets[ 0 ].setSpeeds( self.speed_r, 0 )
 		self.rackets[ 1 ].setSpeeds( 0, self.speed_r )
@@ -59,7 +59,7 @@ class Pongest( gi.Game ):
 
 
 	def initBalls( self ):
-		self.balls.append( go.GameObject( 1, self, self.iPosB1[ 0 ], self.iPosB1[ 1 ], self.size_b, self.size_b ))
+		self.balls.append( go.GameObject( 1, self, self.iPosB1[ 0 ], self.iPosB1[ 1 ], self.size_b, self.size_b, self.speed_m_b ))
 		self.balls[ 0 ].setSpeeds( self.speed_b * ( 1 / 3 ), self.speed_b )
 		self.balls[ 0 ].setDirs( 1, -1 )
 

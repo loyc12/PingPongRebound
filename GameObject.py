@@ -15,44 +15,46 @@ except ModuleNotFoundError:
 # object class
 class GameObject:
 
-	def __init__( self, _id, _game, _x, _y, _w, _h ):
+	def __init__( self, _id, _game, _x, _y, _w, _h, _maxSpeed = 160 ): #_type = df.OBJ_BASE ):
 		self.game = _game
 		self.id = _id
-		self.setSpeeds( 0, 0 )
+		self.setSize( int( _w ), int ( _h ))
+		self.setPos( int( _x ), int( _y ))
+		self.maxSpeed = int( _maxSpeed )
 		self.setDirs( 0, 0 )
-		self.setSize( _w, _h )
-		self.setPos( _x, _y )
+		self.setSpeeds( 0, 0 )
+		#self.type = _type
 
 		if( cfg.DEBUG_MODE ):
-			self.box = pg.Rect( _game.width / 2, _game.height / 2, _w, _h )# 	NOTE : DEBUG
-
-
-	def drawSelf( self ): # 														NOTE : DEBUG
-		if( cfg.DEBUG_MODE ):
-			self.box.center = ( self.px, self.py )
-			pg.draw.rect( self.game.win, df.COL_OBJ, self.box )
-		else:
-			print( "GameObject.drawSelf()is a DEBUG_MODE function" )
+			self.box = pg.Rect( _game.width / 2, _game.height / 2, _w, _h )
 
 
 	def getCopy( self ):
 
-		copy = GameObject( self.id, self.game, self.px, self.py, self.sx, self.sy )
+		copy = GameObject( self.id, self.game, self.px, self.py, self.sx, self.sy, self.maxSpeed )
 		copy.setSpeeds( self.dx, self.dy )
 		copy.setDirs( self.fx, self.fy )
 
 		return copy
 
 
+	def drawSelf( self ): # 										NOTE : DEBUG
+		if( cfg.DEBUG_MODE ):
+			self.box.center = ( self.px, self.py )
+			pg.draw.rect( self.game.win, df.COL_OBJ, self.box )
+		else:
+			print( "GameObject.drawSelf() is a DEBUG_MODE function" )
+
+
 # ---------------------------------------------- POSITION ---------------------------------------------- #
 
 
-	def setSize( self, _w, _h ):
+	def setSize( self, _w, _h ): #		NOTE : .sx and .sy are half lenghts
 		self.sx = int( _w / 2 )
 		self.sy = int( _h / 2 )
 
 	def getSize( self ):
-		return( int( self.sx ), int( self.sy ))
+		return( int( 2 * self.sx ), int( 2 * self.sy ))
 
 
 	def setLeft( self, _x ):
@@ -102,27 +104,11 @@ class GameObject:
 		return self.py
 
 
-	def updatePos( self, max_speed ):
-		# makes sure the dx and dy are positive
+	def updatePos( self ):
 		self.clampSpeed()
 
-		# moving on x
-		if self.fx != 0:
-			if abs( self.dx * self.fx ) > max_speed:
-				if self.dx > max_speed:
-					self.dx = max_speed
-				self.px += max_speed * df.getSign( self.fx )
-			else:
-				self.px += self.dx * self.fx
-
-		# moving on y
-		if self.fy != 0:
-			if abs( self.dy * self.fy ) > max_speed:
-				if self.dy > max_speed:
-					self.dy = max_speed
-				self.py += max_speed * df.getSign( self.fy )
-			else:
-				self.py += self.dy * self.fy
+		self.px += self.dx * self.fx
+		self.py += self.dy * self.fy
 
 		self.px = int( self.px )
 		self.py = int( self.py )
@@ -171,25 +157,33 @@ class GameObject:
 	def bounceOnWall( self, mode ):
 		if mode == "stop":
 			self.stopDirs()
+
+		# vertical surface bounces ( | )
 		elif mode == "x":
 			self.fx *= -1
 			self.dx *= self.game.factor_wall
+
+		# horizontal surface bounces ( -- )
 		elif mode == "y":
 			self.fy *= -1
 			self.dy *= self.game.factor_wall
 
 		self.clampSpeed()
-		if df.BOT_NO_STUCK:
+		if df.NO_STUCK_BALLS:
 			self.makeUnstuck( mode )
 
 
 	# NOTE : IS ONLY FOR BALLS
 	def bounceOnRack( self, other, mode ):
 		t = time.time() - self.game.start_time
+
+		# vertical surface bounces ( | )
 		if mode == "x":
 			self.fx *= -1
 			self.dx *= self.game.factor_rack
 			self.dy += other.getMvY() * self.fy
+
+		# horizontal surface bounces ( -- )
 		elif mode == "y":
 			self.fy *= -1
 			self.dy *= self.game.factor_rack
@@ -199,7 +193,7 @@ class GameObject:
 			print( f"{self.game.gameID} )  {self.game.name}  \t: racket bounce at {'{:.1f}'.format( t )}s" )# 	NOTE : DEBUG
 
 		self.clampSpeed()
-		if df.BOT_NO_STUCK:
+		if df.NO_STUCK_BALLS:
 			self.makeUnstuck( mode )
 
 
@@ -264,13 +258,35 @@ class GameObject:
 
 
 	def clampSpeed( self ):
-		# make sure dy and dx are positive
+		# making sure dx is positive
 		if self.dy < 0:
 			self.dy *= -1
 			self.fy *= -1
+
+		# making sure dy is positive
 		if self.dx < 0:
 			self.dx *= -1
 			self.fx *= -1
+
+		self.checkMaxSpeed()
+
+
+	def checkMaxSpeed( self ):
+		# checking on x
+		if abs( self.dx * self.fx ) > self.maxSpeed:
+			if self.dx > self.maxSpeed: # 				NOTE : handling for balls (variable dx/dy)
+				self.dx = self.maxSpeed
+			else: # 									NOTE : handling for rackets (variable fx/fy)
+				while abs( self.dx * self.fx ) > self.maxSpeed:
+					self.fx -= df.getSign( self.fx )
+
+		# checking on y
+		if abs( self.dy * self.fy ) > self.maxSpeed:
+			if self.dy > self.maxSpeed: # 				NOTE : handling for balls (variable dx/dy)
+				self.dy = self.maxSpeed
+			else: # 									NOTE : handling for rackets (variable fx/fy)
+				while abs( self.dy * self.fy ) > self.maxSpeed:
+					self.fy -= df.getSign( self.fy )
 
 
 # ---------------------------------------------- DIRECTION --------------------------------------------- #

@@ -15,6 +15,8 @@ except ModuleNotFoundError:
 class Ping( gi.Game ):
 	name = "Ping"
 
+	divide_sides = True
+
 	width = 2048
 	height = 1024
 
@@ -37,43 +39,25 @@ class Ping( gi.Game ):
 	iPosS2 = ( int( width * ( 3 / 4 )), int( height * ( 1 / 2 )))
 
 	lines = [
-	[( 0.5, 0 ), ( 0.5, 1 ), 1],
-	[( 0, 0 ), ( 0, 1 ), 2],
-	[( 1, 0 ), ( 1, 1 ), 2],
-	[( 0, 0 ), ( 1, 0 ), 2]]
+	[( 0.5, 0 ), ( 0.5, 1 ), 1 ],
+	[( 0, 0 ), ( 0, 1 ), 2 ],
+	[( 1, 0 ), ( 1, 1 ), 2 ],
+	[( 0, 0 ), ( 1, 0 ), 2 ]]
 
 
 	def initRackets( self ):
-		self.rackets.append( go.GameObject( 1, self, self.iPosR1[ 0 ], self.iPosR1[ 1 ], self.size_r, self.size_b ))
+		# setting up rackets :             id, game, _x              , _y              , _w         , _h         , _maxSpeed
+		self.rackets.append( go.GameObject( 1, self, self.iPosR1[ 0 ], self.iPosR1[ 1 ], self.size_r, self.size_b, self.speed_m_r ))
 		self.rackets[ 0 ].setSpeeds( self.speed_r, 0 )
 
-		self.rackets.append( go.GameObject( 2, self, self.iPosR2[ 0 ], self.iPosR2[ 1 ], self.size_r, self.size_b ))
+		self.rackets.append( go.GameObject( 2, self, self.iPosR2[ 0 ], self.iPosR2[ 1 ], self.size_r, self.size_b, self.speed_m_r ))
 		self.rackets[ 1 ].setSpeeds( self.speed_r, 0 )
 
 
 	def initBalls( self ):
-		self.balls.append( go.GameObject( 1, self, self.iPosB1[ 0 ], self.iPosB1[ 1 ], self.size_b, self.size_b ))
+		self.balls.append( go.GameObject( 1, self, self.iPosB1[ 0 ], self.iPosB1[ 1 ], self.size_b, self.size_b, self.speed_m_b ))
 		self.balls[ 0 ].setSpeeds( self.speed_b * ( 2 / 3 ), self.speed_b * ( 3 / 2 ) )
 		self.balls[ 0 ].setDirs( 1, -1 )
-
-
-	def moveRacket( self, rack ):
-		rack.clampSpeed()
-		rack.updatePos( self.speed_m_r )
-
-		# prevent racket from going off screen
-		if( not rack.isInScreen() ):
-			rack.bounceOnWall( "stop" )
-
-		# prevent racket from crossing the middle line
-		if rack.id == 1 and rack.getRight() > self.width / 2:
-			rack.bounceOnWall( "stop" )
-			rack.setPosX(( self.width - self.size_r ) / 2 )
-		elif rack.id == 2 and rack.getLeft() < self.width / 2:
-			rack.bounceOnWall( "stop" )
-			rack.setPosX(( self.width + self.size_r ) / 2 )
-
-		rack.clampPos()
 
 
 	# scoring a goal

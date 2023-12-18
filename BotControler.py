@@ -387,39 +387,54 @@ class BotControler( gc.GameControler ):
 		while dept <= df.BOT_SEARCH_DEPTH:
 			dept += 1
 
-			# have the ball do one step
-			dy += g.gravity * fy #			NOTE : assumes normal gravity
-
-			X += dx * fx
-			X = int( X )
-
-			Y += dy * fy
-			Y = int( Y )
-
-			while df.isInZone( X, Y, self.border, self.border, g.width - self.border, g.height - self.border  ):
+			# do steps until goal is reached (or ball is stuck)
+			while( True ):
+				# breaks if the ball is stuck
 				if( dx * fx == 0 ) and ( dy * fy == 0 ):
 					break;
-				dy += g.gravity * fy #		NOTE : assumes normal gravity
 
-				X += dx * fx
-				X = int( X )
+				dy += g.gravity * df.getSign( fy ) #					NOTE : assumes normal gravity (gy)
+				( X, Y ) = self.calculateStep( X, Y, dx, dy, fx, fy)
 
-				Y += dy * fy
-				Y = int( Y )
+				# breaks if the ball is on screen edge
+				if not df.isInZone( X, Y, self.border, self.border, g.width - self.border, g.height - self.border ):
+					break
 
+			# returns where to be to block the next potential goal
 			if self.isInOwnGoal( X, Y, self.border ):
 				return( int( X ), int( Y ))
 
-			# make ball bounce on edges
+			# bounces the ball on horizontal ( __ ) edges if need be
 			if X <= self.border or X >= ( g.width - self.border ):
 				fx *= -1
 				dx *= factor
+
+				# clamps the ball's position to the screen
+				if X <= self.border:
+					X = self.border
+				else:
+					X = g.width - self.border
+
+			# bounces the ball on vertical ( | ) edges if need be
 			if Y <= self.border or Y >= ( g.height - self.border ):
 				fy *= -1
 				dy *= factor
 
+				# clamps the ball's position to the screen
+				if Y <= self.border:
+					Y = self.border
+				else:
+					Y = g.height - self.border
 
-		return( int( X ), int( Y ))
+		# if no potential goal is found, go back to default position
+		return( self.defaultX, self.defaultY )
+
+
+	def calculateStep( self, x, y, dx, dy, fx, fy ):
+		x += dx * fx
+		y += dy * fy
+
+		return( int( x ), int( y ) )
 
 
 
