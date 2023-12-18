@@ -12,8 +12,8 @@ except ModuleNotFoundError:
 
 
 # MASTER LIST
-# TODO : rework ball respawn in pongest
 # TODO : have max speed be a gameObject var instead of an argument
+# TODO : rework ball respawn in pongest
 # TODO : have respawn trajectories be stored in an array in game interface
 
 # FUNCTION LIST
@@ -46,7 +46,7 @@ async def debugTester( Initialiser ):
 
 
 if __name__ == '__main__':
-	asy.run( debugTester( Pongest ))
+	asy.run( debugTester( Pingest ))
 
 
 

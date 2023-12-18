@@ -40,15 +40,16 @@ class Pong( gi.Game ):
 
 
 	def initRackets( self ):
-		self.rackets.append( go.GameObject( 1, self, self.iPosR1[ 0 ], self.iPosR1[ 1 ], self.size_b, self.size_r ))
-		self.rackets[ 0 ].setSpeeds( 0, self.speed_r )
+		# setting up rackets :             id, game, _x              , _y              , _w         , _h         , _maxSpeed
+		self.rackets.append( go.GameObject( 1, self, self.iPosR1[ 0 ], self.iPosR1[ 1 ], self.size_b, self.size_r, self.speed_m_r ))
+		self.rackets.append( go.GameObject( 2, self, self.iPosR2[ 0 ], self.iPosR2[ 1 ], self.size_b, self.size_r, self.speed_m_r ))
 
-		self.rackets.append( go.GameObject( 2, self, self.iPosR2[ 0 ], self.iPosR2[ 1 ], self.size_b, self.size_r ))
+		self.rackets[ 0 ].setSpeeds( 0, self.speed_r )
 		self.rackets[ 1 ].setSpeeds( 0, self.speed_r )
 
 
 	def initBalls( self ):
-		self.balls.append( go.GameObject( 1, self, self.iPosB1[ 0 ], self.iPosB1[ 1 ] , self.size_b, self.size_b ))
+		self.balls.append( go.GameObject( 1, self, self.iPosB1[ 0 ], self.iPosB1[ 1 ] , self.size_b, self.size_b, self.speed_m_b ))
 		self.balls[ 0 ].setSpeeds( self.speed_b * ( 3 / 2 ), self.speed_b )
 		self.balls[ 0 ].setDirs( 1, 1 )
 

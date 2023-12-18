@@ -8,6 +8,12 @@ CONTROLER = 0
 PLAYER = 1
 BOT = 2
 
+# game objects
+OBJ_BASE = 0
+OBJ_BALL = 1
+OBJ_RACKET = 2
+OBJ_OBSTACLE = 3
+
 # movements
 NULL = 0
 STOP = 1
@@ -15,6 +21,7 @@ UP = 2
 RIGHT = 3
 DOWN = 4
 LEFT = 5
+NO_STUCK_BALLS = True #			NOTE : this prevent balls from having 0 speed on either X or Y (no straight bounces)
 
 # scores
 GOALS = 1
@@ -48,7 +55,6 @@ HARD = 3
 BOT_CAN_PLAY = True
 BOT_INSTANT_REACT = False #	TODO : put me to false before pushing
 BOT_HARD_BREAK = True
-BOT_NO_STUCK = True
 
 BOT_M_FACTOR = 4 #			how many times dx or dy can the racket go at
 BOT_KICK_FACTOR = 2

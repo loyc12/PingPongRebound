@@ -32,7 +32,7 @@ class Pi( gi.Game ):
 
 
 	def initBalls( self ):
-		self.balls.append( go.GameObject( 1, self, self.iPosB1[ 0 ], self.iPosB1[ 1 ], self.size_b, self.size_b ))
+		self.balls.append( go.GameObject( 1, self, self.iPosB1[ 0 ], self.iPosB1[ 1 ], self.size_b, self.size_b, self.speed_m_r ))
 		self.balls[ 0 ].setSpeeds( self.speed_b, 0 )
 		self.balls[ 0 ].setDirs( 1, 1 )
 

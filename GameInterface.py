@@ -27,7 +27,8 @@ class Game:
 	name = "Game"
 	racketCount = 1
 	state = df.STARTING
-	hard_break = False
+	hard_break = False #		NOTE : automatically stop racket when decelerating
+	divide_sides = False #		NOTE : prevents rackets from crossing the middle of the screen
 
 	width = 1536
 	height = 1024
@@ -47,8 +48,8 @@ class Game:
 	factor_rack = 1.10
 	gravity = 0
 
-	start_time = 0 #					NOTE : DEBUG
-	last_time = 0 #						NOTE : DEBUG
+	start_time = 0 #			NOTE : DEBUG
+	last_time = 0 #				NOTE : DEBUG
 
 	last_ponger = 0
 	step_count = 0
@@ -125,12 +126,14 @@ class Game:
 
 
 	def initRackets( self ):
-		self.rackets.append( go.GameObject( 1, self, self.iPosR1[ 0 ], self.iPosR1[ 1 ], self.size_r, self.size_b ))
+		# setting up rackets :             id, game, _x              , _y              , _w         , _h         , _maxSpeed
+		self.rackets.append( go.GameObject( 1, self, self.iPosR1[ 0 ], self.iPosR1[ 1 ], self.size_r, self.size_b, self.speed_m_r ))
+
 		self.rackets[ 0 ].setSpeeds( self.speed_r, 0 )
 
 
 	def initBalls( self ):
-		self.balls.append( go.GameObject( 1, self, self.iPosB1[ 0 ], self.iPosB1[ 1 ], self.size_b, self.size_b ))
+		self.balls.append( go.GameObject( 1, self, self.iPosB1[ 0 ], self.iPosB1[ 1 ], self.size_b, self.size_b, self.speed_m_b ))
 		self.balls[ 0 ].setSpeeds( self.speed_b, self.speed_b )
 		self.balls[ 0 ].setDirs( 1, 1 )
 
@@ -448,11 +451,21 @@ class Game:
 
 	def moveRacket( self, rack ):
 		rack.clampSpeed()
-		rack.updatePos( self.speed_m_r )
+		rack.updatePos()
 
 		# prevent racket from going off screen
 		if( not rack.isInScreen() ):
 			rack.bounceOnWall( "stop" )
+
+		# prevent rackets from crossing the middle lines
+		if self.divide_sides:
+			if( rack.id == 1 or rack.id == 3 ) and rack.getRight() > self.width / 2:
+				rack.bounceOnWall( "stop" )
+				rack.setPosX(( self.width - self.size_r ) / 2 )
+
+			elif( rack.id == 2 or rack.id == 4 ) and rack.getLeft() < self.width / 2:
+				rack.bounceOnWall( "stop" )
+				rack.setPosX(( self.width + self.size_r ) / 2 )
 
 		rack.clampPos()
 
@@ -462,7 +475,7 @@ class Game:
 		self.aplyGravity( ball )
 
 		ball.clampSpeed()
-		ball.updatePos( self.speed_m_b )
+		ball.updatePos()
 
 
 		self.checkRackets( ball )
@@ -470,7 +483,6 @@ class Game:
 		self.checkGoals( ball )
 
 		ball.clampPos()
-		ball.clampSpeed()
 
 
 	def aplyGravity( self, ball ):
