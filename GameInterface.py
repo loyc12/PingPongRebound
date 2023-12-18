@@ -373,7 +373,7 @@ class Game:
 			else:
 				self.controlers[ 0 ].handleKeyInput( key )
 		else:
-			for i in range( 0, self.controlerCount ):
+			for i in range( self.controlerCount ):
 				if self.controlers[ i ].mode == df.PLAYER:
 					self.controlers[ i ].handleKeyInput( key )
 
@@ -496,9 +496,9 @@ class Game:
 
 	# bouncing off the rackets
 	def checkRackets( self, ball ):
-		for i in range( len( self.rackets )):
-			rack = self.rackets[ i ]
+		for rack in self.rackets: #		copies the racket's data
 			if ball.isOverlaping( rack ):
+
 				ball.setPosY( rack.getPosY() - self.size_b )# '-' because the ball is going above the racket
 				ball.bounceOnRack( rack, "y" )
 				self.scorePoint( rack.id, df.HITS )

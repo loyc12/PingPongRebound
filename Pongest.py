@@ -76,6 +76,7 @@ class Pongest( gi.Game ):
 	def checkRackets( self, ball ):
 		for rack in self.rackets: #		copies the racket's data
 			if ball.isOverlaping( rack ):
+
 				if( rack.id == 1 ):
 					ball.setPosY( rack.getPosY() + self.size_b )# '+' because the ball is going under
 					ball.bounceOnRack( rack, "y" )

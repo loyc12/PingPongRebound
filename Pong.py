@@ -57,13 +57,14 @@ class Pong( gi.Game ):
 
 	# bouncing off the rackets
 	def checkRackets( self, ball ):
-		for i in range( self.racket_count ):
-			rack = self.rackets[ i ]
+		for rack in self.rackets: #		copies the racket's data
 			if ball.isOverlaping( rack ):
+
 				if( rack.id == 1 ):
 					ball.setPosX( rack.getPosX() + self.size_b )# '+' because the ball is going to the right
 				elif( rack.id == 2 ):
 					ball.setPosX( rack.getPosX() - self.size_b )# '-' because the ball is going to the left
+
 				ball.bounceOnRack( rack, "x" )
 				self.scorePoint( rack.id, df.HITS )
 
