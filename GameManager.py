@@ -156,7 +156,7 @@ class GameManager:
 
 		async with game.gameLock:
 			game.addPlayer( name, playerID )
-			if game.mode == df.DUAL and game.racketCount > 1:
+			if game.mode == df.DUAL and game.racket_count > 1:
 				game.addPlayer( "guest", 0 )
 
 
@@ -437,16 +437,16 @@ class GameManager:
 		return {
 			'gameType': gameClass.name,
 			'sizeInfo': GameManager.getSizeInfo( gameClass ),
-			'racketCount': gameClass.racketCount,
+			'racketCount': gameClass.racket_count,
 			'scorePos': GameManager.getScorePos( gameClass ),
 			'scoreSize': gameClass.size_font,
 			'lines': GameManager.getLines( gameClass ),
-			'orientations': [ initRacketsPos[( i * 3 ) + 2 ] for i in range( gameClass.racketCount )],
+			'orientations': [ initRacketsPos[( i * 3 ) + 2 ] for i in range( gameClass.racket_count )],
 			'update': {
 				'racketPos': [ coord for coord in initRacketsPos if not isinstance( coord, str )],
 				'ballPos': GameManager.getBallInitPos( gameClass ),
 				'lastPonger': 0,
-				'scores': [ 0 for _ in range( gameClass.racketCount )]
+				'scores': [ 0 for _ in range( gameClass.score_count )]
 			}
 		}
 
@@ -559,7 +559,7 @@ class GameManager:
 		gameClass = GameManager.getGameClass( gameType )
 
 		if( gameClass != None ):
-			return gameClass.racketCount
+			return gameClass.racket_count
 
 		print( "Error : GameManager.getMaxPlayerCount(): invalid game type" )
 		return 0

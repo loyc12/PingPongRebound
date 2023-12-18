@@ -20,7 +20,8 @@ class Pong( gi.Game ):
 
 	size_font = 768
 
-	racketCount = 2
+	racket_count = 2
+	score_count = 2
 
 	score_mode = df.GOALS
 	scores = [ 0, 0 ]
@@ -56,7 +57,7 @@ class Pong( gi.Game ):
 
 	# bouncing off the rackets
 	def checkRackets( self, ball ):
-		for i in range( len( self.rackets )):
+		for i in range( self.racket_count ):
 			rack = self.rackets[ i ]
 			if ball.isOverlaping( rack ):
 				if( rack.id == 1 ):

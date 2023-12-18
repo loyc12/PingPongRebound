@@ -23,7 +23,10 @@ class Ping( gi.Game ):
 	size_font = 768
 
 	gravity = 0.333
-	racketCount = 2
+
+	racket_count = 2
+	score_count = 2
+
 	factor_rack = 0.9
 	factor_wall = 0.6
 

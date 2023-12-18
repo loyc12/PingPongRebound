@@ -23,7 +23,8 @@ class Pongest( gi.Game ):
 	speed_m_b = 20
 
 	factor_rack = 1.05
-	racketCount = 4
+	racket_count = 4
+	score_count = 4
 
 	score_mode = df.GOALS
 	scores = [ 0, 0, 0, 0 ]

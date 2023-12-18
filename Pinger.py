@@ -24,7 +24,8 @@ class Pinger( gi.Game ):
 
 	factor_rack = 1.05
 
-	racketCount = 4
+	racket_count = 4
+	score_count = 2
 
 	score_mode = df.GOALS
 	scores = [ 0, 0 ]

@@ -39,8 +39,8 @@ class BotControler( gc.GameControler ):
 		print( "Error: cannot give key inputs to a bot" )
 
 
-	def setFrequencyOffset( self, racketCount ):
-		self.frequency_offset = int(( float( self.racketID ) / racketCount ) * df.BOT_PLAY_FREQUENCY )
+	def setFrequencyOffset( self, r_count ):
+		self.frequency_offset = int(( float( self.racketID ) / r_count ) * df.BOT_PLAY_FREQUENCY )
 
 
 	def recordDefaultPos( self ):
@@ -101,7 +101,7 @@ class BotControler( gc.GameControler ):
 
 
 	def canKickBall( self ):
-		if self.game.racketCount < 2:
+		if self.game.score_count < 2:
 			return False
 		if not self.isInFrontOf( self.lastBall ):
 			return False

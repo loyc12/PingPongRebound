@@ -25,13 +25,16 @@ except ModuleNotFoundError:
 # game class
 class Game:
 	name = "Game"
-	racketCount = 1
+
 	state = df.STARTING
 	hard_break = False #		NOTE : automatically stop racket when decelerating
 	divide_sides = False #		NOTE : prevents rackets from crossing the middle of the screen
 
 	width = 1536
 	height = 1024
+
+	racket_count = 1
+	score_count = 1
 
 	size_b = 20
 	size_r = 160
@@ -55,23 +58,22 @@ class Game:
 	step_count = 0
 
 	score_mode = df.GOALS
+	scores = [ 0 ]
 
-	iPosR1 = ( int( width * ( 1 / 2 )), int( height - size_b), "x" )
+	iPosR1 = ( width * ( 1 / 2 ), height - size_b, "x" )
 	iPosR2 = None
 	iPosR3 = None
 	iPosR4 = None
 
-	iPosB1 = ( int( width * ( 3 / 8 )), size_b )
+	iPosB1 = ( width * ( 3 / 8 ), size_b )
 	iPosB2 = None
 	iPosB3 = None
 	iPosB4 = None
 
-	iPosS1 = ( int( width * ( 1 / 2 )), int( height * ( 1 / 2 )))
+	iPosS1 = ( width * ( 1 / 2 ), height * ( 1 / 2 ))
 	iPosS2 = None
 	iPosS3 = None
 	iPosS4 = None
-
-	scores = [ 0 ] #	NOTE : these are team scores. add more if end up having more than 4 teams
 
 	lines = [
 	[( 0, 0 ), ( 0, 1 ), 2 ],
@@ -119,7 +121,7 @@ class Game:
 
 		self.initRackets()
 		self.initBalls()
-		#self.initScores()
+		self.initScores()
 
 		if (cfg.PRINT_STATES):
 			print( f"{self.gameID} )  {self.name}  \t: game has been created" )# 		NOTE : DEBUG
@@ -139,27 +141,28 @@ class Game:
 
 
 	def initScores( self ):
-		pass
-		#for _ in range( self.racketCount ):
-			#self.scores.append( 0 )
+		self.scores = []
+
+		for _ in range( self.score_count ):
+			self.scores.append( 0 )
 
 
 	# --------------------------------------------- PLAYER & AI -------------------------------------------- #
 
 
 	def initBots( self ):
-		while self.controlerCount < self.racketCount:
+		while self.controlerCount < self.racket_count:
 			self.addBot( "B" + str( self.controlerCount + 1 ))
 
 
 	def addBot( self, botname ):
-		if( self.controlerCount >= self.racketCount ):
+		if( self.controlerCount >= self.racket_count ):
 			raise Exception( "Too many bots for this game" )
 
 		bot = bc.BotControler( self, botname )
 		bot.setRacket( self.rackets[ len( self.controlers )].id )
 		bot.recordDefaultPos()
-		bot.setFrequencyOffset( self.racketCount )
+		bot.setFrequencyOffset( self.racket_count )
 		self.controlers.append( bot )
 
 		self.controlerCount += 1
@@ -170,7 +173,7 @@ class Game:
 
 
 	def makeBotsPlay( self ):
-		if self.useAI and self.playerCount < self.racketCount:
+		if self.useAI and self.playerCount < self.racket_count:
 			for i in range( self.playerCount, self.controlerCount ):
 				if( self.controlers[ i ].mode == df.BOT ):
 
@@ -237,7 +240,7 @@ class Game:
 		return( False )
 
 	def isGameFull( self ):
-		return( self.playerCount >= self.racketCount )
+		return( self.playerCount >= self.racket_count )
 
 
 	def isGameEmpty( self ):
@@ -348,7 +351,7 @@ class Game:
 
 
 	def handleUserInput( self, playerID, key ):
-		if self.mode == df.DUAL and self.racketCount > 1:
+		if self.mode == df.DUAL and self.racket_count > 1:
 			if key == df.KUP or key == df.KRIGHT or key == df.KDOWN or key == df.KLEFT or key == df.NZERO: # check which player played
 				self.controlers[ 1 ].handleKeyInput( key )
 			else:
@@ -364,7 +367,7 @@ class Game:
 
 
 	def handlePygameInput( self, key ): #				NOTE : DEBUGGS
-		if self.mode == df.DUAL and self.racketCount > 1:
+		if self.mode == df.DUAL and self.racket_count > 1:
 			if key == df.KUP or key == df.KRIGHT or key == df.KDOWN or key == df.KLEFT or key == df.NZERO:
 				self.controlers[ 1 ].handleKeyInput( key )
 			else:
@@ -524,26 +527,28 @@ class Game:
 
 	# --------------------------------------------------------------
 
-	def scorePoint( self, controler_id, mode ):
-		if controler_id > 0:
+	def scorePoint( self, teamID, mode ):
+		if teamID > 0:
 			if mode == df.GOALS: #					if the ball went out of bounds
 				if self.score_mode == df.GOALS: #		if goals give points
-					self.scores[ controler_id - 1 ] += 1
+					self.scores[ teamID - 1 ] += 1
+					if cfg.PRINT_STATES:
+						print( f"{self.gameID} )  {self.name}  \t: team #{ teamID } scored a point" )
 				else: # 								if racket hits give points
-					self.scores[ controler_id - 1 ] = 0
+					self.scores[ teamID - 1 ] = 0
 				self.last_ponger = 0
 
 			elif mode == df.HITS: #					if the ball hit a racket
 				if self.score_mode == df.HITS: #		if racket hits give points
-					self.scores[ controler_id - 1 ] += 1
-				else: #									if goals give points
-					pass
-				self.last_ponger = controler_id
+					self.scores[ teamID - 1 ] += 1
+				# else: #								if goals give points, do nothing
+
+				self.last_ponger = teamID
 		else:
 			self.last_ponger = 0
 
 		# check if someone won
-		for i in range( len( self.scores )):
+		for i in range( self.score_count ):
 			score = self.scores[ i ]
 			if score >= df.WIN_SCORE:
 				self.winGame( i + 1 )
@@ -735,7 +740,7 @@ if __name__ == '__main__': #			NOTE : DEBUG MODE ONLY
 	pg.init()
 	g = Game( 1 )
 
-	g.setWindow( pg.display.set_mode(( df.DEF_WIN_SIZE, df.DEF_WIN_SIZE )))
+	g.setWindow( pg.display.set_mode(( 1280, 1280 )))
 	pg.display.set_caption( g.name )
 
 	#g.addPlayer( "Player 1", 1 )
