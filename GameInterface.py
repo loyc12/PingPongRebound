@@ -735,7 +735,7 @@ if __name__ == '__main__': #			NOTE : DEBUG MODE ONLY
 	pg.init()
 	g = Game( 1 )
 
-	g.setWindow( pg.display.set_mode(( 1280, 1280 )))
+	g.setWindow( pg.display.set_mode(( df.DEF_WIN_SIZE, df.DEF_WIN_SIZE )))
 	pg.display.set_caption( g.name )
 
 	#g.addPlayer( "Player 1", 1 )

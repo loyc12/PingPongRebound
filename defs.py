@@ -68,7 +68,7 @@ BOT_REACT_DIST = 320
 
 # pygame (debug) stuff
 if cfg.DEBUG_MODE:
-	WIN_SIZE = 1280
+	DEF_WIN_SIZE = 1280
 	COL_BGR = pg.Color( 'black' )
 	COL_FNT = pg.Color( 'grey25' )
 	COL_OBJ = pg.Color( 'white' )
