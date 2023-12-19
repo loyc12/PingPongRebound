@@ -90,6 +90,8 @@ class Game:
 		self.controlerCount = 0
 
 		self.last_ponger = 0
+		#self.spawn_target = 0
+		#self.spawn_queue = []
 		self.missed_shots = 0
 
 		self.winnerID = 0 #				NOTE : this is a scores[] index( teamID )
