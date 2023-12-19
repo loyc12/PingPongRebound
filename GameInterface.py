@@ -111,6 +111,7 @@ class Game:
 		self.useAI = True
 		self.winnerID = 0 #				NOTE : this is a scores[] index( teamID )
 		self.quitterID = 0 #			NOTE : this is a playerID
+		self.missed_shots = 0
 
 		self.playerCount = 0
 		self.controlerCount = 0
@@ -292,17 +293,6 @@ class Game:
 
 	# --------------------------------------------------------------
 
-#	Possible event types :
-#		- "start_game"
-#		- "end_game"
-#		- "key_press"
-
-#		class Event {
-#			id; // 		playerID	( 0 for server commands )
-#			type; // 	event type	( see above )
-#			key; // 	event code	( key when keyboard related )
-#		}
-
 	async def getNextEvents( self ):
 		if cfg.DEBUG_MODE:
 			return pg.event.get()
@@ -462,6 +452,7 @@ class Game:
 
 		# prevent rackets from crossing the middle lines
 		if self.divide_sides:
+
 			if( rack.id == 1 or rack.id == 3 ) and rack.getRight() > self.width / 2:
 				rack.bounceOnWall( "stop" )
 				rack.setPosX(( self.width - self.size_r ) / 2 )
@@ -501,6 +492,8 @@ class Game:
 				ball.setPosY( rack.getPosY() - self.size_b )# '-' because the ball is going above the racket
 				ball.bounceOnRack( rack, "y" )
 				self.scorePoint( rack.id, df.HITS )
+
+				break # 									NOTE : prevents multihits
 
 
 	# scoring a goal

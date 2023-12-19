@@ -31,6 +31,7 @@ GOALS = 1
 HITS = 2
 
 WIN_SCORE = 8
+MAX_MISSES = 3
 
 # game states
 STARTING = 1

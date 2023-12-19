@@ -79,6 +79,8 @@ class Pinger( gi.Game ):
 				ball.bounceOnRack( rack, "y" )
 				self.scorePoint( rack.id, df.HITS )
 
+				break # 									NOTE : prevents multihits
+
 
 	# bouncing on the walls
 	def checkWalls( self, ball ):

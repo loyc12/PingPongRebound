@@ -95,6 +95,8 @@ class Pongest( gi.Game ):
 
 				self.scorePoint( rack.id, df.HITS )
 
+				break # 									NOTE : prevents multihits
+
 
 	# bouncing on the walls( walls are absent in Pongester )
 	def checkWalls( self, ball ):
