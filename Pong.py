@@ -16,16 +16,15 @@ except ModuleNotFoundError:
 class Pong( gi.Game ):
 	name = "Pong"
 
+	score_mode = df.GOALS
+
 	width = 2048
 	height = 1024
 
-	size_font = 768
+	size_f = 768
 
 	racket_count = 2
 	score_count = 2
-
-	score_mode = df.GOALS
-	scores = [ 0, 0 ]
 
 	iPosR1 = ( int( gi.Game.size_b ), int( height * ( 1 / 2 ))			, "y" )
 	iPosR2 = ( int( width - gi.Game.size_b ), int( height * ( 1 / 2 ))	, "y" )

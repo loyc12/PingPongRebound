@@ -26,40 +26,31 @@ except ModuleNotFoundError:
 class Game:
 	name = "Game"
 
-	state = df.STARTING
 	hard_break = False #		NOTE : automatically stop racket when decelerating
 	divide_sides = False #		NOTE : prevents rackets from crossing the middle of the screen
+	score_mode = df.GOALS
 
 	width = 1536
 	height = 1024
 
-	racket_count = 1
-	score_count = 1
-
 	size_b = 20
+	speed_b = 8
+	speed_m_b = 64
+
 	size_r = 160
+	speed_r = 8
+	speed_m_r = 64
 
 	size_l = 10
-	size_font = 768
-
-	speed_b = 8
-	speed_r = 8
-	speed_m_b = 60
-	speed_m_r = 60
+	size_f = 768
 
 	factor_wall = 0.75
 	factor_rack = 1.10
-	gravity = 0
 
-	start_time = 0 #			NOTE : DEBUG
-	last_time = 0 #				NOTE : DEBUG
+	gravity = 0.0
 
-	last_ponger = 0
-	step_count = 0
-
-	score_mode = df.GOALS
-	scores = [ 0 ]
-
+	racket_count = 1
+	score_count = 1
 
 	iPosR1 = ( width * ( 1 / 2 ), height - size_b, "x" )
 	iPosR2 = None
@@ -89,6 +80,29 @@ class Game:
 
 		self.gameID = _gameID
 		self.connector = connector
+		self.gameLock = asy.Lock()
+		self.state = df.STARTING
+
+		self.useAI = True
+		self.step_count = 0
+
+		self.playerCount = 0
+		self.controlerCount = 0
+
+		self.last_ponger = 0
+		self.missed_shots = 0
+
+		self.winnerID = 0 #				NOTE : this is a scores[] index( teamID )
+		self.quitterID = 0 #			NOTE : this is a playerID
+
+		self.rackets = []
+		self.controlers = []
+		self.balls = []
+		self.scores = []
+
+		self.initRackets()
+		self.initBalls()
+		self.initScores()
 
 		if cfg.FORCE_MODE:
 			print ( "WARNING: game mode has been forced to " + str( df.FORCE_MODE_TO ))
@@ -96,37 +110,17 @@ class Game:
 		else:
 			self.mode = _gameMode
 
-		self.gameLock = asy.Lock()
-
-		self.last_ponger = 0
-		self.step_count = 0
+		if cfg.PRINT_STATES:
+			print( f"{self.gameID} )  {self.name}  \t: game has been created" )# 		NOTE : DEBUG
 
 		if cfg.DEBUG_MODE:
-			self.font = pg.font.Font( None, self.size_font )
+			self.font = pg.font.Font( None, self.size_f )
 			self.debug_font = pg.font.Font( None, 42 )
 			self.racket_font = pg.font.Font( None, 21 )
 
-			self.last_time = time.time()
+			self.start_time = time.time()
+			self.last_time = self.start_time
 			self.delta_time = cfg.FRAME_DELAY
-
-		self.useAI = True
-		self.winnerID = 0 #				NOTE : this is a scores[] index( teamID )
-		self.quitterID = 0 #			NOTE : this is a playerID
-		self.missed_shots = 0
-
-		self.playerCount = 0
-		self.controlerCount = 0
-
-		self.rackets = []
-		self.controlers = []
-		self.balls = []
-
-		self.initRackets()
-		self.initBalls()
-		self.initScores()
-
-		if cfg.PRINT_STATES:
-			print( f"{self.gameID} )  {self.name}  \t: game has been created" )# 		NOTE : DEBUG
 
 
 	def initRackets( self ):

@@ -14,15 +14,15 @@ except ModuleNotFoundError:
 class Pi( gi.Game ):
 	name = "Pi"
 
+	score_mode = gi.df.HITS
+
 	width = 1280
 	height = 1280
 
-	gravity = 0.3
 	factor_rack = 0.9
 	factor_wall = 0.6
 
-	score_mode = gi.df.HITS
-	scores = [ 0 ]
+	gravity = 0.3
 
 	iPosR1 = ( int( width * ( 1 / 2 )), int( height - gi.Game.size_b ), "x" )
 

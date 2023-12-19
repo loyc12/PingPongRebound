@@ -123,19 +123,19 @@ class GameObject:
 		if self.getLeft() < 0:
 			self.setLeft( 0 )
 			if cfg.PRINT_DEBUG:
-				print( "clamping to left" )
+				print( "clamping pos to left" )
 		if self.getRight() > self.game.width:
 			self.setRight( self.game.width )
 			if cfg.PRINT_DEBUG:
-				print( "clamping to right" )
+				print( "clamping pos to right" )
 		if self.getTop() < 0:
 			self.setTop( 0 )
 			if cfg.PRINT_DEBUG:
-				print( "clamping to top" )
+				print( "clamping pos to top" )
 		if self.getBottom() > self.game.height:
 			self.setBottom( self.game.height )
 			if cfg.PRINT_DEBUG:
-				print( "clamping to bottom" )
+				print( "clamping pos to bottom" )
 
 
 	def isOnScreen( self ):
@@ -192,7 +192,6 @@ class GameObject:
 
 	# NOTE : IS ONLY FOR BALLS
 	def bounceOnRack( self, other, mode ):
-		t = time.time() - self.game.start_time
 
 		# vertical surface bounces ( | )
 		if mode == "x":
@@ -207,6 +206,7 @@ class GameObject:
 			self.dx = int( self.dx + ( other.getMvX() * df.KICK_FACTOR * df.getSign( self.fx )))
 
 		if cfg.PRINT_COLLISIONS:
+			t = time.time() - self.game.start_time
 			print( f"{self.game.gameID} )  {self.game.name}  \t: racket bounce at {'{:.1f}'.format( t )}s" )# 	NOTE : DEBUG
 
 		self.clampSpeed()
@@ -297,17 +297,25 @@ class GameObject:
 		if abs( self.dx * self.fx ) > self.maxSpeed:
 			if self.dx > self.maxSpeed: # 				NOTE : handling for balls (variable dx/dy)
 				self.dx = self.maxSpeed
+
 			else: # 									NOTE : handling for rackets (variable fx/fy)
 				while abs( self.dx * self.fx ) > self.maxSpeed:
 					self.fx -= df.getSign( self.fx )
+
+			if cfg.PRINT_DEBUG:
+				print( "clamping speed on x" )
 
 		# checking on y
 		if abs( self.dy * self.fy ) > self.maxSpeed:
 			if self.dy > self.maxSpeed: # 				NOTE : handling for balls (variable dx/dy)
 				self.dy = self.maxSpeed
+
 			else: # 									NOTE : handling for rackets (variable fx/fy)
 				while abs( self.dy * self.fy ) > self.maxSpeed:
 					self.fy -= df.getSign( self.fy )
+
+			if cfg.PRINT_DEBUG:
+				print( "clamping speed on y" )
 
 
 # ---------------------------------------------- DIRECTION --------------------------------------------- #

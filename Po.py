@@ -14,16 +14,15 @@ except ModuleNotFoundError:
 class Po( gi.Game ):
 	name = "Po"
 
+	score_mode = gi.df.HITS
+
 	width = 1280
 	height = 1280
 
-	size_font = 768
+	size_f = 768
 
 	factor_rack = 1.2
 	factor_wall = 0.9
-
-	score_mode = gi.df.HITS
-	scores = [ 0 ]
 
 	iPosR1 = ( int( width * ( 1 / 2 )), int( height - gi.Game.size_b ), "x" )
 

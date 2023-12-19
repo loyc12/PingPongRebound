@@ -17,22 +17,20 @@ class Ping( gi.Game ):
 	name = "Ping"
 
 	divide_sides = True
+	score_mode = df.GOALS
 
 	width = 2048
 	height = 1024
 
-	size_font = 768
+	size_f = 768
+
+	factor_rack = 0.9
+	factor_wall = 0.6
 
 	gravity = 0.333
 
 	racket_count = 2
 	score_count = 2
-
-	factor_rack = 0.9
-	factor_wall = 0.6
-
-	score_mode = df.GOALS
-	scores = [ 0, 0 ]
 
 	iPosR1 = ( int( width * ( 1 / 3 )), int( height - gi.Game.size_b ), "x" )
 	iPosR2 = ( int( width * ( 2 / 3 )), int( height - gi.Game.size_b ), "x" )

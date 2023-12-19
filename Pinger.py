@@ -17,19 +17,17 @@ class Pinger( gi.Game ):
 	name = "Pinger"
 
 	divide_sides = True
+	score_mode = df.GOALS
 
 	width = 1536
 	height = 1280
 
-	size_font = 768
+	size_f = 768
 
 	factor_rack = 1.05
 
 	racket_count = 4
 	score_count = 2
-
-	score_mode = df.GOALS
-	scores = [ 0, 0 ]
 
 	iPosR1 = ( int( width * ( 2 / 7 )), int( gi.Game.size_b )			, "x" )
 	iPosR2 = ( int( width * ( 5 / 7 )), int( gi.Game.size_b )			, "x" )
@@ -40,7 +38,6 @@ class Pinger( gi.Game ):
 
 	iPosS1 = ( int( width * ( 1 / 4 )), int( height * ( 1 / 2 )))
 	iPosS2 = ( int( width * ( 3 / 4 )), int( height * ( 1 / 2 )))
-
 
 	lines = [
 	[( 0, 0 ), ( 0, 1 ), 2 ],

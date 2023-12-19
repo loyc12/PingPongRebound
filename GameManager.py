@@ -443,7 +443,7 @@ class GameManager:
 			'sizeInfo': GameManager.getSizeInfo( gameClass ),
 			'racketCount': gameClass.racket_count,
 			'scorePos': GameManager.getScorePos( gameClass ),
-			'scoreSize': gameClass.size_font,
+			'scoreSize': gameClass.size_f,
 			'lines': GameManager.getLines( gameClass ),
 			'orientations': [ initRacketsPos[( i * 3 ) + 2 ] for i in range( gameClass.racket_count )],
 			'update': {

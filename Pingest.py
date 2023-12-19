@@ -17,19 +17,17 @@ class Pingest( gi.Game ):
 	name = "Pingest"
 
 	divide_sides = True
+	score_mode = df.GOALS
 
 	width = 2048 #			NOTE : should be 1536 but issues with client side
 	height = 1024 #			NOTE : should be 1280 but issues with client side
 
-	size_font = 768
+	size_f = 768
 
 	factor_rack = 1.05
 
 	racket_count = 4
 	score_count = 4
-
-	score_mode = df.GOALS
-	scores = [ 0, 0, 0, 0 ]
 
 	iPosR1 = ( int( width * ( 2 / 7 )), int( gi.Game.size_b )			, "x" )
 	iPosR2 = ( int( width * ( 5 / 7 )), int( gi.Game.size_b )			, "x" )
