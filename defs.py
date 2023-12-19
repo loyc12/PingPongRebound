@@ -38,11 +38,6 @@ STARTING = 1
 PLAYING = 2
 ENDING = 3
 
-# end states
-END_WIN = "win"
-END_QUIT = "quit"
-END_ABORT = "abort"
-
 # game modes
 SOLO = 1
 DUAL = 2

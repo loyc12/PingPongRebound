@@ -105,7 +105,7 @@ class Game:
 		self.initScores()
 
 		if cfg.FORCE_MODE:
-			print ( "WARNING: game mode has been forced to " + str( df.FORCE_MODE_TO ))
+			print ( "Warning : game mode has been forced to " + str( df.FORCE_MODE_TO ))
 			self.mode = df.FORCE_MODE_TO
 		else:
 			self.mode = _gameMode
@@ -153,7 +153,7 @@ class Game:
 
 	def addBot( self, botname ):
 		if( self.controlerCount >= self.racket_count ):
-			raise Exception( "Too many bots for this game" )
+			print( "Warning : game #" + str( self.gameID ) + " is full" )
 
 		bot = bc.BotControler( self, botname )
 		bot.setRacket( self.rackets[ len( self.controlers )].id )
@@ -165,7 +165,7 @@ class Game:
 		return( bot )
 
 
-	# def removeBots( self ): # NOTE : not needed anymore
+	# def removeBots( self ): #		NOTE : obsolete; bots are only added on game start now, so we never have to remove any
 
 
 	def makeBotsPlay( self ):
@@ -189,9 +189,9 @@ class Game:
 
 	def addPlayer( self, username, playerID ):
 		if( self.state != df.STARTING ):
-			print( "cannot add players once the game started" )
+			print( "Warning : cannot add players once the game started" )
 		elif( self.isGameFull() ):
-			print( "this game is full" )
+			print( "Warning : game #" + str( self.gameID ) + " is full" )
 
 		player = pl.PlayerControler( self, username, playerID )
 		player.setRacket( self.rackets[ self.playerCount ].id )
@@ -210,7 +210,7 @@ class Game:
 				self.playerCount -= 1
 				self.controlerCount -= 1
 
-		print( "player #" + str( playerID ) + " not found in this game" )
+		print( "Warning : player #" + str( playerID ) + " not found in this game" )
 
 
 	def getPlayerControler( self, username ):
@@ -246,12 +246,12 @@ class Game:
 
 	def makeMove( self, target_id, move ):
 		if target_id <= 0 :
-			print( "Error: no target selected" )
+			print( "Warning : no target selected" )
 			return
 
 		if move <= df.NULL:
 			if move < df.NULL:
-				print( "Error: invalid move : " + str( move ))
+				print( "Warning : invalid move : " + str( move ))
 			return
 
 		for i in range( len( self.rackets )):
@@ -283,7 +283,7 @@ class Game:
 					else:
 						rack.fy += 1
 				else:
-					print( "Error: invalid move : " + str( move ))
+					print( "Warning : invalid move : " + str( move ))
 				return
 
 	# --------------------------------------------------------------
@@ -347,7 +347,7 @@ class Game:
 					self.controlers[ i ].handleKeyInput( key )
 					return
 
-			print( "player #" + str( playerID ) + " is not in this game" )
+			print( "Warning : player #" + str( playerID ) + " is not in this game" )
 
 
 	def handlePygameInput( self, key ): #				NOTE : DEBUGGS
@@ -376,7 +376,7 @@ class Game:
 				print( self.getPlayerInfo() )# 												NOTE : DEBUG
 
 		else:
-			print( "game is either running or over" )
+			print( "Warning : game # " + str( self.gameID ) + " is already running or over" )
 
 
 	def close( self ):
@@ -390,11 +390,11 @@ class Game:
 	async def run( self ):
 
 		if not cfg.DEBUG_MODE:
-			print( "cannot use run() without debug mode" )
+			print( "Warning : cannot use game.run() without DEBUG_MODE on" )
 			return
 
 		if self.state != df.PLAYING:
-			print( f"{ self.name } is not running" )
+			print( "Warning : game #" + str( self.gameID ) + " was not started" )
 			return
 
 		# main game loop
@@ -408,7 +408,7 @@ class Game:
 	def step( self, display = False ):
 
 		if self.state != df.PLAYING:
-			print( str( self.name ) + " is not running" )
+			print( "Warning : game #" + str( self.gameID ) + " was not started" )
 			return
 
 		if not cfg.DEBUG_MODE or cfg.MOVE_OBJECTS:
@@ -698,13 +698,7 @@ class Game:
 
 		infoDict[ "gameType" ] = self.name
 		infoDict[ "gameMode" ] = self.getMode()
-
-		if self.quitterID != 0:
-			infoDict[ "endState" ] = df.END_QUIT
-		elif self.winnerID != 0:
-			infoDict[ "endState" ] = df.END_WIN
-		else:
-			infoDict[ "endState" ] = df.END_ABORT
+		infoDict[ "endState" ] = self.getEndState()
 
 		if self.winnerID != 0:
 			infoDict[ "winingTeam" ] = self.winnerID
@@ -718,6 +712,13 @@ class Game:
 
 		return( infoDict )
 
+	def getEndState( self ):
+		if( self.quitterID != 0 ):
+			return "quit"
+		elif( self.winnerID != 0):
+			return "win"
+		else:
+			return "abort"
 
 	# --------------------------------------------- CLASS END ---------------------------------------------- #
 
