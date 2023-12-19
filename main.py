@@ -12,12 +12,14 @@ except ModuleNotFoundError:
 
 
 # MASTER LIST
+# TODO : make the ball receiver change after N missed shots
 # TODO : rework ball respawn in pongest
 # TODO : have respawn trajectories be stored in an array in game interface
 
 # FUNCTION LIST
 
 # DEBUG LIST
+# TODO : remove herobrine when ball touches two racks at once
 
 # MINOR LIST
 # TODO : swap racket 2 and 3 in pingest (breaks client side for now)
