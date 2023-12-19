@@ -71,7 +71,7 @@ class Pong( gi.Game ):
 
 	# bouncing on the walls
 	def checkWalls( self, ball ):
-		if ball.getTop() <= 0 or ball.getBottom() >= self.height:
+		if ball.getTop() < 0 or ball.getBottom() > self.height:
 			ball.bounceOnWall( "y" )
 
 

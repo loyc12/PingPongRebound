@@ -81,7 +81,8 @@ class BotControler( gc.GameControler ):
 		if not df.BOT_CAN_PLAY:
 			return
 
-		elif df.BOT_INSTANT_REACT or self.isNear( self.lastBall ): #	NOTE : if the ball is near, the bot will react instantly
+		# if the ball is near, the bot will react instantly
+		elif df.BOT_INSTANT_REACT or ( df.BOT_QUICK_REACT and self.isNear( self.lastBall )):
 			self.seeBall()
 
 		if self.difficulty == df.EASY:
@@ -110,47 +111,60 @@ class BotControler( gc.GameControler ):
 			return False
 		if not self.isCloserThan( self.lastBall, df.BOT_KICK_DIST ):
 			return False
+		#if abs( self.racket.getMvX() ) >= self.lastBall.dx:
+			#return False
 		return True
 
 
 	def kickBall( self ):
 		if self.game.name == "Ping":
 			self.goToCenter( df.BOT_KICK_FACTOR )
+			return
 
-		#elif not df.BOT_INSTANT_REACT and df.BOT_SEE_FREQUENCY > 2 * df.BOT_PLAY_FREQUENCY:
-			#self.goTo( self.lastBall.dx, self.lastBall.dy, 1)
+		if self.racketDir == 'x':
 
-		elif self.racketDir == 'x':
-			if self.racket.dx * abs( self.racket.fx ) < self.lastBall.dx: # and self.lastBall.isLeftOfX( self.racket.px ):
-				#if self.lastBall.isLeftOfX( self.racket.px ):
-				if self.lastBall.isGoingLeft():
-					if self.racket.fx > -df.BOT_KICK_FACTOR:
-						if self.lastBall.isLeftOfX( self.racket.getRight() - df.BOT_PRECISION ):
-							self.goLeft( self.max_factor )
-						else:
-							self.goRight( self.max_factor )
+			if self.lastBall.isGoingLeft():
+				if self.lastBall.isLeftOfX( self.racket.getPosX() + df.BOT_PRECISION ):
+					if -df.BOT_KICK_FACTOR < self.racket.fx :
+						self.goLeft( self.max_factor )
+						return
 				else:
 					if self.racket.fx < df.BOT_KICK_FACTOR:
-						if self.lastBall.isRightOfX( self.racket.getLeft() + df.BOT_PRECISION ):
-							self.goRight( self.max_factor )
-						else:
-							self.goLeft( self.max_factor )
+						self.goRight( self.max_factor )
+						return
+			else:
+				if self.lastBall.isRightOfX( self.racket.getPosX() - df.BOT_PRECISION ):
+					if self.racket.fx < df.BOT_KICK_FACTOR:
+						self.goRight( self.max_factor )
+						return
+				else:
+					if -df.BOT_KICK_FACTOR < self.racket.fx :
+						self.goLeft( self.max_factor )
+						return
 
-		elif self.racketDir == 'y':
-			if self.racket.dy * abs( self.racket.fy ) < self.lastBall.dy: # and self.lastBall.isAboveY( self.racket.py ):
-				#if self.lastBall.isAboveY( self.racket.py ):
-				if self.lastBall.isGoingUp():
-					if self.racket.fy > -df.BOT_KICK_FACTOR:
-						if self.lastBall.isAboveY( self.racket.getBottom() - df.BOT_PRECISION ):
-							self.goUp( self.max_factor )
-						else:
-							self.goDown( self.max_factor )
+		if self.racketDir == 'y':
+
+			if self.lastBall.isGoingUp():
+				if self.lastBall.isAboveY( self.racket.getPosY() + df.BOT_PRECISION ):
+					if -df.BOT_KICK_FACTOR < self.racket.fy:
+						self.goUp( self.max_factor )
+						return
 				else:
 					if self.racket.fy < df.BOT_KICK_FACTOR:
-						if self.lastBall.isBelowY( self.racket.getTop() + df.BOT_PRECISION ):
-							self.goDown( self.max_factor )
-						else:
-							self.goUp( self.max_factor )
+						self.goDown( self.max_factor )
+						return
+			else:
+				if self.lastBall.isBelowY( self.racket.getPosY() - df.BOT_PRECISION ):
+					if self.racket.fy < df.BOT_KICK_FACTOR:
+						self.goDown( self.max_factor )
+						return
+				else:
+					if -df.BOT_KICK_FACTOR < self.racket.fy:
+						self.goUp( self.max_factor )
+						return
+
+		# if there is no good kick, continue as normal
+		self.goToNextGoal( self.max_factor )
 
 
 	def stopHere( self ):
@@ -369,8 +383,6 @@ class BotControler( gc.GameControler ):
 		return False
 
 	def isNear( self, gameObj ):
-		if not df.BOT_QUICK_REACT:
-			return False
 		if abs( self.racket.getPosY() - gameObj.getPosY() ) <= df.BOT_REACT_DIST * 2:
 			if abs( self.racket.getPosX() - gameObj.getPosX() ) <= df.BOT_REACT_DIST * 2:
 				return True

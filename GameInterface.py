@@ -457,7 +457,7 @@ class Game:
 		rack.updatePos()
 
 		# prevent racket from going off screen
-		if( not rack.isInScreen() ):
+		if( not rack.isOnScreen() ):
 			rack.bounceOnWall( "stop" )
 
 		# prevent rackets from crossing the middle lines
@@ -480,10 +480,9 @@ class Game:
 		ball.clampSpeed()
 		ball.updatePos()
 
-
 		self.checkRackets( ball )
-		self.checkWalls( ball )
 		self.checkGoals( ball )
+		self.checkWalls( ball )
 
 		ball.clampPos()
 
@@ -504,9 +503,20 @@ class Game:
 				self.scorePoint( rack.id, df.HITS )
 
 
+	# scoring a goal
+	def checkGoals( self, ball ):
+		if ball.getBottom() > self.height:
+			self.scorePoint( self.last_ponger, df.GOALS )
+			self.respawnBall( ball )
+			if self.connector != None:
+				self.connector.update_scores( self.scores )
+
+
 	# bouncing on the walls
 	def checkWalls( self, ball ):
 		if ball.getLeft() < 0 or ball.getRight() > self.width or ball.getTop() < 0:
+
+			print ( "bouncing on the sides" )
 
 			# bouncing off the sides
 			if ball.getLeft() < 0 or ball.getRight() > self.width:
@@ -515,15 +525,6 @@ class Game:
 			# bouncing off the top( no bounce factor )
 			if ball.getTop() < 0:
 				ball.bounceOnWall( "y" )
-
-
-	# scoring a goal
-	def checkGoals( self, ball ):
-		if ball.getBottom() > self.height:
-			self.scorePoint( self.last_ponger, df.GOALS )
-			self.respawnBall( ball )
-			if self.connector != None:
-				self.connector.update_scores( self.scores )
 
 	# --------------------------------------------------------------
 

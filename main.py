@@ -46,7 +46,7 @@ async def debugTester( Initialiser ):
 
 
 if __name__ == '__main__':
-	asy.run( debugTester( Pingest ))
+	asy.run( debugTester( Pong ))
 
 
 

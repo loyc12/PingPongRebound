@@ -118,23 +118,28 @@ class GameObject:
 
 
 	def clampPos( self ):
+
 		# prevent balls from going off screen
 		if self.getLeft() < 0:
 			self.setLeft( 0 )
+			print( "clamping ball left" )
 		if self.getRight() > self.game.width:
 			self.setRight( self.game.width )
+			print( "clamping ball right" )
 		if self.getTop() < 0:
 			self.setTop( 0 )
+			print( "clamping ball top" )
 		if self.getBottom() > self.game.height:
 			self.setBottom( self.game.height )
+			print( "clamping ball bottom" )
 
-	def isInScreen( self ):
+
+	def isOnScreen( self ):
 		if self.getLeft() < 0 or self.getRight() > self.game.width:
 			return False
 		if self.getTop() < 0 or self.getBottom() > self.game.height:
 			return False
 		return True
-
 
 	def isOnScreenX( self ):
 		if self.getLeft() < 0 or self.getRight() > self.game.width:
@@ -160,6 +165,7 @@ class GameObject:
 	def bounceOnWall( self, mode ):
 		if mode == "stop":
 			self.stopDirs()
+			return
 
 		# vertical surface bounces ( | )
 		elif mode == "x":
@@ -173,7 +179,7 @@ class GameObject:
 
 		self.clampSpeed()
 		if df.NO_STUCK_BALLS:
-			self.makeUnstuck( mode )
+			self.makeUnstuck()
 
 
 	# NOTE : IS ONLY FOR BALLS
@@ -197,14 +203,22 @@ class GameObject:
 
 		self.clampSpeed()
 		if df.NO_STUCK_BALLS:
-			self.makeUnstuck( mode )
+			self.makeUnstuck()
 
 
-	def makeUnstuck( self, mode ):
-		if mode == "stop":
-			return
+	def makeUnstuck( self ):
 
-		elif mode == "y" and self.dx < 1:
+		if self.dy < 1:
+			self.dy = 1
+
+			if self.py < self.game.height / 2:
+				self.fy = 1
+			else:
+				self.fy = -1
+
+			print( "unstuck x" )
+
+		if  self.dx < 1:
 			self.dx = 1
 
 			if self.px < self.game.width / 2:
@@ -212,13 +226,7 @@ class GameObject:
 			else:
 				self.fx = -1
 
-		elif mode == "x" and self.dy < 1:
-			self.dy = 1
-
-			if self.py < self.game.height / 2:
-				self.fy = 1
-			else:
-				self.fy = -1
+			print( "unstuck y" )
 
 
 # ---------------------------------------------- MOVEMENT ---------------------------------------------- #
