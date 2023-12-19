@@ -52,26 +52,26 @@ class Game:
 	racket_count = 1
 	score_count = 1
 
-	# racket init positions	  px, py	         , dir
-	iPosR1 = ( width * ( 1 / 2 ), height - size_b, "x" )
+	# racket init positions			px, py					 , dir
+	iPosR1 = ( int( width * ( 1 / 2 )), int( height - size_b), "x" )
 	iPosR2 = None
 	iPosR3 = None
 	iPosR4 = None
 
-	# ball init positions	  px, py
-	iPosB1 = ( width * ( 3 / 8 ), size_b )
+	# ball init positions			px, py
+	iPosB1 = ( int( width * ( 3 / 8 )), int( size_b ))
 	iPosB2 = None
 	iPosB3 = None
 	iPosB4 = None
 
-	# spawn positions		 px, py	, s, s, d, d
-	posS1 = ( width * ( 1 / 2 ), size_b, 1, 1, 1, 1 )
+	# spawn positions			   px, py			, s, s, d, d
+	posS1 = ( int( width * ( 1 / 2 )), int( size_b ), 1, 1, 1, 1 )
 	posS2 = None
 	posS3 = None
 	posS4 = None
 
-	# score positions		 px, py
-	posN1 = ( width * ( 1 / 2 ), height * ( 1 / 2 ))
+	# score positions			   px, py
+	posN1 = ( int( width * ( 1 / 2 )), int( height * ( 1 / 2 )))
 	posN2 = None
 	posN3 = None
 	posN4 = None
@@ -142,20 +142,42 @@ class Game:
 	# --------------------------------------------------------------
 
 	def initRackets( self ):
-		# setting up rackets :             id, game, _x              , _y              , _w         , _h         , _maxSpeed
-		self.rackets.append( go.GameObject( 1, self, self.iPosR1[ 0 ], self.iPosR1[ 1 ], self.size_r, self.size_b, self.speed_m_r ))
-
-		self.rackets[ 0 ].setSpeeds( self.speed_r, 0 )
+		if self.iPosR1 != None: #			   id, game, _x              , _y              , _w         , _h         , _maxSpeed
+			self.rackets.append( go.GameObject( 1, self, self.iPosR1[ 0 ], self.iPosR1[ 1 ], self.size_r, self.size_b, self.speed_m_r ))
+			self.rackets[ 0 ].setSpeeds( self.speed_r, 0 )
+		if self.iPosR2 != None:
+			self.rackets.append( go.GameObject( 2, self, self.iPosR2[ 0 ], self.iPosR2[ 1 ], self.size_r, self.size_b, self.speed_m_r ))
+			self.rackets[ 1 ].setSpeeds( self.speed_r, 0 )
+		if self.iPosR3 != None:
+			self.rackets.append( go.GameObject( 3, self, self.iPosR3[ 0 ], self.iPosR3[ 1 ], self.size_r, self.size_b, self.speed_m_r ))
+			self.rackets[ 2 ].setSpeeds( self.speed_r, 0 )
+		if self.iPosR4 != None:
+			self.rackets.append( go.GameObject( 4, self, self.iPosR4[ 0 ], self.iPosR4[ 1 ], self.size_r, self.size_b, self.speed_m_r ))
+			self.rackets[ 3 ].setSpeeds( self.speed_r, 0 )
 
 
 	def initBalls( self ):
-		self.balls.append( go.GameObject( 1, self, self.iPosB1[ 0 ], self.iPosB1[ 1 ], self.size_b, self.size_b, self.speed_m_b ))
-		self.balls[ 0 ].setSpeeds( self.posS1[ 2 ] * self.speed_b, self.posS1[ 3 ] * self.speed_b )
-		self.balls[ 0 ].setDirs( self.posS1[ 4 ], self.posS1[ 5 ] )
+		if self.iPosB1 != None:
+			self.balls.append( go.GameObject( 1, self, self.iPosB1[ 0 ], self.iPosB1[ 1 ], self.size_b, self.size_b, self.speed_m_b ))
+			self.balls[ 0 ].setSpeeds( self.posS1[ 2 ] * self.speed_b, self.posS1[ 3 ] * self.speed_b )
+			self.balls[ 0 ].setDirs( self.posS1[ 4 ], self.posS1[ 5 ] )
+		if self.iPosB2 != None:
+			self.balls.append( go.GameObject( 2, self, self.iPosB2[ 0 ], self.iPosB2[ 1 ], self.size_b, self.size_b, self.speed_m_b ))
+			self.balls[ 1 ].setSpeeds( self.posS2[ 2 ] * self.speed_b, self.posS2[ 3 ] * self.speed_b )
+			self.balls[ 1 ].setDirs( self.posS2[ 4 ], self.posS2[ 5 ] )
+		if self.iPosB3 != None:
+			self.balls.append( go.GameObject( 3, self, self.iPosB3[ 0 ], self.iPosB3[ 1 ], self.size_b, self.size_b, self.speed_m_b ))
+			self.balls[ 2 ].setSpeeds( self.posS3[ 2 ] * self.speed_b, self.posS3[ 3 ] * self.speed_b )
+			self.balls[ 2 ].setDirs( self.posS3[ 4 ], self.posS3[ 5 ] )
+		if self.iPosB4 != None:
+			self.balls.append( go.GameObject( 4, self, self.iPosB4[ 0 ], self.iPosB4[ 1 ], self.size_b, self.size_b, self.speed_m_b ))
+			self.balls[ 3 ].setSpeeds( self.posS4[ 2 ] * self.speed_b, self.posS4[ 3 ] * self.speed_b )
+			self.balls[ 3 ].setDirs( self.posS4[ 4 ], self.posS4[ 5 ] )
 
 
 	def initSpawns( self ):
-		self.spawns.append( self.posS1 )
+		if self.posS1 != None:
+			self.spawns.append( self.posS1 )
 		if self.posS2 != None:
 			self.spawns.append( self.posS2 )
 		if self.posS3 != None:
@@ -515,9 +537,9 @@ class Game:
 				ball.setPosY( rack.getPosY() - self.size_b )# '-' because the ball is going above the racket
 				ball.bounceOnRack( rack, "y" )
 				self.last_ponger = rack.id
-				self.ballEvent( ball, df.HITS, self.getTeamID( rack.id ))
+				self.ballEvent( ball, df.HITS, self.getTeamID( self.last_ponger ) ) #	NOTE : does not handle multiple rackets scoring
 
-				break # 									NOTE : prevents multihits
+				break # 																NOTE : prevents multihits
 
 
 	# bouncing on the walls
@@ -536,7 +558,7 @@ class Game:
 	# scoring a goal
 	def checkGoals( self, ball ):
 		if ball.getBottom() >= self.height:
-			self.ballEvent( ball, df.GOALS, self.getTeamID( self.last_ponger ))
+			self.ballEvent( ball, df.GOALS, self.getTeamID( self.last_ponger ) )
 
 			if self.connector != None:
 				self.connector.update_scores( self.scores )
@@ -544,55 +566,61 @@ class Game:
 	# --------------------------------------------------------------
 
 	def ballEvent( self, ball, mode, teamID ):
-		if cfg.PRINT_STATES:
-			print( f"{self.gameID} )  {self.type}  \t: ball event #{ mode }" )
+		if self.score_mode == df.HITS: #	if racket hits give points
 
-		if mode == df.HITS: #					if the ball hit a racket
-			if self.score_mode == df.HITS: #		if racket hits give points
+			if mode == df.HITS: # 				if it was a hit
 				self.scorePoint( teamID )
 
-		elif mode == df.GOALS: #				if the ball went out of bounds
-			if teamID <= 0:
-				self.missShot()
-
-			elif self.score_mode == df.GOALS: #		if goals give points
-				self.scorePoint( teamID )
-
-			else: # 								if racket hits give points
+			else: # 							if it was a goal
 				self.scores[ teamID - 1 ] = 0
 				if cfg.PRINT_STATES:
 					print( f"{self.gameID} )  {self.type}  \t: the ball was dropped by team #{ teamID }" )
 
-			self.respawnBall( ball ) # respawn the ball because it is out of bounds
+		else: #								if goals give points
+			if self.last_ponger <= 0: #			if it was a serve ball
+				self.missShot()
+			elif mode == df.GOALS: # 			if it was a goal
+				self.scorePoint( teamID )
+			else: #								if it was a hit
+				self.missed_shots = 0
 
+		if mode == df.HITS: # 			reset the miss counter if it was a hit
+			self.miss_shots = 0
+		else: # 						respawn the ball if it was a goal
+			self.respawnBall( ball )
 
 
 	def scorePoint( self, teamID ):
+		self.scores[ teamID - 1 ] += 1
+
 		if cfg.PRINT_STATES:
 			if self.score_mode == df.GOALS:
 				print( f"{self.gameID} )  {self.type}  \t: team #{ teamID } scored a point" )
 			else:
 				print( f"{self.gameID} )  {self.type}  \t: team #{ teamID } hit the ball" )
 
-		self.scores[ teamID - 1 ] += 1
 		self.findNextSpawn( "goal" )
 		self.checkWin()
 
 
 	def missShot( self ):
 		self.missed_shots += 1
-		self.last_ponger = 0
 
 		if self.missed_shots >= df.MAX_MISS:
 			self.missed_shots = 0
 			self.findNextSpawn( "miss" )
 
+			if cfg.PRINT_STATES:
+				print( f"{self.gameID} )  {self.type}  \t: resetting miss_shots" )
+
 
 	def findNextSpawn( self, mode ): # mode is either "miss" or "goal"
 
-		self.spawn_target += 1
-		if self.spawn_target > self.racket_count:
-			self.spawn_target = 1
+		if mode == "miss":
+			self.spawn_target += 1
+			self.spawn_target %= self.racket_count
+		if mode == "goal":
+			self.spawn_target = self.last_ponger - 1
 
 	# --------------------------------------------------------------
 
@@ -613,8 +641,9 @@ class Game:
 
 
 	def respawnBall( self, ball ):
+		self.last_ponger = 0
 
-		s = self.spawns[ self.spawn_target - 1 ]
+		s = self.spawns[ self.spawn_target ]
 
 		ball.setPos( s[ 0 ], s[ 1 ])
 		ball.setSpeeds( s[ 2 ] * self.speed_b, s[ 3 ] * self.speed_b )
@@ -666,9 +695,18 @@ class Game:
 
 
 	def drawScores( self ):
-		text = self.font.render( f'{ self.scores[ 0 ]}', True, df.COL_FNT )
-
-		self.win.blit( text, text.get_rect( center = self.posN1 ))
+		if self.posN1 != None:
+			text = self.font.render( f'{ self.scores[ 0 ]}', True, df.COL_FNT )
+			self.win.blit( text, text.get_rect( center = self.posN1 ))
+		if self.posN2 != None:
+			text = self.font.render( f'{ self.scores[ 1 ]}', True, df.COL_FNT )
+			self.win.blit( text, text.get_rect( center = self.posN2 ))
+		if self.posN3 != None:
+			text = self.font.render( f'{ self.scores[ 2 ]}', True, df.COL_FNT )
+			self.win.blit( text, text.get_rect( center = self.posN3 ))
+		if self.posN4 != None:
+			text = self.font.render( f'{ self.scores[ 3 ]}', True, df.COL_FNT )
+			self.win.blit( text, text.get_rect( center = self.posN4 ))
 
 
 	def drawFps( self ):
@@ -687,6 +725,12 @@ class Game:
 
 			text = self.racket_font.render( self.controlers[ i ].name, True, df.COL_FNT )
 			self.win.blit( text, text.get_rect( center = racket.box.center ))
+
+		for i in range( len( self.balls )):
+			ball = self.balls[ i ]
+
+			text = self.racket_font.render( str( self.last_ponger ), True, df.COL_FNT )
+			self.win.blit( text, text.get_rect( center = ball.box.center ))
 
 
 	# -------------------------------------------- GAME PACKETS -------------------------------------------- #
