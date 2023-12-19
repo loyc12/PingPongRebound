@@ -15,7 +15,7 @@ except ModuleNotFoundError:
 class Pingest(gi.Game):
 	name = "Pingest"
 
-	width = 1536
+	width = 2048 # should be 1536 but issues with client side
 	height = 1024
 	racketCount = 4
 
