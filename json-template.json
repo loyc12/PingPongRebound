@@ -1,92 +1,95 @@
 
-{ // join request packet (useless / ignore me (???))
-	"playerName": "llord",
-	"playerID": 25,
-	"gameType": "pong", //	random == doesn't matter (create random one if none are joinable)
-	"gameMode": "solo" //	solo, dual, freeplay, tournament
+{ // join request format (?) ( not handled by gameManager )
+	"gameType": "pong", //	random == doesn't matter( create random one if none are joinable )
+	"gameMode": "solo", //	solo, dual, freeplay, tournament
+	"withAI": true
 }
 
 { // getInitInfo()
-	"gameID": 1,
 	"gameType": "pong",
-	"gameMode": "solo", //		NOTE : USELESS ???
-	"gameState": "playing", //	NOTE : USELESS ???
 	"sizeInfo": {
 		"width": 2048,
 		"height": 1024,
-		"wRatio": 0.0005,
-		"hRatio": 0.001,
 		"rSize": 160,
 		"bSize": 20
 	},
 	"racketCount" : 4,
-	"racketInitPos": [
-		"x1", "y1", "d1", // aka : x, y, long side direction ("x" or "y")
-		"x2", "y2", "d2",
-		"x3", "y3", "d3",
-		"x4", "y4", "d4"
+	"teamCount": 2,
+	"scoreSize": "size", // proportional to the screen height
+	"scorePos": [
+		"x1", "y1", // center point of the number
+		"x2", "y2",
+		"x3", "y3",
+		"x4", "y4"
 	],
-	"ballInitPos": [
-		"x1", "y1"
+	"lines": [
+		"xa", "ya", "xb", "yb", "t", // t = thickness (1, 1.4, 2)
+		"xa", "ya", "xb", "yb", "t"	 // ...
 	],
-	"teamCount": 2
-	// followed by player info packets
+	"orientations": [
+		"d1",			// 'x' or 'y
+		"d2",
+		"d3",
+		"d4"
+	],
+	"update": {
+		"racketPos": [
+			"x1", "y1",
+			"x2", "y2",
+			"x3", "y3",
+			"x4", "y4"
+		],
+		"ballPos": [
+			"x1", "y1"
+		],
+		"lastPonger": 0,
+		"scores": [
+			"s1",
+			"s2",
+			"s3",
+			"s4"
+		]
+	}
 }
 
 { // getPlayerInfo()
-	"gameID": 1,
-	"playerInfo": [ // login and racket id
-		{
-			"isConfirmed": false,
-			"llord": [
-				{
-					"isBot": false,
-					"playerID": 25,
-					"racketID": 1,
-					"teamID": 0
-				}
-			],
-			"vjean": [
-				{
-					"isBot": false,
-					"playerID": 16,
-					"racketID": 2,
-					"teamID": 0
-				}
-			],
-			"ghebert": [
-				{
-					"isBot": false,
-					"playerID": 36,
-					"racketID": 3,
-					"teamID": 0
-				}
-			],
-			"bot_2": [
-				{
-					"isBot": true,
-					"playerID": 4,
-					"racketID": 4,
-					"teamID": 0
-				}
-			]
-		}
-	]
+	"1": {
+		"isBot": false,
+		"name": "llord",
+		"playerID": 25,
+		"teamID": 1
+	},
+	"2": {
+		"isBot": false,
+		"name": "vjean",
+		"playerID": 16,
+		"teamID": 1
+	},
+	"3": {
+		"isBot": false,
+		"name": "ghebert",
+		"playerID": 36,
+		"teamID": 2
+	},
+	"4": {
+		"isBot": true,
+		"name": "bot_1",
+		"playerID": 4,
+		"teamID": 2
+	}
 }
 
 { // getUpdateInfo()
-	"gameID": 1,
-	//"gameState": "playing",
 	"racketPos": [
 		"x1", "y1",
 		"x2", "y2",
 		"x3", "y3",
 		"x4", "y4"
 	],
-	"lastPonger": 1,
 	"ballPos": [
 		"x1", "y1"
 	],
+	"lastPonger": 1,
 	"scores": [
 		"s1",
 		"s2",
@@ -96,12 +99,17 @@
 }
 
 { // getEndInfo()
-	"gameID": 1,
-	"winingTeam": 1,
+	"gameConnector": 1,
+	"gameType": "pong", //	random == doesn't matter( create random one if none are joinable )
+	"gameMode": "solo", //	solo, dual, freeplay, tournament
+	"endState": "win", //	win, quit, crash
+	"winingTeam": 1, //		teamID
+	"quitter": 2, //		playerID
 	"scores": [
 		"s1",
 		"s2",
 		"s3",
 		"s4"
-	]
+	],
+	"playerInfo": getPlayerInfo{}
 }
