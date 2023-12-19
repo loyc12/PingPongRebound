@@ -36,10 +36,10 @@ class Pingest( gi.Game ):
 
 	iPosB1 = ( int( width * ( 1 / 2 )), int( height * ( 3 / 4 )))
 
-	iPosS1 = ( int( width * ( 1 / 4 )), int( height * ( 1 / 4 )))
-	iPosS2 = ( int( width * ( 3 / 4 )), int( height * ( 1 / 4 )))
-	iPosS3 = ( int( width * ( 1 / 4 )), int( height * ( 3 / 4 )))
-	iPosS4 = ( int( width * ( 3 / 4 )), int( height * ( 3 / 4 )))
+	posN1 = ( int( width * ( 1 / 4 )), int( height * ( 1 / 4 )))
+	posN2 = ( int( width * ( 3 / 4 )), int( height * ( 1 / 4 )))
+	posN3 = ( int( width * ( 1 / 4 )), int( height * ( 3 / 4 )))
+	posN4 = ( int( width * ( 3 / 4 )), int( height * ( 3 / 4 )))
 
 	lines = [
 	[( 0.5, 0 ), ( 0.5, 1 ), 1 ],
@@ -78,7 +78,7 @@ class Pingest( gi.Game ):
 					ball.setPosY( rack.getPosY() - self.size_b )# '-' because the ball is going over
 
 				ball.bounceOnRack( rack, "y" )
-				self.scorePoint( rack.id, df.HITS )
+				self.ballEvent( ball, rack.id, df.HITS )
 
 				break # 									NOTE : prevents multihits
 
@@ -96,7 +96,7 @@ class Pingest( gi.Game ):
 
 			# checking who scored
 			if( self.last_ponger > 0 ):
-				self.scorePoint( self.last_ponger, df.GOALS )
+				self.ballEvent( self.last_ponger, df.GOALS )
 			else:
 				ball.setDirs( -ball.fx, -ball.fy )
 
@@ -128,7 +128,7 @@ class Pingest( gi.Game ):
 		text3 = self.font.render( f'{self.scores[ 2 ]}', True, df.COL_FNT )
 		text4 = self.font.render( f'{self.scores[ 3 ]}', True, df.COL_FNT )
 
-		self.win.blit( text1, text1.get_rect( center = self.iPosS1 ))
-		self.win.blit( text2, text2.get_rect( center = self.iPosS2 ))
-		self.win.blit( text3, text3.get_rect( center = self.iPosS3 ))
-		self.win.blit( text4, text4.get_rect( center = self.iPosS4 ))
+		self.win.blit( text1, text1.get_rect( center = self.posN1 ))
+		self.win.blit( text2, text2.get_rect( center = self.posN2 ))
+		self.win.blit( text3, text3.get_rect( center = self.posN3 ))
+		self.win.blit( text4, text4.get_rect( center = self.posN4 ))

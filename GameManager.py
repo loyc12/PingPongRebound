@@ -525,18 +525,18 @@ class GameManager:
 	def getScorePos( gameClass ):
 		scoresPos = []
 
-		if( gameClass.iPosS1 != None ):
-			scoresPos.append( gameClass.iPosS1[ 0 ] )
-			scoresPos.append( gameClass.iPosS1[ 1 ] )
-		if( gameClass.iPosS2 != None ):
-			scoresPos.append( gameClass.iPosS2[ 0 ] )
-			scoresPos.append( gameClass.iPosS2[ 1 ] )
-		if( gameClass.iPosS3 != None ):
-			scoresPos.append( gameClass.iPosS3[ 0 ] )
-			scoresPos.append( gameClass.iPosS3[ 1 ] )
-		if( gameClass.iPosS4 != None ):
-			scoresPos.append( gameClass.iPosS4[ 0 ] )
-			scoresPos.append( gameClass.iPosS4[ 1 ] )
+		if( gameClass.posN1 != None ):
+			scoresPos.append( gameClass.posN1[ 0 ] )
+			scoresPos.append( gameClass.posN1[ 1 ] )
+		if( gameClass.posN2 != None ):
+			scoresPos.append( gameClass.posN2[ 0 ] )
+			scoresPos.append( gameClass.posN2[ 1 ] )
+		if( gameClass.posN3 != None ):
+			scoresPos.append( gameClass.posN3[ 0 ] )
+			scoresPos.append( gameClass.posN3[ 1 ] )
+		if( gameClass.posN4 != None ):
+			scoresPos.append( gameClass.posN4[ 0 ] )
+			scoresPos.append( gameClass.posN4[ 1 ] )
 
 		return( scoresPos )
 

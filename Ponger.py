@@ -37,8 +37,8 @@ class Ponger( gi.Game ):
 
 	iPosB1 = ( int( width * ( 1 / 2 )), int( height * ( 1 / 4 )))
 
-	iPosS1 = ( int( width * ( 1 / 2 )), int( height * ( 1 / 4 )))
-	iPosS2 = ( int( width * ( 1 / 2 )), int( height * ( 3 / 4 )))
+	posN1 = ( int( width * ( 1 / 2 )), int( height * ( 1 / 4 )))
+	posN2 = ( int( width * ( 1 / 2 )), int( height * ( 3 / 4 )))
 
 	lines = [
 	[( 0, 0 ), ( 0 , 1 ), 2 ],
@@ -90,7 +90,7 @@ class Ponger( gi.Game ):
 					ball.setPosY( rack.getPosY() - self.size_b )# '-' because the ball is going over
 
 				ball.bounceOnRack( rack, "y" )
-				self.scorePoint( rack.id, df.HITS )
+				self.ballEvent( ball, rack.id, df.HITS )
 
 				break # 									NOTE : prevents multihits
 
@@ -109,13 +109,13 @@ class Ponger( gi.Game ):
 			# checking who scored
 			if ball.getTop() < 0:
 				if self.last_ponger > 0:
-					self.scorePoint( 2, df.GOALS )
+					self.ballEvent( 2, df.GOALS )
 				ball.setDirs( -ball.fx, -1 )
 				ball.setPos( self.width * ( 1 / 2 ), self.height * ( 3 / 4 ))
 
 			elif ball.getBottom() > self.height:
 				if self.last_ponger > 0:
-					self.scorePoint( 1, df.GOALS )
+					self.ballEvent( 1, df.GOALS )
 				ball.setDirs( -ball.fx, 1 )
 				ball.setPos( self.width * ( 1 / 2 ), self.height * ( 1 / 4 ))
 
@@ -133,5 +133,5 @@ class Ponger( gi.Game ):
 		text1 = self.font.render( f'{self.scores[ 0 ]}', True, df.COL_FNT )
 		text2 = self.font.render( f'{self.scores[ 1 ]}', True, df.COL_FNT )
 
-		self.win.blit( text1, text1.get_rect( center = self.iPosS1 ))
-		self.win.blit( text2, text2.get_rect( center = self.iPosS2 ))
+		self.win.blit( text1, text1.get_rect( center = self.posN1 ))
+		self.win.blit( text2, text2.get_rect( center = self.posN2 ))

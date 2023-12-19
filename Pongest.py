@@ -37,10 +37,10 @@ class Pongest( gi.Game ):
 
 	iPosB1 = ( int( width * ( 1 / 2 )), int( height * ( 1 / 2 )))
 
-	iPosS1 = ( int( width * ( 1 / 2 )), int( height * ( 1 / 5 )))
-	iPosS2 = ( int( width * ( 4 / 5 )), int( height * ( 1 / 2 )))
-	iPosS3 = ( int( width * ( 1 / 2 )), int( height * ( 4 / 5 )))
-	iPosS4 = ( int( width * ( 1 / 5 )), int( height * ( 1 / 2 )))
+	posN1 = ( int( width * ( 1 / 2 )), int( height * ( 1 / 5 )))
+	posN2 = ( int( width * ( 4 / 5 )), int( height * ( 1 / 2 )))
+	posN3 = ( int( width * ( 1 / 2 )), int( height * ( 4 / 5 )))
+	posN4 = ( int( width * ( 1 / 5 )), int( height * ( 1 / 2 )))
 
 	lines = [
 	[( 0, 0 ), ( 1, 1 ), 1.4 ],
@@ -94,7 +94,7 @@ class Pongest( gi.Game ):
 					ball.setPosX( rack.getPosX() + self.size_b )# '+' because the ball is going right
 					ball.bounceOnRack( rack, "x" )
 
-				self.scorePoint( rack.id, df.HITS )
+				self.ballEvent( ball, rack.id, df.HITS )
 
 				break # 									NOTE : prevents multihits
 
@@ -109,7 +109,7 @@ class Pongest( gi.Game ):
 		if ball.getTop() < 0 or ball.getBottom() > self.height or ball.getLeft() < 0 or ball.getRight() > self.width:
 			# increasing score
 			if( self.last_ponger > 0 ):
-				self.scorePoint( self.last_ponger, df.GOALS )
+				self.ballEvent( self.last_ponger, df.GOALS )
 
 			# checking how to respawn the ball
 			if self.last_ponger == 1 or ( self.last_ponger == 0 and ball.fx < 0 and ball.fy < 0 ):
@@ -143,7 +143,7 @@ class Pongest( gi.Game ):
 		text3 = self.font.render( f'{self.scores[ 2 ]}', True, df.COL_FNT )
 		text4 = self.font.render( f'{self.scores[ 3 ]}', True, df.COL_FNT )
 
-		self.win.blit( text1, text1.get_rect( center = self.iPosS1 ))
-		self.win.blit( text2, text2.get_rect( center = self.iPosS2 ))
-		self.win.blit( text3, text3.get_rect( center = self.iPosS3 ))
-		self.win.blit( text4, text4.get_rect( center = self.iPosS4 ))
+		self.win.blit( text1, text1.get_rect( center = self.posN1 ))
+		self.win.blit( text2, text2.get_rect( center = self.posN2 ))
+		self.win.blit( text3, text3.get_rect( center = self.posN3 ))
+		self.win.blit( text4, text4.get_rect( center = self.posN4 ))

@@ -37,8 +37,8 @@ class Ping( gi.Game ):
 
 	iPosB1 = ( int( width * ( 1 / 2 )), int( height * ( 1 / 3 )))
 
-	iPosS1 = ( int( width * ( 1 / 4 )), int( height * ( 1 / 2 )))
-	iPosS2 = ( int( width * ( 3 / 4 )), int( height * ( 1 / 2 )))
+	posN1 = ( int( width * ( 1 / 4 )), int( height * ( 1 / 2 )))
+	posN2 = ( int( width * ( 3 / 4 )), int( height * ( 1 / 2 )))
 
 	lines = [
 	[( 0.5, 0 ), ( 0.5, 1 ), 1 ],
@@ -69,12 +69,12 @@ class Ping( gi.Game ):
 			# checking who scored
 			if ball.getRight() < self.width / 2:
 				if self.last_ponger > 0:
-					self.scorePoint( 2, df.GOALS )
+					self.ballEvent( 2, df.GOALS )
 				ball.setDirs( -1, -1 )
 
 			if ball.getLeft() > self.width / 2:
 				if self.last_ponger > 0:
-					self.scorePoint( 1, df.GOALS )
+					self.ballEvent( 1, df.GOALS )
 				ball.setDirs( 1, -1 )
 
 			self.respawnBall( ball )
@@ -91,5 +91,5 @@ class Ping( gi.Game ):
 		text1 = self.font.render( f'{self.scores[ 0 ]}', True, df.COL_FNT )
 		text2 = self.font.render( f'{self.scores[ 1 ]}', True, df.COL_FNT )
 
-		self.win.blit( text1, text1.get_rect( center = self.iPosS1 ))
-		self.win.blit( text2, text2.get_rect( center = self.iPosS2 ))
+		self.win.blit( text1, text1.get_rect( center = self.posN1 ))
+		self.win.blit( text2, text2.get_rect( center = self.posN2 ))

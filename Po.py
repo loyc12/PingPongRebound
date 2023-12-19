@@ -28,4 +28,4 @@ class Po( gi.Game ):
 
 	iPosB1 = ( int( width * ( 3 / 8 )), int( gi.Game.size_b ))
 
-	iPosS1 = ( int( width * ( 1 / 2 )), int( height * ( 1 / 2 )))
+	posN1 = ( int( width * ( 1 / 2 )), int( height * ( 1 / 2 )))

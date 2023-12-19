@@ -243,8 +243,8 @@ class GameObject:
 
 
 	def setSpeeds( self, _dx, _dy ):
-		self.dx = _dx
-		self.dy = _dy
+		self.dx = int( _dx )
+		self.dy = int ( _dy )
 		self.clampSpeed()
 
 	def getSpeeds( self ):
@@ -252,8 +252,8 @@ class GameObject:
 
 
 	def setDirs( self, _fx, _fy ):
-		self.fx = _fx
-		self.fy = _fy
+		self.fx = int( _fx )
+		self.fy = int( _fy )
 
 	def getDirs( self ):
 		return( self.fx, self.fy )
@@ -279,6 +279,7 @@ class GameObject:
 
 
 	def clampSpeed( self ):
+
 		# making sure dx is positive
 		if self.dy < 0:
 			self.dy *= -1

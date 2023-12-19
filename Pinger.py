@@ -36,8 +36,8 @@ class Pinger( gi.Game ):
 
 	iPosB1 = ( int( width * ( 1 / 2 )), int( height * ( 1 / 4 )))
 
-	iPosS1 = ( int( width * ( 1 / 4 )), int( height * ( 1 / 2 )))
-	iPosS2 = ( int( width * ( 3 / 4 )), int( height * ( 1 / 2 )))
+	posN1 = ( int( width * ( 1 / 4 )), int( height * ( 1 / 2 )))
+	posN2 = ( int( width * ( 3 / 4 )), int( height * ( 1 / 2 )))
 
 	lines = [
 	[( 0, 0 ), ( 0, 1 ), 2 ],
@@ -75,7 +75,7 @@ class Pinger( gi.Game ):
 					ball.setPosY( rack.getPosY() - self.size_b )# '-' because the ball is going over
 
 				ball.bounceOnRack( rack, "y" )
-				self.scorePoint( rack.id, df.HITS )
+				self.ballEvent( ball, rack.id, df.HITS )
 
 				break # 									NOTE : prevents multihits
 
@@ -94,11 +94,11 @@ class Pinger( gi.Game ):
 			# checking who scored
 			if ball.getRight() < self.width / 2:
 				if self.last_ponger > 0:
-					self.scorePoint( 2, df.GOALS )
+					self.ballEvent( 2, df.GOALS )
 
 			if ball.getLeft() > self.width / 2:
 				if self.last_ponger > 0:
-					self.scorePoint( 1, df.GOALS )
+					self.ballEvent( 1, df.GOALS )
 
 			self.respawnBall( ball )
 			if self.connector != None:
@@ -125,5 +125,5 @@ class Pinger( gi.Game ):
 		text1 = self.font.render( f'{self.scores[ 0 ]}', True, df.COL_FNT )
 		text2 = self.font.render( f'{self.scores[ 1 ]}', True, df.COL_FNT )
 
-		self.win.blit( text1, text1.get_rect( center = self.iPosS1 ))
-		self.win.blit( text2, text2.get_rect( center = self.iPosS2 ))
+		self.win.blit( text1, text1.get_rect( center = self.posN1 ))
+		self.win.blit( text2, text2.get_rect( center = self.posN2 ))

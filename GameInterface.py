@@ -52,20 +52,29 @@ class Game:
 	racket_count = 1
 	score_count = 1
 
+	# racket init positions	  px, py	         , dir
 	iPosR1 = ( width * ( 1 / 2 ), height - size_b, "x" )
 	iPosR2 = None
 	iPosR3 = None
 	iPosR4 = None
 
+	# ball init positions	  px, py
 	iPosB1 = ( width * ( 3 / 8 ), size_b )
 	iPosB2 = None
 	iPosB3 = None
 	iPosB4 = None
 
-	iPosS1 = ( width * ( 1 / 2 ), height * ( 1 / 2 ))
-	iPosS2 = None
-	iPosS3 = None
-	iPosS4 = None
+	# spawn positions		 px, py	, s, s, d, d
+	posS1 = ( width * ( 1 / 2 ), size_b, 1, 1, 1, 1 )
+	posS2 = None
+	posS3 = None
+	posS4 = None
+
+	# score positions		 px, py
+	posN1 = ( width * ( 1 / 2 ), height * ( 1 / 2 ))
+	posN2 = None
+	posN3 = None
+	posN4 = None
 
 	lines = [
 	[( 0, 0 ), ( 0, 1 ), 2 ],
@@ -92,8 +101,8 @@ class Game:
 		self.controlerCount = 0
 
 		self.last_ponger = 0
-		#self.spawn_target = 0
-		#self.spawn_queue = []
+		self.spawn_target = 0
+		self.spawn_queue = []
 		self.missed_shots = 0
 
 		self.winnerID = 0 #			NOTE : this is a scores[] index( teamID )
@@ -103,15 +112,16 @@ class Game:
 		self.controlers = []
 		self.balls = []
 		self.scores = []
-
-		self.initRackets()
-		self.initBalls()
-		self.initScores()
+		self.spawns = []
 
 		self.onInit()
 
 
 	def onInit( self ):
+		self.initRackets()
+		self.initBalls()
+		self.initSpawns()
+		self.initScores()
 
 		if cfg.FORCE_MODE:
 			print ( "Warning : game mode has been forced to " + str( df.FORCE_MODE_TO ))
@@ -140,8 +150,18 @@ class Game:
 
 	def initBalls( self ):
 		self.balls.append( go.GameObject( 1, self, self.iPosB1[ 0 ], self.iPosB1[ 1 ], self.size_b, self.size_b, self.speed_m_b ))
-		self.balls[ 0 ].setSpeeds( self.speed_b, self.speed_b )
-		self.balls[ 0 ].setDirs( 1, 1 )
+		self.balls[ 0 ].setSpeeds( self.posS1[ 2 ] * self.speed_b, self.posS1[ 3 ] * self.speed_b )
+		self.balls[ 0 ].setDirs( self.posS1[ 4 ], self.posS1[ 5 ] )
+
+
+	def initSpawns( self ):
+		self.spawns.append( self.posS1 )
+		if self.posS2 != None:
+			self.spawns.append( self.posS2 )
+		if self.posS3 != None:
+			self.spawns.append( self.posS3 )
+		if self.posS4 != None:
+			self.spawns.append( self.posS4 )
 
 
 	def initScores( self ):
@@ -475,8 +495,8 @@ class Game:
 		ball.updatePos()
 
 		self.checkRackets( ball )
-		self.checkGoals( ball )
 		self.checkWalls( ball )
+		self.checkGoals( ball )
 
 		ball.clampPos()
 
@@ -494,18 +514,10 @@ class Game:
 
 				ball.setPosY( rack.getPosY() - self.size_b )# '-' because the ball is going above the racket
 				ball.bounceOnRack( rack, "y" )
-				self.scorePoint( rack.id, df.HITS )
+				self.last_ponger = rack.id
+				self.ballEvent( ball, df.HITS, self.getTeamID( rack.id ))
 
 				break # 									NOTE : prevents multihits
-
-
-	# scoring a goal
-	def checkGoals( self, ball ):
-		if ball.getBottom() > self.height:
-			self.scorePoint( self.last_ponger, df.GOALS )
-			self.respawnBall( ball )
-			if self.connector != None:
-				self.connector.update_scores( self.scores )
 
 
 	# bouncing on the walls
@@ -520,56 +532,102 @@ class Game:
 			if ball.getTop() < 0:
 				ball.bounceOnWall( "y" )
 
+
+	# scoring a goal
+	def checkGoals( self, ball ):
+		if ball.getBottom() >= self.height:
+			self.ballEvent( ball, df.GOALS, self.getTeamID( self.last_ponger ))
+
+			if self.connector != None:
+				self.connector.update_scores( self.scores )
+
 	# --------------------------------------------------------------
 
-	def scorePoint( self, teamID, mode ):
-		if teamID > 0:
-			if mode == df.GOALS: #					if the ball went out of bounds
-				if self.score_mode == df.GOALS: #		if goals give points
-					self.scores[ teamID - 1 ] += 1
-					if cfg.PRINT_STATES:
-						print( f"{self.gameID} )  {self.type}  \t: team #{ teamID } scored a point" )
-				else: # 								if racket hits give points
-					self.scores[ teamID - 1 ] = 0
-				self.last_ponger = 0
+	def ballEvent( self, ball, mode, teamID ):
+		if cfg.PRINT_STATES:
+			print( f"{self.gameID} )  {self.type}  \t: ball event #{ mode }" )
 
-			elif mode == df.HITS: #					if the ball hit a racket
-				if self.score_mode == df.HITS: #		if racket hits give points
-					self.scores[ teamID - 1 ] += 1
-				# else: #								if goals give points, do nothing
+		if mode == df.HITS: #					if the ball hit a racket
+			if self.score_mode == df.HITS: #		if racket hits give points
+				self.scorePoint( teamID )
 
-				self.last_ponger = teamID
-		else:
-			self.last_ponger = 0
+		elif mode == df.GOALS: #				if the ball went out of bounds
+			if teamID <= 0:
+				self.missShot()
 
-		# check if someone won
+			elif self.score_mode == df.GOALS: #		if goals give points
+				self.scorePoint( teamID )
+
+			else: # 								if racket hits give points
+				self.scores[ teamID - 1 ] = 0
+				if cfg.PRINT_STATES:
+					print( f"{self.gameID} )  {self.type}  \t: the ball was dropped by team #{ teamID }" )
+
+			self.respawnBall( ball ) # respawn the ball because it is out of bounds
+
+
+
+	def scorePoint( self, teamID ):
+		if cfg.PRINT_STATES:
+			if self.score_mode == df.GOALS:
+				print( f"{self.gameID} )  {self.type}  \t: team #{ teamID } scored a point" )
+			else:
+				print( f"{self.gameID} )  {self.type}  \t: team #{ teamID } hit the ball" )
+
+		self.scores[ teamID - 1 ] += 1
+		self.findNextSpawn( "goal" )
+		self.checkWin()
+
+
+	def missShot( self ):
+		self.missed_shots += 1
+		self.last_ponger = 0
+
+		if self.missed_shots >= df.MAX_MISS:
+			self.missed_shots = 0
+			self.findNextSpawn( "miss" )
+
+
+	def findNextSpawn( self, mode ): # mode is either "miss" or "goal"
+
+		self.spawn_target += 1
+		if self.spawn_target > self.racket_count:
+			self.spawn_target = 1
+
+	# --------------------------------------------------------------
+
+	def checkWin( self ):
 		for i in range( self.score_count ):
 			score = self.scores[ i ]
+
 			if score >= df.WIN_SCORE:
-				self.winGame( i + 1 )
+				self.winnerID = score + 1
 
+				if cfg.PRINT_STATES:
+					print( f"{self.gameID} )  {self.type}  \t: game has been won by team #{ self.winnerID }" )
 
-	def winGame( self, teamID ):
-		self.winnerID = teamID
-		self.close()
+				if cfg.DEBUG_MODE and cfg.PRINT_PACKETS:
+					print( self.getEndInfo() )
 
-		if cfg.PRINT_STATES:
-			print( f"{self.gameID} )  {self.type}  \t: game has been won by team #{ teamID }" )# 		NOTE : DEBUG
-
-		if cfg.DEBUG_MODE and cfg.PRINT_PACKETS:
-			print( self.getEndInfo() )
+				self.close()
 
 
 	def respawnBall( self, ball ):
-		ball.setDirs( ball.fx, 1 )
-		ball.setPosY( self.size_b )
-		ball.setSpeeds( self.speed_b, self.speed_b )
+
+		s = self.spawns[ self.spawn_target - 1 ]
+
+		ball.setPos( s[ 0 ], s[ 1 ])
+		ball.setSpeeds( s[ 2 ] * self.speed_b, s[ 3 ] * self.speed_b )
+		ball.setDirs( ball.fx, s[ 5 ] )
 
 
-	def respawnAllBalls( self ):
+	def respawnAllBalls( self ): #				NOTE : made to handle more than one ball, but there is only one for now
 		for i in range( len( self.balls )):
 			self.respawnBall( self.balls[ i ] )
 
+
+	def getTeamID( self, racketID ):
+		return( racketID )
 
 	# ------------------------------------------- GAME RENDERING ------------------------------------------- #
  	#									NOTE : DEBUG MODE ONLY
@@ -610,7 +668,7 @@ class Game:
 	def drawScores( self ):
 		text = self.font.render( f'{ self.scores[ 0 ]}', True, df.COL_FNT )
 
-		self.win.blit( text, text.get_rect( center = self.iPosS1 ))
+		self.win.blit( text, text.get_rect( center = self.posN1 ))
 
 
 	def drawFps( self ):
