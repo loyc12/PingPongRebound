@@ -22,7 +22,7 @@ except ModuleNotFoundError:
 	import game.PingPongRebound.BotControler as bc
 	import game.PingPongRebound.defs as df
 
-# game class
+
 class Game:
 	name = "Game"
 
@@ -59,6 +59,7 @@ class Game:
 
 	score_mode = df.GOALS
 	scores = [ 0 ]
+
 
 	iPosR1 = ( width * ( 1 / 2 ), height - size_b, "x" )
 	iPosR2 = None

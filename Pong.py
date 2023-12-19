@@ -12,6 +12,7 @@ except ModuleNotFoundError:
 	from game.PingPongRebound.master import gi
 	import game.PingPongRebound.defs as df
 
+
 class Pong( gi.Game ):
 	name = "Pong"
 
