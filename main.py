@@ -14,7 +14,6 @@ except ModuleNotFoundError:
 # MASTER LIST
 # TODO : make the ball receiver change after N missed shots
 # TODO : rework ball respawn in pongest
-# TODO : have respawn trajectories be stored in an array in game interface
 
 # FUNCTION LIST
 
@@ -22,7 +21,8 @@ except ModuleNotFoundError:
 # TODO : remove herobrine when ball touches two racks at once
 
 # MINOR LIST
-# TODO : swap racket 2 and 3 in pingest (breaks client side for now)
+# TODO : swap racket 2 and 3 in pingest ( breaks client side for now ) ( doable )
+# TODO : have respawn trajectories be stored in an array in game interface
 # TODO : make obstacles type GameObjects in the base class( and use them in pongester )
 # TODO : add sound effects to collisions( in GameObject class )
 # TODO : make an 'asteroids' game( solo )
