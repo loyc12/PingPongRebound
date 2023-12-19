@@ -457,7 +457,7 @@ class Game:
 		rack.updatePos()
 
 		# prevent racket from going off screen
-		if( not rack.isOnScreen() ):
+		if not rack.isOnScreen():
 			rack.bounceOnWall( "stop" )
 
 		# prevent rackets from crossing the middle lines
@@ -520,7 +520,7 @@ class Game:
 			if ball.getLeft() < 0 or ball.getRight() > self.width:
 				ball.bounceOnWall( "x" )
 
-			# bouncing off the top( no bounce factor )
+			# bouncing off the top
 			if ball.getTop() < 0:
 				ball.bounceOnWall( "y" )
 
