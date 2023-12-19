@@ -117,7 +117,7 @@ class BotControler( gc.GameControler ):
 
 
 	def kickBall( self ):
-		if self.game.name == "Ping":
+		if self.game.type == "Ping":
 			self.goToCenter( df.BOT_KICK_FACTOR )
 			return
 
@@ -349,7 +349,7 @@ class BotControler( gc.GameControler ):
 
 	def isOnSameSideOf( self, gameObj ):
 
-		if self.game.name == "Pi" or self.game.name == "Po" or self.game.name == "Ping":
+		if self.game.type == "Pi" or self.game.type == "Po" or self.game.type == "Ping":
 			return True
 
 		if self.racketDir == 'x':
@@ -414,7 +414,7 @@ class BotControler( gc.GameControler ):
 		g = self.game
 
 
-		if g.name == "Pongest":
+		if g.type == "Pongest":
 			factor = g.factor_rack
 		else:
 			factor = g.factor_wall

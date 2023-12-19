@@ -14,7 +14,7 @@ except ModuleNotFoundError:
 
 
 class Pingest( gi.Game ):
-	name = "Pingest"
+	type = "Pingest"
 
 	divide_sides = True
 	score_mode = df.GOALS

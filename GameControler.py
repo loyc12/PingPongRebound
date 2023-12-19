@@ -22,7 +22,7 @@ class GameControler:
 		for i in range( self.game.racket_count ):
 			rack = self.game.rackets[ i ]
 			if( _racketID <= 0 ):
-				raise ValueError( f"Error: no racket with id {_racketID} found in {self.game.name}" )
+				raise ValueError( f"Error: no racket with id {_racketID} found in {self.game.type}" )
 			elif rack.id == _racketID:
 				self.racket = rack
 				self.racketID = rack.id

@@ -207,7 +207,7 @@ class GameObject:
 
 		if cfg.PRINT_COLLISIONS:
 			t = time.time() - self.game.start_time
-			print( f"{self.game.gameID} )  {self.game.name}  \t: racket bounce at {'{:.1f}'.format( t )}s" )# 	NOTE : DEBUG
+			print( f"{self.game.gameID} )  {self.game.type}  \t: racket bounce at {'{:.1f}'.format( t )}s" )# 	NOTE : DEBUG
 
 		self.clampSpeed()
 		if df.NO_STUCK_BALLS:

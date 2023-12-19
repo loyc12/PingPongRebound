@@ -12,7 +12,7 @@ except ModuleNotFoundError:
 
 
 class Po( gi.Game ):
-	name = "Po"
+	type = "Po"
 
 	score_mode = gi.df.HITS
 

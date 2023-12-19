@@ -365,10 +365,10 @@ class GameManager:
 						print( "please select a valid game( 1-8 )" )
 						self.emptyDisplay()
 					else:
-						print( f"{ self.windowID} )  { game.name }  \t: switched game viewed ")
+						print( f"{ self.windowID} )  { game.type }  \t: switched game viewed ")
 						game.delta_time = cfg.FRAME_DELAY
 						game.last_time = time.time()
-						pg.display.set_caption( game.name )
+						pg.display.set_caption( game.type )
 					return
 
 				# handling movement keys presses
@@ -415,7 +415,7 @@ class GameManager:
 		if game.state == df.PLAYING:
 			if game.width != self.win.get_width() or game.height != self.win.get_height():
 				self.win = pg.display.set_mode(( game.width, game.height ))
-				pg.display.set_caption( game.name )
+				pg.display.set_caption( game.type )
 
 			game.refreshScreen()
 
@@ -439,7 +439,7 @@ class GameManager:
 			return None
 
 		return {
-			'gameType': gameClass.name,
+			'gameType': gameClass.type,
 			'sizeInfo': GameManager.getSizeInfo( gameClass ),
 			'racketCount': gameClass.racket_count,
 			'scorePos': GameManager.getScorePos( gameClass ),

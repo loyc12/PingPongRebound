@@ -14,7 +14,7 @@ except ModuleNotFoundError:
 
 
 class Ponger( gi.Game ):
-	name = "Ponger"
+	type = "Ponger"
 
 	score_mode = df.GOALS
 

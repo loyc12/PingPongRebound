@@ -14,7 +14,7 @@ except ModuleNotFoundError:
 
 
 class Pong( gi.Game ):
-	name = "Pong"
+	type = "Pong"
 
 	score_mode = df.GOALS
 

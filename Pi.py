@@ -12,7 +12,7 @@ except ModuleNotFoundError:
 
 
 class Pi( gi.Game ):
-	name = "Pi"
+	type = "Pi"
 
 	score_mode = gi.df.HITS
 

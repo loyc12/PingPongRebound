@@ -14,7 +14,7 @@ except ModuleNotFoundError:
 
 
 class Ping( gi.Game ):
-	name = "Ping"
+	type = "Ping"
 
 	divide_sides = True
 	score_mode = df.GOALS

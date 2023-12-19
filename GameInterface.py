@@ -24,7 +24,7 @@ except ModuleNotFoundError:
 
 
 class Game:
-	name = "Game"
+	type = "None"
 
 	hard_break = False #		NOTE : automatically stop racket when decelerating
 	divide_sides = False #		NOTE : prevents rackets from crossing the middle of the screen
@@ -76,10 +76,12 @@ class Game:
 	# ------------------------------------------- INITIALIZATION ------------------------------------------- #
 
 
-	def __init__( self, _gameID, _gameMode = df.SOLO, connector = None ): # NOTE : take in gametype
+	def __init__( self, _gameID, _gameMode = df.SOLO, connector = None ):
 
 		self.gameID = _gameID
+		self.mode = _gameMode
 		self.connector = connector
+
 		self.gameLock = asy.Lock()
 		self.state = df.STARTING
 
@@ -94,8 +96,8 @@ class Game:
 		#self.spawn_queue = []
 		self.missed_shots = 0
 
-		self.winnerID = 0 #				NOTE : this is a scores[] index( teamID )
-		self.quitterID = 0 #			NOTE : this is a playerID
+		self.winnerID = 0 #			NOTE : this is a scores[] index( teamID )
+		self.quitterID = 0 #		NOTE : this is a playerID
 
 		self.rackets = []
 		self.controlers = []
@@ -106,14 +108,14 @@ class Game:
 		self.initBalls()
 		self.initScores()
 
+		self.onInit()
+
+
+	def onInit( self ):
+
 		if cfg.FORCE_MODE:
 			print ( "Warning : game mode has been forced to " + str( df.FORCE_MODE_TO ))
 			self.mode = df.FORCE_MODE_TO
-		else:
-			self.mode = _gameMode
-
-		if cfg.PRINT_STATES:
-			print( f"{self.gameID} )  {self.name}  \t: game has been created" )# 		NOTE : DEBUG
 
 		if cfg.DEBUG_MODE:
 			self.font = pg.font.Font( None, self.size_f )
@@ -124,6 +126,10 @@ class Game:
 			self.last_time = self.start_time
 			self.delta_time = cfg.FRAME_DELAY
 
+		if cfg.PRINT_STATES:
+			print( f"{self.gameID} )  {self.type}  \t: game has been created" )# 		NOTE : DEBUG
+
+	# --------------------------------------------------------------
 
 	def initRackets( self ):
 		# setting up rackets :             id, game, _x              , _y              , _w         , _h         , _maxSpeed
@@ -373,7 +379,7 @@ class Game:
 			self.start_time = time.time()
 
 			if cfg.PRINT_STATES:
-				print( f"{self.gameID} )  {self.name}  \t: game has been started" )# 		NOTE : DEBUG
+				print( f"{self.gameID} )  {self.type}  \t: game has been started" )# 		NOTE : DEBUG
 			if cfg.PRINT_PACKETS:
 				print( self.getPlayerInfo() )# 												NOTE : DEBUG
 
@@ -385,7 +391,7 @@ class Game:
 		self.state = df.ENDING
 
 		if cfg.PRINT_STATES:
-			print( f"{self.gameID} )  {self.name}  \t: game has been closed" )# 			NOTE : DEBUG
+			print( f"{self.gameID} )  {self.type}  \t: game has been closed" )# 			NOTE : DEBUG
 
 	# --------------------------------------------------------------
 
@@ -522,7 +528,7 @@ class Game:
 				if self.score_mode == df.GOALS: #		if goals give points
 					self.scores[ teamID - 1 ] += 1
 					if cfg.PRINT_STATES:
-						print( f"{self.gameID} )  {self.name}  \t: team #{ teamID } scored a point" )
+						print( f"{self.gameID} )  {self.type}  \t: team #{ teamID } scored a point" )
 				else: # 								if racket hits give points
 					self.scores[ teamID - 1 ] = 0
 				self.last_ponger = 0
@@ -548,7 +554,7 @@ class Game:
 		self.close()
 
 		if cfg.PRINT_STATES:
-			print( f"{self.gameID} )  {self.name}  \t: game has been won by team #{ teamID }" )# 		NOTE : DEBUG
+			print( f"{self.gameID} )  {self.type}  \t: game has been won by team #{ teamID }" )# 		NOTE : DEBUG
 
 		if cfg.DEBUG_MODE and cfg.PRINT_PACKETS:
 			print( self.getEndInfo() )
@@ -698,7 +704,7 @@ class Game:
 
 		infoDict[ "gameConnector" ] = self.connector
 
-		infoDict[ "gameType" ] = self.name
+		infoDict[ "gameType" ] = self.type
 		infoDict[ "gameMode" ] = self.getMode()
 		infoDict[ "endState" ] = self.getEndState()
 
@@ -731,7 +737,7 @@ if __name__ == '__main__': #			NOTE : DEBUG MODE ONLY
 	g = Game( 1 )
 
 	g.setWindow( pg.display.set_mode(( 1280, 1280 )))
-	pg.display.set_caption( g.name )
+	pg.display.set_caption( g.type )
 
 	#g.addPlayer( "Player 1", 1 )
 

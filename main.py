@@ -34,7 +34,7 @@ async def debugTester( Initialiser ):
 		g = Initialiser( 1 )
 
 		g.setWindow( pg.display.set_mode(( g.width, g.height )))
-		pg.display.set_caption( g.name )
+		pg.display.set_caption( g.type )
 
 		if cfg.ADD_DEBUG_PLAYER:
 			g.addPlayer( "Player 1", 1 )
