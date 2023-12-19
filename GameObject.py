@@ -28,7 +28,7 @@ class GameObject:
 		self.setSpeeds( 0, 0 )
 		#self.type = _type
 
-		if( cfg.DEBUG_MODE ):
+		if cfg.DEBUG_MODE:
 			self.box = pg.Rect( _game.width / 2, _game.height / 2, _w, _h )
 
 
@@ -42,7 +42,7 @@ class GameObject:
 
 
 	def drawSelf( self ): # 										NOTE : DEBUG
-		if( cfg.DEBUG_MODE ):
+		if cfg.DEBUG_MODE:
 			self.box.center = ( self.px, self.py )
 			pg.draw.rect( self.game.win, df.COL_OBJ, self.box )
 		else:
@@ -122,16 +122,20 @@ class GameObject:
 		# prevent balls from going off screen
 		if self.getLeft() < 0:
 			self.setLeft( 0 )
-			print( "clamping ball left" )
+			if cfg.PRINT_DEBUG:
+				print( "clamping to left" )
 		if self.getRight() > self.game.width:
 			self.setRight( self.game.width )
-			print( "clamping ball right" )
+			if cfg.PRINT_DEBUG:
+				print( "clamping to right" )
 		if self.getTop() < 0:
 			self.setTop( 0 )
-			print( "clamping ball top" )
+			if cfg.PRINT_DEBUG:
+				print( "clamping to top" )
 		if self.getBottom() > self.game.height:
 			self.setBottom( self.game.height )
-			print( "clamping ball bottom" )
+			if cfg.PRINT_DEBUG:
+				print( "clamping to bottom" )
 
 
 	def isOnScreen( self ):
@@ -171,11 +175,15 @@ class GameObject:
 		elif mode == "x":
 			self.fx *= -1
 			self.dx *= self.game.factor_wall
+			if cfg.PRINT_DEBUG:
+				print ( "bouncing on x" )
 
 		# horizontal surface bounces ( -- )
 		elif mode == "y":
 			self.fy *= -1
 			self.dy *= self.game.factor_wall
+			if cfg.PRINT_DEBUG:
+				print ( "bouncing on y" )
 
 		self.clampSpeed()
 		if df.NO_STUCK_BALLS:
@@ -216,7 +224,8 @@ class GameObject:
 			else:
 				self.fy = -1
 
-			print( "unstuck x" )
+			if cfg.PRINT_DEBUG:
+				print( "unstuck on x" )
 
 		if  self.dx < 1:
 			self.dx = 1
@@ -226,7 +235,8 @@ class GameObject:
 			else:
 				self.fx = -1
 
-			print( "unstuck y" )
+			if cfg.PRINT_DEBUG:
+				print( "unstuck on y" )
 
 
 # ---------------------------------------------- MOVEMENT ---------------------------------------------- #

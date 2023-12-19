@@ -272,9 +272,12 @@ class GameManager:
 		delay = ( cfg.FRAME_DELAY - self.sleep_loss ) * cfg.FRAME_FACTOR
 
 		if cfg.PRINT_FRAMES: #			NOTE : DEBUG PRINTS
+
 			self.meanDt = ( dt + ( self.meanDt * cfg.FPS_SMOOTHING )) / ( cfg.FPS_SMOOTHING + 1 )
 			print( "frame time: {:.5f} \t".format( dt ), "mean time: {:.5f} \t".format( self.meanDt ), "sleep time: {:.5f} \t".format( delay ))
-			#print( "diversion: {:.5f} \t".format( diversion ), "sleep loss: {:.5f} \t".format( self.sleep_loss ), "correction: {:.5f} \t".format( correction ))
+
+			if cfg.PRINT_DEBUG:
+				print( "diversion: {:.5f} \t".format( diversion ), "sleep loss: {:.5f} \t".format( self.sleep_loss ), "correction: {:.5f} \t".format( correction ))
 
 		return delay
 
@@ -299,21 +302,22 @@ class GameManager:
 
 				# respawns the ball
 				elif k == df.RETURN:
-					if self.windowID != 0:
-						if self.gameDict.get( self.windowID )!= None:
-							game = self.gameDict.get( self.windowID )
-							game.respawnAllBalls()
-							print( "respawning the ball( s )" )
-						else:
-							print( "coud not respawn the ball( s )" )
+
+					if self.windowID != 0 and self.gameDict.get( self.windowID ) != None:
+						game = self.gameDict.get( self.windowID )
+						game.respawnAllBalls()
+
+						if cfg.PRINT_DEBUG:
+							print( "respawning the ball(s)" )
 					else:
+						print( "coud not respawn the ball(s)" )
 						print( "please select a valid game( 1-8 )" )
 					return
 
 				# find the next game to view
 				elif k == pg.K_q or k == pg.K_e:
-					i = 0
-					# NOTE : this loops over the games until it finds one that can be displayed
+
+					i = 0 #							NOTE : this loops over the games until it finds one that can be displayed
 					while i <= self.maxGameCount:
 
 						i += 1

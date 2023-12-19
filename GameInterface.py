@@ -123,7 +123,7 @@ class Game:
 		self.initBalls()
 		self.initScores()
 
-		if (cfg.PRINT_STATES):
+		if cfg.PRINT_STATES:
 			print( f"{self.gameID} )  {self.name}  \t: game has been created" )# 		NOTE : DEBUG
 
 
@@ -175,10 +175,9 @@ class Game:
 	def makeBotsPlay( self ):
 		if self.useAI and self.playerCount < self.racket_count:
 			for i in range( self.playerCount, self.controlerCount ):
+
 				if( self.controlers[ i ].mode == df.BOT ):
-
 					val = ( self.step_count + self.controlers[ i ].frequency_offset )
-
 
 					if( val % df.BOT_SEE_FREQUENCY ) == 0:
 						#print( "bot #" + str( i ) + " is seeing  on step #" + str( self.step_count ))#		NOTE : DEBUG
@@ -385,7 +384,8 @@ class Game:
 			self.initBots()
 			self.state = df.PLAYING
 			self.start_time = time.time()
-			if (cfg.PRINT_STATES):
+
+			if cfg.PRINT_STATES:
 				print( f"{self.gameID} )  {self.name}  \t: game has been started" )# 		NOTE : DEBUG
 			if cfg.PRINT_PACKETS:
 				print( self.getPlayerInfo() )# 												NOTE : DEBUG
@@ -397,7 +397,7 @@ class Game:
 	def close( self ):
 		self.state = df.ENDING
 
-		if (cfg.PRINT_STATES):
+		if cfg.PRINT_STATES:
 			print( f"{self.gameID} )  {self.name}  \t: game has been closed" )# 			NOTE : DEBUG
 
 	# --------------------------------------------------------------
@@ -405,7 +405,7 @@ class Game:
 	async def run( self ):
 
 		if not cfg.DEBUG_MODE:
-			print( "cannot use run()without debug mode" )
+			print( "cannot use run() without debug mode" )
 			return
 
 		if self.state != df.PLAYING:
@@ -515,8 +515,6 @@ class Game:
 	# bouncing on the walls
 	def checkWalls( self, ball ):
 		if ball.getLeft() < 0 or ball.getRight() > self.width or ball.getTop() < 0:
-
-			print ( "bouncing on the sides" )
 
 			# bouncing off the sides
 			if ball.getLeft() < 0 or ball.getRight() > self.width:
