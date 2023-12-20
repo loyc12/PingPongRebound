@@ -620,7 +620,7 @@ class Game:
 			self.spawn_target += 1
 			self.spawn_target %= self.score_count
 		if mode == "goal":
-			self.spawn_target = self.getTeamID( self.last_ponger ) - 1
+			self.spawn_target = self.getTeamID( self.last_ponger ) % self.score_count
 
 	# --------------------------------------------------------------
 
