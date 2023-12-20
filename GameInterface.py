@@ -614,13 +614,13 @@ class Game:
 				print( f"{self.gameID} )  {self.type}  \t: resetting miss_shots" )
 
 
-	def findNextSpawn( self, mode ): # mode is either "miss" or "goal"
+	def findNextSpawn( self, mode ):
 
 		if mode == "miss":
 			self.spawn_target += 1
-			self.spawn_target %= self.racket_count
+			self.spawn_target %= self.score_count
 		if mode == "goal":
-			self.spawn_target = self.last_ponger - 1
+			self.spawn_target = self.getTeamID( self.last_ponger ) - 1
 
 	# --------------------------------------------------------------
 

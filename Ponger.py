@@ -35,8 +35,8 @@ class Ponger( gi.Game ):
 
 	iPosB1 = ( int( width * ( 1 / 2 )), int( height * ( 3 / 4 )))
 
-	posS1 = ( int( width * ( 3 / 4 )), int( height * ( 1 / 2 )), 0.4, 1, -1, -1)
-	posS2 = ( int( width * ( 1 / 4 )), int( height * ( 1 / 2 )), 0.4, 1, 1, 1)
+	posS1 = ( int( width * ( 1 / 2 )), int( height * ( 3 / 4 )), 0.4, 1, -1, -1)
+	posS2 = ( int( width * ( 1 / 2 )), int( height * ( 1 / 4 )), 0.4, 1, 1, 1)
 
 
 	posN1 = ( int( width * ( 1 / 2 )), int( height * ( 1 / 4 )))
@@ -92,7 +92,7 @@ class Ponger( gi.Game ):
 			if ball.getTop() <= 0:
 				self.ballEvent( ball, df.GOALS, 2 )
 
-			if ball.getBottom() >= self.width:
+			if ball.getBottom() >= self.height:
 				self.ballEvent( ball, df.GOALS, 1 )
 
 			if self.connector != None:
@@ -107,3 +107,9 @@ class Ponger( gi.Game ):
 		ball.setPos( s[ 0 ], s[ 1 ])
 		ball.setSpeeds( s[ 2 ] * self.speed_b, s[ 3 ] * self.speed_b )
 		ball.setDirs( -ball.fx, s[ 5 ] )
+
+	def getTeamID( self, racketID ):
+		if racketID == 1 or racketID == 3:
+			return 1
+		else:
+			return 2

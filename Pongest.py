@@ -37,10 +37,10 @@ class Pongest( gi.Game ):
 
 	iPosB1 = ( int( width * ( 3 / 4 )), int( height * ( 3 / 4 )))
 
-	posS1 = ( int( width * ( 3 / 4 )), int( height * ( 3 / 4 )), 0.4, 1, -1, -1)
-	posS2 = ( int( width * ( 1 / 4 )), int( height * ( 3 / 4 )), 1, 0.4, 1, -1)
-	posS3 = ( int( width * ( 1 / 4 )), int( height * ( 1 / 4 )), 0.4, 1, 1, 1)
-	posS4 = ( int( width * ( 3 / 4 )), int( height * ( 1 / 4 )), 1, 0.4, -1, 1)
+	posS1 = ( int( width * ( 3 / 4 )), int( height * ( 3 / 4 )), 0.5, 1, -1, -1)
+	posS2 = ( int( width * ( 1 / 4 )), int( height * ( 3 / 4 )), 1, 0.5, 1, -1)
+	posS3 = ( int( width * ( 1 / 4 )), int( height * ( 1 / 4 )), 0.5, 1, 1, 1)
+	posS4 = ( int( width * ( 3 / 4 )), int( height * ( 1 / 4 )), 1, 0.5, -1, 1)
 
 	posN1 = ( int( width * ( 1 / 2 )), int( height * ( 1 / 5 )))
 	posN2 = ( int( width * ( 4 / 5 )), int( height * ( 1 / 2 )))
@@ -104,8 +104,9 @@ class Pongest( gi.Game ):
 
 
 	def findNextSpawn( self, mode ): # mode is either "miss" or "goal"
+
 		if mode == "miss":
 			self.spawn_target += 1
-			self.spawn_target %= self.racket_count
+			self.spawn_target %= self.score_count
 		if mode == "goal":
-			self.spawn_target = self.last_ponger % self.racket_count
+			self.spawn_target = self.getTeamID( self.last_ponger ) % self.score_count # rotate target on win (no - 1)

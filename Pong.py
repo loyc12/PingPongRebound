@@ -34,8 +34,8 @@ class Pong( gi.Game ):
 	posN1 = ( int( width * ( 1 / 4 )), int( height * ( 1 / 2 )))
 	posN2 = ( int( width * ( 3 / 4 )), int( height * ( 1 / 2 )))
 
-	posS1 = ( int( width * ( 3 / 4 )), int( height * ( 1 / 2 )), 1, 1, 1, -1 )
-	posS2 = ( int( width * ( 1 / 4 )), int( height * ( 1 / 2 )), 1, 1, 1, 1 )
+	posS1 = ( int( width * ( 3 / 4 )), int( height * ( 1 / 2 )), 1.5, 1, 1, -1 )
+	posS2 = ( int( width * ( 1 / 4 )), int( height * ( 1 / 2 )), 1.5, 1, 1, 1 )
 
 	lines = [
 	[( 0, 0 ), ( 1, 0 ), 2 ],

@@ -97,6 +97,7 @@ class Pinger( gi.Game ):
 			if self.connector != None:
 				self.connector.update_scores( self.scores )
 
+
 	def respawnBall( self, ball ):
 		self.last_ponger = 0
 
@@ -105,3 +106,10 @@ class Pinger( gi.Game ):
 		ball.setPos( s[ 0 ], s[ 1 ])
 		ball.setSpeeds( s[ 2 ] * self.speed_b, s[ 3 ] * self.speed_b )
 		ball.setDirs( s[ 4 ], -ball.fy )
+
+
+	def getTeamID( self, racketID ):
+		if racketID == 1 or racketID == 2:
+			return 1
+		else:
+			return 2
