@@ -37,11 +37,11 @@ class Ping( gi.Game ):
 
 	iPosB1 = ( int( width * ( 1 / 2 )), int( height * ( 1 / 4 )))
 
-	posN1 = ( int( width * ( 1 / 4 )), int( height * ( 1 / 2 )))
-	posN2 = ( int( width * ( 3 / 4 )), int( height * ( 1 / 2 )))
-
 	posS1 = ( int( width * ( 1 / 2 )), int( height * ( 1 / 4 )), 1, 1, -1, -1)
 	posS2 = ( int( width * ( 1 / 2 )), int( height * ( 1 / 4 )), 1, 1, 1, -1)
+
+	posN1 = ( int( width * ( 1 / 4 )), int( height * ( 1 / 2 )))
+	posN2 = ( int( width * ( 3 / 4 )), int( height * ( 1 / 2 )))
 
 	lines = [
 	[( 0.5, 0 ), ( 0.5, 1 ), 1 ],
@@ -62,13 +62,3 @@ class Ping( gi.Game ):
 
 			if self.connector != None:
 				self.connector.update_scores( self.scores )
-
-
-	def respawnBall( self, ball ):
-		self.last_ponger = 0
-
-		s = self.spawns[ self.spawn_target ]
-
-		ball.setPos( s[ 0 ], s[ 1 ])
-		ball.setSpeeds( s[ 2 ] * self.speed_b, s[ 3 ] * self.speed_b )
-		ball.setDirs( s[ 4 ], s[ 5 ] )

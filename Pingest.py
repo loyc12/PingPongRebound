@@ -36,6 +36,11 @@ class Pingest( gi.Game ):
 
 	iPosB1 = ( int( width * ( 1 / 2 )), int( height * ( 3 / 4 )))
 
+	posS1 = ( int( width * ( 1 / 2 )), int( height * ( 3 / 4 )), 0.75, 1, -1, -1)
+	posS2 = ( int( width * ( 1 / 2 )), int( height * ( 3 / 4 )), 0.75, 1, 1, -1)
+	posS3 = ( int( width * ( 1 / 2 )), int( height * ( 1 / 4 )), 0.75, 1, 1, 1)
+	posS4 = ( int( width * ( 1 / 2 )), int( height * ( 1 / 4 )), 0.75, 1, -1, 1)
+
 	posN1 = ( int( width * ( 1 / 4 )), int( height * ( 1 / 4 )))
 	posN2 = ( int( width * ( 3 / 4 )), int( height * ( 1 / 4 )))
 	posN3 = ( int( width * ( 1 / 4 )), int( height * ( 3 / 4 )))
@@ -61,12 +66,6 @@ class Pingest( gi.Game ):
 		self.rackets[ 3 ].setSpeeds( self.speed_r, 0 )
 
 
-	def initBalls( self ):
-		self.balls.append( go.GameObject( 1, self, self.iPosB1[ 0 ], self.iPosB1[ 1 ], self.size_b, self.size_b, self.speed_m_b ))
-		self.balls[ 0 ].setSpeeds( self.speed_b * ( 2 / 3 ), self.speed_b )
-		self.balls[ 0 ].setDirs( -1, -1 )
-
-
 	# bouncing off the rackets
 	def checkRackets( self, ball ):
 		for rack in self.rackets: #		copies the racket's data
@@ -78,7 +77,8 @@ class Pingest( gi.Game ):
 					ball.setPosY( rack.getPosY() - self.size_b )# '-' because the ball is going over
 
 				ball.bounceOnRack( rack, "y" )
-				self.ballEvent( ball, rack.id, df.HITS )
+				self.last_ponger = rack.id
+				self.ballEvent( ball, df.HITS, rack.id )
 
 				break # 									NOTE : prevents multihits
 
@@ -93,42 +93,17 @@ class Pingest( gi.Game ):
 	# scoring a goal
 	def checkGoals( self, ball ):
 		if ball.getTop() < 0 or ball.getBottom() > self.height:
+			self.ballEvent( ball, df.GOALS, self.last_ponger )
 
-			# checking who scored
-			if( self.last_ponger > 0 ):
-				self.ballEvent( self.last_ponger, df.GOALS )
-			else:
-				ball.setDirs( -ball.fx, -ball.fy )
-
-			self.respawnBall( ball )
 			if self.connector != None:
 				self.connector.update_scores( self.scores )
 
 
-
 	def respawnBall( self, ball ):
-		ball.setSpeeds(( self.speed_b + ball.dx ) * ( 1 / 3 ), self.speed_b)
+		self.last_ponger = 0
 
-		if( ball.getPosX() < self.width / 2 ):
-			ball.setDirs( -1, ball.fy )
-		else:
-			ball.setDirs( 1, ball.fy )
+		s = self.spawns[ self.spawn_target ]
 
-		if( ball.getPosY() < self.height / 2 ):
-			ball.setDirs( ball.fx, -1 )
-			ball.setPos( self.width * ( 1 / 2 ), self.height * ( 3 / 4 ))
-		else:
-			ball.setDirs( ball.fx, 1 )
-			ball.setPos( self.width * ( 1 / 2 ), self.height * ( 1 / 4 ))
-
-
-	def drawScores( self ):
-		text1 = self.font.render( f'{self.scores[ 0 ]}', True, df.COL_FNT )
-		text2 = self.font.render( f'{self.scores[ 1 ]}', True, df.COL_FNT )
-		text3 = self.font.render( f'{self.scores[ 2 ]}', True, df.COL_FNT )
-		text4 = self.font.render( f'{self.scores[ 3 ]}', True, df.COL_FNT )
-
-		self.win.blit( text1, text1.get_rect( center = self.posN1 ))
-		self.win.blit( text2, text2.get_rect( center = self.posN2 ))
-		self.win.blit( text3, text3.get_rect( center = self.posN3 ))
-		self.win.blit( text4, text4.get_rect( center = self.posN4 ))
+		ball.setPos( s[ 0 ], s[ 1 ])
+		ball.setSpeeds( s[ 2 ] * self.speed_b, s[ 3 ] * self.speed_b )
+		ball.setDirs( s[ 4 ], s[ 5 ] )

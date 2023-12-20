@@ -647,7 +647,7 @@ class Game:
 
 		ball.setPos( s[ 0 ], s[ 1 ])
 		ball.setSpeeds( s[ 2 ] * self.speed_b, s[ 3 ] * self.speed_b )
-		ball.setDirs( ball.fx, s[ 5 ] )
+		ball.setDirs( s[ 4 ], s[ 5 ] )
 
 
 	def respawnAllBalls( self ): #				NOTE : made to handle more than one ball, but there is only one for now
