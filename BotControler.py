@@ -170,7 +170,7 @@ class BotControler( gc.GameControler ):
 
 	def kickBall( self ):
 		if self.game.type == "Ping":
-			self.goToCenter( df.BOT_KICK_FACTOR )
+			self.goToCenter( df.BOT_KICK_SPEED )
 			return
 
 		rack = self.racket
@@ -180,40 +180,40 @@ class BotControler( gc.GameControler ):
 			if ball.isGoingLeft():
 
 				if ball.isLeftOfX( rack.getPosX() + df.BOT_PRECISION ):
-					self.goLeft( df.BOT_KICK_FACTOR )
+					self.goLeft( df.BOT_KICK_SPEED )
 					return
 
 				else:
-					self.goRight( df.BOT_KICK_FACTOR )
+					self.goRight( df.BOT_KICK_SPEED )
 					return
 			else:
 
 				if ball.isRightOfX( rack.getPosX() - df.BOT_PRECISION ):
-					self.goRight( df.BOT_KICK_FACTOR )
+					self.goRight( df.BOT_KICK_SPEED )
 					return
 
 				else:
-					self.goLeft( df.BOT_KICK_FACTOR )
+					self.goLeft( df.BOT_KICK_SPEED )
 					return
 
 		if self.racketDir == 'y':
 			if ball.isGoingUp():
 
 				if ball.isAboveY( rack.getPosY() + df.BOT_PRECISION ):
-					self.goUp( df.BOT_KICK_FACTOR )
+					self.goUp( df.BOT_KICK_SPEED )
 					return
 
 				else:
-					self.goDown( df.BOT_KICK_FACTOR )
+					self.goDown( df.BOT_KICK_SPEED )
 					return
 			else:
 
 				if ball.isBelowY( rack.getPosY() - df.BOT_PRECISION ):
-					self.goDown( df.BOT_KICK_FACTOR )
+					self.goDown( df.BOT_KICK_SPEED )
 					return
 
 				else:
-					self.goUp( df.BOT_KICK_FACTOR )
+					self.goUp( df.BOT_KICK_SPEED )
 					return
 
 		# if there is no good kick, continue as normal
@@ -224,38 +224,38 @@ class BotControler( gc.GameControler ):
 
 			if ball.isGoingLeft():
 				if rack.isRightOfX( ball.px - rack.sx - df.BOT_PRECISION ): #	when the ball is left of the racket's right half
-					self.goLeft( df.BOT_KICK_FACTOR )
+					self.goLeft( df.BOT_KICK_SPEED )
 					return
 
 				elif rack.isLeftOfX( ball.px + rack.sx - df.BOT_PRECISION ): #	when the ball is right of the racket's right half
-					self.goRight( df.BOT_KICK_FACTOR )
+					self.goRight( df.BOT_KICK_SPEED )
 					return
 			else:
 				if rack.isLeftOfX( ball.px + rack.sx + df.BOT_PRECISION ): #	when the ball is right of the racket's left half
-					self.goRight( df.BOT_KICK_FACTOR )
+					self.goRight( df.BOT_KICK_SPEED )
 					return
 
 				elif rack.isRightOfX( ball.px - rack.sx + df.BOT_PRECISION ): #	when the ball is left of the racket's left half
-					self.goLeft( df.BOT_KICK_FACTOR )
+					self.goLeft( df.BOT_KICK_SPEED )
 					return
 
 		if self.racketDir == 'y':
 
 			if ball.isGoingUp():
 				if rack.isBelowY( ball.py - rack.sy - df.BOT_PRECISION ): #		when the ball is above the racket's bottom half
-					self.goUp( df.BOT_KICK_FACTOR )
+					self.goUp( df.BOT_KICK_SPEED )
 					return
 
 				elif rack.isAboveY( ball.py + rack.sy - df.BOT_PRECISION ): #	when the ball is bellow the racket's bottom half
-					self.goDown( df.BOT_KICK_FACTOR )
+					self.goDown( df.BOT_KICK_SPEED )
 					return
 			else:
 				if rack.isAboveY( ball.py + rack.sy + df.BOT_PRECISION ): #		when the ball is bellow the racket's top half
-					self.goDown( df.BOT_KICK_FACTOR )
+					self.goDown( df.BOT_KICK_SPEED )
 					return
 
 				elif rack.isBelowY( ball.py - rack.sy + df.BOT_PRECISION ): #	when the ball is above the racket's top half
-					self.goUp( df.BOT_KICK_FACTOR )
+					self.goUp( df.BOT_KICK_SPEED )
 					return
 
 

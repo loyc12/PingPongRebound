@@ -205,9 +205,9 @@ class GameObject:
 			self.dy *= self.game.factor_rack
 			self.dx = int( self.dx + ( other.getMvX() * df.KICK_FACTOR * df.getSign( self.fx )))
 
-		#if cfg.PRINT_COLLISIONS:
-		#	t = time.time() - self.game.start_time
-		#	print( f"{self.game.gameID} )  {self.game.type}  \t: racket bounce at {'{:.1f}'.format( t )}s" )# 	NOTE : DEBUG
+		if cfg.PRINT_COLLISIONS:
+			t = time.time() - self.game.start_time
+			print( f"{self.game.gameID} )  {self.game.type}  \t: racket bounce at {'{:.1f}'.format( t )}s" )# 	NOTE : DEBUG
 
 		self.clampSpeed()
 		if df.NO_STUCK_BALLS:
