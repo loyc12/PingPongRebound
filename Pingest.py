@@ -97,13 +97,3 @@ class Pingest( gi.Game ):
 
 			if self.connector != None:
 				self.connector.update_scores( self.scores )
-
-
-	def respawnBall( self, ball ):
-		self.last_ponger = 0
-
-		s = self.spawns[ self.spawn_target ]
-
-		ball.setPos( s[ 0 ], s[ 1 ])
-		ball.setSpeeds( s[ 2 ] * self.speed_b, s[ 3 ] * self.speed_b )
-		ball.setDirs( s[ 4 ], s[ 5 ] )
