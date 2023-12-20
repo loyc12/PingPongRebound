@@ -35,7 +35,12 @@ class Pongest( gi.Game ):
 	iPosR3 = ( int( width * ( 1 / 2 )), int( height - gi.Game.size_b )	, "x" )
 	iPosR4 = ( int( gi.Game.size_b ), int( height * ( 1 / 2 ))			, "y" )
 
-	iPosB1 = ( int( width * ( 1 / 2 )), int( height * ( 1 / 2 )))
+	iPosB1 = ( int( width * ( 3 / 4 )), int( height * ( 3 / 4 )))
+
+	posS1 = ( int( width * ( 3 / 4 )), int( height * ( 3 / 4 )), 0.4, 1, -1, -1)
+	posS2 = ( int( width * ( 1 / 4 )), int( height * ( 3 / 4 )), 1, 0.4, 1, -1)
+	posS3 = ( int( width * ( 1 / 4 )), int( height * ( 1 / 4 )), 0.4, 1, 1, 1)
+	posS4 = ( int( width * ( 3 / 4 )), int( height * ( 1 / 4 )), 1, 0.4, -1, 1)
 
 	posN1 = ( int( width * ( 1 / 2 )), int( height * ( 1 / 5 )))
 	posN2 = ( int( width * ( 4 / 5 )), int( height * ( 1 / 2 )))
@@ -60,19 +65,6 @@ class Pongest( gi.Game ):
 		self.rackets[ 3 ].setSpeeds( 0, self.speed_r )
 
 
-	def initBalls( self ):
-		self.balls.append( go.GameObject( 1, self, self.iPosB1[ 0 ], self.iPosB1[ 1 ], self.size_b, self.size_b, self.speed_m_b ))
-		self.balls[ 0 ].setSpeeds( self.speed_b * ( 1 / 3 ), self.speed_b )
-		self.balls[ 0 ].setDirs( 1, -1 )
-
-
-	def initScores( self ):
-		self.scores.append( 0 )
-		self.scores.append( 0 )
-		self.scores.append( 0 )
-		self.scores.append( 0 )
-
-
 	# bouncing off the rackets
 	def checkRackets( self, ball ):
 		for rack in self.rackets: #		copies the racket's data
@@ -81,20 +73,18 @@ class Pongest( gi.Game ):
 				if( rack.id == 1 ):
 					ball.setPosY( rack.getPosY() + self.size_b )# '+' because the ball is going under
 					ball.bounceOnRack( rack, "y" )
-
 				elif( rack.id == 2 ):
 					ball.setPosX( rack.getPosX() - self.size_b )# '-' because the ball is going left
 					ball.bounceOnRack( rack, "x" )
-
 				elif( rack.id == 3 ):
 					ball.setPosY( rack.getPosY() - self.size_b )# '-' because the ball is going over
 					ball.bounceOnRack( rack, "y" )
-
 				elif( rack.id == 4 ):
 					ball.setPosX( rack.getPosX() + self.size_b )# '+' because the ball is going right
 					ball.bounceOnRack( rack, "x" )
 
-				self.ballEvent( ball, rack.id, df.HITS )
+				self.last_ponger = rack.id
+				self.ballEvent( ball, df.HITS, rack.id)
 
 				break # 									NOTE : prevents multihits
 
@@ -107,43 +97,15 @@ class Pongest( gi.Game ):
 	# scoring a goal
 	def checkGoals( self, ball ):
 		if ball.getTop() < 0 or ball.getBottom() > self.height or ball.getLeft() < 0 or ball.getRight() > self.width:
-			# increasing score
-			if( self.last_ponger > 0 ):
-				self.ballEvent( self.last_ponger, df.GOALS )
+			self.ballEvent( ball, df.GOALS, self.last_ponger )
 
-			# checking how to respawn the ball
-			if self.last_ponger == 1 or ( self.last_ponger == 0 and ball.fx < 0 and ball.fy < 0 ):
-				ball.setDirs( -ball.fx, -1 )
-				ball.setSpeeds( self.speed_b * ( 1 / 3 ), self.speed_b )
-
-			elif self.last_ponger == 2 or ( self.last_ponger == 0 and ball.fx > 0 and ball.fy < 0 ):
-				ball.setDirs( 1, -ball.fy )
-				ball.setSpeeds( self.speed_b, self.speed_b * ( 1 / 3 ))
-
-			elif self.last_ponger == 3 or ( self.last_ponger == 0 and ball.fx > 0 and ball.fy > 0 ):
-				ball.setDirs( -ball.fx, 1 )
-				ball.setSpeeds( self.speed_b * ( 1 / 3 ), self.speed_b )
-
-			elif self.last_ponger == 4 or ( self.last_ponger == 0 and ball.fx < 0 and ball.fy > 0 ):
-				ball.setDirs( -1, -ball.fy )
-				ball.setSpeeds( self.speed_b, self.speed_b * ( 1 / 3 ))
-
-			self.respawnBall( ball )
 			if self.connector != None:
 				self.connector.update_scores( self.scores )
 
 
-	def respawnBall( self, ball ):
-		ball.setPos( self.width * ( 1 / 2 ), self.height * ( 1 / 2 ))
-
-
-	def drawScores( self ):
-		text1 = self.font.render( f'{self.scores[ 0 ]}', True, df.COL_FNT )
-		text2 = self.font.render( f'{self.scores[ 1 ]}', True, df.COL_FNT )
-		text3 = self.font.render( f'{self.scores[ 2 ]}', True, df.COL_FNT )
-		text4 = self.font.render( f'{self.scores[ 3 ]}', True, df.COL_FNT )
-
-		self.win.blit( text1, text1.get_rect( center = self.posN1 ))
-		self.win.blit( text2, text2.get_rect( center = self.posN2 ))
-		self.win.blit( text3, text3.get_rect( center = self.posN3 ))
-		self.win.blit( text4, text4.get_rect( center = self.posN4 ))
+	def findNextSpawn( self, mode ): # mode is either "miss" or "goal"
+		if mode == "miss":
+			self.spawn_target += 1
+			self.spawn_target %= self.racket_count
+		if mode == "goal":
+			self.spawn_target = self.last_ponger % self.racket_count
