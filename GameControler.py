@@ -20,17 +20,14 @@ class GameControler:
 		self.defaultY = _game.height / 2
 
 
-	def setRacket( self, _racketID ):
-		for i in range( self.game.racket_count ):
-			rack = self.game.rackets[ i ]
+	def setRacket( self, racketID ):
+		self.racket = self.game.getRacket( racketID )
 
-			if rack.id == _racketID:
-				self.racket = rack
+		if self.racket != None:
+			self.recordDefaultPos()
+		else:
+			print( "Error : racket not found" )
 
-				self.recordDefaultPos()
-				break
-
-		print( f"Warning: no racket with id {_racketID} found in game #{self.game.gameID}" )
 
 
 	def recordDefaultPos( self ):
@@ -70,6 +67,38 @@ class GameControler:
 			print( "The game is over" )
 		elif move != df.NULL:
 			self.game.makeMove( self.racket.id, move )
+
+
+	def stopHere( self ):
+		self.playMove( df.STOP )
+
+
+	def goUp( self, maxFactor ):
+		if abs( self.racket.fy ) <= maxFactor:
+			self.playMove( df.UP )
+
+
+	def goRight( self, maxFactor ):
+		if abs( self.racket.fx ) <= maxFactor:
+			self.playMove( df.RIGHT )
+
+
+	def goDown( self, maxFactor ):
+		if abs( self.racket.fy ) <= maxFactor:
+			self.playMove( df.DOWN )
+
+
+	def goLeft( self, maxFactor ):
+		if abs( self.racket.fx ) <= maxFactor:
+			self.playMove( df.LEFT )
+
+
+	def goToCenter( self, maxFactor ):
+		self.goTo( maxFactor, self.game.width / 2, self.game.height / 2 )
+
+
+	def goToDefaultPos( self, maxFactor ):
+		self.goTo( maxFactor, self.defaultX, self.defaultY )
 
 
 	def getInfo( self ):

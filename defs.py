@@ -60,10 +60,10 @@ BOT_QUICK_REACT = True #	TODO : put me to false before pushing (overides BOT_SEE
 BOT_SEE_FREQUENCY = 60 #	TODO : put me to cfg.FRAME_RATE (aka 1hz) before pushing
 
 BOT_CAN_KICK = True
-BOT_KICK_DIST = 320
+BOT_KICK_DIST = 160
 BOT_REACT_DIST = 320 #		used by BOT_QUICK_REACT
 BOT_KICK_FACTOR = 1
-BOT_PRECISION = 40 #		max = rSize / 2 (80) : how far from the center of the racket will the AI tolerate to hit with
+BOT_PRECISION = 50 #		max = rSize / 2 (80) : how far from the center of the racket will the AI tolerate to hit with
 
 BOT_GO_TO_DEFAULT = True
 BOT_HARD_BREAK = True

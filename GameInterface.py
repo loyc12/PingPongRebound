@@ -199,6 +199,8 @@ class Game:
 	def initBots( self ):
 		while self.controlerCount < self.racket_count:
 			self.addBot( "B" + str( self.controlerCount + 1 ))
+			if cfg.PRINT_STATES:
+				print( f"{self.gameID} )  {self.type}  \t: bot #{ self.controlerCount } has been added" )
 
 
 	def addBot( self, botname ):
@@ -233,6 +235,14 @@ class Game:
 
 			self.step_count += 1
 			self.step_count %= df.BOT_PLAY_FREQUENCY * df.BOT_SEE_FREQUENCY
+
+
+	def getRacket( self, racketID ):
+		for i in range( len( self.rackets )):
+			if( self.rackets[ i ].id == racketID ):
+				return( self.rackets[ i ] )
+		print( "Warning : racket #" + str( racketID ) + " not found in this game" )
+		return None
 
 	# --------------------------------------------------------------
 
