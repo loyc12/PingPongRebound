@@ -76,6 +76,7 @@ class BotControler( gc.GameControler ):
 		elif df.BOT_INSTANT_REACT or ( df.BOT_QUICK_REACT and self.isNear( self.lastBall )):
 			self.seeBall()
 
+
 		if self.difficulty == df.EASY:
 			self.goTo( self.max_factor, self.lastBall.getPosX(), self.lastBall.getPosY() )
 
@@ -219,6 +220,8 @@ class BotControler( gc.GameControler ):
 		# if there is no good kick, continue as normal
 		self.goToNextGoal( self.max_factor )
 		return
+
+		# attempt at new code, is eh
 
 		if self.racketDir == 'x':
 
