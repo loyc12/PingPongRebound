@@ -136,10 +136,9 @@ class BotControler( gc.GameControler ):
 
 	#	makes kick_distance proportional to ball speed
 	def getKickDist( self ):
-		return df.BOT_KICK_DIST #	NOTE : remove me
 
-		damp = self.game.speed_m_b
-		speed = 0
+		speed = self.game.speed_m_b
+		damp = 30
 
 		if self.racketDir == 'x':
 			speed = self.lastBall.dy
@@ -149,12 +148,13 @@ class BotControler( gc.GameControler ):
 			print( "Warning : racketDir is not set" )
 			return df.BOT_KICK_DIST
 
-		if speed < 0:
-			speed = 0
+		kickFactor = (( speed + damp ) / ( self.game.speed_m_b + damp ))
 
-		kickFactor = ( speed + damp ) / ( self.game.speed_m_b + damp )
+		#print( f"speed      : {speed}")
+		#print( "kickFactor : {:.3f}".format( kickFactor ))
+		#print( f"distance   : {int( 2 * df.BOT_KICK_DIST * kickFactor )}")
 
-		return int( df.BOT_KICK_DIST * kickFactor )
+		return int( 2 * df.BOT_KICK_DIST * kickFactor )
 
 	def canKickBall( self ):
 		if not df.BOT_CAN_KICK:
