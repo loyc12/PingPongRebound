@@ -10,12 +10,15 @@ except ModuleNotFoundError:
 # controler class
 class PlayerControler( gc.GameControler ):
 
+	mode = df.PLAYER
 
 	def __init__( self, _game, _playerName, _playerID ):
 		self.game = _game
 		self.name = _playerName
 		self.playerID = _playerID
-		self.mode = df.PLAYER
+
+		self.defaultX = _game.width / 2
+		self.defaultY = _game.height / 2
 
 
 	def handleKeyInput( self, key ):

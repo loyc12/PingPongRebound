@@ -12,11 +12,9 @@ except ModuleNotFoundError:
 
 
 # MASTER LIST
-# TODO : overhaul the ball respawn mechanic (needs to know who to respawn at explicitly)
+# TODO : make kick distance proportional to ball speed
+# TODO : rework ball respawn trajectories
 # TODO : add a respawn queue to know who to respawn at next
-# TODO : have respawn trajectories be stored in an array in game interface
-# TODO : make the ball receiver change after N missed shots
-# TODO : rework ball respawn trajectory in pongest
 
 # FUNCTION LIST
 
@@ -48,4 +46,4 @@ async def debugTester( Initialiser ):
 
 
 if __name__ == '__main__':
-	asy.run( debugTester( Ponger ))
+	asy.run( debugTester( Pong ))

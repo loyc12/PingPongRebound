@@ -16,6 +16,9 @@ class GameControler:
 	def __init__( self, _game ):
 		self.game = _game
 
+		self.defaultX = _game.width / 2
+		self.defaultY = _game.height / 2
+
 
 	def setRacket( self, _racketID ):
 		for i in range( self.game.racket_count ):

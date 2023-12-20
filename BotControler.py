@@ -14,6 +14,7 @@ class BotControler( gc.GameControler ):
 	difficulty = df.HARD
 	max_factor = df.BOT_M_FACTOR #( max speed factor( how many times dx or dy can the racket go at )
 
+	mode = df.BOT
 
 	# ----------------------------------------------- BASICS ----------------------------------------------- #
 
@@ -21,7 +22,6 @@ class BotControler( gc.GameControler ):
 	def __init__( self, _game, _botName ):
 		self.game = _game
 		self.name = _botName
-		self.mode = df.BOT
 
 		self.defaultX = _game.width / 2
 		self.defaultY = _game.height / 2
@@ -37,6 +37,8 @@ class BotControler( gc.GameControler ):
 
 		self.seeBall()
 
+		self.tmp = 0
+
 		if self.difficulty == df.EASY:
 			self.allow_hard_break = False
 			df.BOT_PLAY_FREQUENCY *= 2
@@ -44,7 +46,7 @@ class BotControler( gc.GameControler ):
 
 
 	def handleKeyInput( self, key ):
-		print( "Error: cannot give key inputs to a bot" )
+		print( "Warning : cannot give key inputs to a bot" )
 
 
 	def setFrequencyOffset( self, r_count ):
@@ -164,18 +166,37 @@ class BotControler( gc.GameControler ):
 
 	# ---------------------------------------------- KICKING ----------------------------------------------- #
 
+	#	makes kick_distance proportional to ball speed
+	def getKickDist( self ):
+		#return df.BOT_KICK_DIST
+
+		damp = self.game.speed_m_b
+		speed = 0
+
+		if self.racketDir == 'x':
+			speed = self.lastBall.dy
+		elif self.racketDir == 'y':
+			speed = self.lastBall.dx
+		else:
+			print( "Warning : racketDir is not set" )
+			return df.BOT_KICK_DIST
+
+		if speed < 0:
+			speed = 0
+
+		kickFactor = ( speed + damp ) / ( self.game.speed_m_b + damp )
+
+		return int( df.BOT_KICK_DIST * kickFactor )
 
 	def canKickBall( self ):
 		if not df.BOT_CAN_KICK:
 			return False
 		if self.game.score_count < 2:
 			return False
+		if not self.isCloserThan( self.lastBall, self.getKickDist() ):
+			return False
 		if not self.isInFrontOf( self.lastBall ):
 			return False
-		if not self.isCloserThan( self.lastBall, df.BOT_KICK_DIST ):
-			return False
-		#if abs( self.racket.getMvX() ) >= self.lastBall.dx:
-			#return False
 		return True
 
 
@@ -185,46 +206,44 @@ class BotControler( gc.GameControler ):
 			return
 
 		if self.racketDir == 'x':
-
 			if self.lastBall.isGoingLeft():
+
 				if self.lastBall.isLeftOfX( self.racket.getPosX() + df.BOT_PRECISION ):
-					if -df.BOT_KICK_FACTOR < self.racket.fx :
-						self.goLeft( self.max_factor )
-						return
+					self.goLeft( df.BOT_KICK_FACTOR )
+					return
+
 				else:
-					if self.racket.fx < df.BOT_KICK_FACTOR:
-						self.goRight( self.max_factor )
-						return
+					self.goRight( df.BOT_KICK_FACTOR )
+					return
 			else:
+
 				if self.lastBall.isRightOfX( self.racket.getPosX() - df.BOT_PRECISION ):
-					if self.racket.fx < df.BOT_KICK_FACTOR:
-						self.goRight( self.max_factor )
-						return
+					self.goRight( df.BOT_KICK_FACTOR )
+					return
+
 				else:
-					if -df.BOT_KICK_FACTOR < self.racket.fx :
-						self.goLeft( self.max_factor )
-						return
+					self.goLeft( df.BOT_KICK_FACTOR )
+					return
 
 		if self.racketDir == 'y':
-
 			if self.lastBall.isGoingUp():
+
 				if self.lastBall.isAboveY( self.racket.getPosY() + df.BOT_PRECISION ):
-					if -df.BOT_KICK_FACTOR < self.racket.fy:
-						self.goUp( self.max_factor )
-						return
+					self.goUp( df.BOT_KICK_FACTOR )
+					return
+
 				else:
-					if self.racket.fy < df.BOT_KICK_FACTOR:
-						self.goDown( self.max_factor )
-						return
+					self.goDown( df.BOT_KICK_FACTOR )
+					return
 			else:
+
 				if self.lastBall.isBelowY( self.racket.getPosY() - df.BOT_PRECISION ):
-					if self.racket.fy < df.BOT_KICK_FACTOR:
-						self.goDown( self.max_factor )
-						return
+					self.goDown( df.BOT_KICK_FACTOR )
+					return
+
 				else:
-					if -df.BOT_KICK_FACTOR < self.racket.fy:
-						self.goUp( self.max_factor )
-						return
+					self.goUp( df.BOT_KICK_FACTOR )
+					return
 
 		# if there is no good kick, continue as normal
 		self.goToNextGoal( self.max_factor )
@@ -247,13 +266,14 @@ class BotControler( gc.GameControler ):
 
 
 	def isCloserThan( self, gameObj, distance ):
-		if self.racketDir == 'x':
-			if abs( self.racket.getPosY() - gameObj.getPosY() ) <= distance:
-				return True
-		elif self.racketDir == 'y':
-			if abs( self.racket.getPosX() - gameObj.getPosX() ) <= distance:
-				return True
-		return False
+		self.tmp += 1
+
+		if abs( self.racket.getPosY() - gameObj.getPosY() ) > distance or abs( self.racket.getPosX() - gameObj.getPosX() ) > distance:
+			self.tmp = 0
+			return False
+
+		print ( f"{self.racket.id} )  Closeby {self.tmp}" ) # NOTE : DEBUG (remove me)
+		return True
 
 
 	def isInFrontOf( self, gameObj ):
@@ -274,7 +294,6 @@ class BotControler( gc.GameControler ):
 
 
 	def isInOwnGoal( self, px, py ):
-
 		if self.goal == df.LEFT and px < self.racket.px:
 			return True
 		if self.goal == df.RIGHT and px > self.racket.px:
@@ -428,8 +447,8 @@ class BotControler( gc.GameControler ):
 
 
 	def bounceOnX( self, px, py, dx, dy, fx, fy, factor ):
+		dx *= factor
 		fx *= -1
-		dx == dx * factor
 
 		# clamps the ball's position to the screen
 		if px <= self.border:
@@ -450,9 +469,8 @@ class BotControler( gc.GameControler ):
 
 
 	def bounceOnY( self, px, py, dx, dy, fx, fy, factor ):
-
+		dy *= factor
 		fy *= -1
-		dy == dy * factor
 
 		# clamps the ball's position to the screen
 		if py <= self.border:
@@ -477,8 +495,8 @@ class BotControler( gc.GameControler ):
 		if self.nextGoal != None:
 			return self.nextGoal
 
-		px = self.lastBall.getPosX()
-		py = self.lastBall.getPosY()
+		px = self.lastBall.px
+		py = self.lastBall.py
 		dx = self.lastBall.dx
 		dy = self.lastBall.dy
 		fx = self.lastBall.fx
@@ -498,9 +516,6 @@ class BotControler( gc.GameControler ):
 
 			# do steps until goal is reached (or ball is stuck)
 			while( True ):
-				# breaks if the ball is stuck
-				if( dx * fx == 0 ) and ( dy * fy == 0 ):
-					break;
 
 				# does one game step
 				( px, py, dx, dy, fx, fy ) = self.calculateStep( px, py, dx, dy, fx, fy)
@@ -522,8 +537,8 @@ class BotControler( gc.GameControler ):
 			if py <= self.border or py >= ( g.height - self.border ):
 				( px, py, dx, dy, fx, fy ) = self.bounceOnY( px, py, dx, dy, fx, fy, factor )
 
-		# if no potential goal is found, go back to default position
-		self.nextGoal = ( int( px ), int( py ))
+		# if no potential goal is found at this dept, go back to default position
+		self.nextGoal = ( self.defaultX, self.defaultY )
 
 
 
