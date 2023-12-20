@@ -276,14 +276,14 @@ class BotControler( gc.GameControler ):
 
 
 	def isCloserThan( self, gameObj, distance ):
-		self.tmp += 1 #														NOTE : DEBUG (remove me)
+		#self.tmp += 1 #													NOTE : DEBUG (remove me)
 
 		if abs( self.racket.getPosY() - gameObj.getPosY() ) <= distance:
 			if abs( self.racket.getPosX() - gameObj.getPosX() ) <= distance:
-				print ( f"{self.racket.id} )  Closeby {self.tmp}" ) #		NOTE : DEBUG (remove me)
+				#print ( f"{self.racket.id} )  Closeby {self.tmp}" ) #		NOTE : DEBUG (remove me)
 				return True
 
-		self.tmp = 0 #														NOTE : DEBUG (remove me)
+		#self.tmp = 0 #														NOTE : DEBUG (remove me)
 		return False
 
 

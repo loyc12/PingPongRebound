@@ -12,7 +12,8 @@ except ModuleNotFoundError:
 
 
 # MASTER LIST
-# TODO : make kick distance proportional to ball speed
+# TODO : make kick distance proportional to ball speed # WIP
+# TODO : make functions isSlowerThan for gameObjects in botControler
 # TODO : rework ball respawn trajectories
 # TODO : add a respawn queue to know who to respawn at next
 
