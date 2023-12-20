@@ -31,7 +31,7 @@ class Pong( gi.Game ):
 
 	iPosB1 = ( int( width * ( 1 / 4 )), int( height * ( 1 / 2 )))
 
-	posS1 = ( int( width * ( 3 / 4 )), int( height * ( 1 / 2 )), 1.5, 1, 1, -1 )
+	posS1 = ( int( width * ( 3 / 4 )), int( height * ( 1 / 2 )), 1.5, 1, -1, -1 )
 	posS2 = ( int( width * ( 1 / 4 )), int( height * ( 1 / 2 )), 1.5, 1, 1, 1 )
 
 	posN1 = ( int( width * ( 1 / 4 )), int( height * ( 1 / 2 )))
