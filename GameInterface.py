@@ -565,24 +565,23 @@ class Game:
 
 	# --------------------------------------------------------------
 
+	# called when a ball either hits a racket or scores a goal
 	def ballEvent( self, ball, mode, teamID ):
 		if self.score_mode == df.HITS: #	if racket hits give points
 
 			if mode == df.HITS: # 				if it was a hit
 				self.scorePoint( teamID )
 
-			else: # 							if it was a goal
+			elif self.last_ponger > 0: # 							if it was a goal
 				self.scores[ teamID - 1 ] = 0
 				if cfg.PRINT_STATES:
-					print( f"{self.gameID} )  {self.type}  \t: the ball was dropped by team #{ teamID }" )
+					print( f"{self.gameID} )  {self.type}  \t: team #{ teamID } dropped the ball (frfr no cap) " )
 
 		else: #								if goals give points
 			if self.last_ponger <= 0: #			if it was a serve ball
 				self.missShot()
 			elif mode == df.GOALS: # 			if it was a goal
 				self.scorePoint( teamID )
-			else: #								if it was a hit
-				self.missed_shots = 0
 
 		if mode == df.HITS: # 			reset the miss counter if it was a hit
 			self.miss_shots = 0
