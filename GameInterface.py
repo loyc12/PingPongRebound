@@ -35,7 +35,7 @@ class Game:
 
 	size_b = 20
 	speed_b = 8
-	speed_m_b = 64
+	speed_m_b = 56
 
 	size_r = 160
 	speed_r = 8
@@ -207,7 +207,6 @@ class Game:
 
 		bot = bc.BotControler( self, botname )
 		bot.setRacket( self.rackets[ len( self.controlers )].id )
-		bot.recordDefaultPos()
 		bot.setFrequencyOffset( self.racket_count )
 		self.controlers.append( bot )
 
@@ -255,7 +254,7 @@ class Game:
 	def removePlayer( self, playerID ):
 		for i in range( len( self.controlers )):
 			if( self.controlers[ i ].playerID == playerID ):
-				racketID = self.controlers[ i ].racketID
+				racketID = self.controlers[ i ].racket.id
 				self.controlers.pop( i )
 				self.playerCount -= 1
 				self.controlerCount -= 1

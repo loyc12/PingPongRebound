@@ -30,7 +30,7 @@ NO_STUCK_BALLS = True #			NOTE : this prevent balls from having 0 speed on eithe
 GOALS = 1
 HITS = 2
 
-WIN_SCORE = 8
+WIN_SCORE = 69
 MAX_MISS = 3
 
 # game states

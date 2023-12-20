@@ -14,6 +14,10 @@ class BotControler( gc.GameControler ):
 	difficulty = df.HARD
 	max_factor = df.BOT_M_FACTOR #( max speed factor( how many times dx or dy can the racket go at )
 
+
+	# ----------------------------------------------- BASICS ----------------------------------------------- #
+
+
 	def __init__( self, _game, _botName ):
 		self.game = _game
 		self.name = _botName
@@ -24,11 +28,14 @@ class BotControler( gc.GameControler ):
 
 		self.border = self.game.size_b * ( 1 / 2 )
 
-		self.seeBall()
-
 		self.frequency_offset = 0
 		self.step = 0
 		self.goal = df.NULL
+
+		self.lastBall = None
+		self.nextGoal = None
+
+		self.seeBall()
 
 		if self.difficulty == df.EASY:
 			self.allow_hard_break = False
@@ -41,40 +48,22 @@ class BotControler( gc.GameControler ):
 
 
 	def setFrequencyOffset( self, r_count ):
-		self.frequency_offset = int(( float( self.racketID ) / r_count ) * df.BOT_PLAY_FREQUENCY )
-
-
-	def recordDefaultPos( self ):
-		self.defaultX = self.racket.getPosX()
-		self.defaultY = self.racket.getPosY()
-		self.goal = self.findOwnGoal()
+		self.frequency_offset = int(( float( self.racket.id ) / r_count ) * df.BOT_PLAY_FREQUENCY )
 
 
 	def seeBall( self ):
 		self.lastBall = self.game.balls[ 0 ].getCopy()
+		self.nextGoal = None
 
 
-	def findOwnGoal( self ):
-		rack = self.racket
-
-		if rack.dx != 0:
-			if( self.defaultY < self.game.height / 2 ): # goal is on the top
-				return df.UP
-			else:
-				return df.DOWN
-
-		elif rack.dy != 0:
-			if( self.defaultX < ( self.game.width / 2 )): # goal is on the left
-				return df.LEFT
-			else:
-				return df.RIGHT
+	# --------------------------------------------- MOVEMENTS ---------------------------------------------- #
 
 
 	def playMove( self, move = df.NULL ):
 		if move == df.NULL:
 			self.playAutoMove()
 		else:
-			self.game.makeMove( self.racketID, move )
+			self.game.makeMove( self.racket.id, move )
 
 
 	def playAutoMove( self ):
@@ -100,6 +89,80 @@ class BotControler( gc.GameControler ):
 				self.kickBall()
 			else:
 				self.goToNextGoal( self.max_factor )
+
+
+	def stopHere( self ):
+		self.playMove( df.STOP )
+
+
+	def goUp( self, maxFactor ):
+		if abs( self.racket.fy ) <= maxFactor:
+			self.playMove( df.UP )
+
+
+	def goRight( self, maxFactor ):
+		if abs( self.racket.fx ) <= maxFactor:
+			self.playMove( df.RIGHT )
+
+
+	def goDown( self, maxFactor ):
+		if abs( self.racket.fy ) <= maxFactor:
+			self.playMove( df.DOWN )
+
+
+	def goLeft( self, maxFactor ):
+		if abs( self.racket.fx ) <= maxFactor:
+			self.playMove( df.LEFT )
+
+
+	def goToCenter( self, maxFactor ):
+		self.goTo( maxFactor, self.game.width / 2, self.game.height / 2 )
+
+
+	def goToDefaultPos( self, maxFactor ):
+		self.goTo( maxFactor, self.defaultX, self.defaultY )
+
+
+	def goTo( self, maxFactor, px, py ):
+
+		if self.racketDir == 'x':
+			tolerance = ( self.racket.sx - df.BOT_PRECISION )
+
+			if self.racket.isRightOfX( px - tolerance):
+				if self.allow_hard_break and self.racket.isGoingRight():
+					self.stopHere()
+				else:
+					self.goLeft( maxFactor )
+
+			elif self.racket.isLeftOfX( px + tolerance ):
+				if self.allow_hard_break and self.racket.isGoingLeft():
+					self.stopHere()
+				else:
+					self.goRight( maxFactor )
+
+			elif self.allow_hard_break:
+				self.stopHere()
+
+		elif self.racketDir == 'y':
+			tolerance = ( self.racket.sy - df.BOT_PRECISION )
+
+			if self.racket.isBelowY( py - tolerance ):
+				if self.allow_hard_break and self.racket.isGoingDown():
+					self.stopHere()
+				else:
+					self.goUp( maxFactor )
+
+			elif self.racket.isAboveY( py + tolerance ):
+				if self.allow_hard_break and self.racket.isGoingUp():
+					self.stopHere()
+				else:
+					self.goDown( maxFactor )
+
+			elif self.allow_hard_break:
+				self.stopHere()
+
+
+	# ---------------------------------------------- KICKING ----------------------------------------------- #
 
 
 	def canKickBall( self ):
@@ -167,28 +230,64 @@ class BotControler( gc.GameControler ):
 		self.goToNextGoal( self.max_factor )
 
 
-	def stopHere( self ):
-		self.playMove( df.STOP )
+	# ---------------------------------------------- CHECKS ------------------------------------------------ #
 
-	def goUp( self, maxFactor ):
-		if abs( self.racket.fy ) <= maxFactor:
-			self.playMove( df.UP )
 
-	def goRight( self, maxFactor ):
-		if abs( self.racket.fx ) <= maxFactor:
-			self.playMove( df.RIGHT )
+	def isOnSameSideOf( self, gameObj ):
+		if self.game.type == "Pi" or self.game.type == "Po" or self.game.type == "Ping":
+			return True
+		if self.racketDir == 'x':
+			if( self.game.height / 2 > self.racket.getPosY() ) == ( self.game.height / 2 > gameObj.getPosY() ):
+				return True
+		if self.racketDir == 'y':
+			if( self.game.width / 2 > self.racket.getPosX() ) == ( self.game.width / 2 > gameObj.getPosX() ):
+				return True
 
-	def goDown( self, maxFactor ):
-		if abs( self.racket.fy ) <= maxFactor:
-			self.playMove( df.DOWN )
+		return False
 
-	def goLeft( self, maxFactor ):
-		if abs( self.racket.fx ) <= maxFactor:
-			self.playMove( df.LEFT )
 
-	def goToNextGoal( self, maxFactor ):
-		( X, Y ) = self.findNextGoal()
-		self.goTo( maxFactor, X, Y )
+	def isCloserThan( self, gameObj, distance ):
+		if self.racketDir == 'x':
+			if abs( self.racket.getPosY() - gameObj.getPosY() ) <= distance:
+				return True
+		elif self.racketDir == 'y':
+			if abs( self.racket.getPosX() - gameObj.getPosX() ) <= distance:
+				return True
+		return False
+
+
+	def isInFrontOf( self, gameObj ):
+		if self.racketDir == 'x':
+			if not gameObj.isLeftOf( self.racket ) and not gameObj.isRightOf( self.racket ):
+				return True
+		elif self.racketDir == 'y':
+			if not gameObj.isAbove( self.racket ) and not gameObj.isBelow( self.racket ):
+				return True
+		return False
+
+
+	def isNear( self, gameObj ):
+		if abs( self.racket.getPosY() - gameObj.getPosY() ) <= df.BOT_REACT_DIST * 2:
+			if abs( self.racket.getPosX() - gameObj.getPosX() ) <= df.BOT_REACT_DIST * 2:
+				return True
+		return False
+
+
+	def isInOwnGoal( self, px, py ):
+
+		if self.goal == df.LEFT and px < self.racket.px:
+			return True
+		if self.goal == df.RIGHT and px > self.racket.px:
+			return True
+		if self.goal == df.UP and py < self.racket.py:
+			return True
+		if self.goal == df.DOWN and py > self.racket.py:
+			return True
+
+		return False
+
+
+	# -------------------------------------------- SMART FOLLOW -------------------------------------------- #
 
 
 	def goTowardsBall( self, maxFactor ):
@@ -300,126 +399,99 @@ class BotControler( gc.GameControler ):
 				self.stopHere()
 
 
-	def goTo( self, maxFactor, X, Y ):
-
-		if self.racketDir == 'x':
-			tolerance = ( self.racket.sx - df.BOT_PRECISION )
-
-			if self.racket.isRightOfX( X - tolerance):
-				if self.allow_hard_break and self.racket.isGoingRight():
-					self.stopHere()
-				else:
-					self.goLeft( maxFactor )
-
-			elif self.racket.isLeftOfX( X + tolerance ):
-				if self.allow_hard_break and self.racket.isGoingLeft():
-					self.stopHere()
-				else:
-					self.goRight( maxFactor )
-
-			elif self.allow_hard_break:
-				self.stopHere()
-
-		elif self.racketDir == 'y':
-			tolerance = ( self.racket.sy - df.BOT_PRECISION )
-
-			if self.racket.isBelowY( Y - tolerance ):
-				if self.allow_hard_break and self.racket.isGoingDown():
-					self.stopHere()
-				else:
-					self.goUp( maxFactor )
-
-			elif self.racket.isAboveY( Y + tolerance ):
-				if self.allow_hard_break and self.racket.isGoingUp():
-					self.stopHere()
-				else:
-					self.goDown( maxFactor )
-
-			elif self.allow_hard_break:
-				self.stopHere()
+	# ------------------------------------------ GOAL PREDICTION ------------------------------------------- #
 
 
-	def goToCenter( self, maxFactor ):
-		self.goTo( maxFactor, self.game.width / 2, self.game.height / 2 )
+	def goToNextGoal( self, maxFactor ):
+		self.findNextGoal()
+		( px, py ) = self.nextGoal
+		self.goTo( maxFactor, px, py )
 
 
-	def goToDefaultPos( self, maxFactor ):
-		self.goTo( maxFactor, self.defaultX, self.defaultY )
+	def calculateStep( self, px, py, dx, dy, fx, fy ):
+		# calculates gravity (only in dy)
+		dy += self.game.gravity * df.getSign( fy )
+
+		# clamps dx and dy to positive values
+		if ( dx < 0 ):
+			dx *= -1
+			fx *= -1
+		if ( dy < 0 ):
+			dy *= -1
+			fy *= -1
+
+		# uptades position
+		px += dx * fx
+		py += dy * fy
+
+		return( int( px ), int( py ), dx, dy, int( fx ), int( fy ))
 
 
-	def isOnSameSideOf( self, gameObj ):
+	def bounceOnX( self, px, py, dx, dy, fx, fy, factor ):
+		fx *= -1
+		dx == dx * factor
 
-		if self.game.type == "Pi" or self.game.type == "Po" or self.game.type == "Ping":
-			return True
+		# clamps the ball's position to the screen
+		if px <= self.border:
+			px = self.border
+		else:
+			px = self.game.width - self.border
 
-		if self.racketDir == 'x':
-			if( self.game.height / 2 > self.racket.getPosY() ) == ( self.game.height / 2 > gameObj.getPosY() ):
-				return True
+		# unstucks x
+		if dx == 0:
+			dx = 1
 
-		if self.racketDir == 'y':
-			if( self.game.width / 2 > self.racket.getPosX() ) == ( self.game.width / 2 > gameObj.getPosX() ):
-				return True
+			if px < self.game.width / 2:
+				fx = 1
+			else:
+				fx = -1
 
-		return False
-
-
-	def isCloserThan( self, gameObj, distance ):
-		if self.racketDir == 'x':
-			if abs( self.racket.getPosY() - gameObj.getPosY() ) <= distance:
-				return True
-		elif self.racketDir == 'y':
-			if abs( self.racket.getPosX() - gameObj.getPosX() ) <= distance:
-				return True
-		return False
+		return( int( px ), int( py ), dx, dy, int( fx ), int( fy ))
 
 
-	def isInFrontOf( self, gameObj ):
-		if self.racketDir == 'x':
-			if not gameObj.isLeftOf( self.racket ) and not gameObj.isRightOf( self.racket ):
-				return True
-		elif self.racketDir == 'y':
-			if not gameObj.isAbove( self.racket ) and not gameObj.isBelow( self.racket ):
-				return True
-		return False
+	def bounceOnY( self, px, py, dx, dy, fx, fy, factor ):
 
-	def isNear( self, gameObj ):
-		if abs( self.racket.getPosY() - gameObj.getPosY() ) <= df.BOT_REACT_DIST * 2:
-			if abs( self.racket.getPosX() - gameObj.getPosX() ) <= df.BOT_REACT_DIST * 2:
-				return True
-		return False
+		fy *= -1
+		dy == dy * factor
 
+		# clamps the ball's position to the screen
+		if py <= self.border:
+			py = self.border
+		else:
+			py = self.game.height - self.border
 
-	def isInOwnGoal( self, X, Y ):
+		# unstucks y
+		if dy == 0:
+			dy = 1
 
-		if self.goal == df.LEFT and X < self.racket.px:
-			return True
-		if self.goal == df.RIGHT and X > self.racket.px:
-			return True
-		if self.goal == df.UP and Y < self.racket.py:
-			return True
-		if self.goal == df.DOWN and Y > self.racket.py:
-			return True
+			if py < self.game.height / 2:
+				fy = 1
+			else:
+				fy = -1
 
-		return False
+		return( int( px ), int( py ), dx, dy, int( fx ), int( fy ))
 
 
 	def findNextGoal( self ):
-		X = self.lastBall.getPosX()
-		Y = self.lastBall.getPosY()
+		# prevents redoing the same calculations when not needed
+		if self.nextGoal != None:
+			return self.nextGoal
+
+		px = self.lastBall.getPosX()
+		py = self.lastBall.getPosY()
 		dx = self.lastBall.dx
 		dy = self.lastBall.dy
 		fx = self.lastBall.fx
 		fy = self.lastBall.fy
 
 		g = self.game
-
+		dept = 0
 
 		if g.type == "Pongest":
 			factor = g.factor_rack
 		else:
 			factor = g.factor_wall
 
-		dept = 0
 		# loops over all the "bounce points" of the ball's trajectory( untill max_search_dept is reached )
 		while dept <= df.BOT_SEARCH_DEPTH:
 			dept += 1
@@ -430,48 +502,31 @@ class BotControler( gc.GameControler ):
 				if( dx * fx == 0 ) and ( dy * fy == 0 ):
 					break;
 
-				dy += g.gravity * df.getSign( fy ) #					NOTE : assumes normal gravity (gy)
-				( X, Y ) = self.calculateStep( X, Y, dx, dy, fx, fy)
+				# does one game step
+				( px, py, dx, dy, fx, fy ) = self.calculateStep( px, py, dx, dy, fx, fy)
 
 				# returns where to be to block the next potential goal
-				if self.isInOwnGoal( X, Y ):
-					return( int( X ), int( Y ))
+				if self.isInOwnGoal( px, py ):
+					self.nextGoal = ( int( px ), int( py ))
+					return
 
 				# breaks if the ball is on screen edge
-				if not df.isInZone( X, Y, self.border, self.border, g.width - self.border, g.height - self.border ):
+				if not df.isInZone( px, py, self.border, self.border, g.width - self.border, g.height - self.border ):
 					break
 
 			# bounces the ball on horizontal ( __ ) edges if need be
-			if X <= self.border or X >= ( g.width - self.border ):
-				fx *= -1
-				dx *= factor
-
-				# clamps the ball's position to the screen
-				if X <= self.border:
-					X = self.border
-				else:
-					X = g.width - self.border
+			if px <= self.border or px >= ( g.width - self.border ):
+				( px, py, dx, dy, fx, fy ) = self.bounceOnX( px, py, dx, dy, fx, fy, factor )
 
 			# bounces the ball on vertical ( | ) edges if need be
-			if Y <= self.border or Y >= ( g.height - self.border ):
-				fy *= -1
-				dy *= factor
-
-				# clamps the ball's position to the screen
-				if Y <= self.border:
-					Y = self.border
-				else:
-					Y = g.height - self.border
+			if py <= self.border or py >= ( g.height - self.border ):
+				( px, py, dx, dy, fx, fy ) = self.bounceOnY( px, py, dx, dy, fx, fy, factor )
 
 		# if no potential goal is found, go back to default position
-		return( self.defaultX, self.defaultY )
+		self.nextGoal = ( int( px ), int( py ))
 
 
-	def calculateStep( self, x, y, dx, dy, fx, fy ):
-		x += dx * fx
-		y += dy * fy
 
-		return( int( x ), int( y ) )
 
 
 

@@ -8,10 +8,9 @@ class GameControler:
 	name = "unnamed"
 	game = None
 	racket = None
-	racketDir = 'z'
+	racketDir = None
 
 	playerID = 0
-	racketID = 0
 	mode = df.CONTROLER
 
 	def __init__( self, _game ):
@@ -21,15 +20,42 @@ class GameControler:
 	def setRacket( self, _racketID ):
 		for i in range( self.game.racket_count ):
 			rack = self.game.rackets[ i ]
-			if( _racketID <= 0 ):
-				raise ValueError( f"Error: no racket with id {_racketID} found in {self.game.type}" )
-			elif rack.id == _racketID:
+
+			if rack.id == _racketID:
 				self.racket = rack
-				self.racketID = rack.id
-				if rack.dx != 0:
-					self.racketDir = 'x'
-				elif rack.dy != 0:
-					self.racketDir = 'y'
+
+				self.recordDefaultPos()
+				break
+
+		print( f"Warning: no racket with id {_racketID} found in game #{self.game.gameID}" )
+
+
+	def recordDefaultPos( self ):
+		self.defaultX = self.racket.getPosX()
+		self.defaultY = self.racket.getPosY()
+
+		if self.racket.dx != 0:
+			self.racketDir = 'x'
+		elif self.racket.dy != 0:
+			self.racketDir = 'y'
+
+		self.goal = self.findOwnGoal()
+
+
+	def findOwnGoal( self ):
+		rack = self.racket
+
+		if rack.dx != 0:
+			if( self.defaultY < self.game.height / 2 ): # goal is on the top
+				return df.UP
+			else:
+				return df.DOWN
+
+		elif rack.dy != 0:
+			if( self.defaultX < ( self.game.width / 2 )): # goal is on the left
+				return df.LEFT
+			else:
+				return df.RIGHT
 
 
 	def playMove( self, move ):
@@ -40,7 +66,7 @@ class GameControler:
 		elif self.game.state == df.ENDING:
 			print( "The game is over" )
 		elif move != df.NULL:
-			self.game.makeMove( self.racketID, move )
+			self.game.makeMove( self.racket.id, move )
 
 
 	def getInfo( self ):
@@ -53,6 +79,6 @@ class GameControler:
 			"isBot": isBot,
 			"name": self.name,
 			"playerID": self.playerID,
-			"teamID": self.racketID
+			"teamID": self.racket.id
 		}
 
