@@ -156,6 +156,7 @@ class BotControler( gc.GameControler ):
 
 		return int( 2 * df.BOT_KICK_DIST * kickFactor )
 
+
 	def canKickBall( self ):
 		if not df.BOT_CAN_KICK:
 			return False
@@ -220,8 +221,8 @@ class BotControler( gc.GameControler ):
 		self.goToNextGoal( self.max_factor )
 		return
 
-		# attempt at new code, is eh
 
+		# attempt at new code, is eh0
 		if self.racketDir == 'x':
 
 			if ball.isGoingLeft():
