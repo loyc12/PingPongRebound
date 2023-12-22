@@ -105,7 +105,7 @@ class Game:
 		self.spawn_queue = []
 		self.missed_shots = 0
 
-		self.winnerID = 0 #			NOTE : this is a scores[] index ( aka teamID )
+		self.winnerID = 0 #			NOTE : this is a teamID (aka a scores[] index)
 		self.quitterID = 0 #		NOTE : this is a playerID
 
 		self.rackets = []
@@ -633,11 +633,11 @@ class Game:
 	# --------------------------------------------------------------
 
 	def checkWin( self ):
-		for i in range( self.score_count ):
-			score = self.scores[ i ]
+		for teamID in range( self.score_count ):
+			score = self.scores[ teamID ]
 
 			if score >= df.WIN_SCORE:
-				self.winnerID = i #			NOTE : this is a scores[] index ( aka teamID )
+				self.winnerID = teamID
 
 				if cfg.PRINT_STATES:
 					print( f"{self.gameID} )  {self.type}  \t: game has been won by team #{ self.winnerID }" )
