@@ -14,7 +14,6 @@ OBJ_BALL = 1
 OBJ_RACKET = 2
 OBJ_OBSTACLE = 3
 
-
 # movements
 NULL = 0
 STOP = 1
@@ -30,8 +29,8 @@ NO_STUCK_BALLS = True #			NOTE : this prevent balls from having 0 speed on eithe
 GOALS = 1
 HITS = 2
 
-WIN_SCORE = 8
-MAX_MISS = 3
+WIN_SCORE = 5
+MAX_MISS = 2
 
 # game states
 STARTING = 1

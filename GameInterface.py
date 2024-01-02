@@ -105,8 +105,8 @@ class Game:
 		self.spawn_queue = []
 		self.missed_shots = 0
 
-		self.winnerID = 0 #			NOTE : this is a scores[] index ( aka teamID )
-		self.quitterID = 0 #		NOTE : this is a playerID
+		self.winnerID = 0 #			NOTE : this is a scores[] index ( same as teamID ) ( 0 == null)
+		self.quitterID = 0 #		NOTE : this is a player index ( same as playerID ) ( 0 == null)
 
 		self.rackets = []
 		self.controlers = []
@@ -637,7 +637,7 @@ class Game:
 			score = self.scores[ i ]
 
 			if score >= df.WIN_SCORE:
-				self.winnerID = i #			NOTE : this is a scores[] index ( aka teamID )
+				self.winnerID = i + 1 #			NOTE : this is a scores[] index ( same as teamID ) ( 0 == null)
 
 				if cfg.PRINT_STATES:
 					print( f"{self.gameID} )  {self.type}  \t: game has been won by team #{ self.winnerID }" )
@@ -818,11 +818,12 @@ class Game:
 		infoDict[ "gameMode" ] = self.getMode()
 		infoDict[ "endState" ] = self.getEndState()
 
-		if self.winnerID != 0:
-			infoDict[ "winingTeam" ] = self.winnerID
-		else:
-			infoDict[ "winingTeam" ] = -1
+		#if self.winnerID != 0:
+		#	infoDict[ "winingTeam" ] = self.winnerID
+		#else:
+		#	infoDict[ "winingTeam" ] = -1 #				NOTE : LL 0 == null, so we shouldn't have to do this. see if frontend could use 0 for none instead
 
+		infoDict[ "winingTeam" ] = self.winnerID
 		infoDict[ "quitter" ] = self.quitterID
 		infoDict[ "scores" ] = self.scores
 
@@ -836,7 +837,7 @@ class Game:
 		elif( self.winnerID != 0):
 			return "win"
 		else:
-			return "abort"
+			return "abort" #							NOTE : LL see if frontend needs this to be crash instead
 
 	# --------------------------------------------- CLASS END ---------------------------------------------- #
 

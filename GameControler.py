@@ -102,7 +102,7 @@ class GameControler:
 
 
 	def getInfo( self ):
-		if (self.mode == df.PLAYER):
+		if self.mode == df.PLAYER:
 			isBot = False
 		else:
 			isBot = True
@@ -111,6 +111,6 @@ class GameControler:
 			"isBot": isBot,
 			"name": self.name,
 			"playerID": self.playerID,
-			"teamID": self.racket.id
+			"teamID": self.racket.id #		this won't work on team games (ponger / pinger )
 		}
 
