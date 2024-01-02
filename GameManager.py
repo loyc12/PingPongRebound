@@ -271,12 +271,11 @@ class GameManager:
 
 		delay = ( cfg.FRAME_DELAY - self.sleep_loss ) * cfg.FRAME_FACTOR
 
-		if cfg.PRINT_FRAMES: #			NOTE : DEBUG PRINTS
-
+		if cfg.PRINT_FRAMES:
 			self.meanDt = ( dt + ( self.meanDt * cfg.FPS_SMOOTHING )) / ( cfg.FPS_SMOOTHING + 1 )
 			print( "frame time: {:.5f} \t".format( dt ), "mean time: {:.5f} \t".format( self.meanDt ), "sleep time: {:.5f} \t".format( delay ))
 
-			if cfg.PRINT_DEBUG:
+			if cfg.PRINT_EXTRA:
 				print( "diversion: {:.5f} \t".format( diversion ), "sleep loss: {:.5f} \t".format( self.sleep_loss ), "correction: {:.5f} \t".format( correction ))
 
 		return delay
@@ -307,7 +306,7 @@ class GameManager:
 						game = self.gameDict.get( self.windowID )
 						game.respawnAllBalls()
 
-						if cfg.PRINT_DEBUG:
+						if cfg.PRINT_STATES and cfg.PRINT_EXTRA:
 							print( "respawning the ball(s)" )
 					else:
 						print( "coud not respawn the ball(s)" )

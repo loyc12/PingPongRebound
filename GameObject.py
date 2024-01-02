@@ -122,19 +122,19 @@ class GameObject:
 		# prevent balls from going off screen
 		if self.getLeft() < 0:
 			self.setLeft( 0 )
-			if cfg.PRINT_DEBUG:
+			if cfg.PRINT_EXTRA:
 				print( "clamping pos to left" )
 		if self.getRight() > self.game.width:
 			self.setRight( self.game.width )
-			if cfg.PRINT_DEBUG:
+			if cfg.PRINT_EXTRA:
 				print( "clamping pos to right" )
 		if self.getTop() < 0:
 			self.setTop( 0 )
-			if cfg.PRINT_DEBUG:
+			if cfg.PRINT_EXTRA:
 				print( "clamping pos to top" )
 		if self.getBottom() > self.game.height:
 			self.setBottom( self.game.height )
-			if cfg.PRINT_DEBUG:
+			if cfg.PRINT_EXTRA:
 				print( "clamping pos to bottom" )
 
 
@@ -175,19 +175,23 @@ class GameObject:
 		elif mode == "x":
 			self.fx *= -1
 			self.dx *= self.game.factor_wall
-			if cfg.PRINT_DEBUG:
+			if cfg.PRINT_COLLISIONS and cfg.PRINT_EXTRA:
 				print ( "bouncing on x" )
 
 		# horizontal surface bounces ( -- )
 		elif mode == "y":
 			self.fy *= -1
 			self.dy *= self.game.factor_wall
-			if cfg.PRINT_DEBUG:
+			if cfg.PRINT_COLLISIONS and cfg.PRINT_EXTRA:
 				print ( "bouncing on y" )
 
 		self.clampSpeed()
 		if df.NO_STUCK_BALLS:
 			self.makeUnstuck()
+
+		if cfg.PRINT_COLLISIONS:
+			t = time.time() - self.game.start_time
+			print( f"{self.game.gameID} )  {self.game.type}  \t: wall bounce at {'{:.1f}'.format( t )}s" )# 	NOTE : DEBUG
 
 
 	# NOTE : IS ONLY FOR BALLS
@@ -198,12 +202,16 @@ class GameObject:
 			self.fx *= -1
 			self.dx *= self.game.factor_rack
 			self.dy = int( self.dy + ( other.getMvY() * df.KICK_FACTOR * df.getSign( self.fy )))
+			if cfg.PRINT_COLLISIONS and cfg.PRINT_EXTRA:
+				print ( "bouncing on x" )
 
 		# horizontal surface bounces ( -- )
 		elif mode == "y":
 			self.fy *= -1
 			self.dy *= self.game.factor_rack
 			self.dx = int( self.dx + ( other.getMvX() * df.KICK_FACTOR * df.getSign( self.fx )))
+			if cfg.PRINT_COLLISIONS and cfg.PRINT_EXTRA:
+				print ( "bouncing on y" )
 
 		if cfg.PRINT_COLLISIONS:
 			t = time.time() - self.game.start_time
@@ -224,7 +232,7 @@ class GameObject:
 			else:
 				self.fy = -1
 
-			if cfg.PRINT_DEBUG:
+			if cfg.PRINT_EXTRA:
 				print( "unstuck on x" )
 
 		if  self.dx < 1:
@@ -235,7 +243,7 @@ class GameObject:
 			else:
 				self.fx = -1
 
-			if cfg.PRINT_DEBUG:
+			if cfg.PRINT_EXTRA:
 				print( "unstuck on y" )
 
 
@@ -281,14 +289,20 @@ class GameObject:
 	def clampSpeed( self ):
 
 		# making sure dx is positive
+		if self.dx < 0:
+			self.dx *= -1
+			self.fx *= -1
+
+			if cfg.PRINT_EXTRA:
+				print( "inverting speed on x" )
+
+		# making sure dy is positive
 		if self.dy < 0:
 			self.dy *= -1
 			self.fy *= -1
 
-		# making sure dy is positive
-		if self.dx < 0:
-			self.dx *= -1
-			self.fx *= -1
+			if cfg.PRINT_EXTRA:
+				print( "inverting speed on y" )
 
 		self.checkMaxSpeed()
 
@@ -303,7 +317,7 @@ class GameObject:
 				while abs( self.dx * self.fx ) > self.maxSpeed:
 					self.fx -= df.getSign( self.fx )
 
-			if cfg.PRINT_DEBUG:
+			if cfg.PRINT_EXTRA:
 				print( "clamping speed on x" )
 
 		# checking on y
@@ -315,7 +329,7 @@ class GameObject:
 				while abs( self.dy * self.fy ) > self.maxSpeed:
 					self.fy -= df.getSign( self.fy )
 
-			if cfg.PRINT_DEBUG:
+			if cfg.PRINT_EXTRA:
 				print( "clamping speed on y" )
 
 

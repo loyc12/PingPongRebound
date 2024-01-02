@@ -1,19 +1,20 @@
 # DEBUG MODE STUFF
 DEBUG_MODE = True
-PRINT_DEBUG_INFO = True
-ADD_DEBUG_PLAYER = False
+PRINT_DEBUG = True #		screen debug info (for debug_mode / pygame only)
+ADD_DEBUG_PLAYER = False #	adds a player to every game (for debug_mode / pygame only)
 
 # LOGS PRINT STUFF
-PRINT_COLLISIONS = False
-PRINT_PACKETS = False
-PRINT_FRAMES = False
-PRINT_STATES = False
-PRINT_POINTS = True
-PRINT_DEBUG = False
-PRINT_MOVES = True
-PRINT_BOTS = False
+PRINT_COLLISIONS = False #	racket and wall collisions
+PRINT_PACKETS = False #		client packets to be sent
+PRINT_FRAMES = False #		frame processing info
+PRINT_STATES = False #		general game status (starting, ending, etc)
+PRINT_POINTS = True #		point changes (scoring and reseting)
+PRINT_EXTRA = False #		random additional info (clamping and shit)
+PRINT_MOVES = True #		player moves, if PRINT_BOTS : bot moves
+PRINT_BOTS = False #		bot creation
 
 # GAMERULES STUFF
+BOT_DIFFICULTY = 3 #		1 is easy, 3 is hard (normally 3)
 MOVE_OBJECTS = True
 FORCE_MODE = False
 

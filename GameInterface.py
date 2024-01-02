@@ -90,6 +90,7 @@ class Game:
 		self.gameID = _gameID
 		self.mode = _gameMode
 		self.connector = connector
+		self.difficulty = cfg.BOT_DIFFICULTY #			NOTE : LL replace by df.HARD before pushing
 
 		self.gameLock = asy.Lock()
 		self.state = df.STARTING
@@ -198,16 +199,16 @@ class Game:
 
 	def initBots( self ):
 		while self.controlerCount < self.racket_count:
-			self.addBot( "B" + str( self.controlerCount + 1 ))
+			self.addBot( "B" + str( self.controlerCount + 1 ), self.difficulty )
 			if cfg.PRINT_BOTS:
-				print( f"{self.gameID} )  {self.type}  \t: bot #{ self.controlerCount } has been added" )
+				print( f"{self.gameID} )  {self.type}  \t: bot #{ self.controlerCount } has been added with difficulty #{ self.difficulty }" )
 
 
-	def addBot( self, botname ):
+	def addBot( self, botname, difficulty = df.HARD ):
 		if( self.controlerCount >= self.racket_count ):
 			print( "Warning : game #" + str( self.gameID ) + " is full" )
 
-		bot = bc.BotControler( self, botname )
+		bot = bc.BotControler( self, botname, difficulty )
 		bot.setRacket( self.rackets[ len( self.controlers )].id )
 		bot.setFrequencyOffset( self.racket_count )
 		self.controlers.append( bot )
@@ -659,7 +660,7 @@ class Game:
 				if cfg.PRINT_STATES:
 					print( f"{self.gameID} )  {self.type}  \t: game has been won by team #{ self.winnerID }" )
 
-				if cfg.DEBUG_MODE and cfg.PRINT_PACKETS:
+				if cfg.PRINT_PACKETS:
 					print( self.getEndInfo() )
 
 				self.close()
@@ -704,7 +705,7 @@ class Game:
 		for ball in self.balls: # 		copies the ball's data
 			ball.drawSelf()
 
-		if cfg.PRINT_DEBUG_INFO:
+		if cfg.PRINT_DEBUG:
 			self.drawFps()
 			self.drawNames()
 

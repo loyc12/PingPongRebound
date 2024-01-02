@@ -11,7 +11,6 @@ class BotControler( gc.GameControler ):
 	allow_hard_break = df.BOT_HARD_BREAK
 	go_to_default = df.BOT_GO_TO_DEFAULT
 
-	difficulty = df.HARD
 	max_factor = df.BOT_M_FACTOR #( max speed factor( how many times dx or dy can the racket go at )
 
 	mode = df.BOT
@@ -19,7 +18,7 @@ class BotControler( gc.GameControler ):
 	# ----------------------------------------------- BASICS ----------------------------------------------- #
 
 
-	def __init__( self, _game, _botName ):
+	def __init__( self, _game, _botName, _difficulty ):
 		self.game = _game
 		self.name = _botName
 
@@ -37,11 +36,11 @@ class BotControler( gc.GameControler ):
 
 		self.seeBall()
 
-		self.tmp = 0
+		# self.tmp = 0
 
+		self.difficulty = _difficulty
 		if self.difficulty == df.EASY:
 			self.allow_hard_break = False
-			df.BOT_PLAY_FREQUENCY *= 2
 			self.max_factor -= 1
 
 
@@ -77,13 +76,15 @@ class BotControler( gc.GameControler ):
 			self.seeBall()
 
 		if self.difficulty == df.EASY:
+			self.seeBall()
 			self.goTo( self.max_factor, self.lastBall.getPosX(), self.lastBall.getPosY() )
 
 		elif self.difficulty == df.MEDIUM:
+			self.seeBall()
 			if self.go_to_default and not self.isOnSameSideOf( self.lastBall ):
 				self.goToDefaultPos( self.max_factor )
 			else:
-				self.goTowardsBall( self.max_factor, self.lastBall )
+				self.goTowardsBall( self.max_factor )
 			return
 
 		elif self.difficulty == df.HARD:
