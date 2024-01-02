@@ -199,7 +199,7 @@ class Game:
 	def initBots( self ):
 		while self.controlerCount < self.racket_count:
 			self.addBot( "B" + str( self.controlerCount + 1 ))
-			if cfg.PRINT_STATES:
+			if cfg.PRINT_BOTS:
 				print( f"{self.gameID} )  {self.type}  \t: bot #{ self.controlerCount } has been added" )
 
 
@@ -317,33 +317,50 @@ class Game:
 			rack = self.rackets[ i ]
 
 			if( rack.id == target_id ):
+				moveName = "INVALID"
 
 				if( move == df.STOP ):
 					rack.fx = 0
 					rack.fy = 0
+					moveName = "STOP"
+
 				elif( move == df.LEFT ):
 					if( self.hard_break and rack.fx > 0 ):
 						rack.fx = 0
 					else:
 						rack.fx -= 1
+					moveName = "LEFT"
+
 				elif( move == df.UP ):
 					if( self.hard_break and rack.fy > 0 ):
 						rack.fy = 0
 					else:
 						rack.fy -= 1
+					moveName = "UP"
+
 				elif( move == df.RIGHT ):
 					if( self.hard_break and rack.fx < 0 ):
 						rack.fx = 0
 					else:
 						rack.fx += 1
+					moveName = "RIGHT"
+
 				elif( move == df.DOWN ):
 					if( self.hard_break and rack.fy < 0 ):
 						rack.fy = 0
 					else:
 						rack.fy += 1
+					moveName = "DOWN"
+
 				else:
 					print( "Warning : invalid move : " + str( move ))
-				return
+
+				if cfg.PRINT_MOVES:
+					ctrlr = self.controlers[ i ]
+					if ctrlr.mode == df.PLAYER:
+						print( f"{self.gameID} )  {self.type}  \t: player #{ ctrlr.playerID } is making move { moveName } on racket #{ rack.id }" )
+					elif cfg.PRINT_BOTS:
+						print( f"{self.gameID} )  {self.type}  \t: bot on racket # { rack.id } is making move { moveName }" )
 
 	# --------------------------------------------------------------
 
@@ -583,8 +600,8 @@ class Game:
 
 			elif self.last_ponger > 0: # 							if it was a goal
 				self.scores[ teamID - 1 ] = 0
-				if cfg.PRINT_STATES:
-					print( f"{self.gameID} )  {self.type}  \t: team #{ teamID } dropped the ball (frfr no cap) " )
+				if cfg.PRINT_POINTS:
+					print( f"{self.gameID} )  {self.type}  \t: team #{ teamID } dropped the ball ( resets their score )" )
 
 		else: #								if goals give points
 			if self.last_ponger <= 0: #			if it was a serve ball
@@ -601,7 +618,7 @@ class Game:
 	def scorePoint( self, teamID ):
 		self.scores[ teamID - 1 ] += 1
 
-		if cfg.PRINT_STATES:
+		if cfg.PRINT_POINTS:
 			if self.score_mode == df.GOALS:
 				print( f"{self.gameID} )  {self.type}  \t: team #{ teamID } scored a point" )
 			else:
