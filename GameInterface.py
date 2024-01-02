@@ -634,7 +634,7 @@ class Game:
 
 	def checkWin( self ):
 		for i in range( self.score_count ):
-			score = self.scores[ i + 1 ]
+			score = self.scores[ i ]
 
 			if score >= df.WIN_SCORE:
 				self.winnerID = i + 1 #			NOTE : this is a scores[] index ( same as teamID ) ( 0 == null)
