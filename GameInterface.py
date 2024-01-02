@@ -90,7 +90,7 @@ class Game:
 		self.gameID = _gameID
 		self.mode = _gameMode
 		self.connector = connector
-		self.difficulty = cfg.BOT_DIFFICULTY #			NOTE : LL replace by df.HARD before pushing
+		self.difficulty = cfg.BOT_DIFFICULTY
 
 		self.gameLock = asy.Lock()
 		self.state = df.STARTING
