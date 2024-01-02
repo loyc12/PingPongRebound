@@ -68,6 +68,7 @@ BOT_GO_TO_DEFAULT = True
 BOT_HARD_BREAK = True
 BOT_SEARCH_DEPTH = 4 #		how many bounces ahead does the AI look
 
+
 # pygame (debug) stuff
 if cfg.DEBUG_MODE:
 	DEF_WIN_SIZE = 1280
@@ -75,12 +76,14 @@ if cfg.DEBUG_MODE:
 	COL_FNT = pg.Color( 'grey25' )
 	COL_OBJ = pg.Color( 'white' )
 
+
 def getSign( value ):
 	if value < 0:
 		return -1
 	if value > 0:
 		return 1
 	return 0
+
 
 def isInZone( px, py, x1, y1, x2, y2 ):
 	if px <= x1 or x2 <= px:
