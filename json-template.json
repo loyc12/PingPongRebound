@@ -73,8 +73,8 @@
 	},
 	"4": {
 		"isBot": true,
-		"name": "bot_1",
-		"playerID": 4,
+		"name": "bot_4",
+		"playerID": 0,
 		"teamID": 2
 	}
 }
@@ -103,7 +103,7 @@
 	"gameType": "pong", //	random == doesn't matter( create random one if none are joinable )
 	"gameMode": "solo", //	solo, dual, freeplay, tournament
 	"endState": "win", //	win, quit, abort
-	"winningTeam": 0, //		teamID
+	"winningTeam": 0, //	teamID
 	"quitter": 2, //		playerID
 	"scores": [
 		"s1",
