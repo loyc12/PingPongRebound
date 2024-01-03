@@ -837,11 +837,11 @@ class Game:
 		infoDict[ "endState" ] = self.getEndState()
 
 		#if self.winnerID != 0:
-		#	infoDict[ "winingTeam" ] = self.winnerID
+		#	infoDict[ "winningTeam" ] = self.winnerID
 		#else:
-		#	infoDict[ "winingTeam" ] = -1 #				NOTE : LL 0 == null, so we shouldn't have to do this. see if frontend could use 0 for none instead
+		#	infoDict[ "winningTeam" ] = -1 #				NOTE : LL 0 == null, so we shouldn't have to do this. see if frontend could use 0 for none instead
 
-		infoDict[ "winingTeam" ] = self.winnerID
+		infoDict[ "winningTeam" ] = self.winnerID
 		infoDict[ "quitter" ] = self.quitterID
 		infoDict[ "scores" ] = self.scores
 
