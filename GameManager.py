@@ -40,7 +40,7 @@ class GameManager:
 		self.previousTime = 0.0
 		self.currentTime = 0.0
 		self.sleep_loss = 0.0 # 			NOTE : will adjust itself over time
-		self.meanDt = cfg.FRAME_DELAY #		NOTE : DEBUG
+		self.meanDt = cfg.FRAME_DELAY #		NOTE : DEBUG INFO
 
 		self.gameDict = {}
 
@@ -122,7 +122,7 @@ class GameManager:
 			game.start()
 
 
-	async def closeGame( self, gameID ):
+	async def closeGame( self, gameID ): #		NOTE : only for external use
 		game = self.gameDict.get( gameID )
 
 		if game == None:
@@ -281,7 +281,7 @@ class GameManager:
 	# ---------------------------------------------- DEBUG CMDS -------------------------------------------- #
 
 
-	def managePygameInputs( self ): # 					NOTE : DEBUG
+	def managePygameInputs( self ): # 					NOTE : DEBUG MODE ONLY
 		# read local player inputs
 		for event in pg.event.get():
 
@@ -391,7 +391,7 @@ class GameManager:
 		return gameID + 1
 
 
-	async def addAllGames( self ): #					NOTE : DEBUG
+	async def addAllGames( self ): #					NOTE : DEBUG MODE ONLY
 		gameID = 1
 		gameMode = df.SOLO
 
@@ -407,7 +407,7 @@ class GameManager:
 		print( "select a player ( 1 to 8  or  q & e )" )
 
 
-	def displayGame( self, game ): # 					NOTE : DEBUG
+	def displayGame( self, game ): # 					NOTE : DEBUG MODE ONLY
 		if game.state == df.PLAYING:
 			if game.width != self.win.get_width() or game.height != self.win.get_height():
 				self.win = pg.display.set_mode(( game.width, game.height ))
@@ -416,7 +416,7 @@ class GameManager:
 			game.refreshScreen()
 
 
-	def emptyDisplay( self ): # 						NOTE : DEBUG
+	def emptyDisplay( self ): # 						NOTE : DEBUG MODE ONLY
 		pg.display.set_caption( "Game Manager" )
 		self.win = pg.display.set_mode(( 2048, 1280 ))
 		self.win.fill( pg.Color( 'black' ))

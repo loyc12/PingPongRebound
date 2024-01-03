@@ -41,7 +41,7 @@ class GameObject:
 		return copy
 
 
-	def drawSelf( self ): # 										NOTE : DEBUG
+	def drawSelf( self ): # 			NOTE : DEBUG MODE ONLY
 		if cfg.DEBUG_MODE:
 			self.box.center = ( self.px, self.py )
 			pg.draw.rect( self.game.win, df.COL_OBJ, self.box )

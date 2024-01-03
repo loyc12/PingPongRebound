@@ -32,8 +32,10 @@ class PlayerControler( gc.GameControler ):
 			self.goDown( 8 )
 		elif key == df.KA or key == df.KLEFT:
 			self.goLeft( 8 )
-		elif( cfg.DEBUG_MODE and key == df.RETURN ): #		NOTE : DEBUG
+
+		elif( cfg.DEBUG_MODE and key == df.RETURN ):
 			for i in range( len( self.game.balls )):
 				self.game.respawnBall( self.game.balls[ i ] )
+
 		else:
 			print( "Error: invalid move" )

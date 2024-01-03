@@ -427,7 +427,7 @@ class Game:
 			print( "Warning : player #" + str( playerID ) + " is not in this game" )
 
 
-	def handlePygameInput( self, key ): #				NOTE : DEBUGGS
+	def handlePygameInput( self, key ): #				NOTE : DEBUG MODE ONLY
 		if self.mode == df.DUAL and self.racket_count > 1:
 			if key == df.KUP or key == df.KRIGHT or key == df.KDOWN or key == df.KLEFT or key == df.NZERO:
 				self.controlers[ 1 ].handleKeyInput( key )

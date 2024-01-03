@@ -36,7 +36,7 @@ class BotControler( gc.GameControler ):
 
 		self.seeBall()
 
-		# self.tmp = 0
+		# self.tmp = 0 #				NOTE : DEBUG (remove me)
 
 		self.difficulty = _difficulty
 		if self.difficulty == df.EASY:
