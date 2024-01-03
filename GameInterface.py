@@ -447,11 +447,15 @@ class Game:
 			self.state = df.PLAYING
 			self.start_time = time.time()
 
-			if cfg.PRINT_STATES:
-				print( f"{self.gameID} )  {self.type}  \t: game has been started" )# 		NOTE : DEBUG
 			if cfg.PRINT_PACKETS:
-				print( self.getPlayerInfo() )# 												NOTE : DEBUG
+				print( "   player info\t: " + str( self.getPlayerInfo() ))
 
+				if cfg.DEBUG_MODE:
+					import GameManager as gm
+					print( "   init info\t: " + str( gm.GameManager.getInitInfo( self.type )))
+
+			if cfg.PRINT_STATES:
+				print( f"{self.gameID} )  {self.type}  \t: game has been started" )
 		else:
 			print( "Warning : game # " + str( self.gameID ) + " is already running or over" )
 
@@ -460,7 +464,7 @@ class Game:
 		self.state = df.ENDING
 
 		if cfg.PRINT_STATES:
-			print( f"{self.gameID} )  {self.type}  \t: game has been closed" )# 			NOTE : DEBUG
+			print( f"{self.gameID} )  {self.type}  \t: game has been closed" )
 
 	# --------------------------------------------------------------
 
@@ -499,8 +503,8 @@ class Game:
 		else:
 			pass #		NOTE : useless( packet sending is done by game manager now )
 
-		if cfg.DEBUG_MODE and cfg.PRINT_PACKETS:
-			print( self.getUpdateInfo() )#		NOTE : DEBUG
+		if cfg.DEBUG_MODE and cfg.PRINT_EXTRA and cfg.PRINT_PACKETS:
+			print( "   update info\t: " + str( self.getUpdateInfo() ))
 
 
 	# ------------------------------------------- GAME MECHANICS ------------------------------------------- #
@@ -661,7 +665,7 @@ class Game:
 					print( f"{self.gameID} )  {self.type}  \t: game has been won by team #{ self.winnerID }" )
 
 				if cfg.PRINT_PACKETS:
-					print( self.getEndInfo() )
+					print( "   end info\t: " + str( self.getEndInfo() ))
 
 				self.close()
 
@@ -835,11 +839,6 @@ class Game:
 		infoDict[ "gameType" ] = self.type
 		infoDict[ "gameMode" ] = self.getMode()
 		infoDict[ "endState" ] = self.getEndState()
-
-		#if self.winnerID != 0:
-		#	infoDict[ "winningTeam" ] = self.winnerID
-		#else:
-		#	infoDict[ "winningTeam" ] = -1 #				NOTE : LL 0 == null, so we shouldn't have to do this. see if frontend could use 0 for none instead
 
 		infoDict[ "winningTeam" ] = self.winnerID
 		infoDict[ "quitter" ] = self.quitterID

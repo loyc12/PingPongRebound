@@ -99,9 +99,6 @@ class GameManager:
 
 				# NOTE : ian check icitte pour le closing
 
-				if not cfg.DEBUG_MODE and cfg.PRINT_PACKETS:
-					print( game.getEndInfo() )
-
 				if game.connector != None:
 					await self.gameGateway.manage_end_game( game.getEndInfo() )
 
@@ -205,8 +202,8 @@ class GameManager:
 
 			await self.tickGames()
 
-			if not cfg.DEBUG_MODE and cfg.PRINT_PACKETS:
-				print( self.getGameUpdates() )
+			if not cfg.DEBUG_MODE and cfg.PRINT_EXTRA and cfg.PRINT_PACKETS:
+				print( "  all updates\t: " + str( self.getGameUpdates() ))
 
 			if self.gameGateway != None:
 				await self.gameGateway.async_send_all_updates( self.getGameUpdates(), True )
@@ -386,8 +383,8 @@ class GameManager:
 		if cfg.ADD_DEBUG_PLAYER:
 			await self.addPlayerToGame( 1, "DBG", gameID )
 
-		if cfg.PRINT_PACKETS:
-			print( self.getInitInfo( gameType ))
+		if not cfg.DEBUG_MODE and cfg.PRINT_PACKETS:
+			print( "   init info\t: " + str( self.getInitInfo( gameType )))
 
 		await self.startGame( gameID )
 
