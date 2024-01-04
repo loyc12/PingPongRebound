@@ -31,14 +31,18 @@ class BotControler( gc.GameControler ):
 		self.goal = df.NULL
 
 		self.lastBall = None
-		self.nextGoal = None
+		self.nextGoal = ( None, None )
 
 		self.seeBall()
 
-		self.tmp = 0 #				NOTE : DEBUG INFO
+		self.tmp = 0 #			NOTE : DEBUG INFO
 		self.PFLAG = False #	NOTE : DEBUG INFO
 
 		self.difficulty = _difficulty
+
+		self.onInit()
+
+	def onInit( self ):
 		if self.difficulty == df.EASY:
 			self.allow_hard_break = False
 			self.max_factor -= 1
@@ -46,8 +50,11 @@ class BotControler( gc.GameControler ):
 		if self.max_factor < 1:
 			self.max_factor = 1
 
+		if self.game.type == "Pongest":
+			self.border *= 2
+
 		import cfg
-		if cfg.PRINT_EXTRA and cfg.PRINT_BOTS:
+		if cfg.PRINT_BOTS:
 			self.PFLAG = True
 
 
@@ -61,7 +68,7 @@ class BotControler( gc.GameControler ):
 
 	def seeBall( self ):
 		self.lastBall = self.game.balls[ 0 ].getCopy()
-		self.nextGoal = None
+		self.nextGoal = ( None, None )
 
 
 	# --------------------------------------------- MOVEMENTS ---------------------------------------------- #
@@ -102,6 +109,8 @@ class BotControler( gc.GameControler ):
 
 
 	def goTo( self, maxFactor, px, py ):
+		if px == None or py == None:
+			return
 
 		if self.racketDir == 'x':
 			tolerance = ( self.racket.sx - df.BOT_PRECISION )
@@ -319,11 +328,11 @@ class BotControler( gc.GameControler ):
 	def isInOwnGoal( self, px, py ):
 		if self.goal == df.LEFT and px < self.racket.px + self.racket.sx:
 			return True
-		if self.goal == df.RIGHT and px > self.racket.px + self.racket.sx:
+		if self.goal == df.RIGHT and px > self.racket.px - self.racket.sx:
 			return True
 		if self.goal == df.UP and py < self.racket.py + self.racket.sy:
 			return True
-		if self.goal == df.DOWN and py > self.racket.py + self.racket.sy:
+		if self.goal == df.DOWN and py > self.racket.py - self.racket.sy:
 			return True
 
 		return False
@@ -515,7 +524,7 @@ class BotControler( gc.GameControler ):
 
 	def findNextGoal( self ):
 		# prevents redoing the same calculations when not needed
-		if self.nextGoal != None:
+		if self.nextGoal != ( None, None ):
 			return self.nextGoal
 
 		px = self.lastBall.px
@@ -546,6 +555,8 @@ class BotControler( gc.GameControler ):
 				# returns where to be to block the next potential goal
 				if self.isInOwnGoal( px, py ):
 					self.nextGoal = ( int( px ), int( py ))
+					if self.PFLAG:
+						print( f"{self.game.gameID} )  {self.game.type}  \t: bot #{self.racket.id}  found next goal {self.nextGoal} in {dept} steps" )
 					return
 
 				# breaks if the ball is on screen edge
@@ -562,6 +573,9 @@ class BotControler( gc.GameControler ):
 
 		# if no potential goal is found at this dept, go back to default position
 		self.nextGoal = ( self.defaultX, self.defaultY )
+		if self.PFLAG:
+			print( f"{self.game.gameID} )  {self.game.type}  \t: bot #{self.racket.id}  couldn't find next goal. going to {self.nextGoal} instead" )
+
 
 
 

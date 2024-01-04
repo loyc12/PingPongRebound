@@ -20,6 +20,7 @@ except ModuleNotFoundError:
 # FUNCTION LIST
 
 # DEBUG LIST
+# TODO : fix Po ai stopping in the middle for no reason
 
 # MINOR LIST
 # TODO : make obstacles type GameObjects in the base class( and use them in pongester )

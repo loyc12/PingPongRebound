@@ -43,15 +43,13 @@ class GameControler:
 
 
 	def findOwnGoal( self ):
-		rack = self.racket
-
-		if rack.dx != 0:
+		if self.racketDir == 'x':
 			if( self.defaultY < self.game.height / 2 ): # goal is on the top
 				return df.UP
 			else:
 				return df.DOWN
 
-		elif rack.dy != 0:
+		elif self.racketDir == 'y':
 			if( self.defaultX < ( self.game.width / 2 )): # goal is on the left
 				return df.LEFT
 			else:

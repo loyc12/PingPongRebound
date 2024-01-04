@@ -13,7 +13,7 @@ PRINT_STATES = True #		general game status (starting, ending, etc)
 PRINT_POINTS = True #		point changes (scoring and reseting)
 PRINT_EXTRA = False #		random additional info (clamping and shit)
 PRINT_MOVES = True #		player moves, if PRINT_BOTS : bot moves
-PRINT_BOTS = True #			bot creation ans other bot related things
+PRINT_BOTS = False #			bot creation ans other bot related things
 
 # GAMERULES STUFF
 BOT_DIFFICULTY = 3 #		1 is easy, 3 is hard (DEFAULT IS 3)

@@ -66,7 +66,7 @@ BOT_PRECISION = 50 #		max = rSize / 2 (80) : how far from the center of the rack
 
 BOT_GO_TO_DEFAULT = True
 BOT_HARD_BREAK = True
-BOT_SEARCH_DEPTH = 5 #		how many bounces ahead does the AI look
+BOT_SEARCH_DEPTH = 4 #		how many bounces ahead does the AI look
 
 
 # pygame (debug) stuff
