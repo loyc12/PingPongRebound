@@ -28,7 +28,6 @@ class BotControler( gc.GameControler ):
 		self.border = self.game.size_b * ( 1 / 2 )
 
 		self.frequency_offset = 0
-		self.step = 0
 		self.goal = df.NULL
 
 		self.lastBall = None
@@ -36,12 +35,20 @@ class BotControler( gc.GameControler ):
 
 		self.seeBall()
 
-		# self.tmp = 0 #				NOTE : DEBUG (remove me)
+		self.tmp = 0 #				NOTE : DEBUG INFO
+		self.PFLAG = False #	NOTE : DEBUG INFO
 
 		self.difficulty = _difficulty
 		if self.difficulty == df.EASY:
 			self.allow_hard_break = False
 			self.max_factor -= 1
+
+		if self.max_factor < 1:
+			self.max_factor = 1
+
+		import cfg
+		if cfg.PRINT_EXTRA and cfg.PRINT_BOTS:
+			self.PFLAG = True
 
 
 	def handleKeyInput( self, key ):
@@ -280,14 +287,15 @@ class BotControler( gc.GameControler ):
 
 
 	def isCloserThan( self, gameObj, distance ):
-		#self.tmp += 1 #													NOTE : DEBUG (remove me)
+		self.tmp += 1 #									NOTE : DEBUG INFO
 
 		if abs( self.racket.getPosY() - gameObj.getPosY() ) <= distance:
 			if abs( self.racket.getPosX() - gameObj.getPosX() ) <= distance:
-				#print ( f"{self.racket.id} )  Closeby {self.tmp}" ) #		NOTE : DEBUG (remove me)
+				if self.PFLAG:
+					print( f"{self.game.gameID} )  {self.game.type}  \t: ball near racket #{self.racket.id} ( {self.tmp} )" )
 				return True
 
-		#self.tmp = 0 #														NOTE : DEBUG (remove me)
+		self.tmp = 0 #									NOTE : DEBUG INFO
 		return False
 
 

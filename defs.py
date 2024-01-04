@@ -42,7 +42,7 @@ SOLO = 1
 DUAL = 2
 FREEPLAY = 3
 TOURNAMENT = 4
-FORCE_MODE_TO = DUAL #	NOTE : only used if FORCE_MODE is set to True in cfg.py
+FORCE_MODE_TO = DUAL #		NOTE : only used if FORCE_MODE is set to True in cfg.py
 
 # bot difficulty
 EASY = 1
@@ -56,7 +56,7 @@ BOT_M_FACTOR = 3 #			how many times dx or dy can the bot move at
 
 BOT_INSTANT_REACT = False #	TODO : put me to false before pushing (overrides BOT_SEE_FREQUENCY everywhere)
 BOT_QUICK_REACT = True #	TODO : put me to false before pushing (overides BOT_SEE_FREQUENCY close to the bot)
-BOT_SEE_FREQUENCY = 60 #	TODO : put me to cfg.FRAME_RATE (aka 1hz) before pushing
+BOT_SEE_FREQUENCY = 60 #	TODO : put me to cfg.FRAME_RATE (aka 1 tps) before pushing
 
 BOT_CAN_KICK = True
 BOT_KICK_DIST = 160
@@ -66,7 +66,7 @@ BOT_PRECISION = 50 #		max = rSize / 2 (80) : how far from the center of the rack
 
 BOT_GO_TO_DEFAULT = True
 BOT_HARD_BREAK = True
-BOT_SEARCH_DEPTH = 4 #		how many bounces ahead does the AI look
+BOT_SEARCH_DEPTH = 5 #		how many bounces ahead does the AI look
 
 
 # pygame (debug) stuff

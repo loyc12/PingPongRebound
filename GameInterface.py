@@ -124,9 +124,8 @@ class Game:
 		self.initSpawns()
 		self.initScores()
 
-		if cfg.FORCE_MODE:
-			print ( "Warning : game mode has been forced to " + str( df.FORCE_MODE_TO ))
-			self.mode = df.FORCE_MODE_TO
+		if cfg.PRINT_STATES:
+			print( f"{self.gameID} )  {self.type}  \t: game has been created" )
 
 		if cfg.DEBUG_MODE:
 			self.font = pg.font.Font( None, self.size_f )
@@ -137,8 +136,9 @@ class Game:
 			self.last_time = self.start_time
 			self.delta_time = cfg.FRAME_DELAY
 
-		if cfg.PRINT_STATES:
-			print( f"{self.gameID} )  {self.type}  \t: game has been created" )# 		NOTE : DEBUG
+			if cfg.FORCE_MODE:
+				print ( "Warning : game mode has been forced to " + str( df.FORCE_MODE_TO ))
+				self.mode = df.FORCE_MODE_TO
 
 	# --------------------------------------------------------------
 
@@ -201,7 +201,7 @@ class Game:
 		while self.controlerCount < self.racket_count:
 			self.addBot( "B" + str( self.controlerCount + 1 ), self.difficulty )
 			if cfg.PRINT_BOTS:
-				print( f"{self.gameID} )  {self.type}  \t: bot #{ self.controlerCount } has been added with difficulty #{ self.difficulty }" )
+				print( f"{self.gameID} )  {self.type}  \t: bot #{ self.controlerCount }  has been added with difficulty #{ self.difficulty }" )
 
 
 	def addBot( self, botname, difficulty = df.HARD ):
@@ -228,11 +228,15 @@ class Game:
 					val = ( self.step_count + self.controlers[ i ].frequency_offset )
 
 					if( val % df.BOT_SEE_FREQUENCY ) == 0:
-						#print( "bot #" + str( i ) + " is seeing  on step #" + str( self.step_count ))#		NOTE : DEBUG
 						self.controlers[ i ].seeBall()
+						if cfg.PRINT_EXTRA and cfg.PRINT_BOTS:
+							print( f"{self.gameID} )  {self.type}  \t: bot #{i}  is seeing  on step #{self.step_count}" )
+
 					if( val % df.BOT_PLAY_FREQUENCY ) == 0:
-						#print( "bot #" + str( i ) + " is playing on step #" + str( self.step_count ))#		NOTE : DEBUG
 						self.controlers[ i ].playMove()
+						if cfg.PRINT_EXTRA and cfg.PRINT_BOTS:
+							print( f"{self.gameID} )  {self.type}  \t: bot #{i}  is playing on step #{self.step_count}" )
+
 
 			self.step_count += 1
 			self.step_count %= df.BOT_PLAY_FREQUENCY * df.BOT_SEE_FREQUENCY
@@ -359,9 +363,9 @@ class Game:
 				if cfg.PRINT_MOVES:
 					ctrlr = self.controlers[ i ]
 					if ctrlr.mode == df.PLAYER:
-						print( f"{self.gameID} )  {self.type}  \t: player #{ ctrlr.playerID } is making move { moveName } on racket #{ rack.id }" )
+						print( f"{self.gameID} )  {self.type}  \t: player #{ ctrlr.playerID }  is making move { moveName } on racket #{ rack.id }" )
 					elif cfg.PRINT_BOTS:
-						print( f"{self.gameID} )  {self.type}  \t: bot on racket # { rack.id } is making move { moveName }" )
+						print( f"{self.gameID} )  {self.type}  \t: bot #{ rack.id }  is making move { moveName }" )
 
 	# --------------------------------------------------------------
 
@@ -448,11 +452,11 @@ class Game:
 			self.start_time = time.time()
 
 			if cfg.PRINT_PACKETS:
-				print( "   player info\t: " + str( self.getPlayerInfo() ))
+				print( f"{self.gameID} )  {self.type}  \t: player info\t: {self.getPlayerInfo()}" )
 
 				if cfg.DEBUG_MODE:
 					import GameManager as gm
-					print( "   init info\t: " + str( gm.GameManager.getInitInfo( self.type )))
+					print( f"{self.gameID} )  {self.type}  \t: init info\t: {gm.GameManager.getInitInfo( self.type )}" )
 
 			if cfg.PRINT_STATES:
 				print( f"{self.gameID} )  {self.type}  \t: game has been started" )
@@ -504,7 +508,7 @@ class Game:
 			pass #		NOTE : useless( packet sending is done by game manager now )
 
 		if cfg.DEBUG_MODE and cfg.PRINT_EXTRA and cfg.PRINT_PACKETS:
-			print( "   update info\t: " + str( self.getUpdateInfo() ))
+			print( f"{self.gameID} )  {self.type}  \t: update info\t: {self.getUpdateInfo()}" )
 
 
 	# ------------------------------------------- GAME MECHANICS ------------------------------------------- #
@@ -606,7 +610,7 @@ class Game:
 			elif self.last_ponger > 0: # 							if it was a goal
 				self.scores[ teamID - 1 ] = 0
 				if cfg.PRINT_POINTS:
-					print( f"{self.gameID} )  {self.type}  \t: team #{ teamID } dropped the ball ( resets their score )" )
+					print( f"{self.gameID} )  {self.type}  \t: team #{ teamID }  dropped the ball ( resets their score )" )
 
 		else: #								if goals give points
 			if self.last_ponger <= 0: #			if it was a serve ball
@@ -625,9 +629,9 @@ class Game:
 
 		if cfg.PRINT_POINTS:
 			if self.score_mode == df.GOALS:
-				print( f"{self.gameID} )  {self.type}  \t: team #{ teamID } scored a point" )
+				print( f"{self.gameID} )  {self.type}  \t: team #{ teamID }  scored a point" )
 			else:
-				print( f"{self.gameID} )  {self.type}  \t: team #{ teamID } hit the ball" )
+				print( f"{self.gameID} )  {self.type}  \t: team #{ teamID }  hit the ball" )
 
 		self.findNextSpawn( "goal" )
 		self.checkWin()
@@ -665,7 +669,7 @@ class Game:
 					print( f"{self.gameID} )  {self.type}  \t: game has been won by team #{ self.winnerID }" )
 
 				if cfg.PRINT_PACKETS:
-					print( "   end info\t: " + str( self.getEndInfo() ))
+					print( f"{self.gameID} )  {self.type}  \t: end info\t: {self.getEndInfo()}" )
 
 				self.close()
 

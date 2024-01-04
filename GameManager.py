@@ -361,10 +361,10 @@ class GameManager:
 						print( "please select a valid game( 1-8 )" )
 						self.emptyDisplay()
 					else:
-						print( f"{ self.windowID} )  { game.type }  \t: switched game viewed ")
 						game.delta_time = cfg.FRAME_DELAY
 						game.last_time = time.time()
 						pg.display.set_caption( game.type )
+						print( "now viewing game #" + str( self.windowID ))
 					return
 
 				# handling movement keys presses
@@ -384,7 +384,7 @@ class GameManager:
 			await self.addPlayerToGame( 1, "DBG", gameID )
 
 		if not cfg.DEBUG_MODE and cfg.PRINT_PACKETS:
-			print( "   init info\t: " + str( self.getInitInfo( gameType )))
+			print( f"{gameID} )  {gameType}  \t: init info\t: {self.getInitInfo( gameType )}" )
 
 		await self.startGame( gameID )
 

@@ -70,7 +70,8 @@ class GameControler:
 
 
 	def stopHere( self ):
-		self.playMove( df.STOP )
+		if self.racket.fx != 0 or self.racket.fy != 0:
+			self.playMove( df.STOP )
 
 
 	def goUp( self, maxFactor ):
