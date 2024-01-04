@@ -3,7 +3,7 @@ DEBUG_MODE = True
 FORCE_MODE = False #		forces the gameMode to be df.FORCE_MODE_TO
 PRINT_DEBUG = True #		shows fps and racket names
 MOVE_OBJECTS = True #		allows objects to move
-ADD_DEBUG_PLAYER = False #	adds a player to every game
+ADD_DEBUG_PLAYER = True #	adds a player to every game
 
 # LOGS PRINT STUFF
 PRINT_COLLISIONS = False #	racket and wall collisions

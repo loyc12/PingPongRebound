@@ -24,6 +24,7 @@ LEFT = 5
 
 KICK_FACTOR = 1.0 #				NOTE : how much of the racket's speed is transfered the the ball when hitting it
 NO_STUCK_BALLS = True #			NOTE : this prevent balls from having 0 speed on either X or Y (no straight bounces)
+PLAYER_HARD_BREAK = False
 
 # scores
 GOALS = 1

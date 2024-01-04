@@ -8,9 +8,6 @@ except ModuleNotFoundError:
 # controler class
 class BotControler( gc.GameControler ):
 
-	allow_hard_break = df.BOT_HARD_BREAK
-	go_to_default = df.BOT_GO_TO_DEFAULT
-
 	max_factor = df.BOT_M_FACTOR #( max speed factor( how many times dx or dy can the racket go at )
 
 	mode = df.BOT
@@ -44,8 +41,12 @@ class BotControler( gc.GameControler ):
 
 	def onInit( self ):
 		if self.difficulty == df.EASY:
-			self.allow_hard_break = False
+			df.BOT_HARD_BREAK = False
 			self.max_factor -= 1
+
+		if self.difficulty == df.HARD:
+			df.BOT_HARD_BREAK = True
+			self.max_factor += 1
 
 		if self.max_factor < 1:
 			self.max_factor = 1
@@ -95,7 +96,7 @@ class BotControler( gc.GameControler ):
 
 		elif self.difficulty == df.MEDIUM:
 			self.seeBall()
-			if self.go_to_default and not self.isOnSameSideOf( self.lastBall ):
+			if df.BOT_GO_TO_DEFAULT and not self.isOnSameSideOf( self.lastBall ):
 				self.goToDefaultPos( self.max_factor )
 			else:
 				self.goTowardsBall( self.max_factor )
@@ -116,36 +117,36 @@ class BotControler( gc.GameControler ):
 			tolerance = ( self.racket.sx - df.BOT_PRECISION )
 
 			if self.racket.isRightOfX( px - tolerance):
-				if self.allow_hard_break and self.racket.isGoingRight():
+				if df.BOT_HARD_BREAK and self.racket.isGoingRight():
 					self.stopHere()
 				else:
 					self.goLeft( maxFactor )
 
 			elif self.racket.isLeftOfX( px + tolerance ):
-				if self.allow_hard_break and self.racket.isGoingLeft():
+				if df.BOT_HARD_BREAK and self.racket.isGoingLeft():
 					self.stopHere()
 				else:
 					self.goRight( maxFactor )
 
-			elif self.allow_hard_break:
+			elif df.BOT_HARD_BREAK:
 				self.stopHere()
 
 		elif self.racketDir == 'y':
 			tolerance = ( self.racket.sy - df.BOT_PRECISION )
 
 			if self.racket.isBelowY( py - tolerance ):
-				if self.allow_hard_break and self.racket.isGoingDown():
+				if df.BOT_HARD_BREAK and self.racket.isGoingDown():
 					self.stopHere()
 				else:
 					self.goUp( maxFactor )
 
 			elif self.racket.isAboveY( py + tolerance ):
-				if self.allow_hard_break and self.racket.isGoingUp():
+				if df.BOT_HARD_BREAK and self.racket.isGoingUp():
 					self.stopHere()
 				else:
 					self.goDown( maxFactor )
 
-			elif self.allow_hard_break:
+			elif df.BOT_HARD_BREAK:
 				self.stopHere()
 
 
@@ -347,19 +348,19 @@ class BotControler( gc.GameControler ):
 
 		if rack.dx != 0: #			handling up and down movement
 			if rack.isRightOf( self.lastBall ): #	when the ball is to the right of the racket
-				if self.allow_hard_break and rack.isGoingRight():
+				if df.BOT_HARD_BREAK and rack.isGoingRight():
 					self.stopHere()
 				else:
 					self.goLeft( maxFactor )
 
 			elif rack.isLeftOf( self.lastBall ): #	when the ball is to the left of the racket
-				if self.allow_hard_break and rack.isGoingLeft():
+				if df.BOT_HARD_BREAK and rack.isGoingLeft():
 					self.stopHere()
 				else:
 					self.goRight( maxFactor )
 
 			elif self.lastBall.isGoingRight(): #		when the ball is going to be to the right
-				if self.allow_hard_break and rack.isGoingLeft():
+				if df.BOT_HARD_BREAK and rack.isGoingLeft():
 					self.stopHere()
 
 				elif self.lastBall.isRightOfX( rack.getPosX() ): # the ball is on the right half of the racket
@@ -377,7 +378,7 @@ class BotControler( gc.GameControler ):
 					return
 
 			elif self.lastBall.isGoingLeft(): #		when the ball is going to be to the left
-				if self.allow_hard_break and rack.isGoingRight():
+				if df.BOT_HARD_BREAK and rack.isGoingRight():
 					self.stopHere()
 
 				elif self.lastBall.isLeftOfX( rack.getPosX() ): # the ball is on the left half of the racket
@@ -399,19 +400,19 @@ class BotControler( gc.GameControler ):
 
 		if rack.dy != 0: #			handling up and down movement
 			if rack.isBelow( self.lastBall ): #		when the ball is  below of the racket
-				if self.allow_hard_break and rack.isGoingDown():
+				if df.BOT_HARD_BREAK and rack.isGoingDown():
 					self.stopHere()
 				else:
 					self.goUp( maxFactor )
 
 			elif rack.isAbove( self.lastBall ): #	when the ball is  above of the racket
-				if self.allow_hard_break and rack.isGoingUp():
+				if df.BOT_HARD_BREAK and rack.isGoingUp():
 					self.stopHere()
 				else:
 					self.goDown( maxFactor )
 
 			elif self.lastBall.isGoingDown(): #		when the ball is going to be to below
-				if self.allow_hard_break and rack.isGoingUp():
+				if df.BOT_HARD_BREAK and rack.isGoingUp():
 					self.stopHere()
 
 				elif self.lastBall.isBelowY( rack.getPosY() ): # the ball is on the lower half of the racket
@@ -429,7 +430,7 @@ class BotControler( gc.GameControler ):
 					return
 
 			elif self.lastBall.isGoingUp(): #		when the ball is going to be above
-				if self.allow_hard_break and rack.isGoingDown():
+				if df.BOT_HARD_BREAK and rack.isGoingDown():
 					self.stopHere()
 
 				elif self.lastBall.isAboveY( rack.getPosY() ): # the ball is on the upper half of the racket

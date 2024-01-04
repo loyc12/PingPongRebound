@@ -26,7 +26,6 @@ except ModuleNotFoundError:
 class Game:
 	type = "None"
 
-	hard_break = False #		NOTE : automatically stop racket when decelerating
 	divide_sides = False #		NOTE : prevents rackets from crossing the middle of the screen
 	score_mode = df.GOALS
 
@@ -330,28 +329,28 @@ class Game:
 					moveName = "STOP"
 
 				elif( move == df.LEFT ):
-					if( self.hard_break and rack.fx > 0 ):
+					if(df.PLAYER_HARD_BREAK and rack.fx > 0 ):
 						rack.fx = 0
 					else:
 						rack.fx -= 1
 					moveName = "LEFT"
 
 				elif( move == df.UP ):
-					if( self.hard_break and rack.fy > 0 ):
+					if(df.PLAYER_HARD_BREAK and rack.fy > 0 ):
 						rack.fy = 0
 					else:
 						rack.fy -= 1
 					moveName = "UP"
 
 				elif( move == df.RIGHT ):
-					if( self.hard_break and rack.fx < 0 ):
+					if(df.PLAYER_HARD_BREAK and rack.fx < 0 ):
 						rack.fx = 0
 					else:
 						rack.fx += 1
 					moveName = "RIGHT"
 
 				elif( move == df.DOWN ):
-					if( self.hard_break and rack.fy < 0 ):
+					if(df.PLAYER_HARD_BREAK and rack.fy < 0 ):
 						rack.fy = 0
 					else:
 						rack.fy += 1
