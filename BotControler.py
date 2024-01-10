@@ -54,9 +54,9 @@ class BotControler( gc.GameControler ):
 		if self.game.type == "Pongest":
 			self.border *= 2
 
-		import cfg
-		if cfg.PRINT_BOTS:
-			self.PFLAG = True
+		#import cfg
+		#if cfg.PRINT_BOTS:
+		self.PFLAG = False
 
 
 	def handleKeyInput( self, key ):

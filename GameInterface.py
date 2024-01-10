@@ -633,7 +633,7 @@ class Game:
 				print( f"{self.gameID} )  {self.type}  \t: team #{ teamID }  hit the ball" )
 
 		self.findNextSpawn( "goal" )
-		self.checkWin()
+		self.checkWin( teamID )
 
 
 	def missShot( self ):
@@ -657,20 +657,19 @@ class Game:
 
 	# --------------------------------------------------------------
 
-	def checkWin( self ):
-		for i in range( self.score_count ):
-			score = self.scores[ i ]
+	def checkWin( self, teamID ):
+		score = self.scores[ teamID ]
 
-			if score >= df.WIN_SCORE:
-				self.winnerID = i + 1 #			NOTE : this is a scores[] index ( same as teamID ) ( 0 == null)
+		if score >= df.WIN_SCORE:
+			self.winnerID = teamID #	NOTE : this is a scores[] index ( same as teamID ) ( 0 == null)
 
-				if cfg.PRINT_STATES:
-					print( f"{self.gameID} )  {self.type}  \t: game has been won by team #{ self.winnerID }" )
+			if cfg.PRINT_STATES:
+				print( f"{self.gameID} )  {self.type}  \t: game has been won by team #{ self.winnerID }" )
 
-				if cfg.PRINT_PACKETS:
-					print( f"{self.gameID} )  {self.type}  \t: end info\t: {self.getEndInfo()}" )
+			if cfg.PRINT_PACKETS:
+				print( f"{self.gameID} )  {self.type}  \t: end info\t: {self.getEndInfo()}" )
 
-				self.close()
+			self.close()
 
 
 	def respawnBall( self, ball ):
